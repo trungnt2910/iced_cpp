@@ -19,7 +19,7 @@ namespace System::Collections
 
 struct InterfaceException : std::exception
 {
-	InterfaceException(std::string s) : base(s) {};
+	InterfaceException(const std::string& s) : std::exception(s.c_str()) {};
 };
 
 #define INTERFACE_FUNC { throw InterfaceException(__FUNCSIG__); }
@@ -36,7 +36,7 @@ template <typename T>
 class IEnumerator
 {
 public:
-	virtual T GetCurrent() const = 0; INTERFACE_FUNC
+	virtual T GetCurrent() const INTERFACE_FUNC
 		virtual bool MoveNext() INTERFACE_FUNC
 		virtual void Reset() INTERFACE_FUNC
 };
