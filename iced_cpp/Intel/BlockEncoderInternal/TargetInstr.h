@@ -1,0 +1,45 @@
+// C# helper headers
+#include <csharp/classes.h>
+#include <csharp/enum.h>
+#include <csharp/interfaces.h>
+#include <csharp/primitives.h>
+
+// Commonly used headers
+#include <cstdint>
+#include <format>
+#include <functional>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#pragma once
+
+#include "Instr.h"
+#include "Block.h"
+
+// Code generated from Iced. Do not edit.
+// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
+namespace Iced::Intel::BlockEncoderInternal
+{
+	/* readonly */
+	class TargetInstr
+	{
+		/* readonly */
+	private:
+		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
+		//ORIGINAL LINE: Instr? instruction;
+		Instr* instruction;
+		/* readonly */
+		std::uint64_t address = 0;
+	public:
+		TargetInstr(Instr* instruction);
+		TargetInstr(std::uint64_t address);
+		bool IsInBlock(Block* block);
+		std::uint64_t GetAddress();
+
+		TargetInstr() = default;
+	};
+}
