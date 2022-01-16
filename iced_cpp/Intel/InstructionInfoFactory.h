@@ -80,9 +80,9 @@ namespace Iced::Intel
 			Is64Bit = 0x00000004,
 			ZeroExtVecRegs = 0x00000008
 		};
-		DEFINE_FLAGS(Flags)
-			DEFINE_COMP(Flags)
-			DEFINE_ARITH(Flags)
+		DEFINE_FLAGS_FRIEND(Flags)
+			DEFINE_COMP_FRIEND(Flags)
+			DEFINE_ARITH_FRIEND(Flags)
 
 			/// <summary>
 			/// Constructor

@@ -108,9 +108,9 @@ namespace Iced::Intel
 			CPL2 = 0x00000100,
 			CPL3 = 0x00000200
 		};
-		DEFINE_FLAGS(Flags)
-			DEFINE_COMP(Flags)
-			DEFINE_ARITH(Flags)
+		DEFINE_FLAGS_FRIEND(Flags)
+			DEFINE_COMP_FRIEND(Flags)
+			DEFINE_ARITH_FRIEND(Flags)
 
 	public:
 		OpCodeInfo(Iced::Intel::Code code, EncFlags1 encFlags1, EncFlags2 encFlags2, EncFlags3 encFlags3, OpCodeInfoFlags1 opcFlags1, OpCodeInfoFlags2 opcFlags2, StringBuilder* sb);

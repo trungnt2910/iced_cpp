@@ -42,8 +42,8 @@ namespace Iced::Intel
 			UseHexPrefix = 0x00000080
 		};
 
-		DEFINE_COMP(Flags1)
-			DEFINE_ARITH(Flags1)
+		DEFINE_COMP_FRIEND(Flags1)
+			DEFINE_ARITH_FRIEND(Flags1)
 
 	public:
 		FastFormatterOptions();

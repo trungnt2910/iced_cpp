@@ -47,7 +47,7 @@ namespace Iced::Intel
 		std::string DigitSeparator;
 
 	private:
-		enum class Flags1 : int
+		enum class Flags1 : uint
 		{
 			None = 0,
 			UppercasePrefixes = 0x00000001,
@@ -83,9 +83,9 @@ namespace Iced::Intel
 			MasmSymbolDisplInBrackets = 0x40000000,
 			MasmDisplInBrackets = 0x80000000
 		};
-		DEFINE_FLAGS(Flags1)
-			DEFINE_COMP(Flags1)
-			DEFINE_ARITH(Flags1)
+		DEFINE_FLAGS_FRIEND(Flags1)
+			DEFINE_COMP_FRIEND(Flags1)
+			DEFINE_ARITH_FRIEND(Flags1)
 
 	private:
 		enum class Flags2 : int
@@ -95,9 +95,9 @@ namespace Iced::Intel
 			PreferST0 = 0x00000002,
 			ShowUselessPrefixes = 0x00000004
 		};
-		DEFINE_FLAGS(Flags2)
-			DEFINE_COMP(Flags2)
-			DEFINE_ARITH(Flags2)
+		DEFINE_FLAGS_FRIEND(Flags2)
+			DEFINE_COMP_FRIEND(Flags2)
+			DEFINE_ARITH_FRIEND(Flags2)
 
 	private:
 		Flags1 flags1 = static_cast<Flags1>(0);

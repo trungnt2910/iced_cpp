@@ -307,11 +307,6 @@ namespace Iced::Intel
 		IEnumerator<Instruction>* IEnumerable_GetEnumerator() override;
 		System::Collections::IEnumerator* IEnumerable_GetEnumerator() override;
 		/// <summary>
-		/// Returns a read-only wrapper for this list
-		/// </summary>
-		/// <returns></returns>
-		ReadOnlyCollection<Instruction>* AsReadOnly();
-		/// <summary>
 		/// Creates a new array with all instructions and returns it
 		/// </summary>
 		/// <returns></returns>

@@ -368,9 +368,6 @@ namespace Iced::Intel
 		public:
 			Enumerator(Decoder* decoder);
 
-			DEFINE_COMP(erator)
-				DEFINE_ARITH(erator)
-
 				/// <summary>
 				/// Gets the current instruction
 				/// </summary>
@@ -401,8 +398,4 @@ namespace Iced::Intel
 		IEnumerator<Instruction>* IEnumerable_GetEnumerator() override;
 		System::Collections::IEnumerator* IEnumerable_GetEnumerator() override;
 	};
-
-	DEFINE_COMP(erator)
-		DEFINE_ARITH(erator)
-
 }

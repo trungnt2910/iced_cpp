@@ -1098,11 +1098,11 @@ template<typename T,
 #define DEFINE_EQ_FRIEND(enum_name) friend inline static constexpr bool operator==(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return (std::underlying_type_t<enum_name>)e1 == i; }
 #define DEFINE_NEQ_FRIEND(enum_name) friend inline static constexpr bool operator!=(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return (std::underlying_type_t<enum_name>)e1 != i; }
 
-#define DEFINE_ADD_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator+(const enum_name& e1, const enum_name& e2) { return enum_add(e1, e2); }
-#define DEFINE_ADD1_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator+(const enum_name& e1, const std::underlying_type_t<enum_name>& e2) { return enum_add(e1, static_cast<const enum_name &>(e2)); }
+#define DEFINE_ADD_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator+(const enum_name& e1, const enum_name& e2) { return static_cast<std::underlying_type_t<enum_name>>(enum_add(e1, e2)); }
+#define DEFINE_ADD1_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator+(const enum_name& e1, const std::underlying_type_t<enum_name>& e2) { return static_cast<std::underlying_type_t<enum_name>>(enum_add(e1, static_cast<enum_name>(e2))); }
 #define DEFINE_ADD2_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator+(const std::underlying_type_t<enum_name>& e1, const enum_name& e2) { return e2 + e1; }
-#define DEFINE_SUB_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator-(const enum_name& e1, const enum_name& e2) { return enum_sub(e1, e2); }
-#define DEFINE_SUB1_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator-(const enum_name& e1, const std::underlying_type_t<enum_name>& e2) { return enum_sub(e1, static_cast<const enum_name &>(e2)); }
+#define DEFINE_SUB_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator-(const enum_name& e1, const enum_name& e2) { return static_cast<std::underlying_type_t<enum_name>>(enum_sub(e1, e2)); }
+#define DEFINE_SUB1_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator-(const enum_name& e1, const std::underlying_type_t<enum_name>& e2) { return static_cast<std::underlying_type_t<enum_name>>(enum_sub(e1, static_cast<enum_name>(e2))); }
 #define DEFINE_SUB2_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator-(const std::underlying_type_t<enum_name>& e1, const enum_name& e2) { return e2 - e1; }
 
 #define DEFINE_COMP(enum_name) DEFINE_EQ(enum_name) DEFINE_NEQ(enum_name)
