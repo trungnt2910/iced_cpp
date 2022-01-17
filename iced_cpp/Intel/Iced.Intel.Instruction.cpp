@@ -193,17 +193,17 @@ namespace Iced::Intel
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", code, operand + 1));
+			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", to_string(code), to_string(operand + 1)));
 		}
 		auto opKind = operands[operand]->GetImmediateOpKind();
-		OpKind opKindPrev = dynamic_cast<OpKind>(operands[operand - 1]->GetImmediateOpKind());
-		if (opKind == OpKind::Immediate8 && operand > 0 && operand + 1 == operands.size() && opKindPrev != nullptr && (opKindPrev == OpKind::Immediate8 || opKindPrev == OpKind::Immediate16))
+		OpKind opKindPrev = operands[operand - 1]->GetImmediateOpKind();
+		if (opKind == OpKind::Immediate8 && operand > 0 && operand + 1 == operands.size() && (opKindPrev == OpKind::Immediate8 || opKindPrev == OpKind::Immediate16))
 		{
 			opKind = OpKind::Immediate8_2nd;
 		}
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't an immediate operand", code, operand));
+			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't an immediate operand", to_string(code), to_string(operand)));
 		}
 		return opKind;
 	}
@@ -218,12 +218,12 @@ namespace Iced::Intel
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", code, operand + 1));
+			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", to_string(code), to_string(operand + 1)));
 		}
 		auto opKind = operands[operand]->GetNearBranchOpKind();
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a near branch operand", code, operand));
+			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a near branch operand", to_string(code), to_string(operand)));
 		}
 		return opKind;
 	}
@@ -238,12 +238,12 @@ namespace Iced::Intel
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", code, operand + 1));
+			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", to_string(code), to_string(operand + 1)));
 		}
 		auto opKind = operands[operand]->GetFarBranchOpKind();
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a far branch operand", code, operand));
+			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a far branch operand", to_string(code), to_string(operand)));
 		}
 		return opKind;
 	}
@@ -2260,8 +2260,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool Instruction::Equals(std::any obj)
 	{
-		Instruction other = dynamic_cast<Instruction>(obj);
-		return other != nullptr && EqualsInternal(*this, other);
+		Instruction* other = std::any_cast<Instruction>(&obj);
+		return other != nullptr && EqualsInternal(*this, *other);
 	}
 
 	bool Instruction::EqualsAllBits(Instruction const a, Instruction const b)
@@ -2398,7 +2398,7 @@ namespace Iced::Intel
 		return flags1 & static_cast<std::uint32_t>(InstrFlags1::LockPrefix | InstrFlags1::RepePrefix | InstrFlags1::RepnePrefix);
 	}
 
-	bool Instruction::IsXacquireInstr()
+	bool Instruction::IsXacquireInstr() const
 	{
 		if (GetOp0Kind() != OpKind::Memory)
 		{
@@ -2411,7 +2411,7 @@ namespace Iced::Intel
 		return GetMnemonic() == Mnemonic::Xchg;
 	}
 
-	bool Instruction::IsXreleaseInstr()
+	bool Instruction::IsXreleaseInstr() const
 	{
 		if (GetOp0Kind() != OpKind::Memory)
 		{
@@ -2646,7 +2646,7 @@ namespace Iced::Intel
 		}
 	}
 
-	OpKind Instruction::GetOpKind(std::int32_t operand)
+	OpKind Instruction::GetOpKind(std::int32_t operand) const
 	{
 		switch (operand)
 		{
@@ -2662,7 +2662,6 @@ namespace Iced::Intel
 			return GetOp4Kind();
 		default:
 			ThrowHelper::ThrowArgumentOutOfRangeException_operand();
-			return 0;
 		}
 	}
 
@@ -2711,7 +2710,7 @@ namespace Iced::Intel
 	Register Instruction::GetSegmentPrefix() const
 	{
 		std::uint32_t index = ((flags1 >> static_cast<std::int32_t>(InstrFlags1::SegmentPrefixShift)) & static_cast<std::uint32_t>(InstrFlags1::SegmentPrefixMask)) - 1;
-		return index < 6 ? Register::ES + static_cast<std::int32_t>(index) : Register::None;
+		return index < 6 ? (Register)(Register::ES + static_cast<std::int32_t>(index)) : Register::None;
 	}
 
 	void Instruction::SetSegmentPrefix(Register value)
@@ -2909,7 +2908,7 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return (switchTempVar_2 == OpKind.Immediate8) ? Immediate8 : (switchTempVar_2 == OpKind.Immediate8_2nd) ? Immediate8_2nd : (switchTempVar_2 == OpKind.Immediate16) ? Immediate16 : (switchTempVar_2 == OpKind.Immediate32) ? Immediate32 : (switchTempVar_2 == OpKind.Immediate64) ? Immediate64 : (switchTempVar_2 == OpKind.Immediate8to16) ? (ulong)Immediate8to16 : (switchTempVar_2 == OpKind.Immediate8to32) ? (ulong)Immediate8to32 : (switchTempVar_2 == OpKind.Immediate8to64) ? (ulong)Immediate8to64 : (switchTempVar_2 == OpKind.Immediate32to64) ? (ulong)Immediate32to64 : throw new ArgumentException(string.Format("Op{0} isn't an immediate operand", operand), nameof(operand));
 		//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires only one argument:
-		return (switchTempVar_2 == OpKind::Immediate8) ? GetImmediate8() : (switchTempVar_2 == OpKind::Immediate8_2nd) ? GetImmediate8_2nd() : (switchTempVar_2 == OpKind::Immediate16) ? GetImmediate16() : (switchTempVar_2 == OpKind::Immediate32) ? GetImmediate32() : (switchTempVar_2 == OpKind::Immediate64) ? GetImmediate64() : (switchTempVar_2 == OpKind::Immediate8to16) ? static_cast<std::uint64_t>(GetImmediate8to16()) : (switchTempVar_2 == OpKind::Immediate8to32) ? static_cast<std::uint64_t>(GetImmediate8to32()) : (switchTempVar_2 == OpKind::Immediate8to64) ? static_cast<std::uint64_t>(GetImmediate8to64()) : (switchTempVar_2 == OpKind::Immediate32to64) ? static_cast<std::uint64_t>(GetImmediate32to64()) : throw std::invalid_argument(std::format("Op{0:s} isn't an immediate operand", operand));
+		return (switchTempVar_2 == OpKind::Immediate8) ? GetImmediate8() : (switchTempVar_2 == OpKind::Immediate8_2nd) ? GetImmediate8_2nd() : (switchTempVar_2 == OpKind::Immediate16) ? GetImmediate16() : (switchTempVar_2 == OpKind::Immediate32) ? GetImmediate32() : (switchTempVar_2 == OpKind::Immediate64) ? GetImmediate64() : (switchTempVar_2 == OpKind::Immediate8to16) ? static_cast<std::uint64_t>(GetImmediate8to16()) : (switchTempVar_2 == OpKind::Immediate8to32) ? static_cast<std::uint64_t>(GetImmediate8to32()) : (switchTempVar_2 == OpKind::Immediate8to64) ? static_cast<std::uint64_t>(GetImmediate8to64()) : (switchTempVar_2 == OpKind::Immediate32to64) ? static_cast<std::uint64_t>(GetImmediate32to64()) : throw std::invalid_argument(std::format("Op{0:s} isn't an immediate operand", to_string(operand)));
 	}
 
 	void Instruction::SetImmediate(std::int32_t operand, std::int32_t immediate)
@@ -2953,7 +2952,7 @@ namespace Iced::Intel
 		default:
 			//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires only one argument:
 			//ORIGINAL LINE: throw new ArgumentException(string.Format("Op{0} isn't an immediate operand", operand), nameof(operand));
-			throw std::invalid_argument(std::format("Op{0:s} isn't an immediate operand", operand));
+			throw std::invalid_argument(std::format("Op{0:s} isn't an immediate operand", to_string(operand)));
 		}
 	}
 
@@ -3265,7 +3264,7 @@ namespace Iced::Intel
 		}
 	}
 
-	Register Instruction::GetOpRegister(std::int32_t operand)
+	Register Instruction::GetOpRegister(std::int32_t operand) const
 	{
 		switch (operand)
 		{
@@ -3281,7 +3280,6 @@ namespace Iced::Intel
 			return GetOp4Register();
 		default:
 			ThrowHelper::ThrowArgumentOutOfRangeException_operand();
-			return 0;
 		}
 	}
 
@@ -3313,7 +3311,7 @@ namespace Iced::Intel
 	Register Instruction::GetOpMask() const
 	{
 		std::int32_t r = static_cast<std::int32_t>(flags1 >> static_cast<std::int32_t>(InstrFlags1::OpMaskShift)) & static_cast<std::int32_t>(InstrFlags1::OpMaskMask);
-		return r == 0 ? Register::None : r + Register::K0;
+		return r == 0 ? Register::None : (Register)(r + Register::K0);
 	}
 
 	void Instruction::SetOpMask(Register value)
@@ -3487,7 +3485,7 @@ namespace Iced::Intel
 		}
 	}
 
-	std::uint8_t Instruction::GetDeclareByteValue(std::int32_t index)
+	std::uint8_t Instruction::GetDeclareByteValue(std::int32_t index) const
 	{
 		switch (index)
 		{
@@ -3570,7 +3568,7 @@ namespace Iced::Intel
 		}
 	}
 
-	std::uint16_t Instruction::GetDeclareWordValue(std::int32_t index)
+	std::uint16_t Instruction::GetDeclareWordValue(std::int32_t index) const
 	{
 		switch (index)
 		{
@@ -3626,7 +3624,7 @@ namespace Iced::Intel
 		}
 	}
 
-	std::uint32_t Instruction::GetDeclareDwordValue(std::int32_t index)
+	std::uint32_t Instruction::GetDeclareDwordValue(std::int32_t index) const
 	{
 		switch (index)
 		{
@@ -3671,7 +3669,7 @@ namespace Iced::Intel
 		}
 	}
 
-	std::uint64_t Instruction::GetDeclareQwordValue(std::int32_t index)
+	std::uint64_t Instruction::GetDeclareQwordValue(std::int32_t index) const
 	{
 		switch (index)
 		{
@@ -3687,6 +3685,7 @@ namespace Iced::Intel
 
 	bool Instruction::IsVsib() const
 	{
+		bool _;
 		return TryGetVsib64(_);
 	}
 
@@ -3702,7 +3701,7 @@ namespace Iced::Intel
 		return TryGetVsib64(vsib64) && vsib64;
 	}
 
-	bool Instruction::TryGetVsib64(bool& vsib64)
+	bool Instruction::TryGetVsib64(bool& vsib64) const
 	{
 		switch (GetCode())
 		{
@@ -3858,12 +3857,12 @@ namespace Iced::Intel
 		return Iced::Intel::EncoderCodeExtensions::ToOpCode(GetCode());
 	}
 
-	std::string Instruction::ToString()
+	std::string Instruction::ToString() const
 	{
 		// If the order of #if/elif checks gets updated, also update the `Instruction_ToString()` test method
 		auto output = new StringOutput();
-		MasmFormatter tempVar();
-		(&tempVar)->Format(*this, output);
+		MasmFormatter tempVar;
+		tempVar.Format(*this, output);
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
 		return output->ToString();
 	}
@@ -4105,7 +4104,7 @@ namespace Iced::Intel
 		return Iced::Intel::InstructionInfoExtensions::IsSaveRestoreInstruction(GetCode());
 	}
 
-	InstructionInfoInternal::RflagsInfo Instruction::GetRflagsInfo()
+	InstructionInfoInternal::RflagsInfo Instruction::GetRflagsInfo() const
 	{
 		auto flags1 = InstructionInfoInternal::InstrInfoTable::Data[static_cast<std::int32_t>(GetCode()) << 1];
 		auto impliedAccess = static_cast<InstructionInfoInternal::ImpliedAccess>((flags1 >> static_cast<std::int32_t>(InstructionInfoInternal::InfoFlags1::ImpliedAccessShift)) & static_cast<std::uint32_t>(InstructionInfoInternal::InfoFlags1::ImpliedAccessMask));
@@ -4347,7 +4346,7 @@ namespace Iced::Intel
 			throw std::invalid_argument("getRegisterValue");
 		}
 		auto provider = new VARegisterValueProviderDelegateImpl(getRegisterValue);
-		std::any result;
+		std::uint64_t result;
 		if (TryGetVirtualAddress(operand, elementIndex, provider, result))
 		{
 			return result;
@@ -4362,7 +4361,7 @@ namespace Iced::Intel
 			throw std::invalid_argument("registerValueProvider");
 		}
 		auto provider = new VARegisterValueProviderAdapter(registerValueProvider);
-		std::any result;
+		std::uint64_t result;
 		if (TryGetVirtualAddress(operand, elementIndex, provider, result))
 		{
 			return result;
@@ -4511,7 +4510,7 @@ namespace Iced::Intel
 					else
 					{
 						b = registerValueProvider->TryGetRegisterValue(indexReg, elementIndex, 4, base);
-						base = static_cast<std::uint64_t>(std::int32_t)base;
+						base = static_cast<std::uint64_t>((std::int32_t)base);
 					}
 					if (!b)
 					{

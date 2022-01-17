@@ -290,7 +290,7 @@ namespace Iced::Intel
 					if ((symbolResolver = this->symbolResolver) != nullptr && symbolResolver->TryGetSymbol(instruction, operand, operand, static_cast<std::uint32_t>(imm64), immSize, symbol))
 					{
 						assert(operand + 1 == 1);
-						Iced.Intel.SymbolResult selectorSymbol;
+						SymbolResult selectorSymbol;
 						if (!symbolResolver->TryGetSymbol(instruction, operand + 1, operand, instruction.GetFarBranchSelector(), 2, selectorSymbol))
 						{
 							FormatNumber(output, instruction.GetFarBranchSelector());
@@ -643,13 +643,13 @@ namespace Iced::Intel
 			}
 			displ = -displ;
 		}
-		auto text = symbol.Text;
+		const TextInfo& text = symbol.Text;
 		auto array = text.TextArray;
 		if (array != nullptr)
 		{
-			for (auto part : *array)
+			for (const auto& part : *array)
 			{
-				std::string s = dynamic_cast<std::string>(part->Text);
+				std::string s = part.Text;
 				if (s != "")
 				{
 					output->AppendNotNull(s);
@@ -658,7 +658,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			std::string s = dynamic_cast<std::string>(text.Text.Text);
+			std::string s = text.Text.Text;
 			if (s != "")
 			{
 				output->AppendNotNull(s);

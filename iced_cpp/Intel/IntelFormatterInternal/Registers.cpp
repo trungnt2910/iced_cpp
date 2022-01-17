@@ -15,6 +15,8 @@
 
 #include "Registers.h"
 
+#include "../FormatterInternal/RegistersTable.h"
+
 using namespace Iced::Intel::FormatterInternal;
 
 namespace Iced::Intel::IntelFormatterInternal

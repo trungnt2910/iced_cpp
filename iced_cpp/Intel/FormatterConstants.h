@@ -41,7 +41,7 @@ namespace Iced::Intel
 	private:
 		static FormatterConstants::StaticConstructor staticConstructor;
 
-		static std::vector<FormatterString> Create(std::vector<std::string>& cc, std::int32_t size, const std::string& prefix, const std::string& suffix);
+		static std::vector<FormatterString> Create(const std::vector<std::string>& cc, std::int32_t size, const std::string& prefix, const std::string& suffix);
 		static std::vector<FormatterString> cmpps_pseudo_ops;
 		static std::vector<FormatterString> vcmpps_pseudo_ops;
 		static std::vector<FormatterString> cmppd_pseudo_ops;

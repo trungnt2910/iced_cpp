@@ -15,6 +15,10 @@
 
 #include "MvexTupleTypeLut.g.h"
 
+#include "MemorySize.g.h"
+
+#include "TupleType.g.h"
+
 namespace Iced::Intel
 {
 

@@ -24,14 +24,14 @@
 namespace Iced::Intel::DecoderInternal
 {
 
-	OpCodeHandler_VectorLength_VEX::OpCodeHandler_VectorLength_VEX(OpCodeHandler* handler128, OpCodeHandler* handler256)
+	OpCodeHandler_VectorLength_VEX::OpCodeHandler_VectorLength_VEX(std::shared_ptr<OpCodeHandler> handler128, std::shared_ptr<OpCodeHandler> handler256)
 	{
 		Static::Assert(static_cast<std::int32_t>(VectorLength::L128) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(VectorLength::L256) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(VectorLength::L512) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(VectorLength::Unknown) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers = new OpCodeHandler[4] { handler128 ?? throw new ArgumentNullException(nameof(handler128)), handler256 ?? throw new ArgumentNullException(nameof(handler256)), OpCodeHandler_Invalid.Instance, OpCodeHandler_Invalid.Instance};
+		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler128 ?? throw new ArgumentNullException(nameof(handler128)), handler256 ?? throw new ArgumentNullException(nameof(handler256)), OpCodeHandler_Invalid.Instance, OpCodeHandler_Invalid.Instance};
 		handlers = { (handler128 != nullptr) ? handler128 : throw std::invalid_argument("handler128"), (handler256 != nullptr) ? handler256 : throw std::invalid_argument("handler256"), OpCodeHandler_Invalid::Instance, OpCodeHandler_Invalid::Instance };
 		assert(handler128->HasModRM == HasModRM);
 		assert(handler256->HasModRM == HasModRM);
@@ -43,14 +43,14 @@ namespace Iced::Intel::DecoderInternal
 		handlers[static_cast<std::int32_t>(decoder->state.vectorLength)]->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_VectorLength_NoModRM_VEX::OpCodeHandler_VectorLength_NoModRM_VEX(OpCodeHandler* handler128, OpCodeHandler* handler256)
+	OpCodeHandler_VectorLength_NoModRM_VEX::OpCodeHandler_VectorLength_NoModRM_VEX(std::shared_ptr<OpCodeHandler> handler128, std::shared_ptr<OpCodeHandler> handler256)
 	{
 		Static::Assert(static_cast<std::int32_t>(VectorLength::L128) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(VectorLength::L256) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(VectorLength::L512) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(VectorLength::Unknown) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers = new OpCodeHandler[4] { handler128 ?? throw new ArgumentNullException(nameof(handler128)), handler256 ?? throw new ArgumentNullException(nameof(handler256)), OpCodeHandler_Invalid.Instance, OpCodeHandler_Invalid.Instance};
+		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler128 ?? throw new ArgumentNullException(nameof(handler128)), handler256 ?? throw new ArgumentNullException(nameof(handler256)), OpCodeHandler_Invalid.Instance, OpCodeHandler_Invalid.Instance};
 		handlers = { (handler128 != nullptr) ? handler128 : throw std::invalid_argument("handler128"), (handler256 != nullptr) ? handler256 : throw std::invalid_argument("handler256"), OpCodeHandler_Invalid::Instance, OpCodeHandler_Invalid::Instance };
 		assert(handler128->HasModRM == HasModRM);
 		assert(handler256->HasModRM == HasModRM);
@@ -89,9 +89,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 			gpr = Register::RAX;
@@ -103,15 +103,15 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -132,9 +132,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 			gpr = Register::RAX;
@@ -146,15 +146,15 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -184,20 +184,20 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg1);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg1));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg2);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg2));
 		}
 		else
 		{
@@ -217,13 +217,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -235,12 +235,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -260,13 +260,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -276,11 +276,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			gpr = Register::EAX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -289,7 +289,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
 	}
 
 	OpCodeHandler_VEX_WV::OpCodeHandler_VEX_WV(Register baseReg, Code code)
@@ -304,17 +304,17 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg2);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg2));
 		}
 		else
 		{
@@ -323,7 +323,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg1);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg1));
 	}
 
 	OpCodeHandler_VEX_VM::OpCodeHandler_VEX_VM(Register baseReg, Code code)
@@ -337,16 +337,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -368,13 +368,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -385,7 +385,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 	}
 
 	OpCodeHandler_VEX_M::OpCodeHandler_VEX_M(Code code)
@@ -398,13 +398,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -426,26 +426,26 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::RAX);
+			instruction.SetOp0Register(Register(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::EAX));
 		}
-		if (state->mod != 3)
+		if (state.mod != 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -462,17 +462,17 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
-		if (state->addressSize == OpSize::Size64)
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegEDI);
 		}
@@ -482,12 +482,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -516,12 +516,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 		}
@@ -531,12 +531,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg1);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg1));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg2);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg2));
 		}
 		else
 		{
@@ -559,17 +559,17 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg1);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg1));
 		}
 		else
 		{
@@ -578,7 +578,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg2);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg2));
 		instruction.SetOp2Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
 	}
@@ -595,13 +595,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -611,11 +611,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			gpr = Register::EAX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -624,7 +624,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 		instruction.SetOp2Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
 	}
@@ -661,19 +661,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg1);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg1));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg2);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg2));
+		if (state.mod == 3)
 		{
 			instruction.SetCode(codeR);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg3);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg3));
 		}
 		else
 		{
@@ -694,16 +694,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -712,7 +712,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op2Kind = OpKind.Register;
-		instruction.SetOp2Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
+		instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
 	}
 
 	OpCodeHandler_VEX_WHV::OpCodeHandler_VEX_WHV(Register baseReg, Code code)
@@ -726,18 +726,18 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		assert(state->mod == 3);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		assert(state.mod == 3);
 		instruction.SetCode(codeR);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op2Kind = OpKind.Register;
-		instruction.SetOp2Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 	}
 
 	OpCodeHandler_VEX_VHM::OpCodeHandler_VEX_VHM(Register baseReg, Code code)
@@ -751,15 +751,15 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -781,9 +781,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -794,10 +794,10 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op2Kind = OpKind.Register;
-		instruction.SetOp2Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 	}
 
 	OpCodeHandler_VEX_VHWIb::OpCodeHandler_VEX_VHWIb(Register baseReg, Code code)
@@ -821,19 +821,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg1);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg1));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg2);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg2));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg3);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg3));
 		}
 		else
 		{
@@ -855,16 +855,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -885,19 +885,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -906,7 +906,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op3Kind = OpKind.Register;
-		instruction.SetOp3Register(static_cast<std::int32_t>((decoder->ReadByte() >> 4) & decoder->reg15Mask) + baseReg);
+		instruction.SetOp3Register((Register)(static_cast<std::int32_t>((decoder->ReadByte() >> 4) & decoder->reg15Mask) + baseReg));
 	}
 
 	OpCodeHandler_VEX_VHIs4W::OpCodeHandler_VEX_VHIs4W(Register baseReg, Code code)
@@ -920,19 +920,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op3Kind = OpKind.Register;
-			instruction.SetOp3Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp3Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -941,7 +941,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op2Kind = OpKind.Register;
-		instruction.SetOp2Register(static_cast<std::int32_t>((decoder->ReadByte() >> 4) & decoder->reg15Mask) + baseReg);
+		instruction.SetOp2Register((Register)(static_cast<std::int32_t>((decoder->ReadByte() >> 4) & decoder->reg15Mask) + baseReg));
 	}
 
 	OpCodeHandler_VEX_VHWIs5::OpCodeHandler_VEX_VHWIs5(Register baseReg, Code code)
@@ -955,19 +955,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -977,7 +977,7 @@ namespace Iced::Intel::DecoderInternal
 		std::uint32_t ib = decoder->ReadByte();
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op3Kind = OpKind.Register;
-		instruction.SetOp3Register(static_cast<std::int32_t>((ib >> 4) & decoder->reg15Mask) + baseReg);
+		instruction.SetOp3Register((Register)(static_cast<std::int32_t>((ib >> 4) & decoder->reg15Mask) + baseReg));
 		assert(instruction.GetOp4Kind() == OpKind::Immediate8); // It's hard coded
 		instruction.SetInternalImmediate8(ib & 0xF);
 	}
@@ -993,19 +993,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op3Kind = OpKind.Register;
-			instruction.SetOp3Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp3Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -1015,7 +1015,7 @@ namespace Iced::Intel::DecoderInternal
 		std::uint32_t ib = decoder->ReadByte();
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op2Kind = OpKind.Register;
-		instruction.SetOp2Register(static_cast<std::int32_t>((ib >> 4) & decoder->reg15Mask) + baseReg);
+		instruction.SetOp2Register((Register)(static_cast<std::int32_t>((ib >> 4) & decoder->reg15Mask) + baseReg));
 		assert(instruction.GetOp4Kind() == OpKind::Immediate8); // It's hard coded
 		instruction.SetInternalImmediate8(ib & 0xF);
 	}
@@ -1030,23 +1030,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (decoder->invalidCheckMask != 0 && (state->vvvv > 7 || state->extraRegisterBase != 0))
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (decoder->invalidCheckMask != 0 && (state.vvvv > 7 || state.extraRegisterBase != 0))
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::K0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::K0));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv & 7) + Register::K0);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv & 7) + Register::K0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm) + Register::K0);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm) + Register::K0));
 		}
 		else
 		{
@@ -1064,20 +1064,20 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (((state->vvvv_invalidCheck | state->extraRegisterBase) & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (((state.vvvv_invalidCheck | state.extraRegisterBase) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::K0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::K0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::K0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::K0));
 		}
 		else
 		{
@@ -1095,20 +1095,20 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (((state->vvvv_invalidCheck | state->extraRegisterBase) & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (((state.vvvv_invalidCheck | state.extraRegisterBase) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::K0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::K0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::K0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::K0));
 		}
 		else
 		{
@@ -1128,20 +1128,20 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (((state->vvvv_invalidCheck | state->extraRegisterBase) & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (((state.vvvv_invalidCheck | state.extraRegisterBase) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::K0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::K0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::K0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::K0));
 		}
 		else
 		{
@@ -1160,13 +1160,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (((state->vvvv_invalidCheck | state->extraRegisterBase) & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (((state.vvvv_invalidCheck | state.extraRegisterBase) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -1177,7 +1177,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg) + Register::K0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg) + Register::K0));
 	}
 
 	OpCodeHandler_VEX_VK_R::OpCodeHandler_VEX_VK_R(Code code, Register gpr)
@@ -1191,20 +1191,20 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (((state->vvvv_invalidCheck | state->extraRegisterBase) & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (((state.vvvv_invalidCheck | state.extraRegisterBase) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::K0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::K0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -1223,20 +1223,20 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + gpr);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + gpr));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::K0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::K0));
 		}
 		else
 		{
@@ -1256,30 +1256,30 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(codeW0);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -1300,13 +1300,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1318,12 +1318,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + gpr);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + gpr));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -1343,13 +1343,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1361,12 +1361,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + gpr);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + gpr));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -1389,16 +1389,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		instruction.SetCode(code);
-		std::int32_t regNum = static_cast<std::int32_t>(state->reg + state->extraRegisterBase);
+		std::int32_t regNum = static_cast<std::int32_t>(state.reg + state.extraRegisterBase);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(regNum + baseReg1);
+		instruction.SetOp0Register((Register)(regNum + baseReg1));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op2Kind = OpKind.Register;
-		instruction.SetOp2Register(static_cast<std::int32_t>(state->vvvv) + baseReg3);
-		if (state->mod == 3)
+		instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.vvvv) + baseReg3));
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -1409,7 +1409,7 @@ namespace Iced::Intel::DecoderInternal
 			if (decoder->invalidCheckMask != 0)
 			{
 				std::uint32_t indexNum = (static_cast<std::uint32_t>(instruction.GetMemoryIndex() - Register::XMM0) % static_cast<std::uint32_t>(IcedConstants::VMM_count));
-				if (static_cast<std::uint32_t>(regNum) == indexNum || state->vvvv == indexNum || static_cast<std::uint32_t>(regNum) == state->vvvv)
+				if (static_cast<std::uint32_t>(regNum) == indexNum || state.vvvv == indexNum || static_cast<std::uint32_t>(regNum) == state.vvvv)
 				{
 					decoder->SetInvalidInstruction();
 				}
@@ -1428,9 +1428,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1442,15 +1442,15 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + gpr);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + gpr));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + gpr);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + gpr));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -1470,9 +1470,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1484,12 +1484,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + gpr);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + gpr));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -1498,7 +1498,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op2Kind = OpKind.Register;
-		instruction.SetOp2Register(static_cast<std::int32_t>(state->vvvv) + gpr);
+		instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.vvvv) + gpr));
 	}
 
 	OpCodeHandler_VEX_Hv_Ev::OpCodeHandler_VEX_Hv_Ev(Code code32, Code code64)
@@ -1512,9 +1512,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1526,12 +1526,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->vvvv) + gpr);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.vvvv) + gpr));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -1551,26 +1551,26 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->vvvv) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.vvvv) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->vvvv) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.vvvv) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::EAX));
 		}
 		else
 		{
@@ -1593,13 +1593,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1609,11 +1609,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			gpr = Register::EAX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -1622,7 +1622,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 		instruction.SetOp2Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
 	}
@@ -1638,13 +1638,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1656,12 +1656,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + gpr);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + gpr));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -1683,13 +1683,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1701,12 +1701,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + gpr);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + gpr));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -1727,16 +1727,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (((state->vvvv_invalidCheck | state->extraRegisterBase) & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (((state.vvvv_invalidCheck | state.extraRegisterBase) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::TMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::TMM0));
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -1757,16 +1757,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (((state->vvvv_invalidCheck | state->extraRegisterBase) & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (((state.vvvv_invalidCheck | state.extraRegisterBase) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg) + Register::TMM0);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg) + Register::TMM0));
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -1787,15 +1787,15 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (((state->vvvv_invalidCheck | state->extraRegisterBase) & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (((state.vvvv_invalidCheck | state.extraRegisterBase) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::TMM0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::TMM0));
 	}
 
 	OpCodeHandler_VEX_VT_RT_HT::OpCodeHandler_VEX_VT_RT_HT(Code code)
@@ -1808,26 +1808,26 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (decoder->invalidCheckMask != 0 && (state->vvvv > 7 || state->extraRegisterBase != 0))
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (decoder->invalidCheckMask != 0 && (state.vvvv > 7 || state.extraRegisterBase != 0))
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::TMM0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::TMM0));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op2Kind = OpKind.Register;
-		instruction.SetOp2Register(static_cast<std::int32_t>(state->vvvv & 7) + Register::TMM0);
-		if (state->mod == 3)
+		instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.vvvv & 7) + Register::TMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::TMM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::TMM0));
 			if (decoder->invalidCheckMask != 0)
 			{
-				if (state->extraBaseRegisterBase != 0 || state->reg == state->vvvv || state->reg == state->rm || state->rm == state->vvvv)
+				if (state.extraBaseRegisterBase != 0 || state.reg == state.vvvv || state.reg == state.rm || state.rm == state.vvvv)
 				{
 					decoder->SetInvalidInstruction();
 				}
@@ -1849,23 +1849,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (decoder->invalidCheckMask != 0 && state->vvvv > 7)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (decoder->invalidCheckMask != 0 && state.vvvv > 7)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv & 7) + Register::K0);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv & 7) + Register::K0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm) + Register::K0);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm) + Register::K0));
 		}
 		else
 		{
@@ -1884,20 +1884,20 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (((state->vvvv_invalidCheck | state->extraRegisterBase) & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (((state.vvvv_invalidCheck | state.extraRegisterBase) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::K0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::K0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -1917,20 +1917,20 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		state->flags |= StateFlags::BranchImm8;
-		if (decoder->invalidCheckMask != 0 && state->vvvv > 7)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		state.flags |= StateFlags::BranchImm8;
+		if (decoder->invalidCheckMask != 0 && state.vvvv > 7)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->vvvv & 7) + Register::K0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.vvvv & 7) + Register::K0));
 		assert(decoder->is64bMode);
 		instruction.SetCode(code);
 		instruction.SetOp1Kind(OpKind::NearBranch64);
 		// The modrm byte has the imm8 value
-		instruction.SetNearBranch64(static_cast<std::uint64_t>(static_cast<std::int8_t>(state->modrm)) + decoder->GetCurrentInstructionPointer64());
+		instruction.SetNearBranch64(static_cast<std::uint64_t>(static_cast<std::int8_t>(state.modrm)) + decoder->GetCurrentInstructionPointer64());
 	}
 
 	OpCodeHandler_VEX_K_Jz::OpCodeHandler_VEX_K_Jz(Code code)
@@ -1943,19 +1943,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if (decoder->invalidCheckMask != 0 && state->vvvv > 7)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if (decoder->invalidCheckMask != 0 && state.vvvv > 7)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->vvvv & 7) + Register::K0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.vvvv & 7) + Register::K0));
 		assert(decoder->is64bMode);
 		instruction.SetCode(code);
 		instruction.SetOp1Kind(OpKind::NearBranch64);
 		// The modrm byte has the low 8 bits of imm32
-		std::uint32_t imm = state->modrm | (decoder->ReadByte() << 8) | (decoder->ReadByte() << 16) | (decoder->ReadByte() << 24);
+		std::uint32_t imm = state.modrm | (decoder->ReadByte() << 8) | (decoder->ReadByte() << 16) | (decoder->ReadByte() << 24);
 		instruction.SetNearBranch64(static_cast<std::uint64_t>(static_cast<std::int32_t>(imm)) + decoder->GetCurrentInstructionPointer64());
 	}
 
@@ -1970,13 +1970,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1988,12 +1988,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + gpr);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + gpr));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -2013,13 +2013,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::VEX || state->Encoding == EncodingKind::XOP);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>(state->flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -2029,11 +2029,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			gpr = Register::EAX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{

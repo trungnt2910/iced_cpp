@@ -26,6 +26,7 @@ namespace Iced::Intel
 	/// </summary>
 	class CodeWriter
 	{
+	private:
 		/// <summary>
 		/// Writes the next byte
 		/// </summary>

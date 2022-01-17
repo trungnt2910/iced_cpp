@@ -15,6 +15,8 @@
 
 #include "InstructionMemorySizes.g.h"
 
+#include "MemorySize.g.h"
+
 namespace Iced::Intel
 {
 

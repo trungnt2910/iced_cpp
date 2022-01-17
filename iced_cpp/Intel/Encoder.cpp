@@ -24,6 +24,8 @@
 #include "InstructionUtils.h"
 #include "Iced.Intel.RegisterExtensions.h"
 
+#include "EncoderInternal/EncoderOpCodeHandler.h"
+
 using namespace Iced::Intel::EncoderInternal;
 
 namespace Iced::Intel
@@ -114,10 +116,10 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to the C# 'null-forgiving operator':
 		//ORIGINAL LINE: handler = null!;
 		handler = nullptr; // It's initialized by TryEncode
-		opSize16Flags = bitness != 16 ? EncoderFlags::P66 : 0;
-		opSize32Flags = bitness == 16 ? EncoderFlags::P66 : 0;
-		adrSize16Flags = bitness != 16 ? EncoderFlags::P67 : 0;
-		adrSize32Flags = bitness != 32 ? EncoderFlags::P67 : 0;
+		opSize16Flags = bitness != 16 ? EncoderFlags::P66 : EncoderFlags::None;
+		opSize32Flags = bitness == 16 ? EncoderFlags::P66 : EncoderFlags::None;
+		adrSize16Flags = bitness != 16 ? EncoderFlags::P67 : EncoderFlags::None;
+		adrSize32Flags = bitness != 32 ? EncoderFlags::P67 : EncoderFlags::None;
 	}
 
 	Encoder* Encoder::Create(std::int32_t bitness, CodeWriter* writer)
@@ -228,9 +230,9 @@ namespace Iced::Intel
 		if (!handler->IsDeclareData)
 		{
 			auto ops = handler->Operands;
-			for (std::int32_t i = 0; i < ops->Length; i++)
+			for (std::int32_t i = 0; i < ops.size(); i++)
 			{
-				ops[i].Encode(this, instruction, i);
+				ops[i]->Encode(this, instruction, i);
 			}
 			if ((handler->EncFlags3 & EncFlags3::Fwait) != 0)
 			{
@@ -258,13 +260,13 @@ namespace Iced::Intel
 		}
 		else
 		{
-			assert(dynamic_cast<DeclareDataHandler*>(handler) != nullptr);
+			assert(std::dynamic_pointer_cast<DeclareDataHandler>(handler) != nullptr);
 			handler->Encode(this, instruction);
 		}
 		std::uint32_t instrLen = static_cast<std::uint32_t>(currentRip) - static_cast<std::uint32_t>(rip);
 		if (instrLen > IcedConstants::MaxInstructionLength && !handler->IsDeclareData)
 		{
-			SetErrorMessage(std::format("Instruction length > {0:s} bytes", IcedConstants::MaxInstructionLength));
+			SetErrorMessage(std::format("Instruction length > {0:s} bytes", to_string(IcedConstants::MaxInstructionLength)));
 		}
 		errorMessage = this->errorMessage;
 		if (errorMessage != "")
@@ -290,7 +292,7 @@ namespace Iced::Intel
 		{
 			return true;
 		}
-		SetErrorMessage(std::format("Operand {0:s}: Expected: {1:s}, actual: {2:s}", operand, expected, actual));
+		SetErrorMessage(std::format("Operand {0:s}: Expected: {1:s}, actual: {2:s}", to_string(operand), to_string(expected), to_string(actual)));
 		return false;
 	}
 
@@ -300,21 +302,21 @@ namespace Iced::Intel
 		{
 			return true;
 		}
-		SetErrorMessage(std::format("Operand {0:s}: Expected: {1:s}, actual: {2:s}", operand, expected, actual));
+		SetErrorMessage(std::format("Operand {0:s}: Expected: {1:s}, actual: {2:s}", to_string(operand), to_string(expected), to_string(actual)));
 		return false;
 	}
 
 	bool Encoder::Verify(std::int32_t operand, Register register_, Register regLo, Register regHi)
 	{
-		if (bitness != 64 && regHi > regLo + 7)
+		if (bitness != 64 && (std::underlying_type_t<Register>)regHi > regLo + 7)
 		{
-			regHi = regLo + 7;
+			regHi = (Register)(regLo + 7);
 		}
 		if (regLo <= register_ && register_ <= regHi)
 		{
 			return true;
 		}
-		SetErrorMessage(std::format("Operand {0:s}: Register {1:s} is not between {2:s} and {3:s} (inclusive)", operand, register_, regLo, regHi));
+		SetErrorMessage(std::format("Operand {0:s}: Register {1:s} is not between {2:s} and {3:s} (inclusive)", to_string(operand), to_string(register_), to_string(regLo), to_string(regHi)));
 		return false;
 	}
 
@@ -422,13 +424,13 @@ namespace Iced::Intel
 			{
 			case 2:
 				Static::Assert(static_cast<std::int32_t>(EncoderFlags::P66) == 0x80 ? 0 : -1);
-				EncoderFlags |= static_cast<EncoderFlags>((bitness & 0x20) << 2);
+				EncoderFlags |= static_cast<enum EncoderFlags>((bitness & 0x20) << 2);
 				ImmSize = ImmSize::RipRelSize2_Target32;
 				Immediate = instruction.GetNearBranch32();
 				break;
 			case 4:
 				Static::Assert(static_cast<std::int32_t>(EncoderFlags::P66) == 0x80 ? 0 : -1);
-				EncoderFlags |= static_cast<EncoderFlags>((bitness & 0x10) << 3);
+				EncoderFlags |= static_cast<enum EncoderFlags>((bitness & 0x10) << 3);
 				ImmSize = ImmSize::RipRelSize4_Target32;
 				Immediate = instruction.GetNearBranch32();
 				break;
@@ -500,7 +502,7 @@ namespace Iced::Intel
 		{
 			if (regSize == 2)
 			{
-				SetErrorMessage(std::format("Invalid register size: {0:s}, must be 32-bit or 64-bit", regSize * 8));
+				SetErrorMessage(std::format("Invalid register size: {0:s}, must be 32-bit or 64-bit", to_string(regSize * 8)));
 			}
 			else if (regSize == 4)
 			{
@@ -511,7 +513,7 @@ namespace Iced::Intel
 		{
 			if (regSize == 8)
 			{
-				SetErrorMessage(std::format("Invalid register size: {0:s}, must be 16-bit or 32-bit", regSize * 8));
+				SetErrorMessage(std::format("Invalid register size: {0:s}, must be 16-bit or 32-bit", to_string(regSize * 8)));
 			}
 			else if (bitness == 16)
 			{
@@ -539,12 +541,12 @@ namespace Iced::Intel
 		{
 			if (instruction.GetMemoryBase() != Register::None || instruction.GetMemoryIndex() != Register::None)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Absolute addresses can't have base and/or index regs", operand));
+				SetErrorMessage(std::format("Operand {0:s}: Absolute addresses can't have base and/or index regs", to_string(operand)));
 				return;
 			}
 			if (instruction.GetMemoryIndexScale() != 1)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Absolute addresses must have scale == *1", operand));
+				SetErrorMessage(std::format("Operand {0:s}: Absolute addresses must have scale == *1", to_string(operand)));
 				return;
 			}
 			switch (instruction.GetMemoryDisplSize())
@@ -552,7 +554,7 @@ namespace Iced::Intel
 			case 2:
 				if (bitness == 64)
 				{
-					SetErrorMessage(std::format("Operand {0:s}: 16-bit abs addresses can't be used in 64-bit mode", operand));
+					SetErrorMessage(std::format("Operand {0:s}: 16-bit abs addresses can't be used in 64-bit mode", to_string(operand)));
 					return;
 				}
 				if (bitness == 32)
@@ -562,7 +564,7 @@ namespace Iced::Intel
 				DisplSize = DisplSize::Size2;
 				if (instruction.GetMemoryDisplacement64() > std::numeric_limits<std::uint16_t>::max())
 				{
-					SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in a ushort", operand));
+					SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in a ushort", to_string(operand)));
 					return;
 				}
 				Displ = instruction.GetMemoryDisplacement32();
@@ -572,7 +574,7 @@ namespace Iced::Intel
 				DisplSize = DisplSize::Size4;
 				if (instruction.GetMemoryDisplacement64() > std::numeric_limits<std::uint32_t>::max())
 				{
-					SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in a uint", operand));
+					SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in a uint", to_string(operand)));
 					return;
 				}
 				Displ = instruction.GetMemoryDisplacement32();
@@ -581,7 +583,7 @@ namespace Iced::Intel
 			{
 				if (bitness != 64)
 				{
-					SetErrorMessage(std::format("Operand {0:s}: 64-bit abs address is only available in 64-bit mode", operand));
+					SetErrorMessage(std::format("Operand {0:s}: 64-bit abs address is only available in 64-bit mode", to_string(operand)));
 					return;
 				}
 				DisplSize = DisplSize::Size8;
@@ -591,13 +593,13 @@ namespace Iced::Intel
 				break;
 			}
 			default:
-				SetErrorMessage(std::format("Operand {0:s}: {1:s}.{2:s} must be initialized to 2 (16-bit) or 4 (32-bit)", operand, "Instruction", "MemoryDisplSize"));
+				SetErrorMessage(std::format("Operand {0:s}: {1:s}.{2:s} must be initialized to 2 (16-bit) or 4 (32-bit)", to_string(operand), "Instruction", "MemoryDisplSize"));
 				break;
 			}
 		}
 		else
 		{
-			SetErrorMessage(std::format("Operand {0:s}: Expected OpKind {1:s}, actual: {2:s}", operand, "Memory", opKind));
+			SetErrorMessage(std::format("Operand {0:s}: Expected OpKind {1:s}, actual: {2:s}", to_string(operand), "Memory", to_string(opKind)));
 		}
 	}
 
@@ -608,7 +610,7 @@ namespace Iced::Intel
 			return;
 		}
 		auto reg = instruction.GetOpRegister(operand);
-		if (!Verify(operand, reg, regLo, regHi))
+		if (!Verify(operand, (Register)reg, regLo, regHi))
 		{
 			return;
 		}
@@ -629,9 +631,9 @@ namespace Iced::Intel
 		ModRM |= static_cast<std::uint8_t>((regNum & 7) << 3);
 		EncoderFlags |= EncoderFlags::ModRM;
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::R) == 4 ? 0 : -1);
-		EncoderFlags |= static_cast<EncoderFlags>((regNum & 8) >> 1);
+		EncoderFlags |= static_cast<enum EncoderFlags>((regNum & 8) >> 1);
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::R2) == 0x200 ? 0 : -1);
-		EncoderFlags |= static_cast<EncoderFlags>((regNum & 0x10) << (9 - 4));
+		EncoderFlags |= static_cast<enum EncoderFlags>((regNum & 0x10) << (9 - 4));
 	}
 
 	void Encoder::AddReg(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi)
@@ -641,7 +643,7 @@ namespace Iced::Intel
 			return;
 		}
 		auto reg = instruction.GetOpRegister(operand);
-		if (!Verify(operand, reg, regLo, regHi))
+		if (!Verify(operand, (Register)reg, regLo, regHi))
 		{
 			return;
 		}
@@ -662,7 +664,7 @@ namespace Iced::Intel
 		OpCode |= regNum & 7;
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::B) == 1 ? 0 : -1);
 		assert(regNum <= 15);
-		EncoderFlags |= static_cast<EncoderFlags>(regNum >> 3); // regNum <= 15, so no need to mask out anything
+		EncoderFlags |= static_cast<enum EncoderFlags>(regNum >> 3); // regNum <= 15, so no need to mask out anything
 	}
 
 	void Encoder::AddRegOrMem(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi, bool allowMemOp, bool allowRegOp)
@@ -678,11 +680,11 @@ namespace Iced::Intel
 		{
 			if (!allowRegOp)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: register operand is not allowed", operand));
+				SetErrorMessage(std::format("Operand {0:s}: register operand is not allowed", to_string(operand)));
 				return;
 			}
 			auto reg = instruction.GetOpRegister(operand);
-			if (!Verify(operand, reg, regLo, regHi))
+			if (!Verify(operand, (Register)reg, regLo, regHi))
 			{
 				return;
 			}
@@ -707,14 +709,14 @@ namespace Iced::Intel
 			ModRM |= 0xC0;
 			Static::Assert(static_cast<std::int32_t>(EncoderFlags::B) == 1 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(EncoderFlags::X) == 2 ? 0 : -1);
-			EncoderFlags |= static_cast<EncoderFlags>((regNum >> 3) & 3);
+			EncoderFlags |= static_cast<enum EncoderFlags>((regNum >> 3) & 3);
 			assert(regNum <= 31);
 		}
 		else if (opKind == OpKind::Memory)
 		{
 			if (!allowMemOp)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: memory operand is not allowed", operand));
+				SetErrorMessage(std::format("Operand {0:s}: memory operand is not allowed", to_string(operand)));
 				return;
 			}
 			if (Iced::Intel::MemorySizeExtensions::IsBroadcast(instruction.GetMemorySize()))
@@ -748,7 +750,7 @@ namespace Iced::Intel
 				auto regSize = GetRegisterOpSize(instruction);
 				if (regSize != addrSize)
 				{
-					SetErrorMessage(std::format("Operand {0:s}: Register operand size must equal memory addressing mode (16/32/64)", operand));
+					SetErrorMessage(std::format("Operand {0:s}: Register operand size must equal memory addressing mode (16/32/64)", to_string(operand)));
 					return;
 				}
 			}
@@ -756,7 +758,7 @@ namespace Iced::Intel
 			{
 				if (vsibIndexRegLo != Register::None)
 				{
-					SetErrorMessage(std::format("Operand {0:s}: VSIB operands can't use 16-bit addressing. It must be 32-bit or 64-bit addressing", operand));
+					SetErrorMessage(std::format("Operand {0:s}: VSIB operands can't use 16-bit addressing. It must be 32-bit or 64-bit addressing", to_string(operand)));
 					return;
 				}
 				AddMemOp16(instruction, operand);
@@ -768,7 +770,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			SetErrorMessage(std::format("Operand {0:s}: Expected a register or memory operand, but opKind is {1:s}", operand, opKind));
+			SetErrorMessage(std::format("Operand {0:s}: Expected a register or memory operand, but opKind is {1:s}", to_string(operand), to_string(opKind)));
 		}
 	}
 
@@ -797,9 +799,9 @@ namespace Iced::Intel
 	bool Encoder::TryConvertToDisp8N(Instruction const instruction, std::int32_t displ, std::int8_t& compressedValue)
 	{
 		auto tryConvertToDisp8N = handler->TryConvertToDisp8N;
-		if (tryConvertToDisp8N != nullptr)
+		if (tryConvertToDisp8N != std::nullopt)
 		{
-			return tryConvertToDisp8N(this, handler, instruction, displ, compressedValue);
+			return tryConvertToDisp8N.value()(this, handler, instruction, displ, compressedValue);
 		}
 		if (std::numeric_limits<std::int8_t>::min() <= displ && displ <= std::numeric_limits<std::int8_t>::max())
 		{
@@ -814,7 +816,7 @@ namespace Iced::Intel
 	{
 		if (bitness == 64)
 		{
-			SetErrorMessage(std::format("Operand {0:s}: 16-bit addressing can't be used by 64-bit code", operand));
+			SetErrorMessage(std::format("Operand {0:s}: 16-bit addressing can't be used by 64-bit code", to_string(operand)));
 			return;
 		}
 		auto baseReg = instruction.GetMemoryBase();
@@ -858,21 +860,21 @@ namespace Iced::Intel
 			DisplSize = DisplSize::Size2;
 			if (instruction.GetMemoryDisplacement64() > std::numeric_limits<std::uint16_t>::max())
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in a ushort", operand));
+				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in a ushort", to_string(operand)));
 				return;
 			}
 			Displ = instruction.GetMemoryDisplacement32();
 		}
 		else
 		{
-			SetErrorMessage(std::format("Operand {0:s}: Invalid 16-bit base + index registers: base={1:s}, index={2:s}", operand, baseReg, indexReg));
+			SetErrorMessage(std::format("Operand {0:s}: Invalid 16-bit base + index registers: base={1:s}, index={2:s}", to_string(operand), to_string(baseReg), to_string(indexReg)));
 			return;
 		}
 		if (baseReg != Register::None || indexReg != Register::None)
 		{
 			if (static_cast<std::int64_t>(instruction.GetMemoryDisplacement64()) < std::numeric_limits<std::int16_t>::min() || static_cast<std::int64_t>(instruction.GetMemoryDisplacement64()) > std::numeric_limits<std::uint16_t>::max())
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in a short or a ushort", operand));
+				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in a short or a ushort", to_string(operand)));
 				return;
 			}
 			Displ = instruction.GetMemoryDisplacement32();
@@ -882,7 +884,7 @@ namespace Iced::Intel
 				displSize = 1;
 				if (Displ != 0)
 				{
-					SetErrorMessage(std::format("Operand {0:s}: Displacement must be 0 if displSize == 0", operand));
+					SetErrorMessage(std::format("Operand {0:s}: Displacement must be 0 if displSize == 0", to_string(operand)));
 					return;
 				}
 			}
@@ -902,7 +904,7 @@ namespace Iced::Intel
 			{
 				if (Displ != 0)
 				{
-					SetErrorMessage(std::format("Operand {0:s}: Displacement must be 0 if displSize == 0", operand));
+					SetErrorMessage(std::format("Operand {0:s}: Displacement must be 0 if displSize == 0", to_string(operand)));
 					return;
 				}
 			}
@@ -911,7 +913,7 @@ namespace Iced::Intel
 				// This if check should never be true when we're here
 				if (static_cast<std::int32_t>(Displ) < std::numeric_limits<std::int8_t>::min() || static_cast<std::int32_t>(Displ) > std::numeric_limits<std::int8_t>::max())
 				{
-					SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in an sbyte", operand));
+					SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in an sbyte", to_string(operand)));
 					return;
 				}
 				ModRM |= 0x40;
@@ -924,7 +926,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Invalid displacement size: {1:s}, must be 0, 1, or 2", operand, displSize));
+				SetErrorMessage(std::format("Operand {0:s}: Invalid displacement size: {1:s}, must be 0, 1, or 2", to_string(operand), to_string(displSize)));
 				return;
 			}
 		}
@@ -935,7 +937,7 @@ namespace Iced::Intel
 		assert(addrSize == 32 || addrSize == 64);
 		if (bitness != 64 && addrSize == 64)
 		{
-			SetErrorMessage(std::format("Operand {0:s}: 64-bit addressing can only be used in 64-bit mode", operand));
+			SetErrorMessage(std::format("Operand {0:s}: 64-bit addressing can only be used in 64-bit mode", to_string(operand)));
 			return;
 		}
 		auto baseReg = instruction.GetMemoryBase();
@@ -974,29 +976,29 @@ namespace Iced::Intel
 		}
 		if (displSize != 0 && displSize != 1 && displSize != 4 && displSize != 8)
 		{
-			SetErrorMessage(std::format("Operand {0:s}: Invalid displ size: {1:s}, must be 0, 1, 4, 8", operand, displSize));
+			SetErrorMessage(std::format("Operand {0:s}: Invalid displ size: {1:s}, must be 0, 1, 4, 8", to_string(operand), to_string(displSize)));
 			return;
 		}
 		if (baseReg == Register::RIP || baseReg == Register::EIP)
 		{
 			if (indexReg != Register::None)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: RIP relative addressing can't use an index register", operand));
+				SetErrorMessage(std::format("Operand {0:s}: RIP relative addressing can't use an index register", to_string(operand)));
 				return;
 			}
 			if (instruction.GetInternalMemoryIndexScale() != 0)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: RIP relative addressing must use scale *1", operand));
+				SetErrorMessage(std::format("Operand {0:s}: RIP relative addressing must use scale *1", to_string(operand)));
 				return;
 			}
 			if (bitness != 64)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: RIP/EIP relative addressing is only available in 64-bit mode", operand));
+				SetErrorMessage(std::format("Operand {0:s}: RIP/EIP relative addressing is only available in 64-bit mode", to_string(operand)));
 				return;
 			}
 			if ((EncoderFlags & EncoderFlags::MustUseSib) != 0)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: RIP/EIP relative addressing isn't supported", operand));
+				SetErrorMessage(std::format("Operand {0:s}: RIP/EIP relative addressing isn't supported", to_string(operand)));
 				return;
 			}
 			ModRM |= 5;
@@ -1012,7 +1014,7 @@ namespace Iced::Intel
 				DisplSize = DisplSize::RipRelSize4_Target32;
 				if (target > std::numeric_limits<std::uint32_t>::max())
 				{
-					SetErrorMessage(std::format("Operand {0:s}: Target address doesn't fit in 32 bits: 0x{1:0>X}", operand, target));
+					SetErrorMessage(std::format("Operand {0:s}: Target address doesn't fit in 32 bits: 0x{1:0>X}", to_string(operand), to_string(target)));
 					return;
 				}
 				Displ = static_cast<std::uint32_t>(target);
@@ -1025,7 +1027,7 @@ namespace Iced::Intel
 		{
 			if (static_cast<std::int64_t>(instruction.GetMemoryDisplacement64()) < std::numeric_limits<std::int32_t>::min() || static_cast<std::int64_t>(instruction.GetMemoryDisplacement64()) > std::numeric_limits<std::int32_t>::max())
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in an int", operand));
+				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in an int", to_string(operand)));
 				return;
 			}
 		}
@@ -1034,7 +1036,7 @@ namespace Iced::Intel
 			assert(addrSize == 32);
 			if (static_cast<std::int64_t>(instruction.GetMemoryDisplacement64()) < std::numeric_limits<std::int32_t>::min() || static_cast<std::int64_t>(instruction.GetMemoryDisplacement64()) > std::numeric_limits<std::uint32_t>::max())
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in an int or a uint", operand));
+				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in an int or a uint", to_string(operand)));
 				return;
 			}
 		}
@@ -1042,7 +1044,7 @@ namespace Iced::Intel
 		{
 			if (vsibIndexRegLo != Register::None)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: VSIB addressing can't use an offset-only address", operand));
+				SetErrorMessage(std::format("Operand {0:s}: VSIB addressing can't use an offset-only address", to_string(operand)));
 				return;
 			}
 			if (bitness == 64 || scale != 0 || (EncoderFlags & EncoderFlags::MustUseSib) != 0)
@@ -1068,7 +1070,7 @@ namespace Iced::Intel
 			displSize = 1;
 			if (Displ != 0)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Displacement must be 0 if displSize == 0", operand));
+				SetErrorMessage(std::format("Operand {0:s}: Displacement must be 0 if displSize == 0", to_string(operand)));
 				return;
 			}
 		}
@@ -1095,7 +1097,7 @@ namespace Iced::Intel
 			// This if check should never be true when we're here
 			if (static_cast<std::int32_t>(Displ) < std::numeric_limits<std::int8_t>::min() || static_cast<std::int32_t>(Displ) > std::numeric_limits<std::int8_t>::max())
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in an sbyte", operand));
+				SetErrorMessage(std::format("Operand {0:s}: Displacement must fit in an sbyte", to_string(operand)));
 				return;
 			}
 			ModRM |= 0x40;
@@ -1110,13 +1112,13 @@ namespace Iced::Intel
 		{
 			if (Displ != 0)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: Displacement must be 0 if displSize == 0", operand));
+				SetErrorMessage(std::format("Operand {0:s}: Displacement must be 0 if displSize == 0", to_string(operand)));
 				return;
 			}
 		}
 		else
 		{
-			SetErrorMessage(std::format("Operand {0:s}: Invalid {1:s} value", operand, "MemoryDisplSize"));
+			SetErrorMessage(std::format("Operand {0:s}: Invalid {1:s} value", to_string(operand), "MemoryDisplSize"));
 			return;
 		}
 		if (indexReg == Register::None && (baseNum & 7) != 4 && scale == 0 && (EncoderFlags & EncoderFlags::MustUseSib) == 0)
@@ -1132,7 +1134,7 @@ namespace Iced::Intel
 			ModRM |= 4;
 			if (indexReg == Register::RSP || indexReg == Register::ESP)
 			{
-				SetErrorMessage(std::format("Operand {0:s}: ESP/RSP can't be used as an index register", operand));
+				SetErrorMessage(std::format("Operand {0:s}: ESP/RSP can't be used as an index register", to_string(operand)));
 				return;
 			}
 			if (baseNum < 0)
@@ -1156,13 +1158,13 @@ namespace Iced::Intel
 		{
 			Static::Assert(static_cast<std::int32_t>(EncoderFlags::B) == 1 ? 0 : -1);
 			assert(baseNum <= 15); // No '& 1' required below
-			EncoderFlags |= static_cast<EncoderFlags>(baseNum >> 3);
+			EncoderFlags |= static_cast<enum EncoderFlags>(baseNum >> 3);
 		}
 		if (indexNum >= 0)
 		{
 			Static::Assert(static_cast<std::int32_t>(EncoderFlags::X) == 2 ? 0 : -1);
-			EncoderFlags |= static_cast<EncoderFlags>((indexNum >> 2) & 2);
-			EncoderFlags |= static_cast<EncoderFlags>((indexNum & 0x10) << static_cast<std::int32_t>(EncoderFlags::VvvvvShift));
+			EncoderFlags |= static_cast<enum EncoderFlags>((indexNum >> 2) & 2);
+			EncoderFlags |= static_cast<enum EncoderFlags>((indexNum & 0x10) << static_cast<std::int32_t>(EncoderFlags::VvvvvShift));
 			assert(indexNum <= 31);
 		}
 	}
@@ -1261,7 +1263,7 @@ namespace Iced::Intel
 			std::int64_t diff8 = static_cast<std::int64_t>((static_cast<std::uint64_t>(DisplHi) << 32) | static_cast<std::uint64_t>(Displ)) - static_cast<std::int64_t>(rip);
 			if (diff8 < std::numeric_limits<std::int32_t>::min() || diff8 > std::numeric_limits<std::int32_t>::max())
 			{
-				SetErrorMessage(std::format("RIP relative distance is too far away: NextIP: 0x{0:0>.16X} target: 0x{1:0>.8X}{2:0>.8X}, diff = {3:s}, diff must fit in an Int32", rip, DisplHi, Displ, diff8));
+				SetErrorMessage(std::format("RIP relative distance is too far away: NextIP: 0x{0:0>.16X} target: 0x{1:0>.8X}{2:0>.8X}, diff = {3:s}, diff must fit in an Int32", to_string(rip), to_string(DisplHi), to_string(Displ), to_string(diff8)));
 			}
 			diff4 = static_cast<std::uint32_t>(diff8);
 			WriteByteInternal(diff4);
@@ -1352,7 +1354,7 @@ namespace Iced::Intel
 			diff2 = static_cast<std::int16_t>(static_cast<std::int16_t>(Immediate) - static_cast<std::int16_t>(ip));
 			if (diff2 < std::numeric_limits<std::int8_t>::min() || diff2 > std::numeric_limits<std::int8_t>::max())
 			{
-				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.4X} target: 0x{1:0>.4X}, diff = {2:s}, diff must fit in an Int8", ip, static_cast<std::uint16_t>(Immediate), diff2));
+				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.4X} target: 0x{1:0>.4X}, diff = {2:s}, diff must fit in an Int8", to_string(ip), to_string(static_cast<std::uint16_t>(Immediate)), to_string(diff2)));
 			}
 			WriteByteInternal(static_cast<std::uint32_t>(diff2));
 			break;
@@ -1361,7 +1363,7 @@ namespace Iced::Intel
 			diff4 = static_cast<std::int32_t>(Immediate) - static_cast<std::int32_t>(eip);
 			if (diff4 < std::numeric_limits<std::int8_t>::min() || diff4 > std::numeric_limits<std::int8_t>::max())
 			{
-				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.8X} target: 0x{1:0>.8X}, diff = {2:s}, diff must fit in an Int8", eip, Immediate, diff4));
+				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.8X} target: 0x{1:0>.8X}, diff = {2:s}, diff must fit in an Int8", to_string(eip), to_string(Immediate), to_string(diff4)));
 			}
 			WriteByteInternal(static_cast<std::uint32_t>(diff4));
 			break;
@@ -1370,7 +1372,7 @@ namespace Iced::Intel
 			diff8 = static_cast<std::int64_t>((static_cast<std::uint64_t>(ImmediateHi) << 32) | static_cast<std::uint64_t>(Immediate)) - static_cast<std::int64_t>(rip);
 			if (diff8 < std::numeric_limits<std::int8_t>::min() || diff8 > std::numeric_limits<std::int8_t>::max())
 			{
-				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.16X} target: 0x{1:0>.8X}{2:0>.8X}, diff = {3:s}, diff must fit in an Int8", rip, ImmediateHi, Immediate, diff8));
+				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.16X} target: 0x{1:0>.8X}{2:0>.8X}, diff = {3:s}, diff must fit in an Int8", to_string(rip), to_string(ImmediateHi), to_string(Immediate), to_string(diff8)));
 			}
 			WriteByteInternal(static_cast<std::uint32_t>(diff8));
 			break;
@@ -1385,7 +1387,7 @@ namespace Iced::Intel
 			diff4 = static_cast<std::int32_t>(Immediate - eip);
 			if (diff4 < std::numeric_limits<std::int16_t>::min() || diff4 > std::numeric_limits<std::int16_t>::max())
 			{
-				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.8X} target: 0x{1:0>.8X}, diff = {2:s}, diff must fit in an Int16", eip, Immediate, diff4));
+				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.8X} target: 0x{1:0>.8X}, diff = {2:s}, diff must fit in an Int16", to_string(eip), to_string(Immediate), to_string(diff4)));
 			}
 			value = static_cast<std::uint32_t>(diff4);
 			WriteByteInternal(value);
@@ -1396,7 +1398,7 @@ namespace Iced::Intel
 			diff8 = static_cast<std::int64_t>((static_cast<std::uint64_t>(ImmediateHi) << 32) | static_cast<std::uint64_t>(Immediate)) - static_cast<std::int64_t>(rip);
 			if (diff8 < std::numeric_limits<std::int16_t>::min() || diff8 > std::numeric_limits<std::int16_t>::max())
 			{
-				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.16X} target: 0x{1:0>.8X}{2:0>.8X}, diff = {3:s}, diff must fit in an Int16", rip, ImmediateHi, Immediate, diff8));
+				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.16X} target: 0x{1:0>.8X}{2:0>.8X}, diff = {3:s}, diff must fit in an Int16", to_string(rip), to_string(ImmediateHi), to_string(Immediate), to_string(diff8)));
 			}
 			value = static_cast<std::uint32_t>(diff8);
 			WriteByteInternal(value);
@@ -1415,7 +1417,7 @@ namespace Iced::Intel
 			diff8 = static_cast<std::int64_t>((static_cast<std::uint64_t>(ImmediateHi) << 32) | static_cast<std::uint64_t>(Immediate)) - static_cast<std::int64_t>(rip);
 			if (diff8 < std::numeric_limits<std::int32_t>::min() || diff8 > std::numeric_limits<std::int32_t>::max())
 			{
-				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.16X} target: 0x{1:0>.8X}{2:0>.8X}, diff = {3:s}, diff must fit in an Int32", rip, ImmediateHi, Immediate, diff8));
+				SetErrorMessage(std::format("Branch distance is too far away: NextIP: 0x{0:0>.16X} target: 0x{1:0>.8X}{2:0>.8X}, diff = {3:s}, diff must fit in an Int32", to_string(rip), to_string(ImmediateHi), to_string(Immediate), to_string(diff8)));
 			}
 			value = static_cast<std::uint32_t>(diff8);
 			WriteByteInternal(value);

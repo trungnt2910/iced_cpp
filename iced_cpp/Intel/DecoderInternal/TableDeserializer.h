@@ -37,7 +37,6 @@ namespace Iced::Intel::DecoderInternal { class TableDeserializer; }
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
-using namespace Iced::Intel::Internal;
 namespace Iced::Intel::DecoderInternal
 {
 	class OpCodeHandlerReader
@@ -45,7 +44,7 @@ namespace Iced::Intel::DecoderInternal
 	public:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public abstract int ReadHandlers(ref TableDeserializer deserializer, OpCodeHandler?[] result, int resultIndex);
-		virtual std::int32_t ReadHandlers(TableDeserializer& deserializer, std::vector<OpCodeHandler*>& result, std::int32_t resultIndex) = 0;
+		virtual std::int32_t ReadHandlers(TableDeserializer& deserializer, std::vector<std::shared_ptr<OpCodeHandler>>& result, std::int32_t resultIndex) = 0;
 	};
 	/* readonly */
 	class HandlerInfo
@@ -53,21 +52,21 @@ namespace Iced::Intel::DecoderInternal
 	public:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public OpCodeHandler? handler;
-		OpCodeHandler* handler;
+		std::shared_ptr<OpCodeHandler> handler;
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public OpCodeHandler?[]? handlers;
-		OpCodeHandler[] ? handlers;
-		HandlerInfo(OpCodeHandler* handler);
+		std::optional<std::vector<std::shared_ptr<OpCodeHandler>>> handlers;
+		HandlerInfo(std::shared_ptr<OpCodeHandler> handler);
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public HandlerInfo(OpCodeHandler?[] handlers)
-		HandlerInfo(std::vector<OpCodeHandler*>& handlers);
+		HandlerInfo(const std::vector<std::shared_ptr<OpCodeHandler>>& handlers);
 
 		HandlerInfo() = default;
 	};
 	class TableDeserializer
 	{
 	private:
-		DataReader reader;
+		Iced::Intel::Internal::DataReader reader;
 		/* readonly */
 		OpCodeHandlerReader* handlerReader;
 		/* readonly */
@@ -75,9 +74,9 @@ namespace Iced::Intel::DecoderInternal
 		/* readonly */
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: OpCodeHandler?[] handlerArray;
-		std::vector<OpCodeHandler*> handlerArray;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlerArray;
 	public:
-		TableDeserializer(OpCodeHandlerReader* handlerReader, std::int32_t maxIds, std::vector<std::uint8_t>& data);
+		TableDeserializer(OpCodeHandlerReader* handlerReader, std::int32_t maxIds, const std::vector<std::uint8_t>& data);
 		void Deserialize();
 		LegacyOpCodeHandlerKind ReadLegacyOpCodeHandlerKind();
 		VexOpCodeHandlerKind ReadVexOpCodeHandlerKind();
@@ -91,16 +90,16 @@ namespace Iced::Intel::DecoderInternal
 		TupleType ReadTupleType();
 		bool ReadBoolean();
 		std::int32_t ReadInt32();
-		OpCodeHandler* ReadHandler();
+		std::shared_ptr<OpCodeHandler> ReadHandler();
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public OpCodeHandler? ReadHandlerOrNull()
-		OpCodeHandler* ReadHandlerOrNull();
+		std::shared_ptr<OpCodeHandler> ReadHandlerOrNull();
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public OpCodeHandler?[] ReadHandlers(int count)
-		std::vector<OpCodeHandler*> ReadHandlers(std::int32_t count);
-		OpCodeHandler* ReadHandlerReference();
-		std::vector<OpCodeHandler*> ReadArrayReference(std::uint32_t kind);
-		std::vector<OpCodeHandler*> GetTable(std::uint32_t index);
+		std::vector<std::shared_ptr<OpCodeHandler>> ReadHandlers(std::int32_t count);
+		std::shared_ptr<OpCodeHandler> ReadHandlerReference();
+		std::vector<std::shared_ptr<OpCodeHandler>> ReadArrayReference(std::uint32_t kind);
+		std::vector<std::shared_ptr<OpCodeHandler>> GetTable(std::uint32_t index);
 
 		TableDeserializer() = default;
 	};

@@ -308,3 +308,10 @@ DontUseFF = 255
 		DEFINE_ARITH(Register)
 
 }
+
+template <>
+struct magic_enum::customize::enum_range<Iced::Intel::Register> {
+	static constexpr int min = 0;
+	static constexpr int max = 255;
+	// (max - min) must be less than UINT16_MIN.
+};

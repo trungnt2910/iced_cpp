@@ -37,12 +37,14 @@ namespace Iced::Intel::NasmFormatterInternal
 
 	std::string InstrInfos::AddSuffix(const std::string& s, std::vector<char>& ca)
 	{
-		return std::string::Intern(s + std::string(ca));
+		// Author uses string.Intern to cache.
+		return s + std::string(ca);
 	}
 
 	std::string InstrInfos::AddPrefix(const std::string& s, std::vector<char>& ca)
 	{
-		return std::string::Intern(std::string(ca) + s);
+		// Author uses string.Intern to cache.
+		return std::string(ca) + s;
 	}
 
 	std::vector<InstrInfo*> InstrInfos::ReadInfos()

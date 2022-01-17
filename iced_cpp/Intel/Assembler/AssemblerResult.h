@@ -34,7 +34,7 @@ namespace Iced::Intel
 	class AssemblerResult
 	{
 	public:
-		AssemblerResult(std::vector<BlockEncoderResult>& result);
+		AssemblerResult(const std::vector<BlockEncoderResult>& result);
 		/// <summary>
 		/// The associated block encoder result.
 		/// </summary>
@@ -45,7 +45,7 @@ namespace Iced::Intel
 		/// <param name="label">A label.</param>
 		/// <param name="index">Result index</param>
 		/// <returns>RIP of the label.</returns>
-		std::uint64_t GetLabelRIP(Label* const label, std::int32_t index = 0);
+		std::uint64_t GetLabelRIP(const Label& label, std::int32_t index = 0);
 
 		AssemblerResult() = default;
 	};

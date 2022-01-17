@@ -55,7 +55,7 @@ namespace Iced::Intel
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public NasmFormatter(FormatterOptions? options, System.Nullable<ISymbolResolver> symbolResolver = null, System.Nullable<IFormatterOptionsProvider> optionsProvider = null)
-	NasmFormatter::NasmFormatter(FormatterOptions* options, ISymbolResolver* symbolResolver, IFormatterOptionsProvider* optionsProvider)
+	NasmFormatter::NasmFormatter(FormatterOptions* options, ISymbolResolver* symbolResolver, IFormatterOptionsProvider* optionsProvider) : numberFormatter(true)
 	{
 		this->options = (options != nullptr) ? options : FormatterOptions::CreateNasm();
 		this->symbolResolver = symbolResolver;
@@ -63,7 +63,6 @@ namespace Iced::Intel
 		allRegisters = Registers::AllRegisters;
 		instrInfos = InstrInfos::AllInfos;
 		allMemorySizes = MemorySizes::AllMemorySizes;
-		numberFormatter = NumberFormatter(true);
 		opSizeStrings = s_opSizeStrings;
 		addrSizeStrings = s_addrSizeStrings;
 		branchInfos = s_branchInfos;
@@ -100,7 +99,7 @@ namespace Iced::Intel
 	FormatterString NasmFormatter::str_z = FormatterString("z");
 	std::vector<FormatterString> NasmFormatter::s_opSizeStrings = { FormatterString(""), FormatterString("o16"), FormatterString("o32"), FormatterString("o64") };
 	std::vector<FormatterString> NasmFormatter::s_addrSizeStrings = { FormatterString(""), FormatterString("a16"), FormatterString("a32"), FormatterString("a64") };
-	std::vector<std::vector<FormatterString>> NasmFormatter::s_branchInfos = std::vector<FormatterString>() == nullptr ? nullptr : {nullptr, std::vector<FormatterString> {FormatterString("near")}, std::vector<FormatterString> {FormatterString("near"), FormatterString("word")}, std::vector<FormatterString> {FormatterString("near"), FormatterString("dword")}, std::vector<FormatterString> {FormatterString("word")}, std::vector<FormatterString> {FormatterString("dword")}, std::vector<FormatterString> {FormatterString("short")}, nullptr};
+	std::vector<std::vector<FormatterString>> NasmFormatter::s_branchInfos = { {}, std::vector<FormatterString> {FormatterString("near")}, std::vector<FormatterString> {FormatterString("near"), FormatterString("word")}, std::vector<FormatterString> {FormatterString("near"), FormatterString("dword")}, std::vector<FormatterString> {FormatterString("word")}, std::vector<FormatterString> {FormatterString("dword")}, std::vector<FormatterString> {FormatterString("short")}, {} };
 	std::vector<FormatterString> NasmFormatter::s_memSizeInfos = { FormatterString(""), FormatterString("word"), FormatterString("dword"), FormatterString("qword") };
 	std::vector<FormatterString> NasmFormatter::s_farMemSizeInfos = { FormatterString(""), FormatterString("word"), FormatterString("dword"), FormatterString("") };
 	std::vector<std::string> NasmFormatter::s_scaleNumbers = { "1", "2", "4", "8" };
@@ -112,7 +111,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(this->options, instruction, opInfo);
 		std::int32_t column = 0;
 		FormatMnemonic(instruction, output, opInfo, column, options);
@@ -122,7 +121,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		return opInfo.OpCount;
 	}
@@ -131,7 +130,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		// Although it's a TryXXX() method, it should only accept valid instruction operand indexes
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(opInfo.OpCount))
@@ -145,7 +144,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(opInfo.OpCount))
 		{
@@ -158,7 +157,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		if (static_cast<std::uint32_t>(instructionOperand) >= static_cast<std::uint32_t>(instruction.GetOpCount()))
 		{
@@ -171,7 +170,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(opInfo.OpCount))
 		{
@@ -197,7 +196,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		FormatOperands(instruction, output, opInfo);
 	}
@@ -206,7 +205,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		std::int32_t column = 0;
 		FormatMnemonic(instruction, output, opInfo, column, FormatMnemonicOptions::None);
@@ -228,7 +227,7 @@ namespace Iced::Intel
 		{
 			auto prefixSeg = instruction.GetSegmentPrefix();
 			constexpr std::uint32_t PrefixFlags = (static_cast<std::uint32_t>(InstrOpInfoFlags::SizeOverrideMask) << static_cast<std::int32_t>(InstrOpInfoFlags::OpSizeShift)) | (static_cast<std::uint32_t>(InstrOpInfoFlags::SizeOverrideMask) << static_cast<std::int32_t>(InstrOpInfoFlags::AddrSizeShift)) | static_cast<std::uint32_t>(InstrOpInfoFlags::BndPrefix);
-			if ((static_cast<std::uint32_t>(prefixSeg) | instruction.GetHasAnyOfLockRepRepnePrefix() | (static_cast<std::uint32_t>(opInfo.Flags & PrefixFlags))) != 0)
+			if ((static_cast<std::uint32_t>(prefixSeg) | instruction.GetHasAnyOfLockRepRepnePrefix() | (static_cast<std::uint32_t>((uint)opInfo.Flags & PrefixFlags))) != 0)
 			{
 				FormatterString prefix;
 				prefix = opSizeStrings[(static_cast<std::int32_t>(opInfo.Flags) >> static_cast<std::int32_t>(InstrOpInfoFlags::OpSizeShift)) & static_cast<std::int32_t>(InstrOpInfoFlags::SizeOverrideMask)];
@@ -554,7 +553,7 @@ namespace Iced::Intel
 			{
 				FormatFlowControl(output, opInfo.Flags, operandOptions);
 				assert(operand + 1 == 1);
-				Iced.Intel.SymbolResult selectorSymbol;
+				SymbolResult selectorSymbol;
 				if (!symbolResolver->TryGetSymbol(instruction, operand + 1, instructionOperand, instruction.GetFarBranchSelector(), 2, selectorSymbol))
 				{
 					s = numberFormatter.FormatUInt16(options, numberOptions, instruction.GetFarBranchSelector(), numberOptions.LeadingZeros);
@@ -777,31 +776,31 @@ namespace Iced::Intel
 			}
 			break;
 		case InstrOpKind::MemorySegSI:
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, instruction.GetMemorySegment(), Register::SI, Register::None, 0, 0, 0, 2, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), instruction.GetMemorySegment(), Register::SI, Register::None, 0, 0, 0, 2, opInfo.Flags);
 			break;
 		case InstrOpKind::MemorySegESI:
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, instruction.GetMemorySegment(), Register::ESI, Register::None, 0, 0, 0, 4, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), instruction.GetMemorySegment(), Register::ESI, Register::None, 0, 0, 0, 4, opInfo.Flags);
 			break;
 		case InstrOpKind::MemorySegRSI:
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, instruction.GetMemorySegment(), Register::RSI, Register::None, 0, 0, 0, 8, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), instruction.GetMemorySegment(), Register::RSI, Register::None, 0, 0, 0, 8, opInfo.Flags);
 			break;
 		case InstrOpKind::MemorySegDI:
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, instruction.GetMemorySegment(), Register::DI, Register::None, 0, 0, 0, 2, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), instruction.GetMemorySegment(), Register::DI, Register::None, 0, 0, 0, 2, opInfo.Flags);
 			break;
 		case InstrOpKind::MemorySegEDI:
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, instruction.GetMemorySegment(), Register::EDI, Register::None, 0, 0, 0, 4, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), instruction.GetMemorySegment(), Register::EDI, Register::None, 0, 0, 0, 4, opInfo.Flags);
 			break;
 		case InstrOpKind::MemorySegRDI:
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, instruction.GetMemorySegment(), Register::RDI, Register::None, 0, 0, 0, 8, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), instruction.GetMemorySegment(), Register::RDI, Register::None, 0, 0, 0, 8, opInfo.Flags);
 			break;
 		case InstrOpKind::MemoryESDI:
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, Register::ES, Register::DI, Register::None, 0, 0, 0, 2, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), Register::ES, Register::DI, Register::None, 0, 0, 0, 2, opInfo.Flags);
 			break;
 		case InstrOpKind::MemoryESEDI:
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, Register::ES, Register::EDI, Register::None, 0, 0, 0, 4, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), Register::ES, Register::EDI, Register::None, 0, 0, 0, 4, opInfo.Flags);
 			break;
 		case InstrOpKind::MemoryESRDI:
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, Register::ES, Register::RDI, Register::None, 0, 0, 0, 8, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), Register::ES, Register::RDI, Register::None, 0, 0, 0, 8, opInfo.Flags);
 			break;
 		case InstrOpKind::Memory:
 		{
@@ -818,7 +817,7 @@ namespace Iced::Intel
 			{
 				displ = instruction.GetMemoryDisplacement32();
 			}
-			FormatMemory(output, instruction, operand, instructionOperand, opInfo.MemorySize, instruction.GetMemorySegment(), baseReg, indexReg, instruction.GetInternalMemoryIndexScale(), displSize, displ, addrSize, opInfo.Flags);
+			FormatMemory(output, instruction, operand, instructionOperand, opInfo.GetMemorySize(), instruction.GetMemorySegment(), baseReg, indexReg, instruction.GetInternalMemoryIndexScale(), displSize, displ, addrSize, opInfo.Flags);
 			break;
 		}
 		case InstrOpKind::Sae:
@@ -1272,7 +1271,7 @@ namespace Iced::Intel
 		assert(static_cast<std::uint32_t>(memSize) < static_cast<std::uint32_t>(allMemorySizes.size()));
 		auto memInfo = allMemorySizes[static_cast<std::int32_t>(memSize)];
 		auto keyword = memInfo.keyword;
-		if (keyword->Length == 0)
+		if (keyword.GetLength() == 0)
 		{
 			return;
 		}

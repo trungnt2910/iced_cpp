@@ -29,6 +29,7 @@
 // Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel::BlockEncoderInternal
 {
+	class Block;
 	/// <summary>
 	/// Simple instruction that doesn't need fixing, i.e., it's not IP relative (no branch instruction, no IP relative memory operand)
 	/// </summary>
@@ -37,7 +38,7 @@ namespace Iced::Intel::BlockEncoderInternal
 	private:
 		Instruction instruction;
 	public:
-		SimpleInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction);
+		SimpleInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:

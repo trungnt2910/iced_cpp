@@ -213,8 +213,8 @@ namespace Iced::Intel
 		void FormatMemory(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, InstrOpInfoFlags flags);
 		void FormatMemoryDispl(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, SymbolResult const symbol, NumberFormattingOptions& numberOptions, std::uint64_t absAddr, std::int64_t displ, std::int32_t displSize, std::int32_t addrSize, bool useSymbol, bool needPlus, bool forceDispl);
 		void FormatMemorySize(FormatterOutput* output, Instruction const instruction, SymbolResult& symbol, MemorySize memSize, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions, bool useSymbol);
-		bool IsSameMemSize(std::vector<FormatterString>& memSizeStrings, bool isBroadcast, SymbolResult& symbol);
-		static bool IsSameMemSize(std::vector<FormatterString>& a, std::vector<FormatterString>& b);
+		bool IsSameMemSize(const std::vector<FormatterString>& memSizeStrings, bool isBroadcast, SymbolResult& symbol);
+		static bool IsSameMemSize(const std::vector<FormatterString>& a, const std::vector<FormatterString>& b);
 		void FormatKeyword(FormatterOutput* output, FormatterString keyword);
 		void FormatFlowControl(FormatterOutput* output, FormatterFlowControl kind, FormatterOperandOptions operandOptions);
 		/// <summary>

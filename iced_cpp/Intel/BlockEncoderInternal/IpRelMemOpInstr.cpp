@@ -19,7 +19,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	IpRelMemOpInstr::IpRelMemOpInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	IpRelMemOpInstr::IpRelMemOpInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
 	{
 		assert(instruction.IsIPRelativeMemoryOperand());
 		this->instruction = instruction;
@@ -104,6 +104,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			auto targetAddress = targetInstr.GetAddress();
 			instruction.SetMemoryDisplacement64(targetAddress);
 			std::string errorMessage;
+			uint32_t _;
 			encoder->TryEncode(instruction, IP, _, errorMessage);
 			bool b = instruction.GetIPRelativeMemoryAddress() == (instruction.GetMemoryBase() == Register::EIP ? static_cast<std::uint32_t>(targetAddress) : targetAddress);
 			assert(b);
@@ -122,7 +123,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		case InstrKind::Long:
 			isOriginalInstruction = false;
 			constantOffsets = Iced::Intel::ConstantOffsets();
-			return "IP relative memory operand is too far away and isn't currently supported. " + "Try to allocate memory close to the original instruction (+/-2GB).";
+			return "IP relative memory operand is too far away and isn't currently supported. " "Try to allocate memory close to the original instruction (+/-2GB).";
 		case InstrKind::Uninitialized:
 		default:
 			throw InvalidOperationException();

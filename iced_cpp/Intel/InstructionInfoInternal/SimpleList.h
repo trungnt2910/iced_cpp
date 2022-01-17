@@ -30,7 +30,7 @@ namespace Iced::Intel::InstructionInfoInternal
 		static SimpleList<T> Empty;
 		std::vector<T> Array;
 		std::int32_t ValidLength = 0;
-		SimpleList(std::vector<T>& array)
+		SimpleList(const std::vector<T>& array)
 		{
 			Array = array;
 			ValidLength = 0;

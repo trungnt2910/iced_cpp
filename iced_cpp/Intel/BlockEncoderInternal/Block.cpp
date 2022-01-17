@@ -27,12 +27,11 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public Block(BlockEncoder blockEncoder, CodeWriter codeWriter, ulong rip, List<RelocInfo>? relocInfos)
-	Block::Block(BlockEncoder* blockEncoder, CodeWriter* codeWriter, std::uint64_t rip, std::vector<RelocInfo>& relocInfos)
+	Block::Block(BlockEncoder* blockEncoder, ::Iced::Intel::CodeWriter* codeWriter, std::uint64_t rip, const std::vector<RelocInfo>& relocInfos) : CodeWriter(codeWriter)
 	{
-		CodeWriter = new CodeWriterImpl(codeWriter);
 		RIP = rip;
 		this->relocInfos = relocInfos;
-		instructions = Array2::Empty<Instr*>();
+		instructions = System::Array2::Empty<Instr*>();
 		dataList = std::vector<BlockData*>();
 		alignment = static_cast<std::uint32_t>(blockEncoder->GetBitness()) / 8;
 		validData = std::vector<BlockData*>();
@@ -45,7 +44,7 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	BlockData* Block::AllocPointerLocation()
 	{
-		auto data = { .IsValid = true };
+		BlockData* data = new BlockData{ .IsValid = true };
 		dataList.push_back(data);
 		return data;
 	}
@@ -88,7 +87,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		std::int32_t alignment = static_cast<std::int32_t>(validDataAddressAligned - validDataAddress);
 		for (std::int32_t i = 0; i < alignment; i++)
 		{
-			codeWriter->WriteByte(0xCC);
+			codeWriter.WriteByte(0xCC);
 		}
 		auto relocInfos = this->relocInfos;
 		std::uint32_t d;
@@ -102,15 +101,15 @@ namespace Iced::Intel::BlockEncoderInternal
 					relocInfos.push_back(RelocInfo(RelocKind::Offset64, data->GetAddress()));
 				}
 				d = static_cast<std::uint32_t>(data->Data);
-				codeWriter->WriteByte(static_cast<std::uint8_t>(d));
-				codeWriter->WriteByte(static_cast<std::uint8_t>(d >> 8));
-				codeWriter->WriteByte(static_cast<std::uint8_t>(d >> 16));
-				codeWriter->WriteByte(static_cast<std::uint8_t>(d >> 24));
+				codeWriter.WriteByte(static_cast<std::uint8_t>(d));
+				codeWriter.WriteByte(static_cast<std::uint8_t>(d >> 8));
+				codeWriter.WriteByte(static_cast<std::uint8_t>(d >> 16));
+				codeWriter.WriteByte(static_cast<std::uint8_t>(d >> 24));
 				d = static_cast<std::uint32_t>(data->Data >> 32);
-				codeWriter->WriteByte(static_cast<std::uint8_t>(d));
-				codeWriter->WriteByte(static_cast<std::uint8_t>(d >> 8));
-				codeWriter->WriteByte(static_cast<std::uint8_t>(d >> 16));
-				codeWriter->WriteByte(static_cast<std::uint8_t>(d >> 24));
+				codeWriter.WriteByte(static_cast<std::uint8_t>(d));
+				codeWriter.WriteByte(static_cast<std::uint8_t>(d >> 8));
+				codeWriter.WriteByte(static_cast<std::uint8_t>(d >> 16));
+				codeWriter.WriteByte(static_cast<std::uint8_t>(d >> 24));
 			}
 			break;
 		default:

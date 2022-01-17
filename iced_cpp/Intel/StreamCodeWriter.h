@@ -28,16 +28,17 @@ namespace Iced::Intel
 	/// </summary>
 	class StreamCodeWriter final : public CodeWriter
 	{
+	private:
 		/// <summary>
 		/// Creates a new instance of <see cref="StreamCodeWriter"/>. 
 		/// </summary>
 		/// <param name="stream">The output stream</param>
 	public:
-		StreamCodeWriter(Stream* stream);
+		StreamCodeWriter(class Stream* stream);
 		/// <summary>
 		/// The stream this instance is writing to
 		/// </summary>
-		Stream* Stream;
+		class Stream* Stream;
 		/// <summary>
 		/// Writes the next byte
 		/// </summary>

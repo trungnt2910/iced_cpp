@@ -17,6 +17,8 @@
 #include "Enums.h"
 #include "../Code.g.h"
 
+#include "../../NRT_Helpers.h"
+
 namespace Iced::Intel::EncoderInternal
 {
 
@@ -113,10 +115,10 @@ namespace Iced::Intel::EncoderInternal
 
 	void OpModRM_regF0::Encode(Encoder* encoder, Instruction const instruction, std::int32_t operand)
 	{
-		if (encoder->GetBitness() != 64 && instruction.GetOpKind(operand) == OpKind::Register && instruction.GetOpRegister(operand) >= regLo + 8 && instruction.GetOpRegister(operand) <= regLo + 15)
+		if (encoder->GetBitness() != 64 && instruction.GetOpKind(operand) == OpKind::Register && (int)instruction.GetOpRegister(operand) >= regLo + 8 && (int)instruction.GetOpRegister(operand) <= regLo + 15)
 		{
 			encoder->EncoderFlags |= EncoderFlags::PF0;
-			encoder->AddModRMRegister(instruction, operand, regLo + 8, regLo + 15);
+			encoder->AddModRMRegister(instruction, operand, (Register)(regLo + 8), Register(regLo + 15));
 		}
 		else
 		{
@@ -142,7 +144,7 @@ namespace Iced::Intel::EncoderInternal
 			return;
 		}
 		auto reg = instruction.GetOpRegister(operand);
-		if (!encoder->Verify(operand, reg, Register::ST0, Register::ST7))
+		if (!encoder->Verify(operand, (Register)reg, Register::ST0, Register::ST7))
 		{
 			return;
 		}
@@ -443,7 +445,7 @@ namespace Iced::Intel::EncoderInternal
 	{
 		// xbegin is special and doesn't mask the target IP. We need to know the code size to return the correct value.
 		// Instruction.CreateXbegin() should be used to create the instruction and this method should never be called.
-		Debug::Fail("Call Instruction.CreateXbegin()");
+		System::Diagnostics::Debug2::Fail("Call Instruction.CreateXbegin()");
 		return Op::GetNearBranchOpKind();
 	}
 
@@ -520,7 +522,7 @@ namespace Iced::Intel::EncoderInternal
 			return;
 		}
 		auto reg = instruction.GetOpRegister(operand);
-		if (!encoder->Verify(operand, reg, regLo, regHi))
+		if (!encoder->Verify(operand, (Register)reg, regLo, regHi))
 		{
 			return;
 		}
@@ -552,7 +554,7 @@ namespace Iced::Intel::EncoderInternal
 			return;
 		}
 		auto reg = instruction.GetOpRegister(operand);
-		if (!encoder->Verify(operand, reg, regLo, regHi))
+		if (!encoder->Verify(operand, (Register)reg, regLo, regHi))
 		{
 			return;
 		}

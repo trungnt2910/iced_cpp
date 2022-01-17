@@ -31,11 +31,12 @@
 #include <csharp/exceptionhelper.h>
 #include <cassert>
 
+namespace Iced::Intel::BlockEncoderInternal { class Block; class Instr; class TargetInstr; }
+
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
-using namespace Iced::Intel::BlockEncoderInternal;
 namespace Iced::Intel
 {
 	// GENERATOR-BEGIN: RelocKind
@@ -98,7 +99,7 @@ namespace Iced::Intel
 		/// <param name="codeWriter">Code writer</param>
 		/// <param name="instructions">Instructions</param>
 		/// <param name="rip">Base IP of all encoded instructions</param>
-		InstructionBlock(CodeWriter* codeWriter, std::vector<Instruction>& instructions, std::uint64_t rip);
+		InstructionBlock(class CodeWriter* codeWriter, const std::vector<Instruction>& instructions, std::uint64_t rip);
 
 		InstructionBlock() = default;
 	};
@@ -136,7 +137,7 @@ namespace Iced::Intel
 		std::vector<ConstantOffsets> ConstantOffsets;
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: internal BlockEncoderResult(ulong rip, List<RelocInfo>? relocInfos, uint[]? newInstructionOffsets, ConstantOffsets[]? constantOffsets)
-		BlockEncoderResult(std::uint64_t rip, std::vector<RelocInfo>& relocInfos, std::uint32_t[] ? *newInstructionOffsets, ConstantOffsets[] ? *constantOffsets);
+		BlockEncoderResult(std::uint64_t rip, const std::vector<RelocInfo>& relocInfos, const std::vector<std::uint32_t>& newInstructionOffsets, const std::vector<class ConstantOffsets>& constantOffsets);
 
 		BlockEncoderResult() = default;
 	};
@@ -172,24 +173,24 @@ namespace Iced::Intel
 		/* readonly */
 		BlockEncoderOptions options = static_cast<BlockEncoderOptions>(0);
 		/* readonly */
-		std::vector<Block*> blocks;
+		std::vector<Iced::Intel::BlockEncoderInternal::Block*> blocks;
 		/* readonly */
 		Encoder* nullEncoder;
 		/* readonly */
-		std::unordered_map<std::uint64_t, Instr*> toInstr;
+		std::unordered_map<std::uint64_t, Iced::Intel::BlockEncoderInternal::Instr*> toInstr;
 	public:
 		std::int32_t GetBitness() const;
 		bool GetFixBranches() const;
 	private:
-		bool [&](std::any ReturnRelocInfos)
+		bool GetReturnRelocInfos() const
 		{
 			return (options & BlockEncoderOptions::ReturnRelocInfos) != 0;
 		};
-		bool [&](std::any ReturnNewInstructionOffsets)
+		bool GetReturnNewInstructionOffsets() const
 		{
 			return (options & BlockEncoderOptions::ReturnNewInstructionOffsets) != 0;
 		};
-		bool [&](std::any ReturnConstantOffsets)
+		bool GetReturnConstantOffsets() const
 		{
 			return (options & BlockEncoderOptions::ReturnConstantOffsets) != 0;
 		};
@@ -204,7 +205,7 @@ namespace Iced::Intel
 			void WriteByte(std::uint8_t value) override;
 		};
 	private:
-		BlockEncoder(std::int32_t bitness, std::vector<InstructionBlock>& instrBlocks, BlockEncoderOptions options);
+		BlockEncoder(std::int32_t bitness, const std::vector<InstructionBlock>& instrBlocks, BlockEncoderOptions options);
 		/// <summary>
 		/// Encodes instructions. Any number of branches can be part of this block.
 		/// You can use this function to move instructions from one location to another location.
@@ -243,14 +244,14 @@ namespace Iced::Intel
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public static bool TryEncode(int bitness, InstructionBlock[] blocks, [NotNullWhen(false)] out string? errorMessage, [NotNullWhen(true)] out BlockEncoderResult[]? result, BlockEncoderOptions options = BlockEncoderOptions.None)
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-		static bool TryEncode(std::int32_t bitness, std::vector<InstructionBlock>& blocks, std::string& errorMessage, BlockEncoderResult[] ? *&result, BlockEncoderOptions options = BlockEncoderOptions::None);
+		static bool TryEncode(std::int32_t bitness, const std::vector<InstructionBlock>& blocks, std::string& errorMessage, std::vector<BlockEncoderResult> &result, BlockEncoderOptions options = BlockEncoderOptions::None);
 	private:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: bool Encode([NotNullWhen(false)] out string? errorMessage, [NotNullWhen(true)] out BlockEncoderResult[]? result)
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-		bool Encode(std::string& errorMessage, BlockEncoderResult[] ? *&result);
+		bool Encode(std::string& errorMessage, std::vector<BlockEncoderResult> &result);
 	public:
-		TargetInstr GetTarget(std::uint64_t address);
+		Iced::Intel::BlockEncoderInternal::TargetInstr GetTarget(std::uint64_t address);
 		std::uint32_t GetInstructionSize(Instruction const instruction, std::uint64_t ip);
 	};
 }

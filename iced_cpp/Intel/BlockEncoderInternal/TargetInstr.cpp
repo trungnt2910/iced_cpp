@@ -32,7 +32,7 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	bool TargetInstr::IsInBlock(Block* block)
 	{
-		return instruction == nullptr ? nullptr : instruction->Block == block;
+		return instruction == nullptr ? false : instruction->Block == block;
 	}
 
 	std::uint64_t TargetInstr::GetAddress()

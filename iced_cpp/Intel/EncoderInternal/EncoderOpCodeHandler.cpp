@@ -26,10 +26,13 @@
 #include "../MvexRegMemConv.g.h"
 #include "../MvexEHBit.g.h"
 
+#include "../Encoder.h"
+
 namespace Iced::Intel::EncoderInternal
 {
+	using System::Array2;
 
-	OpCodeHandler::OpCodeHandler(EncFlags2 encFlags2, EncFlags3 encFlags3, bool isDeclareData, std::optional<TryConvertToDisp8N>& tryConvertToDisp8N, std::vector<Op*>& operands)
+	OpCodeHandler::OpCodeHandler(EncFlags2 encFlags2, enum EncFlags3 encFlags3, bool isDeclareData, const std::optional<TryConvertToDisp8N_>& tryConvertToDisp8N, const std::vector<std::shared_ptr<Op>>& operands)
 	{
 		EncFlags3 = encFlags3;
 		OpCode = GetOpCode(encFlags2);
@@ -50,7 +53,7 @@ namespace Iced::Intel::EncoderInternal
 
 	const std::string InvalidHandler::ERROR_MESSAGE = "Can't encode an invalid instruction";
 
-	InvalidHandler::InvalidHandler() : OpCodeHandler(EncFlags2::None, EncFlags3::Bit16or32 | EncFlags3::Bit64, false, nullptr, Array2::Empty<Op>())
+	InvalidHandler::InvalidHandler() : OpCodeHandler(EncFlags2::None, EncFlags3::Bit16or32 | EncFlags3::Bit64, false, std::nullopt, Array2::Empty<std::shared_ptr<Op>>())
 	{
 	}
 
@@ -59,7 +62,7 @@ namespace Iced::Intel::EncoderInternal
 		encoder->SetErrorMessage(ERROR_MESSAGE);
 	}
 
-	DeclareDataHandler::DeclareDataHandler(Code code) : OpCodeHandler(EncFlags2::None, EncFlags3::Bit16or32 | EncFlags3::Bit64, true, nullptr, Array2::Empty<Op>())
+	DeclareDataHandler::DeclareDataHandler(Code code) : OpCodeHandler(EncFlags2::None, EncFlags3::Bit16or32 | EncFlags3::Bit64, true, std::nullopt, Array2::Empty<std::shared_ptr<Op>>())
 	{
 		auto switchTempVar_0 = code;
 
@@ -85,7 +88,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	std::vector<Op*> LegacyHandler::CreateOps(EncFlags1 encFlags1)
+	std::vector<std::shared_ptr<Op>> LegacyHandler::CreateOps(EncFlags1 encFlags1)
 	{
 		auto op0 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::Legacy_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::Legacy_OpMask));
 		auto op1 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::Legacy_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::Legacy_OpMask));
@@ -94,26 +97,26 @@ namespace Iced::Intel::EncoderInternal
 		if (op3 != 0)
 		{
 			assert(op0 != 0 && op1 != 0 && op2 != 0);
-			return std::vector<Op*> {OpHandlerData::LegacyOps[op0 - 1], OpHandlerData::LegacyOps[op1 - 1], OpHandlerData::LegacyOps[op2 - 1], OpHandlerData::LegacyOps[op3 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetLegacyOps()[op0 - 1], OpHandlerData::GetLegacyOps()[op1 - 1], OpHandlerData::GetLegacyOps()[op2 - 1], OpHandlerData::GetLegacyOps()[op3 - 1]};
 		}
 		if (op2 != 0)
 		{
 			assert(op0 != 0 && op1 != 0);
-			return std::vector<Op*> {OpHandlerData::LegacyOps[op0 - 1], OpHandlerData::LegacyOps[op1 - 1], OpHandlerData::LegacyOps[op2 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetLegacyOps()[op0 - 1], OpHandlerData::GetLegacyOps()[op1 - 1], OpHandlerData::GetLegacyOps()[op2 - 1]};
 		}
 		if (op1 != 0)
 		{
 			assert(op0 != 0);
-			return std::vector<Op*> {OpHandlerData::LegacyOps[op0 - 1], OpHandlerData::LegacyOps[op1 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetLegacyOps()[op0 - 1], OpHandlerData::GetLegacyOps()[op1 - 1]};
 		}
 		if (op0 != 0)
 		{
-			return std::vector<Op*> {OpHandlerData::LegacyOps[op0 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetLegacyOps()[op0 - 1]};
 		}
-		return Array2::Empty<Op*>();
+		return Array2::Empty<std::shared_ptr<Op>>();
 	}
 
-	LegacyHandler::LegacyHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, nullptr, CreateOps(encFlags1))
+	LegacyHandler::LegacyHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, nullptr, CreateOps(encFlags1))
 	{
 		switch (static_cast<LegacyOpCodeTable>((static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncFlags2::TableShift)) & static_cast<std::uint32_t>(EncFlags2::TableMask)))
 		{
@@ -178,7 +181,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	std::vector<Op*> VexHandler::CreateOps(EncFlags1 encFlags1)
+	std::vector<std::shared_ptr<Op>> VexHandler::CreateOps(EncFlags1 encFlags1)
 	{
 		auto op0 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::VEX_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::VEX_OpMask));
 		auto op1 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::VEX_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::VEX_OpMask));
@@ -188,31 +191,31 @@ namespace Iced::Intel::EncoderInternal
 		if (op4 != 0)
 		{
 			assert(op0 != 0 && op1 != 0 && op2 != 0 && op3 != 0);
-			return std::vector<Op*> {OpHandlerData::VexOps[op0 - 1], OpHandlerData::VexOps[op1 - 1], OpHandlerData::VexOps[op2 - 1], OpHandlerData::VexOps[op3 - 1], OpHandlerData::VexOps[op4 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetVexOps()[op0 - 1], OpHandlerData::GetVexOps()[op1 - 1], OpHandlerData::GetVexOps()[op2 - 1], OpHandlerData::GetVexOps()[op3 - 1], OpHandlerData::GetVexOps()[op4 - 1]};
 		}
 		if (op3 != 0)
 		{
 			assert(op0 != 0 && op1 != 0 && op2 != 0);
-			return std::vector<Op*> {OpHandlerData::VexOps[op0 - 1], OpHandlerData::VexOps[op1 - 1], OpHandlerData::VexOps[op2 - 1], OpHandlerData::VexOps[op3 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetVexOps()[op0 - 1], OpHandlerData::GetVexOps()[op1 - 1], OpHandlerData::GetVexOps()[op2 - 1], OpHandlerData::GetVexOps()[op3 - 1]};
 		}
 		if (op2 != 0)
 		{
 			assert(op0 != 0 && op1 != 0);
-			return std::vector<Op*> {OpHandlerData::VexOps[op0 - 1], OpHandlerData::VexOps[op1 - 1], OpHandlerData::VexOps[op2 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetVexOps()[op0 - 1], OpHandlerData::GetVexOps()[op1 - 1], OpHandlerData::GetVexOps()[op2 - 1]};
 		}
 		if (op1 != 0)
 		{
 			assert(op0 != 0);
-			return std::vector<Op*> {OpHandlerData::VexOps[op0 - 1], OpHandlerData::VexOps[op1 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetVexOps()[op0 - 1], OpHandlerData::GetVexOps()[op1 - 1]};
 		}
 		if (op0 != 0)
 		{
-			return std::vector<Op*> {OpHandlerData::VexOps[op0 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetVexOps()[op0 - 1]};
 		}
-		return Array2::Empty<Op*>();
+		return Array2::Empty<std::shared_ptr<Op>>();
 	}
 
-	VexHandler::VexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, nullptr, CreateOps(encFlags1))
+	VexHandler::VexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, nullptr, CreateOps(encFlags1))
 	{
 		table = (static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncFlags2::TableShift)) & static_cast<std::uint32_t>(EncFlags2::TableMask);
 		auto wbit = static_cast<WBit>((static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncFlags2::WBitShift)) & static_cast<std::uint32_t>(EncFlags2::WBitMask));
@@ -276,7 +279,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	std::vector<Op*> XopHandler::CreateOps(EncFlags1 encFlags1)
+	std::vector<std::shared_ptr<Op>> XopHandler::CreateOps(EncFlags1 encFlags1)
 	{
 		auto op0 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::XOP_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::XOP_OpMask));
 		auto op1 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::XOP_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::XOP_OpMask));
@@ -285,26 +288,26 @@ namespace Iced::Intel::EncoderInternal
 		if (op3 != 0)
 		{
 			assert(op0 != 0 && op1 != 0 && op2 != 0);
-			return std::vector<Op*> {OpHandlerData::XopOps[op0 - 1], OpHandlerData::XopOps[op1 - 1], OpHandlerData::XopOps[op2 - 1], OpHandlerData::XopOps[op3 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetXopOps()[op0 - 1], OpHandlerData::GetXopOps()[op1 - 1], OpHandlerData::GetXopOps()[op2 - 1], OpHandlerData::GetXopOps()[op3 - 1]};
 		}
 		if (op2 != 0)
 		{
 			assert(op0 != 0 && op1 != 0);
-			return std::vector<Op*> {OpHandlerData::XopOps[op0 - 1], OpHandlerData::XopOps[op1 - 1], OpHandlerData::XopOps[op2 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetXopOps()[op0 - 1], OpHandlerData::GetXopOps()[op1 - 1], OpHandlerData::GetXopOps()[op2 - 1]};
 		}
 		if (op1 != 0)
 		{
 			assert(op0 != 0);
-			return std::vector<Op*> {OpHandlerData::XopOps[op0 - 1], OpHandlerData::XopOps[op1 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetXopOps()[op0 - 1], OpHandlerData::GetXopOps()[op1 - 1]};
 		}
 		if (op0 != 0)
 		{
-			return std::vector<Op*> {OpHandlerData::XopOps[op0 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetXopOps()[op0 - 1]};
 		}
-		return Array2::Empty<Op*>();
+		return Array2::Empty<std::shared_ptr<Op>>();
 	}
 
-	XopHandler::XopHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, nullptr, CreateOps(encFlags1))
+	XopHandler::XopHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, nullptr, CreateOps(encFlags1))
 	{
 		Static::Assert(static_cast<std::int32_t>(XopOpCodeTable::MAP8) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(XopOpCodeTable::MAP9) == 1 ? 0 : -1);
@@ -346,7 +349,7 @@ namespace Iced::Intel::EncoderInternal
 		encoder->WriteByteInternal(b);
 	}
 
-	std::vector<Op*> EvexHandler::CreateOps(EncFlags1 encFlags1)
+	std::vector<std::shared_ptr<Op>> EvexHandler::CreateOps(EncFlags1 encFlags1)
 	{
 		auto op0 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::EVEX_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::EVEX_OpMask));
 		auto op1 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::EVEX_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::EVEX_OpMask));
@@ -355,28 +358,28 @@ namespace Iced::Intel::EncoderInternal
 		if (op3 != 0)
 		{
 			assert(op0 != 0 && op1 != 0 && op2 != 0);
-			return std::vector<Op*> {OpHandlerData::EvexOps[op0 - 1], OpHandlerData::EvexOps[op1 - 1], OpHandlerData::EvexOps[op2 - 1], OpHandlerData::EvexOps[op3 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetEvexOps()[op0 - 1], OpHandlerData::GetEvexOps()[op1 - 1], OpHandlerData::GetEvexOps()[op2 - 1], OpHandlerData::GetEvexOps()[op3 - 1]};
 		}
 		if (op2 != 0)
 		{
 			assert(op0 != 0 && op1 != 0);
-			return std::vector<Op*> {OpHandlerData::EvexOps[op0 - 1], OpHandlerData::EvexOps[op1 - 1], OpHandlerData::EvexOps[op2 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetEvexOps()[op0 - 1], OpHandlerData::GetEvexOps()[op1 - 1], OpHandlerData::GetEvexOps()[op2 - 1]};
 		}
 		if (op1 != 0)
 		{
 			assert(op0 != 0);
-			return std::vector<Op*> {OpHandlerData::EvexOps[op0 - 1], OpHandlerData::EvexOps[op1 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetEvexOps()[op0 - 1], OpHandlerData::GetEvexOps()[op1 - 1]};
 		}
 		if (op0 != 0)
 		{
-			return std::vector<Op*> {OpHandlerData::EvexOps[op0 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetEvexOps()[op0 - 1]};
 		}
-		return Array2::Empty<Op*>();
+		return Array2::Empty<std::shared_ptr<Op>>();
 	}
 
 	TryConvertToDisp8N EvexHandler::tryConvertToDisp8N = TryConvertToDisp8NImpl::TryConvertToDisp8N;
 
-	EvexHandler::EvexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, tryConvertToDisp8N, CreateOps(encFlags1))
+	EvexHandler::EvexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, tryConvertToDisp8N, CreateOps(encFlags1))
 	{
 		tupleType = static_cast<TupleType>((static_cast<std::uint32_t>(encFlags3) >> static_cast<std::int32_t>(EncFlags3::TupleTypeShift)) & static_cast<std::uint32_t>(EncFlags3::TupleTypeMask));
 		table = (static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncFlags2::TableShift)) & static_cast<std::uint32_t>(EncFlags2::TableMask);
@@ -417,9 +420,9 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	bool EvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, OpCodeHandler* handler, Instruction const instruction, std::int32_t displ, std::int8_t& compressedValue)
+	bool EvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, Instruction const instruction, std::int32_t displ, std::int8_t& compressedValue)
 	{
-		auto evexHandler = static_cast<EvexHandler*>(handler);
+		auto evexHandler = std::dynamic_pointer_cast<EvexHandler>(handler);
 		std::int32_t n = static_cast<std::int32_t>(TupleTypeTable::GetDisp8N(evexHandler->tupleType, (encoder->EncoderFlags & EncoderFlags::Broadcast) != 0));
 		std::int32_t res = displ / n;
 		if (res * n == displ && std::numeric_limits<std::int8_t>::min() <= res && res <= std::numeric_limits<std::int8_t>::max())
@@ -517,7 +520,7 @@ namespace Iced::Intel::EncoderInternal
 		encoder->WriteByteInternal(b);
 	}
 
-	std::vector<Op*> MvexHandler::CreateOps(EncFlags1 encFlags1)
+	std::vector<std::shared_ptr<Op>> MvexHandler::CreateOps(EncFlags1 encFlags1)
 	{
 		auto op0 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::MVEX_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::MVEX_OpMask));
 		auto op1 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::MVEX_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::MVEX_OpMask));
@@ -526,28 +529,28 @@ namespace Iced::Intel::EncoderInternal
 		if (op3 != 0)
 		{
 			assert(op0 != 0 && op1 != 0 && op2 != 0);
-			return std::vector<Op*> {OpHandlerData::MvexOps[op0 - 1], OpHandlerData::MvexOps[op1 - 1], OpHandlerData::MvexOps[op2 - 1], OpHandlerData::MvexOps[op3 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetMvexOps()[op0 - 1], OpHandlerData::GetMvexOps()[op1 - 1], OpHandlerData::GetMvexOps()[op2 - 1], OpHandlerData::GetMvexOps()[op3 - 1]};
 		}
 		if (op2 != 0)
 		{
 			assert(op0 != 0 && op1 != 0);
-			return std::vector<Op*> {OpHandlerData::MvexOps[op0 - 1], OpHandlerData::MvexOps[op1 - 1], OpHandlerData::MvexOps[op2 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetMvexOps()[op0 - 1], OpHandlerData::GetMvexOps()[op1 - 1], OpHandlerData::GetMvexOps()[op2 - 1]};
 		}
 		if (op1 != 0)
 		{
 			assert(op0 != 0);
-			return std::vector<Op*> {OpHandlerData::MvexOps[op0 - 1], OpHandlerData::MvexOps[op1 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetMvexOps()[op0 - 1], OpHandlerData::GetMvexOps()[op1 - 1]};
 		}
 		if (op0 != 0)
 		{
-			return std::vector<Op*> {OpHandlerData::MvexOps[op0 - 1]};
+			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetMvexOps()[op0 - 1]};
 		}
-		return Array2::Empty<Op*>();
+		return Array2::Empty<std::shared_ptr<Op>>();
 	}
 
 	TryConvertToDisp8N MvexHandler::tryConvertToDisp8N = TryConvertToDisp8NImpl::TryConvertToDisp8N;
 
-	MvexHandler::MvexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, tryConvertToDisp8N, CreateOps(encFlags1))
+	MvexHandler::MvexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, tryConvertToDisp8N, CreateOps(encFlags1))
 	{
 		table = (static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncFlags2::TableShift)) & static_cast<std::uint32_t>(EncFlags2::TableMask);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::None) == 0 ? 0 : -1);
@@ -566,7 +569,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	bool MvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, OpCodeHandler* handler, Instruction const instruction, std::int32_t displ, std::int8_t& compressedValue)
+	bool MvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, Instruction const instruction, std::int32_t displ, std::int8_t& compressedValue)
 	{
 		auto mvex = MvexInfo(instruction.GetCode());
 		std::int32_t sss = (static_cast<std::int32_t>(instruction.GetMvexRegMemConv()) - static_cast<std::int32_t>(MvexRegMemConv::MemConvNone)) & 7;
@@ -711,10 +714,10 @@ namespace Iced::Intel::EncoderInternal
 		encoder->WriteByteInternal(b);
 	}
 
-	std::vector<Op*> D3nowHandler::operands =
+	std::vector<std::shared_ptr<Op>> D3nowHandler::operands =
 	{
-		new OpModRM_reg(Register::MM0, Register::MM7),
-		new OpModRM_rm(Register::MM0, Register::MM7)
+		std::make_shared<OpModRM_reg>(Register::MM0, Register::MM7),
+		std::make_shared<OpModRM_rm>(Register::MM0, Register::MM7)
 	};
 
 	D3nowHandler::D3nowHandler(EncFlags2 encFlags2, EncFlags3 encFlags3) : OpCodeHandler(static_cast<EncFlags2>((static_cast<std::uint32_t>(encFlags2) & ~(0xFFFF << static_cast<std::int32_t>(EncFlags2::OpCodeShift))) | (0x000F << static_cast<std::int32_t>(EncFlags2::OpCodeShift))), encFlags3, false, nullptr, operands)

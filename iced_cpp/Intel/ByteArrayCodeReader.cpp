@@ -16,6 +16,8 @@
 #include "ByteArrayCodeReader.h"
 #include "ThrowHelper.h"
 
+#include "HexUtils.h"
+
 namespace Iced::Intel
 {
 
@@ -47,7 +49,7 @@ namespace Iced::Intel
 	{
 	}
 
-	ByteArrayCodeReader::ByteArrayCodeReader(std::vector<std::uint8_t>& data)
+	ByteArrayCodeReader::ByteArrayCodeReader(const std::vector<std::uint8_t>& data)
 	{
 		if (data.empty())
 		{
@@ -56,10 +58,10 @@ namespace Iced::Intel
 		this->data = data;
 		currentPosition = 0;
 		startPosition = 0;
-		endPosition = data.size();
+		endPosition = (std::int32_t)data.size();
 	}
 
-	ByteArrayCodeReader::ByteArrayCodeReader(std::vector<std::uint8_t>& data, std::int32_t index, std::int32_t count)
+	ByteArrayCodeReader::ByteArrayCodeReader(const std::vector<std::uint8_t>& data, std::int32_t index, std::int32_t count)
 	{
 		if (data.empty())
 		{
@@ -83,17 +85,17 @@ namespace Iced::Intel
 		endPosition = index + count;
 	}
 
-	ByteArrayCodeReader::ByteArrayCodeReader(ArraySegment<std::uint8_t> data)
+	// The author used an ArraySegment, std::basic_string_view is basically the same.
+	ByteArrayCodeReader::ByteArrayCodeReader(const std::basic_string_view<std::uint8_t>& data)
 	{
-		if (data.Array.empty())
+		if (data.empty())
 		{
 			ThrowHelper::ThrowArgumentException();
 		}
-		this->data = data.Array;
-		std::int32_t offset = data.Offset;
-		currentPosition = offset;
-		startPosition = offset;
-		endPosition = offset + data.Count;
+		this->data = std::vector<std::uint8_t>(data.begin(), data.end());
+		currentPosition = 0;
+		startPosition = 0;
+		endPosition = (std::int32_t)data.length();
 	}
 
 	std::int32_t ByteArrayCodeReader::ReadByte()

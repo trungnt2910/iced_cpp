@@ -33,19 +33,12 @@
 // Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel::BlockEncoderInternal
 {
+	class Block;
 	/// <summary>
 	/// Instruction with a memory operand that is RIP/EIP relative
 	/// </summary>
 	class IpRelMemOpInstr final : public Instr
 	{
-	private:
-		Instruction instruction;
-		InstrKind instrKind = static_cast<InstrKind>(0);
-		/* readonly */
-		std::uint32_t eipInstructionSize = 0;
-		/* readonly */
-		std::uint32_t ripInstructionSize = 0;
-		TargetInstr targetInstr;
 	private:
 		enum class InstrKind
 		{
@@ -56,11 +49,19 @@ namespace Iced::Intel::BlockEncoderInternal
 			Uninitialized
 		};
 
-		DEFINE_COMP(InstrKind)
-			DEFINE_ARITH(InstrKind)
+		DEFINE_COMP_FRIEND(InstrKind)
+			DEFINE_ARITH_FRIEND(InstrKind)
+	private:
+		Instruction instruction;
+		InstrKind instrKind = static_cast<InstrKind>(0);
+		/* readonly */
+		std::uint32_t eipInstructionSize = 0;
+		/* readonly */
+		std::uint32_t ripInstructionSize = 0;
+		TargetInstr targetInstr;
 
 	public:
-		IpRelMemOpInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction);
+		IpRelMemOpInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 	private:

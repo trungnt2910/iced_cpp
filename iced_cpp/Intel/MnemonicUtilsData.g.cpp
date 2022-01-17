@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "MnemonicUtilsData.g.h"
+#include "Mnemonic.g.h"
 
 namespace Iced::Intel
 {

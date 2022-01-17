@@ -17,6 +17,10 @@
 #include "../Array2.h"
 #include "Iced.Intel.IcedConstants.h"
 
+#include "Iced.Intel.Instruction.h"
+
+#include <algorithm>
+
 using namespace Iced::Intel::BlockEncoderInternal;
 
 namespace Iced::Intel
@@ -28,25 +32,25 @@ namespace Iced::Intel
 		Address = address;
 	}
 
-	InstructionBlock::InstructionBlock(CodeWriter* codeWriter, std::vector<Instruction>& instructions, std::uint64_t rip)
+	InstructionBlock::InstructionBlock(Iced::Intel::CodeWriter* codeWriter, const std::vector<Instruction>& instructions, std::uint64_t rip)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: CodeWriter = codeWriter ?? throw new ArgumentNullException(nameof(codeWriter));
 		CodeWriter = (codeWriter != nullptr) ? codeWriter : throw std::invalid_argument("codeWriter");
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: Instructions = instructions ?? throw new ArgumentNullException(nameof(instructions));
-		Instructions = instructions ? instructions : throw std::invalid_argument("instructions");
+		Instructions = instructions;
 		RIP = rip;
 	}
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: internal BlockEncoderResult(ulong rip, List<RelocInfo>? relocInfos, uint[]? newInstructionOffsets, ConstantOffsets[]? constantOffsets)
-	BlockEncoderResult::BlockEncoderResult(std::uint64_t rip, std::vector<RelocInfo>& relocInfos, std::uint32_t[] ? *newInstructionOffsets, ConstantOffsets[] ? *constantOffsets)
+	BlockEncoderResult::BlockEncoderResult(std::uint64_t rip, const std::vector<RelocInfo>& relocInfos, const std::vector<std::uint32_t>& newInstructionOffsets, const std::vector<class ConstantOffsets>& constantOffsets)
 	{
 		RIP = rip;
 		RelocInfos = relocInfos;
-		NewInstructionOffsets = (newInstructionOffsets != nullptr) ? newInstructionOffsets : Array2::Empty<std::uint32_t>();
-		ConstantOffsets = (constantOffsets != nullptr) ? constantOffsets : Array2::Empty<ConstantOffsets>();
+		NewInstructionOffsets = newInstructionOffsets;
+		ConstantOffsets = constantOffsets;
 	}
 
 	std::int32_t BlockEncoder::GetBitness() const
@@ -69,7 +73,7 @@ namespace Iced::Intel
 	{
 	}
 
-	BlockEncoder::BlockEncoder(std::int32_t bitness, std::vector<InstructionBlock>& instrBlocks, BlockEncoderOptions options)
+	BlockEncoder::BlockEncoder(std::int32_t bitness, const std::vector<InstructionBlock>& instrBlocks, BlockEncoderOptions options)
 	{
 		if (bitness != 16 && bitness != 32 && bitness != 64)
 		{
@@ -91,9 +95,9 @@ namespace Iced::Intel
 			{
 				//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires an argument:
 				//ORIGINAL LINE: throw new ArgumentException();
-				throw std::invalid_argument();
+				throw std::invalid_argument("No instructions");
 			}
-			auto block = new Block(this, instrBlocks[i].CodeWriter, instrBlocks[i].RIP, ReturnRelocInfos ? std::vector<RelocInfo>() : std::vector<RelocInfo>());
+			auto block = new Block(this, instrBlocks[i].CodeWriter, instrBlocks[i].RIP, GetReturnRelocInfos() ? std::vector<RelocInfo>() : std::vector<RelocInfo>());
 			blocks[i] = block;
 			auto instrs = std::vector<Instr*>(instructions.size());
 			std::uint64_t ip = instrBlocks[i].RIP;
@@ -110,23 +114,23 @@ namespace Iced::Intel
 			block->SetInstructions(instrs);
 		}
 		// Optimize from low to high addresses
-		Array::Sort(blocks, [&](a, b)
+		std::sort(blocks.begin(), blocks.end(), [](Block* a, Block* b)
 			{
-				a::RIP->CompareTo(b::RIP);
+				return a->RIP < b->RIP;
 			});
+
 		// There must not be any instructions with the same IP, except if IP = 0 (default value)
 		auto toInstr = std::unordered_map<std::uint64_t, Instr*>(instrCount);
 		this->toInstr = toInstr;
 		bool hasMultipleZeroIPInstrs = false;
 		for (auto block : blocks)
 		{
-			for (auto instr : *block->GetInstructions())
+			for (auto instr : block->GetInstructions())
 			{
 				std::uint64_t origIP = instr->OrigIP;
 				std::unordered_map<std::uint64_t, Instr*>::const_iterator toInstr_iterator = toInstr.find(origIP);
 				if (toInstr_iterator != toInstr.end())
 				{
-					_ = toInstr_iterator->second;
 					if (origIP != 0)
 					{
 						throw std::invalid_argument(std::format("Multiple instructions with the same IP: 0x{0:0>X}", origIP));
@@ -135,7 +139,6 @@ namespace Iced::Intel
 				}
 				else
 				{
-					_ = toInstr_iterator->second;
 					toInstr[origIP] = instr;
 				}
 			}
@@ -147,7 +150,7 @@ namespace Iced::Intel
 		for (auto block : blocks)
 		{
 			std::uint64_t ip = block->RIP;
-			for (auto instr : *block->GetInstructions())
+			for (auto instr : block->GetInstructions())
 			{
 				instr->IP = ip;
 				auto oldSize = instr->Size;
@@ -166,10 +169,10 @@ namespace Iced::Intel
 	//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	bool BlockEncoder::TryEncode(std::int32_t bitness, InstructionBlock block, std::string& errorMessage, BlockEncoderResult& result, BlockEncoderOptions options)
 	{
-		std::any resultArray;
+		std::vector<BlockEncoderResult> resultArray;
 		if (TryEncode(bitness, { block }, errorMessage, resultArray, options))
 		{
-			assert(resultArray->Length == 1);
+			assert(resultArray.size() == 1);
 			result = resultArray[0];
 			return true;
 		}
@@ -183,16 +186,16 @@ namespace Iced::Intel
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public static bool TryEncode(int bitness, InstructionBlock[] blocks, [NotNullWhen(false)] out string? errorMessage, [NotNullWhen(true)] out BlockEncoderResult[]? result, BlockEncoderOptions options = BlockEncoderOptions.None)
 	//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-	bool BlockEncoder::TryEncode(std::int32_t bitness, std::vector<InstructionBlock>& blocks, std::string& errorMessage, BlockEncoderResult[] ? *&result, BlockEncoderOptions options)
+	bool BlockEncoder::TryEncode(std::int32_t bitness, const std::vector<InstructionBlock>& blocks, std::string& errorMessage, std::vector<BlockEncoderResult> &result, BlockEncoderOptions options)
 	{
-		BlockEncoder tempVar(bitness, blocks, options);
-		return (&tempVar)->Encode(errorMessage, result);
+		BlockEncoder tempVar = BlockEncoder(bitness, blocks, options);
+		return tempVar.Encode(errorMessage, result);
 	}
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: bool Encode([NotNullWhen(false)] out string? errorMessage, [NotNullWhen(true)] out BlockEncoderResult[]? result)
 	//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-	bool BlockEncoder::Encode(std::string& errorMessage, BlockEncoderResult[] ? *&result)
+	bool BlockEncoder::Encode(std::string& errorMessage, std::vector<BlockEncoderResult> &result)
 	{
 		constexpr std::int32_t MAX_ITERS = 1000;
 		for (std::int32_t iter = 0; iter < MAX_ITERS; iter++)
@@ -202,7 +205,7 @@ namespace Iced::Intel
 			{
 				std::uint64_t ip = block->RIP;
 				std::uint64_t gained = 0;
-				for (auto instr : *block->GetInstructions())
+				for (auto instr : block->GetInstructions())
 				{
 					instr->IP = ip;
 					auto oldSize = instr->Size;
@@ -211,7 +214,6 @@ namespace Iced::Intel
 						if (instr->Size > oldSize)
 						{
 							errorMessage = "Internal error: new size > old size";
-							result = nullptr;
 							return false;
 						}
 						if (instr->Size < oldSize)
@@ -223,7 +225,6 @@ namespace Iced::Intel
 					else if (instr->Size != oldSize)
 					{
 						errorMessage = "Internal error: new size != old size";
-						result = nullptr;
 						return false;
 					}
 					ip += instr->Size;
@@ -242,15 +243,15 @@ namespace Iced::Intel
 		for (std::int32_t i = 0; i < blocks.size(); i++)
 		{
 			auto block = blocks[i];
-			auto encoder = Encoder::Create(bitness, block->CodeWriter);
+			auto encoder = Encoder::Create(bitness, &block->CodeWriter);
 			std::uint64_t ip = block->RIP;
-			auto newInstructionOffsets = ReturnNewInstructionOffsets ? std::vector<std::uint32_t>(block->GetInstructions().size()) : std::vector<std::uint32_t>();
-			auto constantOffsets = ReturnConstantOffsets ? std::vector<ConstantOffsets>(block->GetInstructions().size()) : std::vector<ConstantOffsets>();
+			auto newInstructionOffsets = GetReturnNewInstructionOffsets() ? std::vector<std::uint32_t>(block->GetInstructions().size()) : std::vector<std::uint32_t>();
+			auto constantOffsets = GetReturnConstantOffsets() ? std::vector<ConstantOffsets>(block->GetInstructions().size()) : std::vector<ConstantOffsets>();
 			auto instructions = block->GetInstructions();
 			for (std::int32_t j = 0; j < instructions.size(); j++)
 			{
 				auto instr = instructions[j];
-				std::uint32_t bytesWritten = block->CodeWriter->BytesWritten;
+				std::uint32_t bytesWritten = block->CodeWriter.BytesWritten;
 				bool isOriginalInstruction;
 				if (!constantOffsets.empty())
 				{
@@ -258,18 +259,17 @@ namespace Iced::Intel
 				}
 				else
 				{
+					ConstantOffsets _;
 					errorMessage = instr->TryEncode(encoder, _, isOriginalInstruction);
 				}
 				if (errorMessage != "")
 				{
-					result = nullptr;
 					return false;
 				}
-				std::uint32_t size = block->CodeWriter->BytesWritten - bytesWritten;
+				std::uint32_t size = block->CodeWriter.BytesWritten - bytesWritten;
 				if (size != instr->Size)
 				{
 					errorMessage = "Internal error: didn't write all bytes";
-					result = nullptr;
 					return false;
 				}
 				if (!newInstructionOffsets.empty())
@@ -295,7 +295,7 @@ namespace Iced::Intel
 
 	TargetInstr BlockEncoder::GetTarget(std::uint64_t address)
 	{
-		TValue instr;
+		Instr* instr;
 		std::unordered_map<std::uint64_t, Instr*>::const_iterator toInstr_iterator = toInstr.find(address);
 		if (toInstr_iterator != toInstr.end())
 		{
@@ -312,6 +312,7 @@ namespace Iced::Intel
 	std::uint32_t BlockEncoder::GetInstructionSize(Instruction const instruction, std::uint64_t ip)
 	{
 		std::uint32_t size;
+		std::string _;
 		if (!nullEncoder->TryEncode(instruction, ip, size, _))
 		{
 			size = IcedConstants::MaxInstructionLength;

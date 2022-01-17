@@ -18,7 +18,7 @@
 namespace Iced::Intel
 {
 
-	StreamCodeReader::StreamCodeReader(Stream* stream)
+	StreamCodeReader::StreamCodeReader(class Stream* stream)
 	{
 		Stream = stream;
 	}

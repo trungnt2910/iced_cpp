@@ -45,7 +45,7 @@ namespace Iced::Intel
 		if (Iced::Intel::RegisterExtensions::IsGPR(fullRegister))
 		{
 			assert(Register::RAX <= fullRegister && fullRegister <= Register::R15);
-			return fullRegister - Register::RAX + Register::EAX;
+			return (Register)(fullRegister - Register::RAX + Register::EAX);
 		}
 		return fullRegister;
 	}

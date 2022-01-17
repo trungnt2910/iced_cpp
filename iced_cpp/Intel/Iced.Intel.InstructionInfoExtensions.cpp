@@ -173,12 +173,12 @@ namespace Iced::Intel
 		std::uint32_t t;
 		if ((t = static_cast<std::uint32_t>(code - Code::Jo_rel16)) <= static_cast<std::uint32_t>(Code::Jg_rel32_64 - Code::Jo_rel16) || (t = static_cast<std::uint32_t>(code - Code::Jo_rel8_16)) <= static_cast<std::uint32_t>(Code::Jg_rel8_64 - Code::Jo_rel8_16) || (t = static_cast<std::uint32_t>(code - Code::Cmovo_r16_rm16)) <= static_cast<std::uint32_t>(Code::Cmovg_r64_rm64 - Code::Cmovo_r16_rm16))
 		{
-			return static_cast<std::int32_t>(t / 3) + Intel::ConditionCode::o;
+			return (Iced::Intel::ConditionCode)(static_cast<std::int32_t>(t / 3) + Intel::ConditionCode::o);
 		}
 		t = static_cast<std::uint32_t>(code - Code::Seto_rm8);
 		if (t <= static_cast<std::uint32_t>(Code::Setg_rm8 - Code::Seto_rm8))
 		{
-			return static_cast<std::int32_t>(t) + Intel::ConditionCode::o;
+			return (Iced::Intel::ConditionCode)(static_cast<std::int32_t>(t) + Intel::ConditionCode::o);
 		}
 		t = static_cast<std::uint32_t>(code - Code::Loopne_rel8_16_CX);
 		if (t <= static_cast<std::uint32_t>(Code::Loopne_rel8_64_RCX - Code::Loopne_rel8_16_CX))
@@ -253,20 +253,20 @@ namespace Iced::Intel
 			//return (((int)((t / 3) << 31) >> 31) | 1) * 3 + code;
 			if (((t / 3) & 1) != 0)
 			{
-				return code - 3;
+				return (Code)(code - 3);
 			}
-			return code + 3;
+			return (Code)(code + 3);
 		}
 		t = static_cast<std::uint32_t>(code - Code::Seto_rm8);
 		if (t <= static_cast<std::uint32_t>(Code::Setg_rm8 - Code::Seto_rm8))
 		{
-			return static_cast<std::int32_t>(t ^ 1) + Code::Seto_rm8;
+			return (Code)(static_cast<std::int32_t>(t ^ 1) + Code::Seto_rm8);
 		}
 		Static::Assert(Code::Loopne_rel8_16_CX + 7 == Code::Loope_rel8_16_CX ? 0 : -1);
 		t = static_cast<std::uint32_t>(code - Code::Loopne_rel8_16_CX);
 		if (t <= static_cast<std::uint32_t>(Code::Loope_rel8_64_RCX - Code::Loopne_rel8_16_CX))
 		{
-			return Code::Loopne_rel8_16_CX + static_cast<std::int32_t>((t + 7) % 14);
+			return (Code)(Code::Loopne_rel8_16_CX + static_cast<std::int32_t>((t + 7) % 14));
 		}
 		switch (code)
 		{
@@ -290,12 +290,12 @@ namespace Iced::Intel
 		t = static_cast<std::uint32_t>(code - Code::Jo_rel16);
 		if (t <= static_cast<std::uint32_t>(Code::Jg_rel32_64 - Code::Jo_rel16))
 		{
-			return static_cast<std::int32_t>(t) + Code::Jo_rel8_16;
+			return (Code)(static_cast<std::int32_t>(t) + Code::Jo_rel8_16);
 		}
 		t = static_cast<std::uint32_t>(code - Code::Jmp_rel16);
 		if (t <= static_cast<std::uint32_t>(Code::Jmp_rel32_64 - Code::Jmp_rel16))
 		{
-			return static_cast<std::int32_t>(t) + Code::Jmp_rel8_16;
+			return (Code)(static_cast<std::int32_t>(t) + Code::Jmp_rel8_16);
 		}
 		switch (code)
 		{
@@ -315,12 +315,12 @@ namespace Iced::Intel
 		t = static_cast<std::uint32_t>(code - Code::Jo_rel8_16);
 		if (t <= static_cast<std::uint32_t>(Code::Jg_rel8_64 - Code::Jo_rel8_16))
 		{
-			return static_cast<std::int32_t>(t) + Code::Jo_rel16;
+			return (Code)(static_cast<std::int32_t>(t) + Code::Jo_rel16);
 		}
 		t = static_cast<std::uint32_t>(code - Code::Jmp_rel8_16);
 		if (t <= static_cast<std::uint32_t>(Code::Jmp_rel8_64 - Code::Jmp_rel8_16))
 		{
-			return static_cast<std::int32_t>(t) + Code::Jmp_rel16;
+			return (Code)(static_cast<std::int32_t>(t) + Code::Jmp_rel16);
 		}
 		switch (code)
 		{

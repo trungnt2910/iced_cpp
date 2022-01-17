@@ -35,12 +35,12 @@ namespace Iced::Intel::MasmFormatterInternal
 
 	std::string InstrInfos::AddSuffix(const std::string& s, std::vector<char>& ca)
 	{
-		return std::string::Intern(s + std::string(ca));
+		return (s + std::string(ca));
 	}
 
 	std::string InstrInfos::AddPrefix(const std::string& s, std::vector<char>& ca)
 	{
-		return std::string::Intern(std::string(ca) + s);
+		return (std::string(ca) + s);
 	}
 
 	std::vector<InstrInfo*> InstrInfos::ReadInfos()

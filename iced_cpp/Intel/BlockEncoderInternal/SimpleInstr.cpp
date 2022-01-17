@@ -18,7 +18,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	SimpleInstr::SimpleInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	SimpleInstr::SimpleInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
 	{
 		this->instruction = instruction;
 		Size = blockEncoder->GetInstructionSize(instruction, instruction.GetIP());
@@ -39,6 +39,7 @@ namespace Iced::Intel::BlockEncoderInternal
 	{
 		isOriginalInstruction = true;
 		std::string errorMessage;
+		std::uint32_t _;
 		if (!encoder->TryEncode(instruction, IP, _, errorMessage))
 		{
 			constantOffsets = Iced::Intel::ConstantOffsets();

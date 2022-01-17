@@ -23,12 +23,12 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsDR(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a DR register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a DR register", nameof(value)));
 		}
 		Value = value;
 	}
 
-	AssemblerRegisterDR::operator Register()
+	AssemblerRegisterDR::operator Register() const
 	{
 		return this->Value;
 	}
@@ -47,8 +47,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterDR::Equals(std::any obj)
 	{
-		AssemblerRegisterDR other = dynamic_cast<AssemblerRegisterDR>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterDR* other = std::any_cast<AssemblerRegisterDR>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterDR::operator == (AssemblerRegisterDR right)

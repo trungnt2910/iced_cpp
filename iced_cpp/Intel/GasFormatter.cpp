@@ -58,7 +58,7 @@ namespace Iced::Intel
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public GasFormatter(FormatterOptions? options, System.Nullable<ISymbolResolver> symbolResolver = null, System.Nullable<IFormatterOptionsProvider> optionsProvider = null)
-	GasFormatter::GasFormatter(FormatterOptions* options, ISymbolResolver* symbolResolver, IFormatterOptionsProvider* optionsProvider)
+	GasFormatter::GasFormatter(FormatterOptions* options, ISymbolResolver* symbolResolver, IFormatterOptionsProvider* optionsProvider) : numberFormatter(true)
 	{
 		this->options = (options != nullptr) ? options : FormatterOptions::CreateGas();
 		this->symbolResolver = symbolResolver;
@@ -67,7 +67,6 @@ namespace Iced::Intel
 		allRegistersNaked = Registers::AllRegistersNaked;
 		instrInfos = InstrInfos::AllInfos;
 		allMemorySizes = MemorySizes::AllMemorySizes;
-		numberFormatter = NumberFormatter(true);
 		opSizeStrings = s_opSizeStrings;
 		addrSizeStrings = s_addrSizeStrings;
 		scaleNumbers = s_scaleNumbers;
@@ -108,7 +107,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(this->options, instruction, opInfo);
 		std::int32_t column = 0;
 		FormatMnemonic(instruction, output, opInfo, column, options);
@@ -118,7 +117,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		return opInfo.OpCount;
 	}
@@ -127,7 +126,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		// Although it's a TryXXX() method, it should only accept valid instruction operand indexes
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(opInfo.OpCount))
@@ -141,7 +140,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(opInfo.OpCount))
 		{
@@ -154,7 +153,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		if (static_cast<std::uint32_t>(instructionOperand) >= static_cast<std::uint32_t>(instruction.GetOpCount()))
 		{
@@ -167,7 +166,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(opInfo.OpCount))
 		{
@@ -193,7 +192,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		FormatOperands(instruction, output, opInfo);
 	}
@@ -202,7 +201,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
-		Iced.Intel.GasFormatterInternal.InstrOpInfo opInfo;
+		InstrOpInfo opInfo;
 		instrInfo->GetOpInfo(options, instruction, opInfo);
 		std::int32_t column = 0;
 		FormatMnemonic(instruction, output, opInfo, column, FormatMnemonicOptions::None);
@@ -224,7 +223,7 @@ namespace Iced::Intel
 		{
 			auto prefixSeg = instruction.GetSegmentPrefix();
 			constexpr std::uint32_t PrefixFlags = (static_cast<std::uint32_t>(InstrOpInfoFlags::SizeOverrideMask) << static_cast<std::int32_t>(InstrOpInfoFlags::OpSizeShift)) | (static_cast<std::uint32_t>(InstrOpInfoFlags::SizeOverrideMask) << static_cast<std::int32_t>(InstrOpInfoFlags::AddrSizeShift)) | static_cast<std::uint32_t>(InstrOpInfoFlags::BndPrefix);
-			if ((static_cast<std::uint32_t>(prefixSeg) | instruction.GetHasAnyOfLockRepRepnePrefix() | (static_cast<std::uint32_t>(opInfo.Flags & PrefixFlags))) != 0)
+			if ((static_cast<std::uint32_t>(prefixSeg) | instruction.GetHasAnyOfLockRepRepnePrefix() | (static_cast<std::uint32_t>((uint)opInfo.Flags & PrefixFlags))) != 0)
 			{
 				FormatterString prefix;
 				if ((opInfo.Flags & InstrOpInfoFlags::OpSizeIsByteDirective) != 0)
@@ -243,7 +242,7 @@ namespace Iced::Intel
 						output->Write(s, FormatterTextKind::Number);
 						output->Write(";", FormatterTextKind::Punctuation);
 						output->Write(" ", FormatterTextKind::Text);
-						column += str_dot_byte.GetLength() + 1 + s.length() + 1 + 1;
+						column += str_dot_byte.GetLength() + 1 + (std::int32_t)s.length() + 1 + 1;
 						break;
 					}
 					case SizeOverride::Size64:
@@ -573,7 +572,7 @@ namespace Iced::Intel
 			{
 				output->Write(ImmediateValuePrefix, FormatterTextKind::Operator);
 				assert(operand + 1 == 1);
-				Iced.Intel.SymbolResult selectorSymbol;
+				SymbolResult selectorSymbol;
 				if (!symbolResolver->TryGetSymbol(instruction, operand + 1, instructionOperand, instruction.GetFarBranchSelector(), 2, selectorSymbol))
 				{
 					s = numberFormatter.FormatUInt16(options, numberOptions, instruction.GetFarBranchSelector(), numberOptions.LeadingZeros);
@@ -938,12 +937,12 @@ namespace Iced::Intel
 
 	std::string GasFormatter::ToRegisterString(Register reg)
 	{
-		assert(static_cast<std::uint32_t>(reg) < static_cast<std::uint32_t>(AllRegisters.size()));
+		assert(static_cast<std::uint32_t>(reg) < static_cast<std::uint32_t>(Registers::AllRegisters.size()));
 		if (options->GetPreferST0() && reg == Registers::Register_ST)
 		{
 			reg = Register::ST0;
 		}
-		auto regStr = AllRegisters[static_cast<std::int32_t>(reg)];
+		auto regStr = Registers::AllRegisters[static_cast<std::int32_t>(reg)];
 		return regStr.Get(options->GetUppercaseRegisters() || options->GetUppercaseAll());
 	}
 

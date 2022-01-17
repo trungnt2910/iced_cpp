@@ -33,6 +33,68 @@ namespace Iced::Intel { class TextPart; }
 namespace Iced::Intel
 {
 	/// <summary>
+	/// Contains text and colors
+	/// </summary>
+	class TextPart
+	{
+		/// <summary>
+		/// Text
+		/// </summary>
+	public:
+		std::string Text;
+		/// <summary>
+		/// Color
+		/// </summary>
+		FormatterTextKind Color = static_cast<FormatterTextKind>(0);
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="text">Text</param>
+		/// <param name="color">Color</param>
+		TextPart(const std::string& text, FormatterTextKind color);
+
+		TextPart() = default;
+	};
+
+	/// <summary>
+	/// Contains one or more <see cref="TextPart"/>s (text and color)
+	/// </summary>
+	class TextInfo
+	{
+		/// <summary>
+		/// <see langword="true"/> if this is the default instance
+		/// </summary>
+	public:
+		bool IsDefault() const;
+		/// <summary>
+		/// The text and color unless <see cref="TextArray"/> is non-null
+		/// </summary>
+		TextPart Text;
+		/// <summary>
+		/// Text and color or null if <see cref="Text"/> should be used
+		/// </summary>
+		std::vector<TextPart>* TextArray;
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="text">Text</param>
+		/// <param name="color">Color</param>
+		TextInfo(const std::string& text, FormatterTextKind color);
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="text">Text</param>
+		TextInfo(TextPart text);
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="text">All text parts</param>
+		TextInfo(std::vector<TextPart>* text);
+
+		TextInfo() = default;
+	};
+
+	/// <summary>
 	/// Used by a formatter to resolve symbols
 	/// </summary>
 	class ISymbolResolver
@@ -155,65 +217,5 @@ namespace Iced::Intel
 		SymbolResult(std::uint64_t address, TextInfo text, SymbolFlags flags, MemorySize size);
 
 		SymbolResult() = default;
-	};
-	/// <summary>
-	/// Contains one or more <see cref="TextPart"/>s (text and color)
-	/// </summary>
-	class TextInfo
-	{
-		/// <summary>
-		/// <see langword="true"/> if this is the default instance
-		/// </summary>
-	public:
-		bool IsDefault() const;
-		/// <summary>
-		/// The text and color unless <see cref="TextArray"/> is non-null
-		/// </summary>
-		TextPart Text;
-		/// <summary>
-		/// Text and color or null if <see cref="Text"/> should be used
-		/// </summary>
-		TextPart[] ? TextArray;
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="text">Text</param>
-		/// <param name="color">Color</param>
-		TextInfo(const std::string& text, FormatterTextKind color);
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="text">Text</param>
-		TextInfo(TextPart text);
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="text">All text parts</param>
-		TextInfo(std::vector<TextPart>& text);
-
-		TextInfo() = default;
-	};
-	/// <summary>
-	/// Contains text and colors
-	/// </summary>
-	class TextPart
-	{
-		/// <summary>
-		/// Text
-		/// </summary>
-	public:
-		std::string Text;
-		/// <summary>
-		/// Color
-		/// </summary>
-		FormatterTextKind Color = static_cast<FormatterTextKind>(0);
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="text">Text</param>
-		/// <param name="color">Color</param>
-		TextPart(const std::string& text, FormatterTextKind color);
-
-		TextPart() = default;
 	};
 }

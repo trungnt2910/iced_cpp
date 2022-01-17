@@ -45,18 +45,18 @@ namespace Iced::Intel
 
 	void FormatterOutput::WriteSymbol(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, std::uint64_t address, SymbolResult const symbol)
 	{
-		auto text = symbol.Text;
+		const auto& text = symbol.Text;
 		auto array = text.TextArray;
 		if (array != nullptr)
 		{
-			for (auto part : *array)
+			for (const auto& part : *array)
 			{
-				Write(part->Text, part->Color);
+				Write(part.Text, part.Color);
 			}
 		}
 		else
 		{
-			std::string s = dynamic_cast<std::string>(text.Text.Text);
+			const std::string& s = text.Text.Text;
 			if (s != "")
 			{
 				Write(s, text.Text.Color);

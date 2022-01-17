@@ -52,7 +52,7 @@ public:
 };
 
 template <typename T>
-class IList : IReadOnlyList<T>
+class IList : public IReadOnlyList<T>
 {
 public:
 	virtual T& operator[](std::int32_t index) INTERFACE_FUNC

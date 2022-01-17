@@ -31,6 +31,6 @@ namespace Iced::Intel::DecoderInternal
 	public:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public override int ReadHandlers(ref TableDeserializer deserializer, OpCodeHandler?[] result, int resultIndex)
-		std::int32_t ReadHandlers(TableDeserializer& deserializer, std::vector<OpCodeHandler*>& result, std::int32_t resultIndex) override;
+		std::int32_t ReadHandlers(TableDeserializer& deserializer, std::vector<std::shared_ptr<OpCodeHandler>>& result, std::int32_t resultIndex) override;
 	};
 }

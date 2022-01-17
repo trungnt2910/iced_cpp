@@ -33,6 +33,8 @@
 #include "Iced.Intel.AssemblerRegisterTMM.h"
 #include "Iced.Intel.AssemblerMemoryOperandFactory.h"
 
+#include <concepts>
+
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT

@@ -18,7 +18,7 @@
 namespace Iced::Intel
 {
 
-	StreamCodeWriter::StreamCodeWriter(Stream* stream)
+	StreamCodeWriter::StreamCodeWriter(class Stream* stream)
 	{
 		Stream = stream;
 	}

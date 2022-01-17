@@ -150,7 +150,7 @@ namespace Iced::Intel
 			throw std::invalid_argument("getRegisterValue");
 		}
 		auto provider = new VARegisterValueProviderDelegateImpl(getRegisterValue);
-		std::any result;
+		std::uint64_t result;
 		if (TryGetVirtualAddress(elementIndex, provider, result))
 		{
 			return result;
@@ -165,7 +165,7 @@ namespace Iced::Intel
 			throw std::invalid_argument("registerValueProvider");
 		}
 		auto provider = new VARegisterValueProviderAdapter(registerValueProvider);
-		std::any result;
+		std::uint64_t result;
 		if (TryGetVirtualAddress(elementIndex, provider, result))
 		{
 			return result;
@@ -279,7 +279,7 @@ namespace Iced::Intel
 			{
 				sb->append("0x");
 				//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-				sb->append(GetDisplacement().ToString("X"));
+				sb->append(std::format("{:X}", GetDisplacement()));
 			}
 		}
 		sb->append(';');

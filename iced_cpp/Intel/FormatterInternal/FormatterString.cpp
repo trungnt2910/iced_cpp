@@ -26,13 +26,14 @@ namespace Iced::Intel::FormatterInternal
 	FormatterString::FormatterString(const std::string& lower)
 	{
 		//C# TO C++ CONVERTER TODO TASK: There is no direct C++ equivalent to this .NET String method:
-		assert(lower.ToLowerInvariant() == lower);
+		assert(tolower(lower) == lower);
 		this->lower = lower;
 		//C# TO C++ CONVERTER TODO TASK: There is no direct C++ equivalent to this .NET String method:
-		upper = std::string::Intern(lower.ToUpperInvariant());
+		// C++ doesn't have string.Intern
+		upper = toupper(lower);
 	}
 
-	std::vector<FormatterString> FormatterString::Create(std::vector<std::string>& strings)
+	std::vector<FormatterString> FormatterString::Create(const std::vector<std::string>& strings)
 	{
 		auto res = std::vector<FormatterString>(strings.size());
 		for (std::int32_t i = 0; i < strings.size(); i++)
@@ -42,7 +43,7 @@ namespace Iced::Intel::FormatterInternal
 		return res;
 	}
 
-	std::string FormatterString::Get(bool upper)
+	std::string FormatterString::Get(bool upper) const
 	{
 		return upper ? this->upper : lower;
 	}

@@ -26,28 +26,31 @@
 #include <csharp/exceptionhelper.h>
 #include <cassert>
 
+namespace Iced::Intel { class BlockEncoder;  }
+
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel::BlockEncoderInternal
 {
+	class BlockData;
 	class Instr
 	{
 	public:
-		Block* Block;
+		class Block* Block;
 		std::uint32_t Size = 0;
 		std::uint64_t IP = 0;
 		std::uint64_t OrigIP = 0;
 		// 6 = FF 15 XXXXXXXX = call qword ptr [rip+mem_target]
 	protected:
 		static constexpr std::uint32_t CallOrJmpPointerDataInstructionSize64 = 6;
-		Instr(Block* block, std::uint64_t origIp);
+		Instr(class Block* block, std::uint64_t origIp);
 		/// <summary>
 		/// Initializes the target address and tries to optimize the instruction
 		/// </summary>
 	public:
-		virtual void Initialize(BlockEncoder* blockEncoder) = 0;
+		virtual void Initialize(::Iced::Intel::BlockEncoder* blockEncoder) = 0;
 		/// <summary>
 		/// Returns <see langword="true"/> if the instruction was updated to a shorter instruction, <see langword="false"/> if nothing changed
 		/// </summary>
@@ -59,7 +62,7 @@ namespace Iced::Intel::BlockEncoderInternal
 	protected:
 		static std::string CreateErrorMessage(const std::string& errorMessage, Instruction const instruction);
 	public:
-		static Instr* Create(BlockEncoder* blockEncoder, Block* block, Instruction const instruction);
+		static Instr* Create(::Iced::Intel::BlockEncoder* blockEncoder, class Block* block, Instruction const instruction);
 	protected:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: protected string? EncodeBranchToPointerData(Encoder encoder, bool isCall, ulong ip, BlockData pointerData, out uint size, uint minSize)

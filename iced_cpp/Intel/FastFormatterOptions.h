@@ -27,8 +27,6 @@ namespace Iced::Intel
 	class FastFormatterOptions final
 	{
 	private:
-		Flags1 flags1 = static_cast<Flags1>(0);
-	private:
 		enum class Flags1 : int
 		{
 			None = 0,
@@ -42,9 +40,11 @@ namespace Iced::Intel
 			UseHexPrefix = 0x00000080
 		};
 
+		DEFINE_FLAGS_FRIEND(Flags1)
 		DEFINE_COMP_FRIEND(Flags1)
 			DEFINE_ARITH_FRIEND(Flags1)
-
+	private:
+		Flags1 flags1 = static_cast<Flags1>(0);
 	public:
 		FastFormatterOptions();
 		/// <summary>

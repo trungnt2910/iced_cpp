@@ -23,12 +23,12 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsGPR8(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a GPR8 register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a GPR8 register", "value"));
 		}
 		Value = value;
 	}
 
-	AssemblerRegister8::operator Register()
+	AssemblerRegister8::operator Register() const
 	{
 		return this->Value;
 	}
@@ -47,8 +47,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegister8::Equals(std::any obj)
 	{
-		AssemblerRegister8 other = dynamic_cast<AssemblerRegister8>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegister8* other = std::any_cast<AssemblerRegister8>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegister8::operator == (AssemblerRegister8 right)

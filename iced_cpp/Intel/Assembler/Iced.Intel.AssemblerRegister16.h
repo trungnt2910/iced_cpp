@@ -49,7 +49,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="reg">AssemblerRegister16</param>
 		/// <returns></returns>
-		operator Register();
+		operator Register() const;
 		/// <summary>
 		/// Adds a register (base) to another register (index) and return a memory operand.
 		/// </summary>
@@ -100,6 +100,9 @@ namespace Iced::Intel
 		/// <param name="right">Register</param>
 		/// <returns></returns>
 		bool operator != (AssemblerRegister16 right);
+
+		inline bool operator == (Register right) { return (Register)(*this) == right; }
+		inline std::string ToString() const { return to_string(Value); }
 
 		AssemblerRegister16() = default;
 	};

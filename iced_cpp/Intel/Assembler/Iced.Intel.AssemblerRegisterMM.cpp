@@ -23,12 +23,12 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsMM(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a MM register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a MM register", nameof(value)));
 		}
 		Value = value;
 	}
 
-	AssemblerRegisterMM::operator Register()
+	AssemblerRegisterMM::operator Register() const
 	{
 		return this->Value;
 	}
@@ -47,8 +47,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterMM::Equals(std::any obj)
 	{
-		AssemblerRegisterMM other = dynamic_cast<AssemblerRegisterMM>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterMM* other = std::any_cast<AssemblerRegisterMM>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterMM::operator == (AssemblerRegisterMM right)

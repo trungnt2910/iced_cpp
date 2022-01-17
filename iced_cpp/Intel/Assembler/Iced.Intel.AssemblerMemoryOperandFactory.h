@@ -105,7 +105,7 @@ namespace Iced::Intel
 		/// <summary>
 		/// Specify a memory operand with a label.
 		/// </summary>
-		AssemblerMemoryOperand operator [](Label* label);
+		AssemblerMemoryOperand operator [](const Label& label);
 
 
 		/// <summary>

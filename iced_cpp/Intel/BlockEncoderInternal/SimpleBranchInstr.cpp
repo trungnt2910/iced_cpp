@@ -20,7 +20,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	SimpleBranchInstr::SimpleBranchInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	SimpleBranchInstr::SimpleBranchInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
 	{
 		bitness = blockEncoder->GetBitness();
 		this->instruction = instruction;
@@ -235,6 +235,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		case InstrKind::Short:
 			isOriginalInstruction = true;
 			instruction.SetNearBranch64(targetInstr.GetAddress());
+			std::uint32_t _;
 			if (!encoder->TryEncode(instruction, IP, _, errorMessage))
 			{
 				constantOffsets = Iced::Intel::ConstantOffsets();
@@ -298,7 +299,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		}
 		case InstrKind::Long:
 			assert(encoder->GetBitness() == 64);
-			Debug2::Assert(pointerData != nullptr);
+			System::Diagnostics::Debug2::Assert(pointerData != nullptr);
 			isOriginalInstruction = false;
 			constantOffsets = Iced::Intel::ConstantOffsets();
 			pointerData->Data = targetInstr.GetAddress();

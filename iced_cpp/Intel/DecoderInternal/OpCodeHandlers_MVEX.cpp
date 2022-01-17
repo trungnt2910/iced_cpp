@@ -26,7 +26,7 @@
 namespace Iced::Intel::DecoderInternal
 {
 
-	OpCodeHandler_EH::OpCodeHandler_EH(OpCodeHandler* handlerEH0, OpCodeHandler* handlerEH1)
+	OpCodeHandler_EH::OpCodeHandler_EH(std::shared_ptr<OpCodeHandler> handlerEH0, std::shared_ptr<OpCodeHandler> handlerEH1)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.handlerEH0 = handlerEH0 ?? throw new ArgumentNullException(nameof(handlerEH0));
@@ -57,16 +57,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::MVEX);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetOpMask(Register::None); // It's ignored (see ctor)
 		instruction.SetCode(code);
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -77,7 +77,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss)));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
 	}
@@ -93,22 +93,22 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::MVEX);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		else
 		{
 			instruction.SetOp0Kind(OpKind::Memory);
-			if (mvex.GetCanUseEvictionHint() && (state->flags & StateFlags::MvexEH) != 0)
+			if (mvex.GetCanUseEvictionHint() && (state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -116,12 +116,12 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase + state->extraRegisterBaseEVEX) + Register::ZMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase + state.extraRegisterBaseEVEX) + Register::ZMM0));
 	}
 
 	OpCodeHandler_MVEX_VW::OpCodeHandler_MVEX_VW(Code code)
@@ -137,23 +137,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::MVEX);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase + state->extraRegisterBaseEVEX) + Register::ZMM0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase + state.extraRegisterBaseEVEX) + Register::ZMM0));
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBaseEVEX) + Register::ZMM0);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + Register::ZMM0));
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				if (mvex.GetCanUseSuppressAllExceptions())
 				{
@@ -183,13 +183,13 @@ namespace Iced::Intel::DecoderInternal
 					decoder->SetInvalidInstruction();
 				}
 				assert(static_cast<std::uint32_t>(sss) <= 7);
-				instruction.InternalSetMvexRegMemConv(MvexRegMemConv::RegSwizzleNone + sss);
+				instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::RegSwizzleNone + sss));
 			}
 		}
 		else
 		{
 			instruction.SetOp1Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -197,7 +197,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
 	}
@@ -215,19 +215,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
+		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->vvvv) + Register::ZMM0);
+		instruction.SetOp0Register((Register)((Register)(static_cast<std::int32_t>(state.vvvv) + Register::ZMM0)));
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBaseEVEX) + Register::ZMM0);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + Register::ZMM0));
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				if (mvex.GetCanUseSuppressAllExceptions())
 				{
@@ -257,13 +257,13 @@ namespace Iced::Intel::DecoderInternal
 					decoder->SetInvalidInstruction();
 				}
 				assert(static_cast<std::uint32_t>(sss) <= 7);
-				instruction.InternalSetMvexRegMemConv(MvexRegMemConv::RegSwizzleNone + sss);
+				instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::RegSwizzleNone + sss));
 			}
 		}
 		else
 		{
 			instruction.SetOp1Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -271,7 +271,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
 		instruction.SetOp2Kind(OpKind::Immediate8);
@@ -291,23 +291,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
-		if ((state->vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::MVEX);
+		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase + state->extraRegisterBaseEVEX) + Register::ZMM0);
+		instruction.SetOp0Register((Register)((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase + state.extraRegisterBaseEVEX) + Register::ZMM0)));
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBaseEVEX) + Register::ZMM0);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			instruction.SetOp1Register((Register)((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + Register::ZMM0)));
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				if (mvex.GetCanUseSuppressAllExceptions())
 				{
@@ -337,13 +337,13 @@ namespace Iced::Intel::DecoderInternal
 					decoder->SetInvalidInstruction();
 				}
 				assert(static_cast<std::uint32_t>(sss) <= 7);
-				instruction.InternalSetMvexRegMemConv(MvexRegMemConv::RegSwizzleNone + sss);
+				instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::RegSwizzleNone + sss));
 			}
 		}
 		else
 		{
 			instruction.SetOp1Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -351,7 +351,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
 		instruction.SetOp2Kind(OpKind::Immediate8);
@@ -371,26 +371,26 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
+		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase + state->extraRegisterBaseEVEX) + Register::ZMM0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase + state.extraRegisterBaseEVEX) + Register::ZMM0));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + Register::ZMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + Register::ZMM0));
 		auto mvex = MvexInfo(code);
-		if (mvex.GetRequireOpMaskRegister() && decoder->invalidCheckMask != 0 && state->aaa == 0)
+		if (mvex.GetRequireOpMaskRegister() && decoder->invalidCheckMask != 0 && state.aaa == 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBaseEVEX) + Register::ZMM0);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + Register::ZMM0));
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				if (mvex.GetCanUseSuppressAllExceptions())
 				{
@@ -420,13 +420,13 @@ namespace Iced::Intel::DecoderInternal
 					decoder->SetInvalidInstruction();
 				}
 				assert(static_cast<std::uint32_t>(sss) <= 7);
-				instruction.InternalSetMvexRegMemConv(MvexRegMemConv::RegSwizzleNone + sss);
+				instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::RegSwizzleNone + sss));
 			}
 		}
 		else
 		{
 			instruction.SetOp2Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -434,7 +434,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
 	}
@@ -452,22 +452,22 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
+		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase + state->extraRegisterBaseEVEX) + Register::ZMM0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase + state.extraRegisterBaseEVEX) + Register::ZMM0));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + Register::ZMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + Register::ZMM0));
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBaseEVEX) + Register::ZMM0);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + Register::ZMM0));
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				if (mvex.GetCanUseSuppressAllExceptions())
 				{
@@ -497,13 +497,13 @@ namespace Iced::Intel::DecoderInternal
 					decoder->SetInvalidInstruction();
 				}
 				assert(static_cast<std::uint32_t>(sss) <= 7);
-				instruction.InternalSetMvexRegMemConv(MvexRegMemConv::RegSwizzleNone + sss);
+				instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::RegSwizzleNone + sss));
 			}
 		}
 		else
 		{
 			instruction.SetOp2Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -511,7 +511,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
 		instruction.SetOp3Kind(OpKind::Immediate8);
@@ -531,26 +531,26 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
-		if ((state->vvvv & decoder->invalidCheckMask) > 7)
+		assert(state.GetEncoding() == EncodingKind::MVEX);
+		if ((state.vvvv & decoder->invalidCheckMask) > 7)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase + state->extraRegisterBaseEVEX) + Register::ZMM0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase + state.extraRegisterBaseEVEX) + Register::ZMM0));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register((static_cast<std::int32_t>(state->vvvv) & 7) + Register::K0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + Register::ZMM0));
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBaseEVEX) + Register::ZMM0);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + Register::ZMM0));
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				if (mvex.GetCanUseSuppressAllExceptions())
 				{
@@ -580,13 +580,13 @@ namespace Iced::Intel::DecoderInternal
 					decoder->SetInvalidInstruction();
 				}
 				assert(static_cast<std::uint32_t>(sss) <= 7);
-				instruction.InternalSetMvexRegMemConv(MvexRegMemConv::RegSwizzleNone + sss);
+				instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::RegSwizzleNone + sss));
 			}
 		}
 		else
 		{
 			instruction.SetOp2Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -594,7 +594,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
 	}
@@ -612,22 +612,22 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
+		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::K0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::K0));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + Register::ZMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + Register::ZMM0));
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBaseEVEX) + Register::ZMM0);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + Register::ZMM0));
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				if (mvex.GetCanUseSuppressAllExceptions())
 				{
@@ -657,13 +657,13 @@ namespace Iced::Intel::DecoderInternal
 					decoder->SetInvalidInstruction();
 				}
 				assert(static_cast<std::uint32_t>(sss) <= 7);
-				instruction.InternalSetMvexRegMemConv(MvexRegMemConv::RegSwizzleNone + sss);
+				instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::RegSwizzleNone + sss));
 			}
 		}
 		else
 		{
 			instruction.SetOp2Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -671,10 +671,10 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
-		if (((state->extraRegisterBase | state->extraRegisterBaseEVEX) & decoder->invalidCheckMask) != 0)
+		if (((state.extraRegisterBase | state.extraRegisterBaseEVEX) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -693,22 +693,22 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
+		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::K0);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::K0));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->vvvv) + Register::ZMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.vvvv) + Register::ZMM0));
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBaseEVEX) + Register::ZMM0);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + Register::ZMM0));
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				if (mvex.GetCanUseSuppressAllExceptions())
 				{
@@ -738,13 +738,13 @@ namespace Iced::Intel::DecoderInternal
 					decoder->SetInvalidInstruction();
 				}
 				assert(static_cast<std::uint32_t>(sss) <= 7);
-				instruction.InternalSetMvexRegMemConv(MvexRegMemConv::RegSwizzleNone + sss);
+				instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::RegSwizzleNone + sss));
 			}
 		}
 		else
 		{
 			instruction.SetOp2Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -752,10 +752,10 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem(instruction, mvex.GetTupleType(sss));
 		}
-		if (((state->extraRegisterBase | state->extraRegisterBaseEVEX) & decoder->invalidCheckMask) != 0)
+		if (((state.extraRegisterBase | state.extraRegisterBaseEVEX) & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -776,22 +776,22 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
-		if (decoder->invalidCheckMask != 0 && ((state->vvvv_invalidCheck & 0xF) != 0 || state->aaa == 0))
+		assert(state.GetEncoding() == EncodingKind::MVEX);
+		if (decoder->invalidCheckMask != 0 && ((state.vvvv_invalidCheck & 0xF) != 0 || state.aaa == 0))
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		else
 		{
 			instruction.SetOp0Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -799,7 +799,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem_VSIB(instruction, Register::ZMM0, mvex.GetTupleType(sss));
 		}
 	}
@@ -817,25 +817,25 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
-		if (decoder->invalidCheckMask != 0 && ((state->vvvv_invalidCheck & 0xF) != 0 || state->aaa == 0))
+		assert(state.GetEncoding() == EncodingKind::MVEX);
+		if (decoder->invalidCheckMask != 0 && ((state.vvvv_invalidCheck & 0xF) != 0 || state.aaa == 0))
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase + state->extraRegisterBaseEVEX) + Register::ZMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase + state.extraRegisterBaseEVEX) + Register::ZMM0));
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		else
 		{
 			instruction.SetOp0Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -843,7 +843,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem_VSIB(instruction, Register::ZMM0, mvex.GetTupleType(sss));
 		}
 	}
@@ -861,26 +861,26 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::MVEX);
-		if (decoder->invalidCheckMask != 0 && ((state->vvvv_invalidCheck & 0xF) != 0 || state->aaa == 0))
+		assert(state.GetEncoding() == EncodingKind::MVEX);
+		if (decoder->invalidCheckMask != 0 && ((state.vvvv_invalidCheck & 0xF) != 0 || state.aaa == 0))
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
-		std::int32_t regNum = static_cast<std::int32_t>(state->reg + state->extraRegisterBase + state->extraRegisterBaseEVEX);
+		std::int32_t regNum = static_cast<std::int32_t>(state.reg + state.extraRegisterBase + state.extraRegisterBaseEVEX);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(regNum + Register::ZMM0);
+		instruction.SetOp0Register((Register)(regNum + Register::ZMM0));
 		auto mvex = MvexInfo(code);
-		auto sss = state->Sss;
-		if (state->mod == 3)
+		auto sss = state.GetSss();
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		else
 		{
 			instruction.SetOp1Kind(OpKind::Memory);
-			if ((state->flags & StateFlags::MvexEH) != 0)
+			if ((state.flags & StateFlags::MvexEH) != 0)
 			{
 				instruction.InternalSetIsMvexEvictionHint();
 			}
@@ -888,7 +888,7 @@ namespace Iced::Intel::DecoderInternal
 			{
 				decoder->SetInvalidInstruction();
 			}
-			instruction.InternalSetMvexRegMemConv(MvexRegMemConv::MemConvNone + sss);
+			instruction.InternalSetMvexRegMemConv((MvexRegMemConv)(MvexRegMemConv::MemConvNone + sss));
 			decoder->ReadOpMem_VSIB(instruction, Register::ZMM0, mvex.GetTupleType(sss));
 			if (decoder->invalidCheckMask != 0)
 			{

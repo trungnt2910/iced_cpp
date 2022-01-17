@@ -23,7 +23,6 @@
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
-using namespace Iced::Intel::Internal;
 namespace Iced::Intel::FormatterInternal
 {
 	class RegistersTable final

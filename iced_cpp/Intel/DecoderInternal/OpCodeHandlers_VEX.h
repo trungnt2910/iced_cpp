@@ -34,18 +34,18 @@ namespace Iced::Intel::DecoderInternal
 	{
 		/* readonly */
 	private:
-		std::vector<OpCodeHandler*> handlers;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers;
 	public:
-		OpCodeHandler_VectorLength_VEX(OpCodeHandler* handler128, OpCodeHandler* handler256);
+		OpCodeHandler_VectorLength_VEX(std::shared_ptr<OpCodeHandler> handler128, std::shared_ptr<OpCodeHandler> handler256);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_VectorLength_NoModRM_VEX final : public OpCodeHandler
 	{
 		/* readonly */
 	private:
-		std::vector<OpCodeHandler*> handlers;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers;
 	public:
-		OpCodeHandler_VectorLength_NoModRM_VEX(OpCodeHandler* handler128, OpCodeHandler* handler256);
+		OpCodeHandler_VectorLength_NoModRM_VEX(std::shared_ptr<OpCodeHandler> handler128, std::shared_ptr<OpCodeHandler> handler256);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_VEX_Simple final : public OpCodeHandler

@@ -28,7 +28,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	Instr::Instr(Block* block, std::uint64_t origIp)
+	Instr::Instr(class Block* block, std::uint64_t origIp)
 	{
 		OrigIP = origIp;
 		Block = block;
@@ -40,7 +40,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		return std::format("{0:s} : 0x{1:0>X} {2:s}", errorMessage, instruction.GetIP(), to_string(instruction));
 	}
 
-	Instr* Instr::Create(BlockEncoder* blockEncoder, Block* block, Instruction const instruction)
+	Instr* Instr::Create(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction)
 	{
 		switch (instruction.GetCode())
 		{
@@ -273,7 +273,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		while (size < minSize)
 		{
 			size++;
-			Block->CodeWriter->WriteByte(0x90);
+			Block->CodeWriter.WriteByte(0x90);
 		}
 		return "";
 	}

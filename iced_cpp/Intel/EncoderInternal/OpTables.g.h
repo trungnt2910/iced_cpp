@@ -28,10 +28,223 @@ namespace Iced::Intel::EncoderInternal
 	class OpHandlerData final
 	{
 	public:
-		static std::vector<Op*> LegacyOps;
-		static std::vector<Op*> VexOps;
-		static std::vector<Op*> XopOps;
-		static std::vector<Op*> EvexOps;
-		static std::vector<Op*> MvexOps;
+		static const std::vector<std::shared_ptr<Op>>& GetLegacyOps();
+		static const std::vector<std::shared_ptr<Op>>& GetVexOps();
+		static const std::vector<std::shared_ptr<Op>>& GetXopOps();
+		static const std::vector<std::shared_ptr<Op>>& GetEvexOps();
+		static const std::vector<std::shared_ptr<Op>>& GetMvexOps();
 	};
+
+	inline const std::vector<std::shared_ptr<Op>>& OpHandlerData::GetLegacyOps()
+	{
+		static const std::vector<std::shared_ptr<Op>> LegacyOps =
+		{
+			std::make_shared<OpA>(2),
+			std::make_shared<OpA>(4),
+			std::make_shared<OpO>(),
+			std::make_shared<OpModRM_rm_mem_only>(false),
+			std::make_shared<OpModRM_rm_mem_only>(false),
+			std::make_shared<OpModRM_rm_mem_only>(false),
+			std::make_shared<OpModRM_rm>(Register::AL, Register::R15L),
+			std::make_shared<OpModRM_rm>(Register::AX, Register::R15W),
+			std::make_shared<OpModRM_rm>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_rm>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_rm>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_rm>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_rm>(Register::MM0, Register::MM7),
+			std::make_shared<OpModRM_rm>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpModRM_rm>(Register::BND0, Register::BND3),
+			std::make_shared<OpModRM_reg>(Register::AL, Register::R15L),
+			std::make_shared<OpRegEmbed8>(Register::AL, Register::R15L),
+			std::make_shared<OpModRM_reg>(Register::AX, Register::R15W),
+			std::make_shared<OpModRM_reg_mem>(Register::AX, Register::R15W),
+			std::make_shared<OpModRM_rm_reg_only>(Register::AX, Register::R15W),
+			std::make_shared<OpRegEmbed8>(Register::AX, Register::R15W),
+			std::make_shared<OpModRM_reg>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_reg_mem>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_rm_reg_only>(Register::EAX, Register::R15D),
+			std::make_shared<OpRegEmbed8>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_reg>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_reg_mem>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_rm_reg_only>(Register::RAX, Register::R15),
+			std::make_shared<OpRegEmbed8>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_reg>(Register::ES, Register::GS),
+			std::make_shared<OpModRM_reg>(Register::MM0, Register::MM7),
+			std::make_shared<OpModRM_rm_reg_only>(Register::MM0, Register::MM7),
+			std::make_shared<OpModRM_reg>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpModRM_rm_reg_only>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpModRM_regF0>(Register::CR0, Register::CR15),
+			std::make_shared<OpModRM_reg>(Register::DR0, Register::DR15),
+			std::make_shared<OpModRM_reg>(Register::TR0, Register::TR7),
+			std::make_shared<OpModRM_reg>(Register::BND0, Register::BND3),
+			std::make_shared<OpReg>(Register::ES),
+			std::make_shared<OpReg>(Register::CS),
+			std::make_shared<OpReg>(Register::SS),
+			std::make_shared<OpReg>(Register::DS),
+			std::make_shared<OpReg>(Register::FS),
+			std::make_shared<OpReg>(Register::GS),
+			std::make_shared<OpReg>(Register::AL),
+			std::make_shared<OpReg>(Register::CL),
+			std::make_shared<OpReg>(Register::AX),
+			std::make_shared<OpReg>(Register::DX),
+			std::make_shared<OpReg>(Register::EAX),
+			std::make_shared<OpReg>(Register::RAX),
+			std::make_shared<OpReg>(Register::ST0),
+			std::make_shared<OpRegSTi>(),
+			std::make_shared<OpIb>(OpKind::Immediate8),
+			std::make_shared<OpImm>(1),
+			std::make_shared<OpIb>(OpKind::Immediate8to16),
+			std::make_shared<OpIb>(OpKind::Immediate8to32),
+			std::make_shared<OpIb>(OpKind::Immediate8to64),
+			std::make_shared<OpIw>(),
+			std::make_shared<OpId>(OpKind::Immediate32),
+			std::make_shared<OpId>(OpKind::Immediate32to64),
+			std::make_shared<OpIq>(),
+			std::make_shared<OpX>(),
+			std::make_shared<OpY>(),
+			std::make_shared<OprDI>(),
+			std::make_shared<OpMRBX>(),
+			std::make_shared<OpJ>(OpKind::NearBranch16, 1),
+			std::make_shared<OpJ>(OpKind::NearBranch32, 1),
+			std::make_shared<OpJ>(OpKind::NearBranch64, 1),
+			std::make_shared<OpJ>(OpKind::NearBranch16, 2),
+			std::make_shared<OpJ>(OpKind::NearBranch32, 4),
+			std::make_shared<OpJ>(OpKind::NearBranch64, 4),
+			std::make_shared<OpJx>(2),
+			std::make_shared<OpJx>(4),
+			std::make_shared<OpJdisp>(2),
+			std::make_shared<OpJdisp>(4)
+		};
+
+		return LegacyOps;
+	}
+
+	inline const std::vector<std::shared_ptr<Op>>& OpHandlerData::GetVexOps()
+	{
+		static const std::vector<std::shared_ptr<Op>> VexOps =
+		{
+			std::make_shared<OpModRM_rm_mem_only>(false),
+			std::make_shared<OpVsib>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpVsib>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpVsib>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpVsib>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpModRM_rm>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_rm>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_rm>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpModRM_rm>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpModRM_rm>(Register::K0, Register::K7),
+			std::make_shared<OpModRM_reg>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_rm_reg_only>(Register::EAX, Register::R15D),
+			std::make_shared<OpHx>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_reg>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_rm_reg_only>(Register::RAX, Register::R15),
+			std::make_shared<OpHx>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_reg>(Register::K0, Register::K7),
+			std::make_shared<OpModRM_rm_reg_only>(Register::K0, Register::K7),
+			std::make_shared<OpHx>(Register::K0, Register::K7),
+			std::make_shared<OpModRM_reg>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpModRM_rm_reg_only>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpHx>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpIsX>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpIsX>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpModRM_reg>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpModRM_rm_reg_only>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpHx>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpIsX>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpIsX>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpI4>(),
+			std::make_shared<OpIb>(OpKind::Immediate8),
+			std::make_shared<OprDI>(),
+			std::make_shared<OpJ>(OpKind::NearBranch64, 1),
+			std::make_shared<OpJ>(OpKind::NearBranch64, 4),
+			std::make_shared<OpModRM_rm_mem_only>(true),
+			std::make_shared<OpModRM_reg>(Register::TMM0, Register::TMM7),
+			std::make_shared<OpModRM_rm_reg_only>(Register::TMM0, Register::TMM7),
+			std::make_shared<OpHx>(Register::TMM0, Register::TMM7)
+		};
+
+		return VexOps;
+	}
+
+	inline const std::vector<std::shared_ptr<Op>>& OpHandlerData::GetXopOps()
+	{
+		static const std::vector<std::shared_ptr<Op>> XopOps = 
+		{
+			std::make_shared<OpModRM_rm>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_rm>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_rm>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpModRM_rm>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpModRM_reg>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_rm_reg_only>(Register::EAX, Register::R15D),
+			std::make_shared<OpHx>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_reg>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_rm_reg_only>(Register::RAX, Register::R15),
+			std::make_shared<OpHx>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_reg>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpHx>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpIsX>(Register::XMM0, Register::XMM15),
+			std::make_shared<OpModRM_reg>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpHx>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpIsX>(Register::YMM0, Register::YMM15),
+			std::make_shared<OpIb>(OpKind::Immediate8),
+			std::make_shared<OpId>(OpKind::Immediate32)
+		};
+		return XopOps;
+	}
+
+	inline const std::vector<std::shared_ptr<Op>>& OpHandlerData::GetEvexOps()
+	{
+		static const std::vector<std::shared_ptr<Op>> EvexOps = 
+		{
+			std::make_shared<OpModRM_rm_mem_only>(false),
+			std::make_shared<OpVsib>(Register::XMM0, Register::XMM31),
+			std::make_shared<OpVsib>(Register::XMM0, Register::XMM31),
+			std::make_shared<OpVsib>(Register::YMM0, Register::YMM31),
+			std::make_shared<OpVsib>(Register::YMM0, Register::YMM31),
+			std::make_shared<OpVsib>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpVsib>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpModRM_rm>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_rm>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_rm>(Register::XMM0, Register::XMM31),
+			std::make_shared<OpModRM_rm>(Register::YMM0, Register::YMM31),
+			std::make_shared<OpModRM_rm>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpModRM_reg>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_rm_reg_only>(Register::EAX, Register::R15D),
+			std::make_shared<OpModRM_reg>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_rm_reg_only>(Register::RAX, Register::R15),
+			std::make_shared<OpModRM_reg>(Register::K0, Register::K7),
+			std::make_shared<OpModRM_reg>(Register::K0, Register::K7),
+			std::make_shared<OpModRM_rm_reg_only>(Register::K0, Register::K7),
+			std::make_shared<OpModRM_reg>(Register::XMM0, Register::XMM31),
+			std::make_shared<OpModRM_rm_reg_only>(Register::XMM0, Register::XMM31),
+			std::make_shared<OpHx>(Register::XMM0, Register::XMM31),
+			std::make_shared<OpHx>(Register::XMM0, Register::XMM31),
+			std::make_shared<OpModRM_reg>(Register::YMM0, Register::YMM31),
+			std::make_shared<OpModRM_rm_reg_only>(Register::YMM0, Register::YMM31),
+			std::make_shared<OpHx>(Register::YMM0, Register::YMM31),
+			std::make_shared<OpModRM_reg>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpModRM_rm_reg_only>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpHx>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpHx>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpIb>(OpKind::Immediate8)
+		};
+		return EvexOps;
+	}
+
+	inline const std::vector<std::shared_ptr<Op>>& OpHandlerData::GetMvexOps()
+	{
+		static const std::vector<std::shared_ptr<Op>> MvexOps = 
+		{
+			std::make_shared<OpModRM_rm_mem_only>(false),
+			std::make_shared<OpVsib>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpModRM_rm>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpModRM_reg>(Register::K0, Register::K7),
+			std::make_shared<OpHx>(Register::K0, Register::K7),
+			std::make_shared<OpModRM_reg>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpHx>(Register::ZMM0, Register::ZMM31),
+			std::make_shared<OpIb>(OpKind::Immediate8)
+		};
+		return MvexOps;
+	}
+
 }

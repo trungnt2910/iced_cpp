@@ -19,7 +19,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	XbeginInstr::XbeginInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	XbeginInstr::XbeginInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
 	{
 		this->instruction = instruction;
 		instrKind = InstrKind::Uninitialized;
@@ -86,6 +86,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		case InstrKind::Unchanged:
 		case InstrKind::Rel16:
 		case InstrKind::Rel32:
+		{
 			isOriginalInstruction = true;
 			if (instrKind == InstrKind::Unchanged)
 			{
@@ -102,6 +103,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			}
 			instruction.SetNearBranch64(targetInstr.GetAddress());
 			std::string errorMessage;
+			std::uint32_t _;
 			if (!encoder->TryEncode(instruction, IP, _, errorMessage))
 			{
 				constantOffsets = Iced::Intel::ConstantOffsets();
@@ -109,6 +111,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			}
 			constantOffsets = encoder->GetConstantOffsets();
 			return "";
+		}
 		case InstrKind::Uninitialized:
 		default:
 			throw InvalidOperationException();

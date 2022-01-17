@@ -88,7 +88,7 @@ namespace Iced::Intel
 				digits++;
 			}
 		}
-		bool useDigitSep = digitGroupSize > 0 && !string2::IsNullOrEmpty(digitSeparator);
+		bool useDigitSep = digitGroupSize > 0 && !System::string2::IsNullOrEmpty(digitSeparator);
 		auto divs = NumberFormatter::divs;
 		for (std::int32_t i = 0; i < digits; i++)
 		{
@@ -146,7 +146,7 @@ namespace Iced::Intel
 				sb->append(prefix);
 			}
 		}
-		bool useDigitSep = digitGroupSize > 0 && !string2::IsNullOrEmpty(digitSeparator);
+		bool useDigitSep = digitGroupSize > 0 && !System::string2::IsNullOrEmpty(digitSeparator);
 		for (std::int32_t i = 0; i < digits; i++)
 		{
 			std::int32_t index = digits - i - 1;
@@ -178,7 +178,7 @@ namespace Iced::Intel
 				digits++;
 			}
 		}
-		bool useDigitSep = digitGroupSize > 0 && !string2::IsNullOrEmpty(digitSeparator);
+		bool useDigitSep = digitGroupSize > 0 && !System::string2::IsNullOrEmpty(digitSeparator);
 		for (std::int32_t i = 0; i < digits; i++)
 		{
 			std::int32_t index = digits - i - 1;
@@ -207,7 +207,7 @@ namespace Iced::Intel
 		return flags;
 	}
 
-	std::string NumberFormatter::FormatInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int8_t value)
+	std::string NumberFormatter::FormatInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int8_t value) const
 	{
 		auto flags = GetFlags(options.LeadingZeros, options.SmallHexNumbersInDecimal);
 		if (value < 0)
@@ -218,7 +218,7 @@ namespace Iced::Intel
 		return FormatUnsignedInteger(formatterOptions, options, static_cast<std::uint8_t>(value), 8, flags);
 	}
 
-	std::string NumberFormatter::FormatInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int16_t value)
+	std::string NumberFormatter::FormatInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int16_t value) const
 	{
 		auto flags = GetFlags(options.LeadingZeros, options.SmallHexNumbersInDecimal);
 		if (value < 0)
@@ -229,7 +229,7 @@ namespace Iced::Intel
 		return FormatUnsignedInteger(formatterOptions, options, static_cast<std::uint16_t>(value), 16, flags);
 	}
 
-	std::string NumberFormatter::FormatInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int32_t value)
+	std::string NumberFormatter::FormatInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int32_t value) const
 	{
 		auto flags = GetFlags(options.LeadingZeros, options.SmallHexNumbersInDecimal);
 		if (value < 0)
@@ -240,7 +240,7 @@ namespace Iced::Intel
 		return FormatUnsignedInteger(formatterOptions, options, static_cast<std::uint32_t>(value), 32, flags);
 	}
 
-	std::string NumberFormatter::FormatInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int64_t value)
+	std::string NumberFormatter::FormatInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int64_t value) const
 	{
 		auto flags = GetFlags(options.LeadingZeros, options.SmallHexNumbersInDecimal);
 		if (value < 0)
@@ -251,64 +251,64 @@ namespace Iced::Intel
 		return FormatUnsignedInteger(formatterOptions, options, static_cast<std::uint64_t>(value), 64, flags);
 	}
 
-	std::string NumberFormatter::FormatUInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint8_t value)
+	std::string NumberFormatter::FormatUInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint8_t value) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 8, GetFlags(options.LeadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value)
+	std::string NumberFormatter::FormatUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 16, GetFlags(options.LeadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value)
+	std::string NumberFormatter::FormatUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 32, GetFlags(options.LeadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value)
+	std::string NumberFormatter::FormatUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 64, GetFlags(options.LeadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatDisplUInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint8_t value)
+	std::string NumberFormatter::FormatDisplUInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint8_t value) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 8, GetFlags(options.DisplacementLeadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatDisplUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value)
+	std::string NumberFormatter::FormatDisplUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 16, GetFlags(options.DisplacementLeadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatDisplUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value)
+	std::string NumberFormatter::FormatDisplUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 32, GetFlags(options.DisplacementLeadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatDisplUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value)
+	std::string NumberFormatter::FormatDisplUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 64, GetFlags(options.DisplacementLeadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value, bool leadingZeros)
+	std::string NumberFormatter::FormatUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value, bool leadingZeros) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 16, GetFlags(leadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value, bool leadingZeros)
+	std::string NumberFormatter::FormatUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value, bool leadingZeros) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 32, GetFlags(leadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
-	std::string NumberFormatter::FormatUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value, bool leadingZeros)
+	std::string NumberFormatter::FormatUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value, bool leadingZeros) const
 	{
 		return FormatUnsignedInteger(formatterOptions, options, value, 64, GetFlags(leadingZeros, options.SmallHexNumbersInDecimal));
 	}
 
 	std::vector<std::string> NumberFormatter::smallDecimalValues = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
-	std::string NumberFormatter::FormatUnsignedInteger(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value, std::int32_t valueSize, NumberFormatterFlags flags)
+	std::string NumberFormatter::FormatUnsignedInteger(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value, std::int32_t valueSize, NumberFormatterFlags flags) const
 	{
 		sb->clear();
 		if ((flags & NumberFormatterFlags::AddMinusSign) != 0)

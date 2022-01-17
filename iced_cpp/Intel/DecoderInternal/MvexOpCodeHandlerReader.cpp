@@ -22,7 +22,7 @@ namespace Iced::Intel::DecoderInternal
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public override int ReadHandlers(ref TableDeserializer deserializer, OpCodeHandler?[] result, int resultIndex)
-	std::int32_t MvexOpCodeHandlerReader::ReadHandlers(TableDeserializer& deserializer, std::vector<OpCodeHandler*>& result, std::int32_t resultIndex)
+	std::int32_t MvexOpCodeHandlerReader::ReadHandlers(TableDeserializer& deserializer, std::vector<std::shared_ptr<OpCodeHandler>>& result, std::int32_t resultIndex)
 	{
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var elem = ref result[resultIndex];
@@ -52,58 +52,58 @@ namespace Iced::Intel::DecoderInternal
 		case MvexOpCodeHandlerKind::ArrayReference:
 			throw InvalidOperationException();
 		case MvexOpCodeHandlerKind::RM:
-			elem = new OpCodeHandler_RM(deserializer.ReadHandler(), deserializer.ReadHandler());
+			elem = std::make_shared<OpCodeHandler_RM>(deserializer.ReadHandler(), deserializer.ReadHandler());
 			return 1;
 		case MvexOpCodeHandlerKind::Group:
-			elem = new OpCodeHandler_Group(deserializer.ReadArrayReference(static_cast<std::uint32_t>(MvexOpCodeHandlerKind::ArrayReference)));
+			elem = std::make_shared<OpCodeHandler_Group>(deserializer.ReadArrayReference(static_cast<std::uint32_t>(MvexOpCodeHandlerKind::ArrayReference)));
 			return 1;
 		case MvexOpCodeHandlerKind::W:
-			elem = new OpCodeHandler_W(deserializer.ReadHandler(), deserializer.ReadHandler());
+			elem = std::make_shared<OpCodeHandler_W>(deserializer.ReadHandler(), deserializer.ReadHandler());
 			return 1;
 		case MvexOpCodeHandlerKind::MandatoryPrefix2:
-			elem = new OpCodeHandler_MandatoryPrefix2(deserializer.ReadHandler(), deserializer.ReadHandler(), deserializer.ReadHandler(), deserializer.ReadHandler());
+			elem = std::make_shared<OpCodeHandler_MandatoryPrefix2>(deserializer.ReadHandler(), deserializer.ReadHandler(), deserializer.ReadHandler(), deserializer.ReadHandler());
 			return 1;
 		case MvexOpCodeHandlerKind::EH:
-			elem = new OpCodeHandler_EH(deserializer.ReadHandler(), deserializer.ReadHandler());
+			elem = std::make_shared<OpCodeHandler_EH>(deserializer.ReadHandler(), deserializer.ReadHandler());
 			return 1;
 		case MvexOpCodeHandlerKind::M:
-			elem = new OpCodeHandler_MVEX_M(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_M>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::MV:
-			elem = new OpCodeHandler_MVEX_MV(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_MV>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::VW:
-			elem = new OpCodeHandler_MVEX_VW(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_VW>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::HWIb:
-			elem = new OpCodeHandler_MVEX_HWIb(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_HWIb>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::VWIb:
-			elem = new OpCodeHandler_MVEX_VWIb(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_VWIb>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::VHW:
-			elem = new OpCodeHandler_MVEX_VHW(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_VHW>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::VHWIb:
-			elem = new OpCodeHandler_MVEX_VHWIb(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_VHWIb>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::VKW:
-			elem = new OpCodeHandler_MVEX_VKW(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_VKW>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::KHW:
-			elem = new OpCodeHandler_MVEX_KHW(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_KHW>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::KHWIb:
-			elem = new OpCodeHandler_MVEX_KHWIb(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_KHWIb>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::VSIB:
-			elem = new OpCodeHandler_MVEX_VSIB(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_VSIB>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::VSIB_V:
-			elem = new OpCodeHandler_MVEX_VSIB_V(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_VSIB_V>(deserializer.ReadCode());
 			return 1;
 		case MvexOpCodeHandlerKind::V_VSIB:
-			elem = new OpCodeHandler_MVEX_V_VSIB(deserializer.ReadCode());
+			elem = std::make_shared<OpCodeHandler_MVEX_V_VSIB>(deserializer.ReadCode());
 			return 1;
 		default:
 			throw InvalidOperationException();

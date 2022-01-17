@@ -33,11 +33,11 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="stream">The input stream</param>
 	public:
-		StreamCodeReader(Stream* stream);
+		StreamCodeReader(class Stream* stream);
 		/// <summary>
 		/// The stream this instance is writing to
 		/// </summary>
-		Stream* Stream;
+		class Stream* Stream;
 		/// <summary>
 		/// Reads the next byte or returns less than 0 if there are no more bytes
 		/// </summary>

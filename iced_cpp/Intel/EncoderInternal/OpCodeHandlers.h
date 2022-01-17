@@ -28,7 +28,7 @@ namespace Iced::Intel::EncoderInternal
 	class OpCodeHandlers final
 	{
 	public:
-		static std::vector<OpCodeHandler*> Handlers;
+		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers;
 	private:
 		class StaticConstructor
 		{

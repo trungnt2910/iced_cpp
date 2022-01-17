@@ -24,7 +24,7 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsYMM(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a YMM register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a YMM register", nameof(value)));
 		}
 		Value = value;
 		Flags = AssemblerOperandFlags::None;
@@ -101,7 +101,7 @@ namespace Iced::Intel
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundTowardZero);
 	}
 
-	AssemblerRegisterYMM::operator Register()
+	AssemblerRegisterYMM::operator Register() const
 	{
 		return this->Value;
 	}
@@ -135,8 +135,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterYMM::Equals(std::any obj)
 	{
-		AssemblerRegisterYMM other = dynamic_cast<AssemblerRegisterYMM>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterYMM* other = std::any_cast<AssemblerRegisterYMM>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterYMM::operator == (AssemblerRegisterYMM right)

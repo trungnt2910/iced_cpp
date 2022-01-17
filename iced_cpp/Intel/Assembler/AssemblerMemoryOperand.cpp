@@ -125,7 +125,7 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerMemoryOperand::Equals(std::any obj)
 	{
-		AssemblerMemoryOperand other = dynamic_cast<AssemblerMemoryOperand>(obj);
+		AssemblerMemoryOperand* other = std::any_cast<AssemblerMemoryOperand>(&obj);
 		return other != nullptr && Equals(other);
 	}
 
@@ -137,7 +137,7 @@ namespace Iced::Intel
 		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Base);
 		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Index);
 		hashCode = (hashCode * 397) ^ Scale;
-		hashCode = (hashCode * 397) ^ Displacement.GetHashCode();
+		hashCode = (hashCode * 397) ^ ::GetHashCode(Displacement);
 		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Flags);
 		return hashCode;
 		//C# TO C++ CONVERTER TODO TASK: End of the original C# 'unchecked' block.

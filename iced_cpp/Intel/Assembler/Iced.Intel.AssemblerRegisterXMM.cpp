@@ -24,7 +24,7 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsXMM(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a XMM register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a XMM register", nameof(value)));
 		}
 		Value = value;
 		Flags = AssemblerOperandFlags::None;
@@ -101,7 +101,7 @@ namespace Iced::Intel
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundTowardZero);
 	}
 
-	AssemblerRegisterXMM::operator Register()
+	AssemblerRegisterXMM::operator Register() const
 	{
 		return this->Value;
 	}
@@ -135,8 +135,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterXMM::Equals(std::any obj)
 	{
-		AssemblerRegisterXMM other = dynamic_cast<AssemblerRegisterXMM>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterXMM* other = std::any_cast<AssemblerRegisterXMM>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterXMM::operator == (AssemblerRegisterXMM right)

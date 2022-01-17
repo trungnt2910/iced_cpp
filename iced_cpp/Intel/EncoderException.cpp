@@ -23,12 +23,8 @@ namespace Iced::Intel
 		return Instruction;
 	}
 
-	EncoderException::EncoderException(const std::string& message, Iced::Intel::Instruction const instruction) : Exception(message)
+	EncoderException::EncoderException(const std::string& message, Iced::Intel::Instruction const instruction) : std::runtime_error(message)
 	{
 		Instruction = instruction;
-	}
-
-	EncoderException::EncoderException(SerializationInfo* info, StreamingContext context) : Exception(info, context)
-	{
 	}
 }

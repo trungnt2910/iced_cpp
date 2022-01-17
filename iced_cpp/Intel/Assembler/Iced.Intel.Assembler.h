@@ -63,6 +63,20 @@ namespace Iced::Intel
 	class Assembler
 	{
 	private:
+		enum class PrefixFlags
+		{
+			None = 0,
+			Lock = 0x01,
+			Repe = 0x02,
+			Repne = 0x04,
+			Notrack = 0x08,
+			PreferVex = 0x10,
+			PreferEvex = 0x20
+		};
+		DEFINE_FLAGS_FRIEND(PrefixFlags)
+			DEFINE_COMP_FRIEND(PrefixFlags)
+			DEFINE_ARITH_FRIEND(PrefixFlags)
+	private:
 		std::int32_t Bitness = 0;
 		bool PreferVex = false;
 		bool PreferShortBranch = false;
@@ -138,17 +152,12 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Label @F
-		Iced::Intel::Label GetF() const;
+		Iced::Intel::Label GetF();
 		/// <summary>
 		/// Add an instruction directly to the flow of instructions.
 		/// </summary>
 		/// <param name="instruction"></param>
 		void AddInstruction(Instruction instruction);
-		/// <summary>
-		/// Add an instruction directly to the flow of instructions.
-		/// </summary>
-		/// <param name="instruction"></param>
-		void AddInstruction(Instruction& instruction);
 		/// <summary>
 		/// Add an instruction directly to the flow of instructions.
 		/// </summary>
@@ -163,84 +172,84 @@ namespace Iced::Intel
 	public:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler @lock
-		Assembler* GetLock() const;
+		Assembler& GetLock() ;
 		/// <summary>
 		/// Add xacquire prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler xacquire
-		Assembler* GetXacquire() const;
+		Assembler& GetXacquire() ;
 		/// <summary>
 		/// Add xrelease prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler xrelease
-		Assembler* GetXrelease() const;
+		Assembler& GetXrelease() ;
 		/// <summary>
 		/// Add rep prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler rep
-		Assembler* GetRep() const;
+		Assembler& GetRep() ;
 		/// <summary>
 		/// Add repe/repz prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler repe
-		Assembler* GetRepe() const;
+		Assembler& GetRepe() ;
 		/// <summary>
 		/// Add repe/repz prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler repz
-		Assembler* GetRepz() const;
+		Assembler& GetRepz() ;
 		/// <summary>
 		/// Add repne/repnz prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler repne
-		Assembler* GetRepne() const;
+		Assembler& GetRepne() ;
 		/// <summary>
 		/// Add repne/repnz prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler repnz
-		Assembler* GetRepnz() const;
+		Assembler& GetRepnz() ;
 		/// <summary>
 		/// Add bnd prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler bnd
-		Assembler* GetBnd() const;
+		Assembler& GetBnd() ;
 		/// <summary>
 		/// Add notrack prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler notrack
-		Assembler* GetNotrack() const;
+		Assembler& GetNotrack() ;
 		/// <summary>
 		/// Prefer VEX encoding if the next instruction can be VEX and EVEX encoded
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler vex
-		Assembler* GetVex() const;
+		Assembler& GetVex() ;
 		/// <summary>
 		/// Prefer EVEX encoding if the next instruction can be VEX and EVEX encoded
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler evex
-		Assembler* GetEvex() const;
+		Assembler& GetEvex() ;
 		/// <summary>
 		/// Adds data
 		/// </summary>
@@ -293,21 +302,37 @@ namespace Iced::Intel
 		/// <param name="argNames">The argument values.</param>
 		/// <returns></returns>
 	private:
-		InvalidOperationException* NoOpCodeFoundFor(Mnemonic mnemonic, std::vector<std::any>& argNames);
-	private:
-		enum class PrefixFlags
+		template <typename T>
+		void NoOpCodeFoundForBuildInternal(StringBuilder& builder, const T& arg)
 		{
-			None = 0,
-			Lock = 0x01,
-			Repe = 0x02,
-			Repne = 0x04,
-			Notrack = 0x08,
-			PreferVex = 0x10,
-			PreferEvex = 0x20
-		};
-		DEFINE_FLAGS(PrefixFlags)
-			DEFINE_COMP(PrefixFlags)
-			DEFINE_ARITH(PrefixFlags)
+			builder.append(to_string(arg));
+		}
+
+		template <typename T, typename... Args>
+		void NoOpCodeFoundForBuildInternal(StringBuilder& builder, const T& arg, const Args&... argNames)
+		{
+			builder.append(to_string(arg));
+			builder.append(", ");
+			NoOpCodeFoundForBuildInternal(builder, argNames...);
+		}
+
+		template <typename... Args>
+		InvalidOperationException NoOpCodeFoundFor(Mnemonic mnemonic, const Args&... argNames)
+		{
+			auto builder = StringBuilder();
+			//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
+			//C# TO C++ CONVERTER TODO TASK: There is no direct C++ equivalent to this .NET String method:
+			builder.append(std::format("Unable to calculate an OpCode for `{0:s}", tolower(to_string(mnemonic))));
+			//for (std::int32_t i = 0; i < argNames.size(); i++)
+			//{
+			//	builder.append(i == 0 ? " " : ", ");
+			//	builder.append(argNames[i]); // TODO: add pretty print for arguments (registers, memory...)
+			//}
+			NoOpCodeFoundForBuildInternal(builder, argNames...);
+			builder.append(" ");
+			builder.append(std::format("`. Combination of arguments and/or current bitness {0:s} is not compatible with any existing OpCode encoding.", std::to_string(GetBitness())));
+			return InvalidOperationException(builder.toString());
+		}
 
 
 
@@ -19171,7 +19196,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister8 dst, AssemblerRegister8 src);
+		void or_(AssemblerRegister8 dst, AssemblerRegister8 src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r/m8, r8</c><br/>
@@ -19181,7 +19206,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerMemoryOperand dst, AssemblerRegister8 src);
+		void or_(AssemblerMemoryOperand dst, AssemblerRegister8 src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r/m16, r16</c><br/>
@@ -19191,7 +19216,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister16 dst, AssemblerRegister16 src);
+		void or_(AssemblerRegister16 dst, AssemblerRegister16 src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r/m16, r16</c><br/>
@@ -19201,7 +19226,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerMemoryOperand dst, AssemblerRegister16 src);
+		void or_(AssemblerMemoryOperand dst, AssemblerRegister16 src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r/m32, r32</c><br/>
@@ -19211,7 +19236,7 @@ namespace Iced::Intel
 		/// <c>386+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister32 dst, AssemblerRegister32 src);
+		void or_(AssemblerRegister32 dst, AssemblerRegister32 src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r/m32, r32</c><br/>
@@ -19221,7 +19246,7 @@ namespace Iced::Intel
 		/// <c>386+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerMemoryOperand dst, AssemblerRegister32 src);
+		void or_(AssemblerMemoryOperand dst, AssemblerRegister32 src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r/m64, r64</c><br/>
@@ -19231,7 +19256,7 @@ namespace Iced::Intel
 		/// <c>X64</c><br/>
 		/// <br/>
 		/// <c>64-bit</c></summary>
-		void or (AssemblerRegister64 dst, AssemblerRegister64 src);
+		void or_(AssemblerRegister64 dst, AssemblerRegister64 src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r/m64, r64</c><br/>
@@ -19241,7 +19266,7 @@ namespace Iced::Intel
 		/// <c>X64</c><br/>
 		/// <br/>
 		/// <c>64-bit</c></summary>
-		void or (AssemblerMemoryOperand dst, AssemblerRegister64 src);
+		void or_(AssemblerMemoryOperand dst, AssemblerRegister64 src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r8, r/m8</c><br/>
@@ -19251,7 +19276,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister8 dst, AssemblerMemoryOperand src);
+		void or_(AssemblerRegister8 dst, AssemblerMemoryOperand src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r16, r/m16</c><br/>
@@ -19261,7 +19286,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister16 dst, AssemblerMemoryOperand src);
+		void or_(AssemblerRegister16 dst, AssemblerMemoryOperand src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r32, r/m32</c><br/>
@@ -19271,7 +19296,7 @@ namespace Iced::Intel
 		/// <c>386+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister32 dst, AssemblerMemoryOperand src);
+		void or_(AssemblerRegister32 dst, AssemblerMemoryOperand src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r64, r/m64</c><br/>
@@ -19281,7 +19306,7 @@ namespace Iced::Intel
 		/// <c>X64</c><br/>
 		/// <br/>
 		/// <c>64-bit</c></summary>
-		void or (AssemblerRegister64 dst, AssemblerMemoryOperand src);
+		void or_(AssemblerRegister64 dst, AssemblerMemoryOperand src);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR AL, imm8</c><br/>
@@ -19299,7 +19324,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister8 dst, std::int8_t imm);
+		void or_(AssemblerRegister8 dst, std::int8_t imm);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR AX, imm16</c><br/>
@@ -19325,7 +19350,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister16 dst, std::int16_t imm);
+		void or_(AssemblerRegister16 dst, std::int16_t imm);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR EAX, imm32</c><br/>
@@ -19351,7 +19376,7 @@ namespace Iced::Intel
 		/// <c>386+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister32 dst, std::int32_t imm);
+		void or_(AssemblerRegister32 dst, std::int32_t imm);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR RAX, imm32</c><br/>
@@ -19377,7 +19402,7 @@ namespace Iced::Intel
 		/// <c>X64</c><br/>
 		/// <br/>
 		/// <c>64-bit</c></summary>
-		void or (AssemblerRegister64 dst, std::int32_t imm);
+		void or_(AssemblerRegister64 dst, std::int32_t imm);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r/m64, imm32</c><br/>
@@ -19435,7 +19460,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerMemoryOperand dst, std::int32_t imm);
+		void or_(AssemblerMemoryOperand dst, std::int32_t imm);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR AL, imm8</c><br/>
@@ -19453,7 +19478,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister8 dst, std::uint8_t imm);
+		void or_(AssemblerRegister8 dst, std::uint8_t imm);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR AX, imm16</c><br/>
@@ -19479,7 +19504,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister16 dst, std::uint16_t imm);
+		void or_(AssemblerRegister16 dst, std::uint16_t imm);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR EAX, imm32</c><br/>
@@ -19505,7 +19530,7 @@ namespace Iced::Intel
 		/// <c>386+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerRegister32 dst, std::uint32_t imm);
+		void or_(AssemblerRegister32 dst, std::uint32_t imm);
 		/// <summary>or instruction.<br/>
 		/// <br/>
 		/// <c>OR r/m32, imm32</c><br/>
@@ -19547,7 +19572,7 @@ namespace Iced::Intel
 		/// <c>8086+</c><br/>
 		/// <br/>
 		/// <c>16/32/64-bit</c></summary>
-		void or (AssemblerMemoryOperand dst, std::uint32_t imm);
+		void or_(AssemblerMemoryOperand dst, std::uint32_t imm);
 		/// <summary>orpd instruction.<br/>
 		/// <br/>
 		/// <c>ORPD xmm1, xmm2/m128</c><br/>
@@ -105752,28 +105777,28 @@ namespace Iced::Intel
 		void dd(std::int32_t imm0, std::int32_t imm1, std::int32_t imm2, std::int32_t imm3);
 		/// <summary>Creates a dd asm directive with the type float.</summary>
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-	  //  public unsafe void dd(float imm0)
-	  //  {
-	  //   AddInstruction(Instruction.CreateDeclareDword( * (uint * ) & imm0));
-	  //  }
+	    void dd(float imm0)
+	    {
+	     AddInstruction(Instruction::CreateDeclareDword( * (uint * ) & imm0));
+	    }
 		/// <summary>Creates a dd asm directive with the type float.</summary>
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-	  //  public unsafe void dd(float imm0, float imm1)
-	  //  {
-	  //   AddInstruction(Instruction.CreateDeclareDword( * (uint * ) & imm0, * (uint * ) & imm1));
-	  //  }
+	    void dd(float imm0, float imm1)
+	    {
+	     AddInstruction(Instruction::CreateDeclareDword( * (uint * ) & imm0, * (uint * ) & imm1));
+	    }
 		/// <summary>Creates a dd asm directive with the type float.</summary>
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-	  //  public unsafe void dd(float imm0, float imm1, float imm2)
-	  //  {
-	  //   AddInstruction(Instruction.CreateDeclareDword( * (uint * ) & imm0, * (uint * ) & imm1, * (uint * ) & imm2));
-	  //  }
+	    void dd(float imm0, float imm1, float imm2)
+	    {
+	     AddInstruction(Instruction::CreateDeclareDword( * (uint * ) & imm0, * (uint * ) & imm1, * (uint * ) & imm2));
+	    }
 		/// <summary>Creates a dd asm directive with the type float.</summary>
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-	  //  public unsafe void dd(float imm0, float imm1, float imm2, float imm3)
-	  //  {
-	  //   AddInstruction(Instruction.CreateDeclareDword( * (uint * ) & imm0, * (uint * ) & imm1, * (uint * ) & imm2, * (uint * ) & imm3));
-	  //  }
+	    void dd(float imm0, float imm1, float imm2, float imm3)
+	    {
+	     AddInstruction(Instruction::CreateDeclareDword( * (uint * ) & imm0, * (uint * ) & imm1, * (uint * ) & imm2, * (uint * ) & imm3));
+	    }
 		/// <summary>Creates a dq asm directive with the type ulong.</summary>
 		void dq(std::uint64_t imm0);
 		/// <summary>Creates a dq asm directive with the type ulong.</summary>
@@ -105784,15 +105809,15 @@ namespace Iced::Intel
 		void dq(std::int64_t imm0, std::int64_t imm1);
 		/// <summary>Creates a dq asm directive with the type double.</summary>
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-	  //  public unsafe void dq(double imm0)
-	  //  {
-	  //   AddInstruction(Instruction.CreateDeclareQword( * (ulong * ) & imm0));
-	  //  }
+	    void dq(double imm0)
+	    {
+	     AddInstruction(Instruction::CreateDeclareQword( * (ulong * ) & imm0));
+	    }
 		/// <summary>Creates a dq asm directive with the type double.</summary>
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-	  //  public unsafe void dq(double imm0, double imm1)
-	  //  {
-	  //   AddInstruction(Instruction.CreateDeclareQword( * (ulong * ) & imm0, * (ulong * ) & imm1));
-	  //  }
+	    void dq(double imm0, double imm1)
+	    {
+	     AddInstruction(Instruction::CreateDeclareQword( * (ulong * ) & imm0, * (ulong * ) & imm1));
+	    }
 	};
 }

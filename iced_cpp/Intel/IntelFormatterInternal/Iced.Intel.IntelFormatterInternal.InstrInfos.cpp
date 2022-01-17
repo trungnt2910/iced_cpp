@@ -24,8 +24,8 @@
 #include "../FormatterConstants.h"
 #include "../FormatterInternal/PseudoOpsKind.g.h"
 
-using namespace Iced::Intel::FormatterInternal;
 using namespace Iced::Intel::Internal;
+using namespace Iced::Intel::FormatterInternal;
 
 namespace Iced::Intel::IntelFormatterInternal
 {
@@ -34,7 +34,7 @@ namespace Iced::Intel::IntelFormatterInternal
 
 	std::string InstrInfos::AddPrefix(const std::string& s, std::vector<char>& ca)
 	{
-		return std::string::Intern(std::string(ca) + s);
+		return (std::string(ca) + s);
 	}
 
 	std::vector<InstrInfo*> InstrInfos::ReadInfos()

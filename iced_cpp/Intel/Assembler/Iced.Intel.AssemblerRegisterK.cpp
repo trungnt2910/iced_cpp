@@ -23,7 +23,7 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsK(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a K register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a K register", nameof(value)));
 		}
 		Value = value;
 		Flags = AssemblerOperandFlags::None;
@@ -75,7 +75,7 @@ namespace Iced::Intel
 		return AssemblerRegisterK(Value, Flags | AssemblerOperandFlags::Zeroing);
 	}
 
-	AssemblerRegisterK::operator Register()
+	AssemblerRegisterK::operator Register() const
 	{
 		return this->Value;
 	}
@@ -94,8 +94,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterK::Equals(std::any obj)
 	{
-		AssemblerRegisterK other = dynamic_cast<AssemblerRegisterK>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterK* other = std::any_cast<AssemblerRegisterK>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterK::operator == (AssemblerRegisterK right)

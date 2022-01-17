@@ -17,6 +17,8 @@
 
 using namespace Iced::Intel::FormatterInternal;
 
+#include "../FormatterInternal/RegistersTable.h"
+
 namespace Iced::Intel::FastFormatterInternal
 {
 

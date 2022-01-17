@@ -24,7 +24,7 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsGPR64(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a GPR64 register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a GPR64 register", nameof(value)));
 		}
 		Value = value;
 		Flags = AssemblerOperandFlags::None;
@@ -101,7 +101,7 @@ namespace Iced::Intel
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundTowardZero);
 	}
 
-	AssemblerRegister64::operator Register()
+	AssemblerRegister64::operator Register() const
 	{
 		return this->Value;
 	}
@@ -155,8 +155,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegister64::Equals(std::any obj)
 	{
-		AssemblerRegister64 other = dynamic_cast<AssemblerRegister64>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegister64* other = std::any_cast<AssemblerRegister64>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegister64::operator == (AssemblerRegister64 right)

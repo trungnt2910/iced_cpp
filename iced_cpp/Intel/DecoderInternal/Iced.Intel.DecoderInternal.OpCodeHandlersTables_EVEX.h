@@ -28,11 +28,11 @@ namespace Iced::Intel::DecoderInternal
 	class OpCodeHandlersTables_EVEX final
 	{
 	public:
-		static std::vector<OpCodeHandler*> Handlers_0F;
-		static std::vector<OpCodeHandler*> Handlers_0F38;
-		static std::vector<OpCodeHandler*> Handlers_0F3A;
-		static std::vector<OpCodeHandler*> Handlers_MAP5;
-		static std::vector<OpCodeHandler*> Handlers_MAP6;
+		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_0F;
+		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_0F38;
+		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_0F3A;
+		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_MAP5;
+		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_MAP6;
 	private:
 		class StaticConstructor
 		{

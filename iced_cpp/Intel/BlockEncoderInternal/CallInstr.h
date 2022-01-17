@@ -49,7 +49,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		bool useOrigInstruction = false;
 		bool done = false;
 	public:
-		CallInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction);
+		CallInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 	private:

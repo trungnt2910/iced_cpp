@@ -11,6 +11,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #pragma once
@@ -63,7 +64,7 @@ namespace Iced::Intel::EncoderInternal
 		bool noGprSuffix = false;
 		/* readonly */
 		bool vecIndexSameAsOpIndex = false;
-		static std::vector<std::string> ConvFnNames;
+		static constexpr std::array ConvFnNames = std::to_array<std::string_view> ({ "Sf32", "Sf64", "Si32", "Si64", "Uf32", "Uf64", "Ui32", "Ui64", "Df32", "Df64", "Di32", "Di64" });
 		std::int32_t GetKIndex();
 		std::int32_t GetBndIndex();
 		std::int32_t GetVecIndex(std::int32_t opIndex);

@@ -89,7 +89,7 @@ namespace Iced::Intel
 
 	bool TextInfo::IsDefault() const
 	{
-		return TextArray == nullptr && Text->Text == nullptr;
+		return TextArray == nullptr && Text.Text == std::string();
 	}
 
 	TextInfo::TextInfo(const std::string& text, FormatterTextKind color)
@@ -104,7 +104,7 @@ namespace Iced::Intel
 		TextArray = nullptr;
 	}
 
-	TextInfo::TextInfo(std::vector<TextPart>& text)
+	TextInfo::TextInfo(std::vector<TextPart>* text)
 	{
 		Text = Iced::Intel::TextPart();
 		TextArray = text;

@@ -28,14 +28,14 @@ namespace Iced::Intel
 		usedMemoryLocations = SimpleList<UsedMemory>(std::vector<UsedMemory>(InstrInfoConstants::DefaultUsedMemoryCollCapacity));
 		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 		//	 unsafe
-			//   {
-			//	opAccesses[0] = 0;
-			//	opAccesses[1] = 0;
-			//	opAccesses[2] = 0;
-			//	opAccesses[3] = 0;
-			//	opAccesses[4] = 0;
-			//	Static.Assert(IcedConstants.MaxOpCount == 5 ? 0 : -1);
-			//   }
+			   {
+				opAccesses[0] = 0;
+				opAccesses[1] = 0;
+				opAccesses[2] = 0;
+				opAccesses[3] = 0;
+				opAccesses[4] = 0;
+				static_assert(IcedConstants::MaxOpCount == 5);
+			   }
 	}
 
 	InstructionInfo::UsedRegisterIterator InstructionInfo::GetUsedRegisters()
@@ -71,21 +71,6 @@ namespace Iced::Intel
 		return static_cast<std::uint32_t>(index) < length;
 	}
 
-	IEnumerator<UsedRegister>* InstructionInfo::UsedRegisterIterator::IEnumerable_GetEnumerator()
-	{
-		return begin();
-	}
-
-	System::Collections::IEnumerator* InstructionInfo::UsedRegisterIterator::IEnumerable_GetEnumerator()
-	{
-		return begin();
-	}
-
-	bool InstructionInfo::UsedRegisterIterator::IEnumerator_MoveNext()
-	{
-		return MoveNext();
-	}
-
 	void InstructionInfo::UsedRegisterIterator::Reset()
 	{
 		throw NotSupportedException();
@@ -118,21 +103,6 @@ namespace Iced::Intel
 		return static_cast<std::uint32_t>(index) < length;
 	}
 
-	IEnumerator<UsedMemory>* InstructionInfo::UsedMemoryIterator::IEnumerable_GetEnumerator()
-	{
-		return begin();
-	}
-
-	System::Collections::IEnumerator* InstructionInfo::UsedMemoryIterator::IEnumerable_GetEnumerator()
-	{
-		return begin();
-	}
-
-	bool InstructionInfo::UsedMemoryIterator::IEnumerator_MoveNext()
-	{
-		return MoveNext();
-	}
-
 	void InstructionInfo::UsedMemoryIterator::Reset()
 	{
 		throw NotSupportedException();
@@ -146,45 +116,45 @@ namespace Iced::Intel
 	{
 		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 		//	 unsafe
-			//	{
-			//	 return (OpAccess)opAccesses[0];
-			//	}
+				{
+				 return (OpAccess)opAccesses[0];
+				}
 	}
 
 	OpAccess InstructionInfo::GetOp1Access() const
 	{
 		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 		//	 unsafe
-			//	{
-			//	 return (OpAccess)opAccesses[1];
-			//	}
+				{
+				 return (OpAccess)opAccesses[1];
+				}
 	}
 
 	OpAccess InstructionInfo::GetOp2Access() const
 	{
 		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 		//	 unsafe
-			//	{
-			//	 return (OpAccess)opAccesses[2];
-			//	}
+				{
+				 return (OpAccess)opAccesses[2];
+				}
 	}
 
 	OpAccess InstructionInfo::GetOp3Access() const
 	{
 		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 		//	 unsafe
-			//	{
-			//	 return (OpAccess)opAccesses[3];
-			//	}
+				{
+				 return (OpAccess)opAccesses[3];
+				}
 	}
 
 	OpAccess InstructionInfo::GetOp4Access() const
 	{
 		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 		//	 unsafe
-			//	{
-			//	 return (OpAccess)opAccesses[4];
-			//	}
+				{
+				 return (OpAccess)opAccesses[4];
+				}
 	}
 
 	OpAccess InstructionInfo::GetOpAccess(std::int32_t operand)
@@ -203,7 +173,6 @@ namespace Iced::Intel
 			return GetOp4Access();
 		default:
 			ThrowHelper::ThrowArgumentOutOfRangeException_operand();
-			return 0;
 		}
 	}
 }

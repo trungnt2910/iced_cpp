@@ -38,6 +38,18 @@ namespace Iced::Intel::BlockEncoderInternal
 	/// </summary>
 	class JmpInstr final : public Instr
 	{
+
+		enum class InstrKind
+		{
+			Unchanged,
+			Short,
+			Near,
+			Long,
+			Uninitialized
+		};
+
+		DEFINE_COMP_FRIEND(InstrKind)
+			DEFINE_ARITH_FRIEND(InstrKind)
 		/* readonly */
 	private:
 		std::int32_t bitness = 0;
@@ -52,20 +64,9 @@ namespace Iced::Intel::BlockEncoderInternal
 		/* readonly */
 		std::uint32_t nearInstructionSize = 0;
 	private:
-		enum class InstrKind
-		{
-			Unchanged,
-			Short,
-			Near,
-			Long,
-			Uninitialized
-		};
-
-		DEFINE_COMP(InstrKind)
-			DEFINE_ARITH(InstrKind)
 
 	public:
-		JmpInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction);
+		JmpInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 	private:

@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "../RoundingControl.g.h"
+
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
@@ -45,19 +47,19 @@ namespace Iced::Intel
 		/// <summary>
 		/// Round to nearest (.rn_sae).
 		/// </summary>
-		RoundToNearest = RoundingControl::RoundToNearest << 3,
+		RoundToNearest = (int)RoundingControl::RoundToNearest << 3,
 		/// <summary>
 		/// Round to down (.rd_sae).
 		/// </summary>
-		RoundDown = RoundingControl::RoundDown << 3,
+		RoundDown = (int)RoundingControl::RoundDown << 3,
 		/// <summary>
 		/// Round to up (.ru_sae).
 		/// </summary>
-		RoundUp = RoundingControl::RoundUp << 3,
+		RoundUp = (int)RoundingControl::RoundUp << 3,
 		/// <summary>
 		/// Round towards zero (.rz_sae).
 		/// </summary>
-		RoundTowardZero = RoundingControl::RoundTowardZero << 3,
+		RoundTowardZero = (int)RoundingControl::RoundTowardZero << 3,
 		/// <summary>
 		/// RoundControl mask.
 		/// </summary>

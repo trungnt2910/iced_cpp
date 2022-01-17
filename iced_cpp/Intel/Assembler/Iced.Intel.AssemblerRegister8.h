@@ -48,7 +48,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="reg">AssemblerRegister8</param>
 		/// <returns></returns>
-		operator Register();
+		operator Register() const;
 		/// <inheritdoc />
 		bool Equals(AssemblerRegister8 other) override;
 		/// <inheritdoc />
@@ -71,6 +71,9 @@ namespace Iced::Intel
 		/// <param name="right">Register</param>
 		/// <returns></returns>
 		bool operator != (AssemblerRegister8 right);
+
+		inline bool operator == (Register right) { return (Register)(*this) == right; }
+		inline std::string ToString() const { return to_string(Value); }
 
 		AssemblerRegister8() = default;
 	};

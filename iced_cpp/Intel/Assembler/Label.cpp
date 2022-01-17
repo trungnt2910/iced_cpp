@@ -42,28 +42,28 @@ namespace Iced::Intel
 		return Id == 0;
 	}
 
-	std::string Label::ToString()
+	std::string Label::ToString() const
 	{
-		return std::format("{0:s}@{1:s}", Name, Id);
+		return std::format("{0:s}@{1:s}", to_string(Name), to_string(Id));
 	}
 
 	bool Label::Equals(Label* other)
 	{
-		return Name == other.Name && Id == other.Id;
+		return Name == other->Name && Id == other->Id;
 	}
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool Label::Equals(std::any obj)
 	{
-		Label* other = dynamic_cast<Label*>(obj);
+		Label* other = std::any_cast<Label*>(obj);
 		return other != nullptr && Equals(other);
 	}
 
 	std::int32_t Label::GetHashCode()
 	{
 		//	 unchecked
-		return (Name.GetHashCode() * 397) ^ Id.GetHashCode();
+		return (::GetHashCode(Name) * 397) ^ ::GetHashCode(Id);
 		//C# TO C++ CONVERTER TODO TASK: End of the original C# 'unchecked' block.
 	}
 

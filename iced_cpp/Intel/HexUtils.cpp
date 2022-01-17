@@ -27,7 +27,7 @@ namespace Iced::Intel
 		}
 		if (hexData.length() == 0)
 		{
-			return Array2::Empty<std::uint8_t>();
+			return System::Array2::Empty<std::uint8_t>();
 		}
 		std::int32_t len = 0;
 		for (std::int32_t i = 0; i < hexData.length(); i++)

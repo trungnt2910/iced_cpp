@@ -28,7 +28,7 @@ namespace Iced::Intel::EncoderInternal
 	class OpCodeInfos final
 	{
 	public:
-		static std::vector<OpCodeInfo*> Infos;
+		static const std::vector<OpCodeInfo*> Infos;
 	private:
 		static std::vector<OpCodeInfo*> CreateInfos();
 	};

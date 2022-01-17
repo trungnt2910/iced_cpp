@@ -15,6 +15,8 @@
 
 #include "MvexMemorySizeLut.g.h"
 
+#include "MemorySize.g.h"
+
 namespace Iced::Intel
 {
 

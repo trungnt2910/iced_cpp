@@ -23,12 +23,12 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsTMM(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a TMM register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a TMM register", nameof(value)));
 		}
 		Value = value;
 	}
 
-	AssemblerRegisterTMM::operator Register()
+	AssemblerRegisterTMM::operator Register() const
 	{
 		return this->Value;
 	}
@@ -47,8 +47,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterTMM::Equals(std::any obj)
 	{
-		AssemblerRegisterTMM other = dynamic_cast<AssemblerRegisterTMM>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterTMM* other = std::any_cast<AssemblerRegisterTMM>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterTMM::operator == (AssemblerRegisterTMM right)

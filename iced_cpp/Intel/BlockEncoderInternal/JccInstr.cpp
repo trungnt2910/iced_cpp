@@ -18,9 +18,10 @@
 #include "../../NRT_Helpers.h"
 #include "../OpKind.g.h"
 
+#include "Block.h"
+
 namespace Iced::Intel::BlockEncoderInternal
 {
-
 	std::uint32_t JccInstr::GetLongInstructionSize64(Instruction const instruction)
 	{
 		// Check if JKZD/JKNZD
@@ -35,7 +36,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		return 2 + CallOrJmpPointerDataInstructionSize64;
 	}
 
-	JccInstr::JccInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	JccInstr::JccInstr(BlockEncoder* blockEncoder, ::Iced::Intel::BlockEncoderInternal::Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
 	{
 		bitness = blockEncoder->GetBitness();
 		this->instruction = instruction;
@@ -157,6 +158,7 @@ namespace Iced::Intel::BlockEncoderInternal
 				instruction.InternalSetCodeNoCheck(Iced::Intel::InstructionInfoExtensions::ToNearBranch(instruction.GetCode()));
 			}
 			instruction.SetNearBranch64(targetInstr.GetAddress());
+			uint32_t _;
 			if (!encoder->TryEncode(instruction, IP, _, errorMessage))
 			{
 				constantOffsets = Iced::Intel::ConstantOffsets();
@@ -166,7 +168,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			return "";
 		case InstrKind::Long:
 		{
-			Debug2::Assert(pointerData != nullptr);
+			::System::Diagnostics::Debug2::Assert(pointerData != nullptr);
 			isOriginalInstruction = false;
 			constantOffsets = Iced::Intel::ConstantOffsets();
 			pointerData->Data = targetInstr.GetAddress();

@@ -82,7 +82,7 @@ namespace Iced::Intel
 		std::vector<FormatterString> mvexRegMemConsts32;
 		/* readonly */
 		std::vector<FormatterString> mvexRegMemConsts64;
-		std::vector<FormatterString> [&](std::any AllRegisters)
+		const std::vector<FormatterString>& GetAllRegisters() const
 		{
 			options->GetGasNakedRegisters() ? allRegistersNaked : allRegisters;
 		};

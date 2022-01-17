@@ -16,6 +16,8 @@
 #include "Registers.h"
 #include "../../NRT_Helpers.h"
 
+#include "../FormatterInternal/RegistersTable.h"
+
 using namespace Iced::Intel::FormatterInternal;
 
 namespace Iced::Intel::GasFormatterInternal
@@ -27,7 +29,7 @@ namespace Iced::Intel::GasFormatterInternal
 	std::vector<FormatterString> Registers::GetRegistersWithPrefix()
 	{
 		auto registers = AllRegistersNaked;
-		Debug2::Assert(!registers.empty());
+		System::Diagnostics::Debug2::Assert(!registers.empty());
 		auto result = std::vector<FormatterString>(registers.size());
 		for (std::int32_t i = 0; i < registers.size(); i++)
 		{

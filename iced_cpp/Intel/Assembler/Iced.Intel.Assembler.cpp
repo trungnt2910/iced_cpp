@@ -22,6 +22,8 @@
 #include "MemoryOperandSize.g.h"
 #include "../Iced.Intel.RegisterExtensions.h"
 
+#include "Iced.Intel.AssemblerRegisters.h"
+
 namespace Iced::Intel
 {
 
@@ -38,7 +40,7 @@ namespace Iced::Intel
 		}
 		Bitness = bitness;
 		instructions = new InstructionList();
-		currentLabelId = 0;
+		currentLabelId = (std::uint8_t)0;
 		currentLabel = Iced::Intel::Label();
 		currentAnonLabel = Iced::Intel::Label();
 		nextAnonLabel = Iced::Intel::Label();
@@ -75,9 +77,9 @@ namespace Iced::Intel
 
 	bool Assembler::GetInstructionPreferVex() const
 	{
-		if ((prefixFlags & (PrefixFlags::PreferVex | PrefixFlags::PreferEvex)) != 0)
+		if ((prefixFlags & (PrefixFlags::PreferVex | PrefixFlags::PreferEvex)) != (std::uint8_t)0)
 		{
-			return (prefixFlags & PrefixFlags::PreferVex) != 0;
+			return (prefixFlags & PrefixFlags::PreferVex) != (std::uint8_t)0;
 		}
 		return GetPreferVex();
 	}
@@ -89,8 +91,8 @@ namespace Iced::Intel
 
 	void Assembler::Reset()
 	{
-		instructions->clear();
-		currentLabelId = 0;
+		instructions->Clear();
+		currentLabelId = (std::uint8_t)0;
 		currentLabel = Iced::Intel::Label();
 		currentAnonLabel = Iced::Intel::Label();
 		nextAnonLabel = Iced::Intel::Label();
@@ -103,7 +105,7 @@ namespace Iced::Intel
 	Iced::Intel::Label Assembler::CreateLabel(const std::string& name)
 	{
 		currentLabelId++;
-		auto label = Label(name, currentLabelId);
+		auto label = Iced::Intel::Label(name, currentLabelId);
 		return label;
 	}
 
@@ -117,20 +119,20 @@ namespace Iced::Intel
 		if (label.IsEmpty())
 		{
 			//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires only one argument:
-			//ORIGINAL LINE: throw new ArgumentException(string.Format("Invalid label. Must be created via {0}", nameof(CreateLabel)), nameof(label));
+			//ORIGINAL LINE: throw new ArgumentException(string.Format("Invalid label. Must be created via {(std::uint8_t)0}", nameof(CreateLabel)), nameof(label));
 			throw std::invalid_argument(std::format("Invalid label. Must be created via {0:s}", "CreateLabel"));
 		}
-		if (label.GetInstructionIndex() >= 0)
+		if (label.GetInstructionIndex() >= (std::uint8_t)0)
 		{
 			//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires only one argument:
-			//ORIGINAL LINE: throw new ArgumentException(string.Format("Cannot reuse label. The specified label is already associated with an instruction at index {0}.", label.InstructionIndex), nameof(label));
-			throw std::invalid_argument(std::format("Cannot reuse label. The specified label is already associated with an instruction at index {0:s}.", label.GetInstructionIndex()));
+			//ORIGINAL LINE: throw new ArgumentException(string.Format("Cannot reuse label. The specified label is already associated with an instruction at index {(std::uint8_t)0}.", label.InstructionIndex), nameof(label));
+			throw std::invalid_argument(std::format("Cannot reuse label. The specified label is already associated with an instruction at index {0:s}.", to_string(label.GetInstructionIndex())));
 		}
 		if (!currentLabel.IsEmpty())
 		{
 			throw std::invalid_argument("At most one label per instruction is allowed");
 		}
-		label.SetInstructionIndex(instructions->size());
+		label.SetInstructionIndex(instructions->GetCount());
 		currentLabel = label;
 	}
 
@@ -161,7 +163,7 @@ namespace Iced::Intel
 		return currentAnonLabel;
 	}
 
-	Iced::Intel::Label Assembler::GetF() const
+	Iced::Intel::Label Assembler::GetF()
 	{
 		if (nextAnonLabel.IsEmpty())
 		{
@@ -171,11 +173,6 @@ namespace Iced::Intel
 	}
 
 	void Assembler::AddInstruction(Instruction instruction)
-	{
-		AddInstruction(instruction);
-	}
-
-	void Assembler::AddInstruction(Instruction& instruction)
 	{
 		if (!currentLabel.IsEmpty() && definedAnonLabel)
 		{
@@ -192,24 +189,24 @@ namespace Iced::Intel
 		// Setup prefixes
 		if (prefixFlags != PrefixFlags::None)
 		{
-			if ((prefixFlags & PrefixFlags::Lock) != 0)
+			if ((prefixFlags & PrefixFlags::Lock) != (std::uint8_t)0)
 			{
 				instruction.SetHasLockPrefix(true);
 			}
-			if ((prefixFlags & PrefixFlags::Repe) != 0)
+			if ((prefixFlags & PrefixFlags::Repe) != (std::uint8_t)0)
 			{
 				instruction.SetHasRepePrefix(true);
 			}
-			else if ((prefixFlags & PrefixFlags::Repne) != 0)
+			else if ((prefixFlags & PrefixFlags::Repne) != (std::uint8_t)0)
 			{
 				instruction.SetHasRepnePrefix(true);
 			}
-			if ((prefixFlags & PrefixFlags::Notrack) != 0)
+			if ((prefixFlags & PrefixFlags::Notrack) != (std::uint8_t)0)
 			{
 				instruction.SetSegmentPrefix(Register::DS);
 			}
 		}
-		instructions->push_back(instruction);
+		instructions->Add(instruction);
 		currentLabel = Iced::Intel::Label();
 		definedAnonLabel = false;
 		prefixFlags = PrefixFlags::None;
@@ -219,99 +216,99 @@ namespace Iced::Intel
 	{
 		if (flags != AssemblerOperandFlags::None)
 		{
-			if ((flags & AssemblerOperandFlags::Broadcast) != 0)
+			if ((flags & AssemblerOperandFlags::Broadcast) != (std::uint8_t)0)
 			{
 				instruction.SetBroadcast(true);
 			}
-			if ((flags & AssemblerOperandFlags::Zeroing) != 0)
+			if ((flags & AssemblerOperandFlags::Zeroing) != (std::uint8_t)0)
 			{
 				instruction.SetZeroingMasking(true);
 			}
-			if ((flags & AssemblerOperandFlags::RegisterMask) != 0)
+			if ((flags & AssemblerOperandFlags::RegisterMask) != (std::uint8_t)0)
 			{
-				// register mask is shift by 2 (starts at index 1 for K1)
-				instruction.SetOpMask(static_cast<Register>(static_cast<std::int32_t>(Register::K0) + ((static_cast<std::int32_t>(flags & AssemblerOperandFlags::RegisterMask)) >> 6)));
+				// register mask is shift by (std::uint8_t)2 (starts at index (std::uint8_t)1 for K1)
+				instruction.SetOpMask(static_cast<Register>(static_cast<std::int32_t>(Register::K0) + ((static_cast<std::int32_t>(flags & AssemblerOperandFlags::RegisterMask)) >> (std::uint8_t)6)));
 			}
-			if ((flags & AssemblerOperandFlags::SuppressAllExceptions) != 0)
+			if ((flags & AssemblerOperandFlags::SuppressAllExceptions) != (std::uint8_t)0)
 			{
 				instruction.SetSuppressAllExceptions(true);
 			}
-			if ((flags & AssemblerOperandFlags::RoundControlMask) != 0)
+			if ((flags & AssemblerOperandFlags::RoundControlMask) != (std::uint8_t)0)
 			{
-				instruction.SetRoundingControl(static_cast<RoundingControl>(((static_cast<std::int32_t>(flags & AssemblerOperandFlags::RoundControlMask)) >> 3)));
+				instruction.SetRoundingControl(static_cast<RoundingControl>(((static_cast<std::int32_t>(flags & AssemblerOperandFlags::RoundControlMask)) >> (std::uint8_t)3)));
 			}
 		}
 		AddInstruction(instruction);
 	}
 
-	Assembler* Assembler::GetLock() const
+	Assembler& Assembler::GetLock()
 	{
 		prefixFlags |= PrefixFlags::Lock;
-		return this;
+		return *this;
 	}
 
-	Assembler* Assembler::GetXacquire() const
+	Assembler& Assembler::GetXacquire()
 	{
 		prefixFlags |= PrefixFlags::Repne;
-		return this;
+		return *this;
 	}
 
-	Assembler* Assembler::GetXrelease() const
+	Assembler& Assembler::GetXrelease()
 	{
 		prefixFlags |= PrefixFlags::Repe;
-		return this;
+		return *this;
 	}
 
-	Assembler* Assembler::GetRep() const
+	Assembler& Assembler::GetRep()
 	{
 		prefixFlags |= PrefixFlags::Repe;
-		return this;
+		return *this;
 	}
 
-	Assembler* Assembler::GetRepe() const
+	Assembler& Assembler::GetRepe()
 	{
 		prefixFlags |= PrefixFlags::Repe;
-		return this;
+		return *this;
 	}
 
-	Assembler* Assembler::GetRepz() const
+	Assembler& Assembler::GetRepz()
 	{
 		return GetRepe();
 	}
 
-	Assembler* Assembler::GetRepne() const
+	Assembler& Assembler::GetRepne()
 	{
 		prefixFlags |= PrefixFlags::Repne;
-		return this;
+		return *this;
 	}
 
-	Assembler* Assembler::GetRepnz() const
+	Assembler& Assembler::GetRepnz()
 	{
 		return GetRepne();
 	}
 
-	Assembler* Assembler::GetBnd() const
+	Assembler& Assembler::GetBnd()
 	{
 		prefixFlags |= PrefixFlags::Repne;
-		return this;
+		return *this;
 	}
 
-	Assembler* Assembler::GetNotrack() const
+	Assembler& Assembler::GetNotrack()
 	{
 		prefixFlags |= PrefixFlags::Notrack;
-		return this;
+		return *this;
 	}
 
-	Assembler* Assembler::GetVex() const
+	Assembler& Assembler::GetVex()
 	{
 		prefixFlags |= PrefixFlags::PreferVex;
-		return this;
+		return *this;
 	}
 
-	Assembler* Assembler::GetEvex() const
+	Assembler& Assembler::GetEvex()
 	{
 		prefixFlags |= PrefixFlags::PreferEvex;
-		return this;
+		return *this;
 	}
 
 	void Assembler::db(std::vector<std::uint8_t>& array)
@@ -320,7 +317,7 @@ namespace Iced::Intel
 		{
 			ThrowHelper::ThrowArgumentNullException_array();
 		}
-		db(array, 0, array.size());
+		db(array, (std::uint8_t)0, (std::int32_t)array.size());
 	}
 
 	void Assembler::db(std::vector<std::uint8_t>& array, std::int32_t index, std::int32_t length)
@@ -329,24 +326,24 @@ namespace Iced::Intel
 		{
 			ThrowHelper::ThrowArgumentNullException_array();
 		}
-		if (index < 0)
+		if (index < (std::uint8_t)0)
 		{
 			ThrowHelper::ThrowArgumentOutOfRangeException_index();
 		}
-		if (length < 0 || static_cast<std::uint32_t>(index + length) > static_cast<std::uint32_t>(array.size()))
+		if (length < (std::uint8_t)0 || static_cast<std::uint32_t>(index + length) > static_cast<std::uint32_t>(array.size()))
 		{
 			ThrowHelper::ThrowArgumentOutOfRangeException_length();
 		}
-		constexpr std::int32_t maxLength = 16;
+		constexpr std::int32_t maxLength = (std::uint8_t)16;
 		std::int32_t rest;
 		std::int32_t cycles = Math::DivRem(length, maxLength, rest);
 		std::int32_t currentPosition = index;
-		for (std::int32_t i = 0; i < cycles; i++)
+		for (std::int32_t i = (std::uint8_t)0; i < cycles; i++)
 		{
 			AddInstruction(Instruction::CreateDeclareByte(array, currentPosition, maxLength));
 			currentPosition += maxLength;
 		}
-		if (rest > 0)
+		if (rest > (std::uint8_t)0)
 		{
 			AddInstruction(Instruction::CreateDeclareByte(array, currentPosition, rest));
 		}
@@ -373,7 +370,56 @@ namespace Iced::Intel
 
 	void Assembler::nop(std::int32_t sizeInBytes)
 	{
-		if (sizeInBytes < 0)
+		const auto AppendNop = [&](int amount)
+		{
+			switch (amount)
+			{
+			case 1:
+				db((byte)0x90); // NOP
+				break;
+			case 2:
+				db((byte)0x66, (byte)0x90); // 66 NOP
+				break;
+			case 3:
+				db((byte)0x0F, (byte)0x1F, (byte)0x00); // NOP dword ptr [eax] or NOP word ptr [bx+si]
+				break;
+			case 4:
+				db((byte)0x0F, (byte)0x1F, (byte)0x40, (byte)0x00); // NOP dword ptr [eax + 00] or NOP word ptr [bx+si]
+				break;
+			case 5:
+				if (Bitness != 16)
+					db((byte)0x0F, (byte)0x1F, (byte)0x44, (byte)0x00, (byte)0x00); // NOP dword ptr [eax + eax*(std::uint8_t)1 + 00]
+				else
+					db((byte)0x0F, (byte)0x1F, (byte)0x80, (byte)0x00, (byte)0x00); // NOP word ptr[bx + si]
+				break;
+			case 6:
+				if (Bitness != 16)
+					db((byte)0x66, (byte)0x0F, (byte)0x1F, (byte)0x44, (byte)0x00, (byte)0x00); // 66 NOP dword ptr [eax + eax*(std::uint8_t)1 + 00]
+				else
+					db((byte)0x66, (byte)0x0F, (byte)0x1F, (byte)0x80, (byte)0x00, (byte)0x00); // NOP dword ptr [bx+si]
+				break;
+			case 7:
+				if (Bitness != 16)
+					db((byte)0x0F, (byte)0x1F, (byte)0x80, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // NOP dword ptr [eax + 00000000]
+				else
+					db((byte)0x67, (byte)0x66, (byte)0x0F, (byte)0x1F, (byte)0x44, (byte)0x00, (byte)0x00); // NOP dword ptr [eax+eax]
+				break;
+			case 8:
+				if (Bitness != 16)
+					db((byte)0x0F, (byte)0x1F, (byte)0x84, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // NOP dword ptr [eax + eax*(std::uint8_t)1 + 00000000]
+				else
+					db((byte)0x67, (byte)0x0F, (byte)0x1F, (byte)0x80, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // NOP word ptr [eax]
+				break;
+			case 9:
+				if (Bitness != 16)
+					db((byte)0x66, (byte)0x0F, (byte)0x1F, (byte)0x84, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // 66 NOP dword ptr [eax + eax*(std::uint8_t)1 + 00000000]
+				else
+					db((byte)0x67, (byte)0x0F, (byte)0x1F, (byte)0x84, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // NOP word ptr [eax+eax]
+				break;
+			}
+		};
+
+		if (sizeInBytes < (std::uint8_t)0)
 		{
 			throw ArgumentOutOfRangeException("sizeInBytes");
 		}
@@ -381,76 +427,28 @@ namespace Iced::Intel
 		{
 			throw InvalidOperationException("No prefixes are allowed");
 		}
-		if (sizeInBytes == 0)
+		if (sizeInBytes == (std::uint8_t)0)
 		{
 			return;
 		}
-		constexpr std::int32_t maxMultibyteNopInstructionLength = 9;
+		constexpr std::int32_t maxMultibyteNopInstructionLength = (std::uint8_t)9;
 		std::int32_t rest;
 		std::int32_t cycles = Math::DivRem(sizeInBytes, maxMultibyteNopInstructionLength, rest);
-		for (std::int32_t i = 0; i < cycles; i++)
+		for (std::int32_t i = (std::uint8_t)0; i < cycles; i++)
 		{
 			AppendNop(maxMultibyteNopInstructionLength);
 		}
-		if (rest > 0)
+		if (rest > (std::uint8_t)0)
 		{
 			AppendNop(rest);
 		}
 		//C# TO C++ CONVERTER TODO TASK: Local functions are not converted by C# to C++ Converter:
-		//	 void AppendNop(int amount)
-			//   {
-			//	switch (amount)
-			//	{
-			//	case 1:
-			//	 db(0x90); // NOP
-			//	 break;
-			//	case 2:
-			//	 db(0x66, 0x90); // 66 NOP
-			//	 break;
-			//	case 3:
-			//	 db(0x0F, 0x1F, 0x00); // NOP dword ptr [eax] or NOP word ptr [bx+si]
-			//	 break;
-			//	case 4:
-			//	 db(0x0F, 0x1F, 0x40, 0x00); // NOP dword ptr [eax + 00] or NOP word ptr [bx+si]
-			//	 break;
-			//	case 5:
-			//	 if (Bitness != 16)
-			//	  db(0x0F, 0x1F, 0x44, 0x00, 0x00); // NOP dword ptr [eax + eax*1 + 00]
-			//	 else
-			//	  db(0x0F, 0x1F, 0x80, 0x00, 0x00); // NOP word ptr[bx + si]
-			//	 break;
-			//	case 6:
-			//	 if (Bitness != 16)
-			//	  db(0x66, 0x0F, 0x1F, 0x44, 0x00, 0x00); // 66 NOP dword ptr [eax + eax*1 + 00]
-			//	 else
-			//	  db(0x66, 0x0F, 0x1F, 0x80, 0x00, 0x00); // NOP dword ptr [bx+si]
-			//	 break;
-			//	case 7:
-			//	 if (Bitness != 16)
-			//	  db(0x0F, 0x1F, 0x80, 0x00, 0x00, 0x00, 0x00); // NOP dword ptr [eax + 00000000]
-			//	 else
-			//	  db(0x67, 0x66, 0x0F, 0x1F, 0x44, 0x00, 0x00); // NOP dword ptr [eax+eax]
-			//	 break;
-			//	case 8:
-			//	 if (Bitness != 16)
-			//	  db(0x0F, 0x1F, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00); // NOP dword ptr [eax + eax*1 + 00000000]
-			//	 else
-			//	  db(0x67, 0x0F, 0x1F, 0x80, 0x00, 0x00, 0x00, 0x00); // NOP word ptr [eax]
-			//	 break;
-			//	case 9:
-			//	 if (Bitness != 16)
-			//	  db(0x66, 0x0F, 0x1F, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00); // 66 NOP dword ptr [eax + eax*1 + 00000000]
-			//	 else
-			//	  db(0x67, 0x0F, 0x1F, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00); // NOP word ptr [eax+eax]
-			//	 break;
-			//	}
-			//   }
 	}
 
 	AssemblerResult Assembler::Assemble(CodeWriter* writer, std::uint64_t rip, BlockEncoderOptions options)
 	{
 		std::string errorMessage;
-		Iced.Intel.AssemblerResult assemblerResult;
+		Iced::Intel::AssemblerResult assemblerResult;
 		if (!TryAssemble(writer, rip, errorMessage, assemblerResult, options))
 		{
 			throw InvalidOperationException(errorMessage);
@@ -471,13 +469,13 @@ namespace Iced::Intel
 		// Protect against using a prefix without actually using it
 		if (prefixFlags != PrefixFlags::None)
 		{
-			errorMessage = std::format("Unused prefixes {0:s}. You must emit an instruction after using an instruction prefix.", prefixFlags);
+			errorMessage = std::format("Unused prefixes {0:s}. You must emit an instruction after using an instruction prefix.", to_string(prefixFlags));
 			return false;
 		}
 		// Protect against a label emitted without being attached to an instruction
 		if (!currentLabel.IsEmpty())
 		{
-			errorMessage = std::format("Unused label {0:s}. You must emit an instruction after emitting a label.", currentLabel);
+			errorMessage = std::format("Unused label {0:s}. You must emit an instruction after emitting a label.", to_string(currentLabel));
 			return false;
 		}
 		if (definedAnonLabel)
@@ -487,11 +485,11 @@ namespace Iced::Intel
 		}
 		if (!nextAnonLabel.IsEmpty())
 		{
-			errorMessage = "Found an @F anonymous label reference but there was no call to " + "AnonymousLabel";
+			errorMessage = "Found an @F anonymous label reference but there was no call to " "AnonymousLabel";
 			return false;
 		}
-		auto blocks = std::vector<InstructionBlock>{ InstructionBlock(writer, instructions, rip) };
-		std::any blockResults;
+		auto blocks = std::vector<InstructionBlock>{ InstructionBlock(writer, instructions->ToArray(), rip)};
+		std::vector<BlockEncoderResult> blockResults;
 		if (BlockEncoder::TryEncode(GetBitness(), blocks, errorMessage, blockResults, options))
 		{
 			assemblerResult = AssemblerResult(blockResults);
@@ -499,24 +497,9 @@ namespace Iced::Intel
 		}
 		else
 		{
-			assemblerResult = AssemblerResult(Array2::Empty<BlockEncoderResult>());
+			assemblerResult = AssemblerResult(System::Array2::Empty<BlockEncoderResult>());
 			return false;
 		}
-	}
-
-	InvalidOperationException* Assembler::NoOpCodeFoundFor(Mnemonic mnemonic, std::vector<std::any>& argNames)
-	{
-		auto builder = new StringBuilder();
-		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		//C# TO C++ CONVERTER TODO TASK: There is no direct C++ equivalent to this .NET String method:
-		builder->append(std::format("Unable to calculate an OpCode for `{0:s}", to_string(mnemonic).ToLowerInvariant()));
-		for (std::int32_t i = 0; i < argNames->Length; i++)
-		{
-			builder->append(i == 0 ? " " : ", ");
-			builder->append(argNames[i]); // TODO: add pretty print for arguments (registers, memory...)
-		}
-		builder->append(std::format("`. Combination of arguments and/or current bitness {0:s} is not compatible with any existing OpCode encoding.", GetBitness()));
-		return new InvalidOperationException(builder->toString());
 	}
 
 	void Assembler::aaa()
@@ -679,7 +662,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Adc, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Adc, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -736,7 +719,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Adc, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Adc, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -891,7 +874,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Add, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Add, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -948,7 +931,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Add, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Add, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -1278,7 +1261,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::And, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::And, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -1335,7 +1318,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::And, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::And, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -1773,7 +1756,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Bndcl, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Bndcl, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -1801,7 +1784,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Bndcn, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Bndcn, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -1829,7 +1812,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Bndcu, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Bndcu, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -1852,7 +1835,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Bndmk, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Bndmk, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -2030,7 +2013,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Bt, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Bt, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -2067,7 +2050,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Bt, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Bt, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -2134,7 +2117,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Btc, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Btc, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -2171,7 +2154,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Btc, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Btc, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -2238,7 +2221,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Btr, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Btr, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -2275,7 +2258,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Btr, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Btr, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -2342,7 +2325,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Bts, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Bts, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -2379,7 +2362,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Bts, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Bts, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -2444,7 +2427,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Call, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Call, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -3634,7 +3617,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Cmp, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Cmp, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -3691,289 +3674,289 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Cmp, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Cmp, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
 
 	void Assembler::cmpeqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmppd(dst, src, 0);
+		cmppd(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::cmpeqpd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmppd(dst, src, 0);
+		cmppd(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::cmpeqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpps(dst, src, 0);
+		cmpps(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::cmpeqps(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpps(dst, src, 0);
+		cmpps(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::cmpeqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpsd(dst, src, 0);
+		cmpsd(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::cmpeqsd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpsd(dst, src, 0);
+		cmpsd(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::cmpeqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpss(dst, src, 0);
+		cmpss(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::cmpeqss(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpss(dst, src, 0);
+		cmpss(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::cmplepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmppd(dst, src, 2);
+		cmppd(dst, src, (std::uint8_t)2);
 	}
 
 	void Assembler::cmplepd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmppd(dst, src, 2);
+		cmppd(dst, src, (std::uint8_t)2);
 	}
 
 	void Assembler::cmpleps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpps(dst, src, 2);
+		cmpps(dst, src, (std::uint8_t)2);
 	}
 
 	void Assembler::cmpleps(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpps(dst, src, 2);
+		cmpps(dst, src, (std::uint8_t)2);
 	}
 
 	void Assembler::cmplesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpsd(dst, src, 2);
+		cmpsd(dst, src, (std::uint8_t)2);
 	}
 
 	void Assembler::cmplesd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpsd(dst, src, 2);
+		cmpsd(dst, src, (std::uint8_t)2);
 	}
 
 	void Assembler::cmpless(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpss(dst, src, 2);
+		cmpss(dst, src, (std::uint8_t)2);
 	}
 
 	void Assembler::cmpless(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpss(dst, src, 2);
+		cmpss(dst, src, (std::uint8_t)2);
 	}
 
 	void Assembler::cmpltpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmppd(dst, src, 1);
+		cmppd(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::cmpltpd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmppd(dst, src, 1);
+		cmppd(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::cmpltps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpps(dst, src, 1);
+		cmpps(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::cmpltps(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpps(dst, src, 1);
+		cmpps(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::cmpltsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpsd(dst, src, 1);
+		cmpsd(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::cmpltsd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpsd(dst, src, 1);
+		cmpsd(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::cmpltss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpss(dst, src, 1);
+		cmpss(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::cmpltss(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpss(dst, src, 1);
+		cmpss(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::cmpneqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmppd(dst, src, 4);
+		cmppd(dst, src, (std::uint8_t)4);
 	}
 
 	void Assembler::cmpneqpd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmppd(dst, src, 4);
+		cmppd(dst, src, (std::uint8_t)4);
 	}
 
 	void Assembler::cmpneqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpps(dst, src, 4);
+		cmpps(dst, src, (std::uint8_t)4);
 	}
 
 	void Assembler::cmpneqps(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpps(dst, src, 4);
+		cmpps(dst, src, (std::uint8_t)4);
 	}
 
 	void Assembler::cmpneqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpsd(dst, src, 4);
+		cmpsd(dst, src, (std::uint8_t)4);
 	}
 
 	void Assembler::cmpneqsd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpsd(dst, src, 4);
+		cmpsd(dst, src, (std::uint8_t)4);
 	}
 
 	void Assembler::cmpneqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpss(dst, src, 4);
+		cmpss(dst, src, (std::uint8_t)4);
 	}
 
 	void Assembler::cmpneqss(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpss(dst, src, 4);
+		cmpss(dst, src, (std::uint8_t)4);
 	}
 
 	void Assembler::cmpnlepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmppd(dst, src, 6);
+		cmppd(dst, src, (std::uint8_t)6);
 	}
 
 	void Assembler::cmpnlepd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmppd(dst, src, 6);
+		cmppd(dst, src, (std::uint8_t)6);
 	}
 
 	void Assembler::cmpnleps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpps(dst, src, 6);
+		cmpps(dst, src, (std::uint8_t)6);
 	}
 
 	void Assembler::cmpnleps(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpps(dst, src, 6);
+		cmpps(dst, src, (std::uint8_t)6);
 	}
 
 	void Assembler::cmpnlesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpsd(dst, src, 6);
+		cmpsd(dst, src, (std::uint8_t)6);
 	}
 
 	void Assembler::cmpnlesd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpsd(dst, src, 6);
+		cmpsd(dst, src, (std::uint8_t)6);
 	}
 
 	void Assembler::cmpnless(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpss(dst, src, 6);
+		cmpss(dst, src, (std::uint8_t)6);
 	}
 
 	void Assembler::cmpnless(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpss(dst, src, 6);
+		cmpss(dst, src, (std::uint8_t)6);
 	}
 
 	void Assembler::cmpnltpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmppd(dst, src, 5);
+		cmppd(dst, src, (std::uint8_t)5);
 	}
 
 	void Assembler::cmpnltpd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmppd(dst, src, 5);
+		cmppd(dst, src, (std::uint8_t)5);
 	}
 
 	void Assembler::cmpnltps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpps(dst, src, 5);
+		cmpps(dst, src, (std::uint8_t)5);
 	}
 
 	void Assembler::cmpnltps(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpps(dst, src, 5);
+		cmpps(dst, src, (std::uint8_t)5);
 	}
 
 	void Assembler::cmpnltsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpsd(dst, src, 5);
+		cmpsd(dst, src, (std::uint8_t)5);
 	}
 
 	void Assembler::cmpnltsd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpsd(dst, src, 5);
+		cmpsd(dst, src, (std::uint8_t)5);
 	}
 
 	void Assembler::cmpnltss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpss(dst, src, 5);
+		cmpss(dst, src, (std::uint8_t)5);
 	}
 
 	void Assembler::cmpnltss(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpss(dst, src, 5);
+		cmpss(dst, src, (std::uint8_t)5);
 	}
 
 	void Assembler::cmpordpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmppd(dst, src, 7);
+		cmppd(dst, src, (std::uint8_t)7);
 	}
 
 	void Assembler::cmpordpd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmppd(dst, src, 7);
+		cmppd(dst, src, (std::uint8_t)7);
 	}
 
 	void Assembler::cmpordps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpps(dst, src, 7);
+		cmpps(dst, src, (std::uint8_t)7);
 	}
 
 	void Assembler::cmpordps(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpps(dst, src, 7);
+		cmpps(dst, src, (std::uint8_t)7);
 	}
 
 	void Assembler::cmpordsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpsd(dst, src, 7);
+		cmpsd(dst, src, (std::uint8_t)7);
 	}
 
 	void Assembler::cmpordsd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpsd(dst, src, 7);
+		cmpsd(dst, src, (std::uint8_t)7);
 	}
 
 	void Assembler::cmpordss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpss(dst, src, 7);
+		cmpss(dst, src, (std::uint8_t)7);
 	}
 
 	void Assembler::cmpordss(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpss(dst, src, 7);
+		cmpss(dst, src, (std::uint8_t)7);
 	}
 
 	void Assembler::cmppd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, std::int8_t imm)
@@ -4078,42 +4061,42 @@ namespace Iced::Intel
 
 	void Assembler::cmpunordpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmppd(dst, src, 3);
+		cmppd(dst, src, (std::uint8_t)3);
 	}
 
 	void Assembler::cmpunordpd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmppd(dst, src, 3);
+		cmppd(dst, src, (std::uint8_t)3);
 	}
 
 	void Assembler::cmpunordps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpps(dst, src, 3);
+		cmpps(dst, src, (std::uint8_t)3);
 	}
 
 	void Assembler::cmpunordps(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpps(dst, src, 3);
+		cmpps(dst, src, (std::uint8_t)3);
 	}
 
 	void Assembler::cmpunordsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpsd(dst, src, 3);
+		cmpsd(dst, src, (std::uint8_t)3);
 	}
 
 	void Assembler::cmpunordsd(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpsd(dst, src, 3);
+		cmpsd(dst, src, (std::uint8_t)3);
 	}
 
 	void Assembler::cmpunordss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		cmpss(dst, src, 3);
+		cmpss(dst, src, (std::uint8_t)3);
 	}
 
 	void Assembler::cmpunordss(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		cmpss(dst, src, 3);
+		cmpss(dst, src, (std::uint8_t)3);
 	}
 
 	void Assembler::cmpxchg(AssemblerRegister8 dst, AssemblerRegister8 src)
@@ -4248,7 +4231,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Crc32, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Crc32, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -4266,7 +4249,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Crc32, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Crc32, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -4424,7 +4407,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Cvtsi2sd, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Cvtsi2sd, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -4452,7 +4435,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Cvtsi2ss, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Cvtsi2ss, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -4632,7 +4615,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Dec, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Dec, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -4678,7 +4661,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Div, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Div, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -4944,7 +4927,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fadd, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fadd, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5034,7 +5017,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fcom, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fcom, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5067,7 +5050,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fcomp, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fcomp, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5110,7 +5093,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fdiv, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fdiv, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5140,7 +5123,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fdivr, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fdivr, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5190,7 +5173,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fiadd, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fiadd, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5208,7 +5191,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Ficom, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Ficom, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5226,7 +5209,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Ficomp, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Ficomp, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5244,7 +5227,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fidiv, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fidiv, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5262,7 +5245,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fidivr, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fidivr, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5284,7 +5267,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fild, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fild, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5302,7 +5285,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fimul, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fimul, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5330,7 +5313,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fist, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fist, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5352,7 +5335,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fistp, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fistp, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5374,7 +5357,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fisttp, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fisttp, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5392,7 +5375,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fisub, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fisub, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5410,7 +5393,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fisubr, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fisubr, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5437,7 +5420,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fld, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fld, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5502,7 +5485,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fmul, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fmul, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5675,7 +5658,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fst, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fst, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5719,7 +5702,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fstp, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fstp, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5757,7 +5740,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fsub, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fsub, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -5787,7 +5770,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Fsubr, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Fsubr, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -6055,7 +6038,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Idiv, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Idiv, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -6101,7 +6084,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Imul, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Imul, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -6296,7 +6279,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Inc, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Inc, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -7029,7 +7012,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Jmp, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Jmp, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -9484,7 +9467,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Mov, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Mov, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -9526,7 +9509,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Mov, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Mov, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -9984,7 +9967,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Movsx, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Movsx, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -10002,7 +9985,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Movsx, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Movsx, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -10020,7 +10003,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Movsx, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Movsx, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -10128,7 +10111,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Movzx, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Movzx, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -10146,7 +10129,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Movzx, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Movzx, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -10164,7 +10147,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Movzx, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Movzx, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())));
 	}
@@ -10230,7 +10213,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Mul, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Mul, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -10346,7 +10329,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Neg, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Neg, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -10390,7 +10373,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Nop, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Nop, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -10436,79 +10419,79 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Not, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Not, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
 
-	void Assembler:: or (AssemblerRegister8 dst, AssemblerRegister8 src)
+	void Assembler::or_ (AssemblerRegister8 dst, AssemblerRegister8 src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_rm8_r8, dst, src));
 	}
 
-	void Assembler:: or (AssemblerMemoryOperand dst, AssemblerRegister8 src)
+	void Assembler::or_ (AssemblerMemoryOperand dst, AssemblerRegister8 src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_rm8_r8, dst.ToMemoryOperand(GetBitness()), src));
 	}
 
-	void Assembler:: or (AssemblerRegister16 dst, AssemblerRegister16 src)
+	void Assembler::or_ (AssemblerRegister16 dst, AssemblerRegister16 src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_rm16_r16, dst, src));
 	}
 
-	void Assembler:: or (AssemblerMemoryOperand dst, AssemblerRegister16 src)
+	void Assembler::or_ (AssemblerMemoryOperand dst, AssemblerRegister16 src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_rm16_r16, dst.ToMemoryOperand(GetBitness()), src));
 	}
 
-	void Assembler:: or (AssemblerRegister32 dst, AssemblerRegister32 src)
+	void Assembler::or_ (AssemblerRegister32 dst, AssemblerRegister32 src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_rm32_r32, dst, src));
 	}
 
-	void Assembler:: or (AssemblerMemoryOperand dst, AssemblerRegister32 src)
+	void Assembler::or_ (AssemblerMemoryOperand dst, AssemblerRegister32 src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_rm32_r32, dst.ToMemoryOperand(GetBitness()), src));
 	}
 
-	void Assembler:: or (AssemblerRegister64 dst, AssemblerRegister64 src)
+	void Assembler::or_ (AssemblerRegister64 dst, AssemblerRegister64 src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_rm64_r64, dst, src));
 	}
 
-	void Assembler:: or (AssemblerMemoryOperand dst, AssemblerRegister64 src)
+	void Assembler::or_ (AssemblerMemoryOperand dst, AssemblerRegister64 src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_rm64_r64, dst.ToMemoryOperand(GetBitness()), src));
 	}
 
-	void Assembler:: or (AssemblerRegister8 dst, AssemblerMemoryOperand src)
+	void Assembler::or_ (AssemblerRegister8 dst, AssemblerMemoryOperand src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_r8_rm8, dst, src.ToMemoryOperand(GetBitness())));
 	}
 
-	void Assembler:: or (AssemblerRegister16 dst, AssemblerMemoryOperand src)
+	void Assembler::or_ (AssemblerRegister16 dst, AssemblerMemoryOperand src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_r16_rm16, dst, src.ToMemoryOperand(GetBitness())));
 	}
 
-	void Assembler:: or (AssemblerRegister32 dst, AssemblerMemoryOperand src)
+	void Assembler::or_ (AssemblerRegister32 dst, AssemblerMemoryOperand src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_r32_rm32, dst, src.ToMemoryOperand(GetBitness())));
 	}
 
-	void Assembler:: or (AssemblerRegister64 dst, AssemblerMemoryOperand src)
+	void Assembler::or_ (AssemblerRegister64 dst, AssemblerMemoryOperand src)
 	{
 		AddInstruction(Instruction::Create(Code::Or_r64_rm64, dst, src.ToMemoryOperand(GetBitness())));
 	}
 
-	void Assembler:: or (AssemblerRegister8 dst, std::int8_t imm)
+	void Assembler::or_ (AssemblerRegister8 dst, std::int8_t imm)
 	{
 		Code code;
 		code = dst == Register::AL ? Code::Or_AL_imm8 : Code::Or_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
-	void Assembler:: or (AssemblerRegister16 dst, std::int16_t imm)
+	void Assembler::or_ (AssemblerRegister16 dst, std::int16_t imm)
 	{
 		Code code;
 		if (dst == Register::AX)
@@ -10522,7 +10505,7 @@ namespace Iced::Intel
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
-	void Assembler:: or (AssemblerRegister32 dst, std::int32_t imm)
+	void Assembler::or_ (AssemblerRegister32 dst, std::int32_t imm)
 	{
 		Code code;
 		if (dst == Register::EAX)
@@ -10536,7 +10519,7 @@ namespace Iced::Intel
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
-	void Assembler:: or (AssemblerRegister64 dst, std::int32_t imm)
+	void Assembler::or_ (AssemblerRegister64 dst, std::int32_t imm)
 	{
 		Code code;
 		if (dst == Register::RAX)
@@ -10550,7 +10533,7 @@ namespace Iced::Intel
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
-	void Assembler:: or (AssemblerMemoryOperand dst, std::int32_t imm)
+	void Assembler::or_ (AssemblerMemoryOperand dst, std::int32_t imm)
 	{
 		Code code;
 		if (dst.Size == MemoryOperandSize::Qword)
@@ -10571,19 +10554,19 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Or, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Or, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
 
-	void Assembler:: or (AssemblerRegister8 dst, std::uint8_t imm)
+	void Assembler::or_ (AssemblerRegister8 dst, std::uint8_t imm)
 	{
 		Code code;
 		code = dst == Register::AL ? Code::Or_AL_imm8 : Code::Or_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
-	void Assembler:: or (AssemblerRegister16 dst, std::uint16_t imm)
+	void Assembler::or_ (AssemblerRegister16 dst, std::uint16_t imm)
 	{
 		Code code;
 		if (dst == Register::AX)
@@ -10597,7 +10580,7 @@ namespace Iced::Intel
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
-	void Assembler:: or (AssemblerRegister32 dst, std::uint32_t imm)
+	void Assembler::or_ (AssemblerRegister32 dst, std::uint32_t imm)
 	{
 		Code code;
 		if (dst == Register::EAX)
@@ -10611,7 +10594,7 @@ namespace Iced::Intel
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
-	void Assembler:: or (AssemblerMemoryOperand dst, std::uint32_t imm)
+	void Assembler::or_ (AssemblerMemoryOperand dst, std::uint32_t imm)
 	{
 		Code code;
 		if (dst.Size == MemoryOperandSize::Dword)
@@ -10628,7 +10611,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Or, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Or, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -11190,42 +11173,42 @@ namespace Iced::Intel
 
 	void Assembler::pclmulhqhqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		pclmulqdq(dst, src, 17);
+		pclmulqdq(dst, src, (std::uint8_t)17);
 	}
 
 	void Assembler::pclmulhqhqdq(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		pclmulqdq(dst, src, 17);
+		pclmulqdq(dst, src, (std::uint8_t)17);
 	}
 
 	void Assembler::pclmulhqlqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		pclmulqdq(dst, src, 1);
+		pclmulqdq(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::pclmulhqlqdq(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		pclmulqdq(dst, src, 1);
+		pclmulqdq(dst, src, (std::uint8_t)1);
 	}
 
 	void Assembler::pclmullqhqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		pclmulqdq(dst, src, 16);
+		pclmulqdq(dst, src, (std::uint8_t)16);
 	}
 
 	void Assembler::pclmullqhqdq(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		pclmulqdq(dst, src, 16);
+		pclmulqdq(dst, src, (std::uint8_t)16);
 	}
 
 	void Assembler::pclmullqlqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
 	{
-		pclmulqdq(dst, src, 0);
+		pclmulqdq(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::pclmullqlqdq(AssemblerRegisterXMM dst, AssemblerMemoryOperand src)
 	{
-		pclmulqdq(dst, src, 0);
+		pclmulqdq(dst, src, (std::uint8_t)0);
 	}
 
 	void Assembler::pclmulqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, std::int8_t imm)
@@ -12752,7 +12735,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Pop, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Pop, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst));
 	}
@@ -12774,7 +12757,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Pop, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Pop, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -13627,7 +13610,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Ptwrite, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Ptwrite, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -13830,7 +13813,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Push, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Push, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst));
 	}
@@ -13852,7 +13835,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Push, std::vector<std::any> {dst});
+			throw NoOpCodeFoundFor(Mnemonic::Push, dst);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness())));
 	}
@@ -13989,7 +13972,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Rcl, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Rcl, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src));
 	}
@@ -13997,35 +13980,35 @@ namespace Iced::Intel
 	void Assembler::rcl(AssemblerRegister8 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcl_rm8_1 : Code::Rcl_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcl_rm8_1 : Code::Rcl_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rcl(AssemblerRegister16 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcl_rm16_1 : Code::Rcl_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcl_rm16_1 : Code::Rcl_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rcl(AssemblerRegister32 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcl_rm32_1 : Code::Rcl_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcl_rm32_1 : Code::Rcl_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rcl(AssemblerRegister64 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcl_rm64_1 : Code::Rcl_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcl_rm64_1 : Code::Rcl_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rcl(AssemblerMemoryOperand dst, std::int8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -14045,7 +14028,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Rcl, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Rcl, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -14066,7 +14049,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Rcl, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Rcl, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -14074,35 +14057,35 @@ namespace Iced::Intel
 	void Assembler::rcl(AssemblerRegister8 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcl_rm8_1 : Code::Rcl_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcl_rm8_1 : Code::Rcl_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rcl(AssemblerRegister16 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcl_rm16_1 : Code::Rcl_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcl_rm16_1 : Code::Rcl_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rcl(AssemblerRegister32 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcl_rm32_1 : Code::Rcl_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcl_rm32_1 : Code::Rcl_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rcl(AssemblerRegister64 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcl_rm64_1 : Code::Rcl_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcl_rm64_1 : Code::Rcl_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rcl(AssemblerMemoryOperand dst, std::uint8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -14122,7 +14105,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Rcl, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Rcl, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -14143,7 +14126,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Rcl, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Rcl, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -14209,7 +14192,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Rcr, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Rcr, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src));
 	}
@@ -14217,35 +14200,35 @@ namespace Iced::Intel
 	void Assembler::rcr(AssemblerRegister8 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcr_rm8_1 : Code::Rcr_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcr_rm8_1 : Code::Rcr_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rcr(AssemblerRegister16 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcr_rm16_1 : Code::Rcr_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcr_rm16_1 : Code::Rcr_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rcr(AssemblerRegister32 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcr_rm32_1 : Code::Rcr_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcr_rm32_1 : Code::Rcr_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rcr(AssemblerRegister64 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcr_rm64_1 : Code::Rcr_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcr_rm64_1 : Code::Rcr_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rcr(AssemblerMemoryOperand dst, std::int8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -14265,7 +14248,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Rcr, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Rcr, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -14286,7 +14269,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Rcr, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Rcr, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -14294,35 +14277,35 @@ namespace Iced::Intel
 	void Assembler::rcr(AssemblerRegister8 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcr_rm8_1 : Code::Rcr_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcr_rm8_1 : Code::Rcr_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rcr(AssemblerRegister16 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcr_rm16_1 : Code::Rcr_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcr_rm16_1 : Code::Rcr_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rcr(AssemblerRegister32 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcr_rm32_1 : Code::Rcr_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcr_rm32_1 : Code::Rcr_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rcr(AssemblerRegister64 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rcr_rm64_1 : Code::Rcr_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rcr_rm64_1 : Code::Rcr_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rcr(AssemblerMemoryOperand dst, std::uint8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -14342,7 +14325,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Rcr, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Rcr, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -14363,7 +14346,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Rcr, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Rcr, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -14893,7 +14876,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Rol, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Rol, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src));
 	}
@@ -14901,35 +14884,35 @@ namespace Iced::Intel
 	void Assembler::rol(AssemblerRegister8 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rol_rm8_1 : Code::Rol_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rol_rm8_1 : Code::Rol_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rol(AssemblerRegister16 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rol_rm16_1 : Code::Rol_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rol_rm16_1 : Code::Rol_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rol(AssemblerRegister32 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rol_rm32_1 : Code::Rol_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rol_rm32_1 : Code::Rol_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rol(AssemblerRegister64 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rol_rm64_1 : Code::Rol_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rol_rm64_1 : Code::Rol_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::rol(AssemblerMemoryOperand dst, std::int8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -14949,7 +14932,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Rol, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Rol, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -14970,7 +14953,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Rol, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Rol, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -14978,35 +14961,35 @@ namespace Iced::Intel
 	void Assembler::rol(AssemblerRegister8 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rol_rm8_1 : Code::Rol_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rol_rm8_1 : Code::Rol_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rol(AssemblerRegister16 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rol_rm16_1 : Code::Rol_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rol_rm16_1 : Code::Rol_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rol(AssemblerRegister32 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rol_rm32_1 : Code::Rol_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rol_rm32_1 : Code::Rol_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rol(AssemblerRegister64 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Rol_rm64_1 : Code::Rol_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Rol_rm64_1 : Code::Rol_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::rol(AssemblerMemoryOperand dst, std::uint8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -15026,7 +15009,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Rol, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Rol, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -15047,7 +15030,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Rol, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Rol, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -15093,7 +15076,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Ror, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Ror, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src));
 	}
@@ -15101,35 +15084,35 @@ namespace Iced::Intel
 	void Assembler::ror(AssemblerRegister8 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Ror_rm8_1 : Code::Ror_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Ror_rm8_1 : Code::Ror_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::ror(AssemblerRegister16 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Ror_rm16_1 : Code::Ror_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Ror_rm16_1 : Code::Ror_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::ror(AssemblerRegister32 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Ror_rm32_1 : Code::Ror_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Ror_rm32_1 : Code::Ror_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::ror(AssemblerRegister64 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Ror_rm64_1 : Code::Ror_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Ror_rm64_1 : Code::Ror_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::ror(AssemblerMemoryOperand dst, std::int8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -15149,7 +15132,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Ror, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Ror, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -15170,7 +15153,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Ror, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Ror, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -15178,35 +15161,35 @@ namespace Iced::Intel
 	void Assembler::ror(AssemblerRegister8 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Ror_rm8_1 : Code::Ror_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Ror_rm8_1 : Code::Ror_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::ror(AssemblerRegister16 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Ror_rm16_1 : Code::Ror_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Ror_rm16_1 : Code::Ror_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::ror(AssemblerRegister32 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Ror_rm32_1 : Code::Ror_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Ror_rm32_1 : Code::Ror_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::ror(AssemblerRegister64 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Ror_rm64_1 : Code::Ror_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Ror_rm64_1 : Code::Ror_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::ror(AssemblerMemoryOperand dst, std::uint8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -15226,7 +15209,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Ror, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Ror, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -15247,7 +15230,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Ror, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Ror, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -15463,7 +15446,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sal, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Sal, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src));
 	}
@@ -15471,35 +15454,35 @@ namespace Iced::Intel
 	void Assembler::sal(AssemblerRegister8 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sal_rm8_1 : Code::Sal_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sal_rm8_1 : Code::Sal_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::sal(AssemblerRegister16 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sal_rm16_1 : Code::Sal_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sal_rm16_1 : Code::Sal_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::sal(AssemblerRegister32 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sal_rm32_1 : Code::Sal_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sal_rm32_1 : Code::Sal_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::sal(AssemblerRegister64 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sal_rm64_1 : Code::Sal_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sal_rm64_1 : Code::Sal_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::sal(AssemblerMemoryOperand dst, std::int8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -15519,7 +15502,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Sal, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Sal, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -15540,7 +15523,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sal, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Sal, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -15548,35 +15531,35 @@ namespace Iced::Intel
 	void Assembler::sal(AssemblerRegister8 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sal_rm8_1 : Code::Sal_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sal_rm8_1 : Code::Sal_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::sal(AssemblerRegister16 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sal_rm16_1 : Code::Sal_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sal_rm16_1 : Code::Sal_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::sal(AssemblerRegister32 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sal_rm32_1 : Code::Sal_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sal_rm32_1 : Code::Sal_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::sal(AssemblerRegister64 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sal_rm64_1 : Code::Sal_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sal_rm64_1 : Code::Sal_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::sal(AssemblerMemoryOperand dst, std::uint8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -15596,7 +15579,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Sal, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Sal, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -15617,7 +15600,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sal, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Sal, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -15668,7 +15651,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sar, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Sar, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src));
 	}
@@ -15676,35 +15659,35 @@ namespace Iced::Intel
 	void Assembler::sar(AssemblerRegister8 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sar_rm8_1 : Code::Sar_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sar_rm8_1 : Code::Sar_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::sar(AssemblerRegister16 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sar_rm16_1 : Code::Sar_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sar_rm16_1 : Code::Sar_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::sar(AssemblerRegister32 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sar_rm32_1 : Code::Sar_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sar_rm32_1 : Code::Sar_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::sar(AssemblerRegister64 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sar_rm64_1 : Code::Sar_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sar_rm64_1 : Code::Sar_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::sar(AssemblerMemoryOperand dst, std::int8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -15724,7 +15707,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Sar, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Sar, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -15745,7 +15728,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sar, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Sar, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -15753,35 +15736,35 @@ namespace Iced::Intel
 	void Assembler::sar(AssemblerRegister8 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sar_rm8_1 : Code::Sar_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sar_rm8_1 : Code::Sar_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::sar(AssemblerRegister16 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sar_rm16_1 : Code::Sar_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sar_rm16_1 : Code::Sar_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::sar(AssemblerRegister32 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sar_rm32_1 : Code::Sar_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sar_rm32_1 : Code::Sar_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::sar(AssemblerRegister64 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Sar_rm64_1 : Code::Sar_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Sar_rm64_1 : Code::Sar_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::sar(AssemblerMemoryOperand dst, std::uint8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -15801,7 +15784,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Sar, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Sar, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -15822,7 +15805,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sar, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Sar, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -15982,7 +15965,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sbb, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Sbb, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -16039,7 +16022,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sbb, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Sbb, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -16534,7 +16517,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Shl, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Shl, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src));
 	}
@@ -16542,35 +16525,35 @@ namespace Iced::Intel
 	void Assembler::shl(AssemblerRegister8 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shl_rm8_1 : Code::Shl_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shl_rm8_1 : Code::Shl_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::shl(AssemblerRegister16 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shl_rm16_1 : Code::Shl_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shl_rm16_1 : Code::Shl_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::shl(AssemblerRegister32 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shl_rm32_1 : Code::Shl_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shl_rm32_1 : Code::Shl_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::shl(AssemblerRegister64 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shl_rm64_1 : Code::Shl_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shl_rm64_1 : Code::Shl_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::shl(AssemblerMemoryOperand dst, std::int8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -16590,7 +16573,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Shl, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Shl, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -16611,7 +16594,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Shl, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Shl, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -16619,35 +16602,35 @@ namespace Iced::Intel
 	void Assembler::shl(AssemblerRegister8 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shl_rm8_1 : Code::Shl_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shl_rm8_1 : Code::Shl_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::shl(AssemblerRegister16 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shl_rm16_1 : Code::Shl_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shl_rm16_1 : Code::Shl_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::shl(AssemblerRegister32 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shl_rm32_1 : Code::Shl_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shl_rm32_1 : Code::Shl_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::shl(AssemblerRegister64 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shl_rm64_1 : Code::Shl_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shl_rm64_1 : Code::Shl_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::shl(AssemblerMemoryOperand dst, std::uint8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -16667,7 +16650,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Shl, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Shl, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -16688,7 +16671,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Shl, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Shl, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -16844,7 +16827,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Shr, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Shr, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src));
 	}
@@ -16852,35 +16835,35 @@ namespace Iced::Intel
 	void Assembler::shr(AssemblerRegister8 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shr_rm8_1 : Code::Shr_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shr_rm8_1 : Code::Shr_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::shr(AssemblerRegister16 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shr_rm16_1 : Code::Shr_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shr_rm16_1 : Code::Shr_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::shr(AssemblerRegister32 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shr_rm32_1 : Code::Shr_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shr_rm32_1 : Code::Shr_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::shr(AssemblerRegister64 dst, std::int8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shr_rm64_1 : Code::Shr_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shr_rm64_1 : Code::Shr_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, imm));
 	}
 
 	void Assembler::shr(AssemblerMemoryOperand dst, std::int8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -16900,7 +16883,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Shr, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Shr, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -16921,7 +16904,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Shr, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Shr, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -16929,35 +16912,35 @@ namespace Iced::Intel
 	void Assembler::shr(AssemblerRegister8 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shr_rm8_1 : Code::Shr_rm8_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shr_rm8_1 : Code::Shr_rm8_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::shr(AssemblerRegister16 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shr_rm16_1 : Code::Shr_rm16_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shr_rm16_1 : Code::Shr_rm16_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::shr(AssemblerRegister32 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shr_rm32_1 : Code::Shr_rm32_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shr_rm32_1 : Code::Shr_rm32_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::shr(AssemblerRegister64 dst, std::uint8_t imm)
 	{
 		Code code;
-		code = imm == 1 ? Code::Shr_rm64_1 : Code::Shr_rm64_imm8;
+		code = imm == (std::uint8_t)1 ? Code::Shr_rm64_1 : Code::Shr_rm64_imm8;
 		AddInstruction(Instruction::Create(code, dst, static_cast<std::uint32_t>(imm)));
 	}
 
 	void Assembler::shr(AssemblerMemoryOperand dst, std::uint8_t imm)
 	{
 		Code code;
-		if (imm == 1)
+		if (imm == (std::uint8_t)1)
 		{
 			if (dst.Size == MemoryOperandSize::Qword)
 			{
@@ -16977,7 +16960,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw NoOpCodeFoundFor(Mnemonic::Shr, std::vector<std::any> {dst, imm});
+				throw NoOpCodeFoundFor(Mnemonic::Shr, dst, imm);
 			}
 		}
 		else if (dst.Size == MemoryOperandSize::Qword)
@@ -16998,7 +16981,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Shr, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Shr, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)));
 	}
@@ -17488,7 +17471,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sub, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Sub, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -17545,7 +17528,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Sub, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Sub, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -17779,7 +17762,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Test, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Test, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -17822,7 +17805,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Test, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Test, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -19233,5042 +19216,5042 @@ namespace Iced::Intel
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ospd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 16);
+		vcmppd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 16);
+		vcmpph(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 16);
+		vcmpph(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 16);
+		vcmpph(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 16);
+		vcmpph(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 16);
+		vcmpph(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 16);
+		vcmpph(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 16);
+		vcmpps(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ossd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 16);
+		vcmpsd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ossd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 16);
+		vcmpsd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ossd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 16);
+		vcmpsd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ossd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 16);
+		vcmpsd(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ossh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 16);
+		vcmpsh(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_ossh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 16);
+		vcmpsh(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 16);
+		vcmpss(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 16);
+		vcmpss(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 16);
+		vcmpss(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_osss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 16);
+		vcmpss(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 8);
+		vcmppd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 8);
+		vcmpph(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 8);
+		vcmpph(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 8);
+		vcmpph(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 8);
+		vcmpph(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 8);
+		vcmpph(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 8);
+		vcmpph(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 8);
+		vcmpps(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 8);
+		vcmpsd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 8);
+		vcmpsd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 8);
+		vcmpsd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 8);
+		vcmpsd(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 8);
+		vcmpsh(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 8);
+		vcmpsh(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 8);
+		vcmpss(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 8);
+		vcmpss(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 8);
+		vcmpss(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 8);
+		vcmpss(dst, src1, src2, (std::uint8_t)8);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_uspd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 24);
+		vcmppd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 24);
+		vcmpph(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 24);
+		vcmpph(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 24);
+		vcmpph(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 24);
+		vcmpph(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 24);
+		vcmpph(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 24);
+		vcmpph(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 24);
+		vcmpps(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_ussd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 24);
+		vcmpsd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_ussd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 24);
+		vcmpsd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_ussd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 24);
+		vcmpsd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_ussd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 24);
+		vcmpsd(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_ussh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 24);
+		vcmpsh(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_ussh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 24);
+		vcmpsh(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 24);
+		vcmpss(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 24);
+		vcmpss(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 24);
+		vcmpss(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeq_usss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 24);
+		vcmpss(dst, src1, src2, (std::uint8_t)24);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 0);
+		vcmppd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 0);
+		vcmpph(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 0);
+		vcmpph(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 0);
+		vcmpph(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 0);
+		vcmpph(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 0);
+		vcmpph(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 0);
+		vcmpph(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 0);
+		vcmpps(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 0);
+		vcmpsd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 0);
+		vcmpsd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 0);
+		vcmpsd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 0);
+		vcmpsd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 0);
+		vcmpsh(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 0);
+		vcmpsh(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 0);
+		vcmpss(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 0);
+		vcmpss(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 0);
+		vcmpss(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpeqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 0);
+		vcmpss(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ospd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 27);
+		vcmppd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 27);
+		vcmpph(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 27);
+		vcmpph(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 27);
+		vcmpph(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 27);
+		vcmpph(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 27);
+		vcmpph(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 27);
+		vcmpph(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 27);
+		vcmpps(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ossd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 27);
+		vcmpsd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ossd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 27);
+		vcmpsd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ossd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 27);
+		vcmpsd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ossd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 27);
+		vcmpsd(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ossh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 27);
+		vcmpsh(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_ossh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 27);
+		vcmpsh(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 27);
+		vcmpss(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 27);
+		vcmpss(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 27);
+		vcmpss(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalse_osss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 27);
+		vcmpss(dst, src1, src2, (std::uint8_t)27);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 11);
+		vcmppd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 11);
+		vcmpph(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 11);
+		vcmpph(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 11);
+		vcmpph(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 11);
+		vcmpph(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 11);
+		vcmpph(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 11);
+		vcmpph(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalseps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 11);
+		vcmpps(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 11);
+		vcmpsd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 11);
+		vcmpsd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 11);
+		vcmpsd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 11);
+		vcmpsd(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 11);
+		vcmpsh(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 11);
+		vcmpsh(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsess(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 11);
+		vcmpss(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsess(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 11);
+		vcmpss(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsess(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 11);
+		vcmpss(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpfalsess(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 11);
+		vcmpss(dst, src1, src2, (std::uint8_t)11);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 29);
+		vcmppd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 29);
+		vcmpph(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 29);
+		vcmpph(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 29);
+		vcmpph(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 29);
+		vcmpph(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 29);
+		vcmpph(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 29);
+		vcmpph(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 29);
+		vcmpps(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 29);
+		vcmpsd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 29);
+		vcmpsd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 29);
+		vcmpsd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 29);
+		vcmpsd(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 29);
+		vcmpsh(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 29);
+		vcmpsh(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 29);
+		vcmpss(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 29);
+		vcmpss(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 29);
+		vcmpss(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpge_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 29);
+		vcmpss(dst, src1, src2, (std::uint8_t)29);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 13);
+		vcmppd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 13);
+		vcmpph(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 13);
+		vcmpph(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 13);
+		vcmpph(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 13);
+		vcmpph(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 13);
+		vcmpph(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 13);
+		vcmpph(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgeps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 13);
+		vcmpps(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 13);
+		vcmpsd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 13);
+		vcmpsd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 13);
+		vcmpsd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 13);
+		vcmpsd(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 13);
+		vcmpsh(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 13);
+		vcmpsh(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgess(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 13);
+		vcmpss(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgess(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 13);
+		vcmpss(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgess(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 13);
+		vcmpss(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgess(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 13);
+		vcmpss(dst, src1, src2, (std::uint8_t)13);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 30);
+		vcmppd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 30);
+		vcmpph(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 30);
+		vcmpph(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 30);
+		vcmpph(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 30);
+		vcmpph(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 30);
+		vcmpph(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 30);
+		vcmpph(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 30);
+		vcmpps(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 30);
+		vcmpsd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 30);
+		vcmpsd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 30);
+		vcmpsd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 30);
+		vcmpsd(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 30);
+		vcmpsh(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 30);
+		vcmpsh(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 30);
+		vcmpss(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 30);
+		vcmpss(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 30);
+		vcmpss(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgt_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 30);
+		vcmpss(dst, src1, src2, (std::uint8_t)30);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 14);
+		vcmppd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 14);
+		vcmpph(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 14);
+		vcmpph(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 14);
+		vcmpph(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 14);
+		vcmpph(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 14);
+		vcmpph(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 14);
+		vcmpph(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 14);
+		vcmpps(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 14);
+		vcmpsd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 14);
+		vcmpsd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 14);
+		vcmpsd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 14);
+		vcmpsd(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 14);
+		vcmpsh(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 14);
+		vcmpsh(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 14);
+		vcmpss(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 14);
+		vcmpss(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 14);
+		vcmpss(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmpgtss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 14);
+		vcmpss(dst, src1, src2, (std::uint8_t)14);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 18);
+		vcmppd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 18);
+		vcmpph(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 18);
+		vcmpph(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 18);
+		vcmpph(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 18);
+		vcmpph(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 18);
+		vcmpph(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 18);
+		vcmpph(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 18);
+		vcmpps(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 18);
+		vcmpsd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 18);
+		vcmpsd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 18);
+		vcmpsd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 18);
+		vcmpsd(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 18);
+		vcmpsh(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 18);
+		vcmpsh(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 18);
+		vcmpss(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 18);
+		vcmpss(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 18);
+		vcmpss(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmple_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 18);
+		vcmpss(dst, src1, src2, (std::uint8_t)18);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 2);
+		vcmppd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 2);
+		vcmpph(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 2);
+		vcmpph(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 2);
+		vcmpph(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 2);
+		vcmpph(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 2);
+		vcmpph(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 2);
+		vcmpph(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpleps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 2);
+		vcmpps(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 2);
+		vcmpsd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 2);
+		vcmpsd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 2);
+		vcmpsd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 2);
+		vcmpsd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 2);
+		vcmpsh(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 2);
+		vcmpsh(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpless(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 2);
+		vcmpss(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpless(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 2);
+		vcmpss(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpless(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 2);
+		vcmpss(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmpless(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 2);
+		vcmpss(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 17);
+		vcmppd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 17);
+		vcmpph(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 17);
+		vcmpph(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 17);
+		vcmpph(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 17);
+		vcmpph(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 17);
+		vcmpph(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 17);
+		vcmpph(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 17);
+		vcmpps(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 17);
+		vcmpsd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 17);
+		vcmpsd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 17);
+		vcmpsd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 17);
+		vcmpsd(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 17);
+		vcmpsh(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 17);
+		vcmpsh(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 17);
+		vcmpss(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 17);
+		vcmpss(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 17);
+		vcmpss(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmplt_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 17);
+		vcmpss(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 1);
+		vcmppd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 1);
+		vcmpph(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 1);
+		vcmpph(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 1);
+		vcmpph(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 1);
+		vcmpph(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 1);
+		vcmpph(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 1);
+		vcmpph(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 1);
+		vcmpps(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 1);
+		vcmpsd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 1);
+		vcmpsd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 1);
+		vcmpsd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 1);
+		vcmpsd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 1);
+		vcmpsh(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 1);
+		vcmpsh(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 1);
+		vcmpss(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 1);
+		vcmpss(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 1);
+		vcmpss(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpltss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 1);
+		vcmpss(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 12);
+		vcmppd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 12);
+		vcmpph(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 12);
+		vcmpph(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 12);
+		vcmpph(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 12);
+		vcmpph(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 12);
+		vcmpph(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 12);
+		vcmpph(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 12);
+		vcmpps(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 12);
+		vcmpsd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 12);
+		vcmpsd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 12);
+		vcmpsd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 12);
+		vcmpsd(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 12);
+		vcmpsh(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 12);
+		vcmpsh(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 12);
+		vcmpss(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 12);
+		vcmpss(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 12);
+		vcmpss(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_oqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 12);
+		vcmpss(dst, src1, src2, (std::uint8_t)12);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ospd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 28);
+		vcmppd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 28);
+		vcmpph(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 28);
+		vcmpph(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 28);
+		vcmpph(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 28);
+		vcmpph(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 28);
+		vcmpph(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 28);
+		vcmpph(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 28);
+		vcmpps(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ossd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 28);
+		vcmpsd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ossd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 28);
+		vcmpsd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ossd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 28);
+		vcmpsd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ossd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 28);
+		vcmpsd(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ossh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 28);
+		vcmpsh(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_ossh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 28);
+		vcmpsh(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 28);
+		vcmpss(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 28);
+		vcmpss(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 28);
+		vcmpss(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_osss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 28);
+		vcmpss(dst, src1, src2, (std::uint8_t)28);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_uspd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 20);
+		vcmppd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 20);
+		vcmpph(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 20);
+		vcmpph(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 20);
+		vcmpph(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 20);
+		vcmpph(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 20);
+		vcmpph(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 20);
+		vcmpph(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 20);
+		vcmpps(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_ussd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 20);
+		vcmpsd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_ussd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 20);
+		vcmpsd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_ussd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 20);
+		vcmpsd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_ussd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 20);
+		vcmpsd(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_ussh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 20);
+		vcmpsh(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_ussh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 20);
+		vcmpsh(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 20);
+		vcmpss(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 20);
+		vcmpss(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 20);
+		vcmpss(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneq_usss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 20);
+		vcmpss(dst, src1, src2, (std::uint8_t)20);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 4);
+		vcmppd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 4);
+		vcmpph(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 4);
+		vcmpph(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 4);
+		vcmpph(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 4);
+		vcmpph(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 4);
+		vcmpph(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 4);
+		vcmpph(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 4);
+		vcmpps(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 4);
+		vcmpsd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 4);
+		vcmpsd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 4);
+		vcmpsd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 4);
+		vcmpsd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 4);
+		vcmpsh(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 4);
+		vcmpsh(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 4);
+		vcmpss(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 4);
+		vcmpss(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 4);
+		vcmpss(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpneqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 4);
+		vcmpss(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 25);
+		vcmppd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 25);
+		vcmpph(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 25);
+		vcmpph(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 25);
+		vcmpph(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 25);
+		vcmpph(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 25);
+		vcmpph(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 25);
+		vcmpph(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 25);
+		vcmpps(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 25);
+		vcmpsd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 25);
+		vcmpsd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 25);
+		vcmpsd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 25);
+		vcmpsd(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 25);
+		vcmpsh(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 25);
+		vcmpsh(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 25);
+		vcmpss(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 25);
+		vcmpss(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 25);
+		vcmpss(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpnge_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 25);
+		vcmpss(dst, src1, src2, (std::uint8_t)25);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 9);
+		vcmppd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 9);
+		vcmpph(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 9);
+		vcmpph(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 9);
+		vcmpph(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 9);
+		vcmpph(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 9);
+		vcmpph(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 9);
+		vcmpph(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngeps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 9);
+		vcmpps(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 9);
+		vcmpsd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 9);
+		vcmpsd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 9);
+		vcmpsd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 9);
+		vcmpsd(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 9);
+		vcmpsh(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 9);
+		vcmpsh(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngess(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 9);
+		vcmpss(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngess(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 9);
+		vcmpss(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngess(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 9);
+		vcmpss(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngess(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 9);
+		vcmpss(dst, src1, src2, (std::uint8_t)9);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 26);
+		vcmppd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 26);
+		vcmpph(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 26);
+		vcmpph(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 26);
+		vcmpph(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 26);
+		vcmpph(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 26);
+		vcmpph(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 26);
+		vcmpph(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 26);
+		vcmpps(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 26);
+		vcmpsd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 26);
+		vcmpsd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 26);
+		vcmpsd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 26);
+		vcmpsd(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 26);
+		vcmpsh(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 26);
+		vcmpsh(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 26);
+		vcmpss(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 26);
+		vcmpss(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 26);
+		vcmpss(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngt_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 26);
+		vcmpss(dst, src1, src2, (std::uint8_t)26);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 10);
+		vcmppd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 10);
+		vcmpph(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 10);
+		vcmpph(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 10);
+		vcmpph(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 10);
+		vcmpph(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 10);
+		vcmpph(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 10);
+		vcmpph(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 10);
+		vcmpps(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 10);
+		vcmpsd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 10);
+		vcmpsd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 10);
+		vcmpsd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 10);
+		vcmpsd(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 10);
+		vcmpsh(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 10);
+		vcmpsh(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 10);
+		vcmpss(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 10);
+		vcmpss(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 10);
+		vcmpss(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpngtss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 10);
+		vcmpss(dst, src1, src2, (std::uint8_t)10);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 22);
+		vcmppd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 22);
+		vcmpph(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 22);
+		vcmpph(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 22);
+		vcmpph(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 22);
+		vcmpph(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 22);
+		vcmpph(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 22);
+		vcmpph(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 22);
+		vcmpps(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 22);
+		vcmpsd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 22);
+		vcmpsd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 22);
+		vcmpsd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 22);
+		vcmpsd(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 22);
+		vcmpsh(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 22);
+		vcmpsh(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 22);
+		vcmpss(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 22);
+		vcmpss(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 22);
+		vcmpss(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnle_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 22);
+		vcmpss(dst, src1, src2, (std::uint8_t)22);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 6);
+		vcmppd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 6);
+		vcmpph(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 6);
+		vcmpph(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 6);
+		vcmpph(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 6);
+		vcmpph(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 6);
+		vcmpph(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 6);
+		vcmpph(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnleps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 6);
+		vcmpps(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 6);
+		vcmpsd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 6);
+		vcmpsd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 6);
+		vcmpsd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 6);
+		vcmpsd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 6);
+		vcmpsh(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 6);
+		vcmpsh(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnless(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 6);
+		vcmpss(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnless(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 6);
+		vcmpss(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnless(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 6);
+		vcmpss(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnless(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 6);
+		vcmpss(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 21);
+		vcmppd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 21);
+		vcmpph(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 21);
+		vcmpph(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 21);
+		vcmpph(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 21);
+		vcmpph(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 21);
+		vcmpph(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 21);
+		vcmpph(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 21);
+		vcmpps(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 21);
+		vcmpsd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 21);
+		vcmpsd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 21);
+		vcmpsd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 21);
+		vcmpsd(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 21);
+		vcmpsh(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 21);
+		vcmpsh(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 21);
+		vcmpss(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 21);
+		vcmpss(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 21);
+		vcmpss(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnlt_uqss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 21);
+		vcmpss(dst, src1, src2, (std::uint8_t)21);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5	);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 5);
+		vcmppd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 5);
+		vcmpph(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 5);
+		vcmpph(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 5);
+		vcmpph(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 5);
+		vcmpph(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 5);
+		vcmpph(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 5);
+		vcmpph(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 5);
+		vcmpps(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 5);
+		vcmpsd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 5);
+		vcmpsd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 5);
+		vcmpsd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 5);
+		vcmpsd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 5);
+		vcmpsh(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 5);
+		vcmpsh(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 5);
+		vcmpss(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 5);
+		vcmpss(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 5);
+		vcmpss(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpnltss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 5);
+		vcmpss(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_spd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 23);
+		vcmppd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 23);
+		vcmpph(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 23);
+		vcmpph(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 23);
+		vcmpph(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 23);
+		vcmpph(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 23);
+		vcmpph(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 23);
+		vcmpph(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 23);
+		vcmpps(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_ssd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 23);
+		vcmpsd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_ssd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 23);
+		vcmpsd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_ssd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 23);
+		vcmpsd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_ssd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 23);
+		vcmpsd(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_ssh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 23);
+		vcmpsh(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_ssh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 23);
+		vcmpsh(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 23);
+		vcmpss(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 23);
+		vcmpss(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 23);
+		vcmpss(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpord_sss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 23);
+		vcmpss(dst, src1, src2, (std::uint8_t)23);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 7);
+		vcmppd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 7);
+		vcmpph(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 7);
+		vcmpph(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 7);
+		vcmpph(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 7);
+		vcmpph(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 7);
+		vcmpph(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 7);
+		vcmpph(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 7);
+		vcmpps(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 7);
+		vcmpsd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 7);
+		vcmpsd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 7);
+		vcmpsd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 7);
+		vcmpsd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 7);
+		vcmpsh(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 7);
+		vcmpsh(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 7);
+		vcmpss(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 7);
+		vcmpss(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 7);
+		vcmpss(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmpordss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 7);
+		vcmpss(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vcmppd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2, std::int8_t imm)
@@ -24633,722 +24616,722 @@ namespace Iced::Intel
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_uspd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 31);
+		vcmppd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 31);
+		vcmpph(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 31);
+		vcmpph(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 31);
+		vcmpph(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 31);
+		vcmpph(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 31);
+		vcmpph(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 31);
+		vcmpph(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 31);
+		vcmpps(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_ussd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 31);
+		vcmpsd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_ussd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 31);
+		vcmpsd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_ussd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 31);
+		vcmpsd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_ussd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 31);
+		vcmpsd(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_ussh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 31);
+		vcmpsh(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_ussh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 31);
+		vcmpsh(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 31);
+		vcmpss(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 31);
+		vcmpss(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 31);
+		vcmpss(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptrue_usss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 31);
+		vcmpss(dst, src1, src2, (std::uint8_t)31);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruepd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 15);
+		vcmppd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 15);
+		vcmpph(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 15);
+		vcmpph(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 15);
+		vcmpph(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 15);
+		vcmpph(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 15);
+		vcmpph(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 15);
+		vcmpph(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptrueps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 15);
+		vcmpps(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 15);
+		vcmpsd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 15);
+		vcmpsd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruesd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 15);
+		vcmpsd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruesd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 15);
+		vcmpsd(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 15);
+		vcmpsh(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruesh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 15);
+		vcmpsh(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruess(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 15);
+		vcmpss(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruess(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 15);
+		vcmpss(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruess(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 15);
+		vcmpss(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmptruess(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 15);
+		vcmpss(dst, src1, src2, (std::uint8_t)15);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_spd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 19);
+		vcmppd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 19);
+		vcmpph(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 19);
+		vcmpph(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 19);
+		vcmpph(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 19);
+		vcmpph(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 19);
+		vcmpph(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 19);
+		vcmpph(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 19);
+		vcmpps(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_ssd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 19);
+		vcmpsd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_ssd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 19);
+		vcmpsd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_ssd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 19);
+		vcmpsd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_ssd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 19);
+		vcmpsd(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_ssh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 19);
+		vcmpsh(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_ssh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 19);
+		vcmpsh(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 19);
+		vcmpss(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 19);
+		vcmpss(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 19);
+		vcmpss(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunord_sss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 19);
+		vcmpss(dst, src1, src2, (std::uint8_t)19);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordpd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmppd(dst, src1, src2, 3);
+		vcmppd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpph(dst, src1, src2, 3);
+		vcmpph(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpph(dst, src1, src2, 3);
+		vcmpph(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpph(dst, src1, src2, 3);
+		vcmpph(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordph(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 3);
+		vcmpph(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordph(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 3);
+		vcmpph(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordph(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpph(dst, src1, src2, 3);
+		vcmpph(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordps(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpps(dst, src1, src2, 3);
+		vcmpps(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 3);
+		vcmpsd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsd(dst, src1, src2, 3);
+		vcmpsd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordsd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 3);
+		vcmpsd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordsd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsd(dst, src1, src2, 3);
+		vcmpsd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpsh(dst, src1, src2, 3);
+		vcmpsh(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordsh(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpsh(dst, src1, src2, 3);
+		vcmpsh(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 3);
+		vcmpss(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vcmpss(dst, src1, src2, 3);
+		vcmpss(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordss(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 3);
+		vcmpss(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcmpunordss(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vcmpss(dst, src1, src2, 3);
+		vcmpss(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vcomisd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
@@ -25533,7 +25516,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtdq2ph, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtdq2ph, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -25667,7 +25650,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtneps2bf16, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtneps2bf16, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -25723,7 +25706,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtpd2dq, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtpd2dq, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -25779,7 +25762,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtpd2ph, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtpd2ph, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -25835,7 +25818,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtpd2ps, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtpd2ps, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -25917,7 +25900,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtpd2udq, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtpd2udq, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -26457,7 +26440,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtps2phx, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtps2phx, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -26633,7 +26616,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtqq2ph, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtqq2ph, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -26685,7 +26668,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtqq2ps, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtqq2ps, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -26864,7 +26847,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtsi2sd, std::vector<std::any> {dst, src1, src2});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtsi2sd, dst, src1, src2);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1, src2.ToMemoryOperand(GetBitness())), src2.Flags);
 	}
@@ -26892,7 +26875,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtsi2sh, std::vector<std::any> {dst, src1, src2});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtsi2sh, dst, src1, src2);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1, src2.ToMemoryOperand(GetBitness())), src2.Flags);
 	}
@@ -26924,7 +26907,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtsi2ss, std::vector<std::any> {dst, src1, src2});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtsi2ss, dst, src1, src2);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1, src2.ToMemoryOperand(GetBitness())), src2.Flags);
 	}
@@ -27037,7 +27020,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvttpd2dq, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvttpd2dq, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -27119,7 +27102,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvttpd2udq, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvttpd2udq, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -27689,7 +27672,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtudq2ph, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtudq2ph, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -27805,7 +27788,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtuqq2ph, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtuqq2ph, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -27857,7 +27840,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtuqq2ps, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtuqq2ps, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags | src.Flags);
 	}
@@ -27900,7 +27883,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtusi2sd, std::vector<std::any> {dst, src1, src2});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtusi2sd, dst, src1, src2);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1, src2.ToMemoryOperand(GetBitness())), src2.Flags);
 	}
@@ -27928,7 +27911,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtusi2sh, std::vector<std::any> {dst, src1, src2});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtusi2sh, dst, src1, src2);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1, src2.ToMemoryOperand(GetBitness())), src2.Flags);
 	}
@@ -27956,7 +27939,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vcvtusi2ss, std::vector<std::any> {dst, src1, src2});
+			throw NoOpCodeFoundFor(Mnemonic::Vcvtusi2ss, dst, src1, src2);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1, src2.ToMemoryOperand(GetBitness())), src2.Flags);
 	}
@@ -32493,7 +32476,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vfpclasspd, std::vector<std::any> {dst, src1, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Vfpclasspd, dst, src1, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1.ToMemoryOperand(GetBitness()), imm), dst.Flags | src1.Flags);
 	}
@@ -32534,7 +32517,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vfpclasspd, std::vector<std::any> {dst, src1, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Vfpclasspd, dst, src1, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)), dst.Flags | src1.Flags);
 	}
@@ -32605,7 +32588,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vfpclassph, std::vector<std::any> {dst, src1, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Vfpclassph, dst, src1, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1.ToMemoryOperand(GetBitness()), imm), dst.Flags | src1.Flags);
 	}
@@ -32646,7 +32629,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vfpclassph, std::vector<std::any> {dst, src1, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Vfpclassph, dst, src1, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)), dst.Flags | src1.Flags);
 	}
@@ -32717,7 +32700,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vfpclassps, std::vector<std::any> {dst, src1, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Vfpclassps, dst, src1, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1.ToMemoryOperand(GetBitness()), imm), dst.Flags | src1.Flags);
 	}
@@ -32758,7 +32741,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vfpclassps, std::vector<std::any> {dst, src1, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Vfpclassps, dst, src1, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1.ToMemoryOperand(GetBitness()), static_cast<std::uint32_t>(imm)), dst.Flags | src1.Flags);
 	}
@@ -33041,7 +33024,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vgatherqps, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vgatherqps, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags);
 	}
@@ -33064,7 +33047,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vgatherqps, std::vector<std::any> {dst, src1, src2});
+			throw NoOpCodeFoundFor(Mnemonic::Vgatherqps, dst, src1, src2);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1.ToMemoryOperand(GetBitness()), src2));
 	}
@@ -37444,122 +37427,122 @@ namespace Iced::Intel
 
 	void Assembler::vpclmulhqhqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 17);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vpclmulhqhqdq(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 17);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vpclmulhqhqdq(AssemblerRegisterZMM dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 17);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vpclmulhqhqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 17);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vpclmulhqhqdq(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 17);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vpclmulhqhqdq(AssemblerRegisterZMM dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 17);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)17);
 	}
 
 	void Assembler::vpclmulhqlqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 1);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpclmulhqlqdq(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 1);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpclmulhqlqdq(AssemblerRegisterZMM dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 1);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpclmulhqlqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 1);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpclmulhqlqdq(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 1);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpclmulhqlqdq(AssemblerRegisterZMM dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 1);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpclmullqhqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 16);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vpclmullqhqdq(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 16);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vpclmullqhqdq(AssemblerRegisterZMM dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 16);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vpclmullqhqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 16);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vpclmullqhqdq(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 16);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vpclmullqhqdq(AssemblerRegisterZMM dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 16);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)16);
 	}
 
 	void Assembler::vpclmullqlqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 0);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpclmullqlqdq(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 0);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpclmullqlqdq(AssemblerRegisterZMM dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpclmulqdq(dst, src1, src2, 0);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpclmullqlqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 0);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpclmullqlqdq(AssemblerRegisterYMM dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 0);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpclmullqlqdq(AssemblerRegisterZMM dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpclmulqdq(dst, src1, src2, 0);
+		vpclmulqdq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpclmulqdq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2, std::int8_t imm)
@@ -37940,122 +37923,122 @@ namespace Iced::Intel
 
 	void Assembler::vpcmpequb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpub(dst, src1, src2, 0);
+		vpcmpub(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpub(dst, src1, src2, 0);
+		vpcmpub(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpub(dst, src1, src2, 0);
+		vpcmpub(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 0);
+		vpcmpub(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 0);
+		vpcmpub(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 0);
+		vpcmpub(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpud(dst, src1, src2, 0);
+		vpcmpud(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpud(dst, src1, src2, 0);
+		vpcmpud(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpud(dst, src1, src2, 0);
+		vpcmpud(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 0);
+		vpcmpud(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 0);
+		vpcmpud(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 0);
+		vpcmpud(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 0);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 0);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 0);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 0);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 0);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 0);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 0);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 0);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 0);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 0);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 0);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpequw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 0);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcmpeqw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
@@ -38190,242 +38173,242 @@ namespace Iced::Intel
 
 	void Assembler::vpcmpfalseb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpb(dst, src1, src2, 3);
+		vpcmpb(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpb(dst, src1, src2, 3);
+		vpcmpb(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpb(dst, src1, src2, 3);
+		vpcmpb(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 3);
+		vpcmpb(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 3);
+		vpcmpb(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 3);
+		vpcmpb(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsed(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpd(dst, src1, src2, 3);
+		vpcmpd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsed(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpd(dst, src1, src2, 3);
+		vpcmpd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsed(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpd(dst, src1, src2, 3);
+		vpcmpd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsed(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 3);
+		vpcmpd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsed(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 3);
+		vpcmpd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsed(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 3);
+		vpcmpd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpq(dst, src1, src2, 3);
+		vpcmpq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpq(dst, src1, src2, 3);
+		vpcmpq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpq(dst, src1, src2, 3);
+		vpcmpq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 3);
+		vpcmpq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 3);
+		vpcmpq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 3);
+		vpcmpq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpub(dst, src1, src2, 3);
+		vpcmpub(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpub(dst, src1, src2, 3);
+		vpcmpub(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpub(dst, src1, src2, 3);
+		vpcmpub(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 3);
+		vpcmpub(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 3);
+		vpcmpub(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 3);
+		vpcmpub(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpud(dst, src1, src2, 3);
+		vpcmpud(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpud(dst, src1, src2, 3);
+		vpcmpud(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpud(dst, src1, src2, 3);
+		vpcmpud(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 3);
+		vpcmpud(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 3);
+		vpcmpud(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 3);
+		vpcmpud(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 3);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 3);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 3);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 3);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 3);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 3);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 3);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 3);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 3);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 3);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 3);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalseuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 3);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsew(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpw(dst, src1, src2, 3);
+		vpcmpw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsew(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpw(dst, src1, src2, 3);
+		vpcmpw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsew(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpw(dst, src1, src2, 3);
+		vpcmpw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsew(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 3);
+		vpcmpw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsew(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 3);
+		vpcmpw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpfalsew(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 3);
+		vpcmpw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcmpgtb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
@@ -38670,1202 +38653,1202 @@ namespace Iced::Intel
 
 	void Assembler::vpcmpleb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpb(dst, src1, src2, 2);
+		vpcmpb(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpb(dst, src1, src2, 2);
+		vpcmpb(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpb(dst, src1, src2, 2);
+		vpcmpb(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 2);
+		vpcmpb(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 2);
+		vpcmpb(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 2);
+		vpcmpb(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpled(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpd(dst, src1, src2, 2);
+		vpcmpd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpled(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpd(dst, src1, src2, 2);
+		vpcmpd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpled(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpd(dst, src1, src2, 2);
+		vpcmpd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpled(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 2);
+		vpcmpd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpled(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 2);
+		vpcmpd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpled(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 2);
+		vpcmpd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpq(dst, src1, src2, 2);
+		vpcmpq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpq(dst, src1, src2, 2);
+		vpcmpq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpq(dst, src1, src2, 2);
+		vpcmpq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 2);
+		vpcmpq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 2);
+		vpcmpq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 2);
+		vpcmpq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpub(dst, src1, src2, 2);
+		vpcmpub(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpub(dst, src1, src2, 2);
+		vpcmpub(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpub(dst, src1, src2, 2);
+		vpcmpub(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 2);
+		vpcmpub(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 2);
+		vpcmpub(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 2);
+		vpcmpub(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpud(dst, src1, src2, 2);
+		vpcmpud(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpud(dst, src1, src2, 2);
+		vpcmpud(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpud(dst, src1, src2, 2);
+		vpcmpud(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 2);
+		vpcmpud(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 2);
+		vpcmpud(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 2);
+		vpcmpud(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 2);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 2);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 2);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 2);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 2);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 2);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 2);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 2);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 2);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 2);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 2);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpleuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 2);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmplew(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpw(dst, src1, src2, 2);
+		vpcmpw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmplew(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpw(dst, src1, src2, 2);
+		vpcmpw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmplew(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpw(dst, src1, src2, 2);
+		vpcmpw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmplew(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 2);
+		vpcmpw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmplew(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 2);
+		vpcmpw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmplew(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 2);
+		vpcmpw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcmpltb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpb(dst, src1, src2, 1);
+		vpcmpb(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpb(dst, src1, src2, 1);
+		vpcmpb(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpb(dst, src1, src2, 1);
+		vpcmpb(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 1);
+		vpcmpb(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 1);
+		vpcmpb(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 1);
+		vpcmpb(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpd(dst, src1, src2, 1);
+		vpcmpd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpd(dst, src1, src2, 1);
+		vpcmpd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpd(dst, src1, src2, 1);
+		vpcmpd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 1);
+		vpcmpd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 1);
+		vpcmpd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 1);
+		vpcmpd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpq(dst, src1, src2, 1);
+		vpcmpq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpq(dst, src1, src2, 1);
+		vpcmpq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpq(dst, src1, src2, 1);
+		vpcmpq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 1);
+		vpcmpq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 1);
+		vpcmpq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 1);
+		vpcmpq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpub(dst, src1, src2, 1);
+		vpcmpub(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpub(dst, src1, src2, 1);
+		vpcmpub(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpub(dst, src1, src2, 1);
+		vpcmpub(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 1);
+		vpcmpub(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 1);
+		vpcmpub(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 1);
+		vpcmpub(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpud(dst, src1, src2, 1);
+		vpcmpud(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpud(dst, src1, src2, 1);
+		vpcmpud(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpud(dst, src1, src2, 1);
+		vpcmpud(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 1);
+		vpcmpud(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 1);
+		vpcmpud(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 1);
+		vpcmpud(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 1);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 1);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 1);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 1);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 1);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 1);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 1);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 1);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 1);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 1);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 1);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 1);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpw(dst, src1, src2, 1);
+		vpcmpw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpw(dst, src1, src2, 1);
+		vpcmpw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpw(dst, src1, src2, 1);
+		vpcmpw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 1);
+		vpcmpw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 1);
+		vpcmpw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpltw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 1);
+		vpcmpw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcmpneqb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpb(dst, src1, src2, 4);
+		vpcmpb(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpb(dst, src1, src2, 4);
+		vpcmpb(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpb(dst, src1, src2, 4);
+		vpcmpb(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 4);
+		vpcmpb(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 4);
+		vpcmpb(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 4);
+		vpcmpb(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpd(dst, src1, src2, 4);
+		vpcmpd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpd(dst, src1, src2, 4);
+		vpcmpd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpd(dst, src1, src2, 4);
+		vpcmpd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 4);
+		vpcmpd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 4);
+		vpcmpd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 4);
+		vpcmpd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpq(dst, src1, src2, 4);
+		vpcmpq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpq(dst, src1, src2, 4);
+		vpcmpq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpq(dst, src1, src2, 4);
+		vpcmpq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 4);
+		vpcmpq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 4);
+		vpcmpq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 4);
+		vpcmpq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpub(dst, src1, src2, 4);
+		vpcmpub(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpub(dst, src1, src2, 4);
+		vpcmpub(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpub(dst, src1, src2, 4);
+		vpcmpub(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 4);
+		vpcmpub(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 4);
+		vpcmpub(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 4);
+		vpcmpub(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpud(dst, src1, src2, 4);
+		vpcmpud(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpud(dst, src1, src2, 4);
+		vpcmpud(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpud(dst, src1, src2, 4);
+		vpcmpud(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 4);
+		vpcmpud(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 4);
+		vpcmpud(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 4);
+		vpcmpud(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 4);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 4);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 4);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 4);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 4);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 4);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 4);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 4);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 4);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 4);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 4);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnequw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 4);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpw(dst, src1, src2, 4);
+		vpcmpw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpw(dst, src1, src2, 4);
+		vpcmpw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpw(dst, src1, src2, 4);
+		vpcmpw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 4);
+		vpcmpw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 4);
+		vpcmpw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpneqw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 4);
+		vpcmpw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcmpnleb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpb(dst, src1, src2, 6);
+		vpcmpb(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpb(dst, src1, src2, 6);
+		vpcmpb(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpb(dst, src1, src2, 6);
+		vpcmpb(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 6);
+		vpcmpb(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 6);
+		vpcmpb(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 6);
+		vpcmpb(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnled(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpd(dst, src1, src2, 6);
+		vpcmpd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnled(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpd(dst, src1, src2, 6);
+		vpcmpd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnled(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpd(dst, src1, src2, 6);
+		vpcmpd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnled(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 6);
+		vpcmpd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnled(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 6);
+		vpcmpd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnled(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 6);
+		vpcmpd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpq(dst, src1, src2, 6);
+		vpcmpq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpq(dst, src1, src2, 6);
+		vpcmpq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpq(dst, src1, src2, 6);
+		vpcmpq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 6);
+		vpcmpq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 6);
+		vpcmpq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 6);
+		vpcmpq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpub(dst, src1, src2, 6);
+		vpcmpub(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpub(dst, src1, src2, 6);
+		vpcmpub(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpub(dst, src1, src2, 6);
+		vpcmpub(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 6);
+		vpcmpub(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 6);
+		vpcmpub(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 6);
+		vpcmpub(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpud(dst, src1, src2, 6);
+		vpcmpud(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpud(dst, src1, src2, 6);
+		vpcmpud(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpud(dst, src1, src2, 6);
+		vpcmpud(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 6);
+		vpcmpud(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 6);
+		vpcmpud(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 6);
+		vpcmpud(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 6);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 6);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 6);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 6);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 6);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 6);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 6);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 6);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 6);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 6);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 6);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnleuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 6);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnlew(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpw(dst, src1, src2, 6);
+		vpcmpw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnlew(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpw(dst, src1, src2, 6);
+		vpcmpw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnlew(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpw(dst, src1, src2, 6);
+		vpcmpw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnlew(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 6);
+		vpcmpw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnlew(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 6);
+		vpcmpw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnlew(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 6);
+		vpcmpw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcmpnltb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpb(dst, src1, src2, 5);
+		vpcmpb(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpb(dst, src1, src2, 5);
+		vpcmpb(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpb(dst, src1, src2, 5);
+		vpcmpb(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 5);
+		vpcmpb(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 5);
+		vpcmpb(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 5);
+		vpcmpb(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpd(dst, src1, src2, 5);
+		vpcmpd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpd(dst, src1, src2, 5);
+		vpcmpd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpd(dst, src1, src2, 5);
+		vpcmpd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltd(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 5);
+		vpcmpd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltd(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 5);
+		vpcmpd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltd(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 5);
+		vpcmpd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpq(dst, src1, src2, 5);
+		vpcmpq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpq(dst, src1, src2, 5);
+		vpcmpq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpq(dst, src1, src2, 5);
+		vpcmpq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 5);
+		vpcmpq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 5);
+		vpcmpq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 5);
+		vpcmpq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpub(dst, src1, src2, 5);
+		vpcmpub(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpub(dst, src1, src2, 5);
+		vpcmpub(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpub(dst, src1, src2, 5);
+		vpcmpub(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 5);
+		vpcmpub(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 5);
+		vpcmpub(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 5);
+		vpcmpub(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpud(dst, src1, src2, 5);
+		vpcmpud(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpud(dst, src1, src2, 5);
+		vpcmpud(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpud(dst, src1, src2, 5);
+		vpcmpud(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 5);
+		vpcmpud(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 5);
+		vpcmpud(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 5);
+		vpcmpud(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 5);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 5);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 5);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 5);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 5);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 5);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 5);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 5);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 5);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 5);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 5);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 5);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpw(dst, src1, src2, 5);
+		vpcmpw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpw(dst, src1, src2, 5);
+		vpcmpw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpw(dst, src1, src2, 5);
+		vpcmpw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 5);
+		vpcmpw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 5);
+		vpcmpw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpnltw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 5);
+		vpcmpw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcmpq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2, std::int8_t imm)
@@ -39930,242 +39913,242 @@ namespace Iced::Intel
 
 	void Assembler::vpcmptrueb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpb(dst, src1, src2, 7);
+		vpcmpb(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpb(dst, src1, src2, 7);
+		vpcmpb(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpb(dst, src1, src2, 7);
+		vpcmpb(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueb(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 7);
+		vpcmpb(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueb(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 7);
+		vpcmpb(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueb(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpb(dst, src1, src2, 7);
+		vpcmpb(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrued(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpd(dst, src1, src2, 7);
+		vpcmpd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrued(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpd(dst, src1, src2, 7);
+		vpcmpd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrued(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpd(dst, src1, src2, 7);
+		vpcmpd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrued(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 7);
+		vpcmpd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrued(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 7);
+		vpcmpd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrued(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpd(dst, src1, src2, 7);
+		vpcmpd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpq(dst, src1, src2, 7);
+		vpcmpq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpq(dst, src1, src2, 7);
+		vpcmpq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpq(dst, src1, src2, 7);
+		vpcmpq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 7);
+		vpcmpq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 7);
+		vpcmpq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpq(dst, src1, src2, 7);
+		vpcmpq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpub(dst, src1, src2, 7);
+		vpcmpub(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpub(dst, src1, src2, 7);
+		vpcmpub(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpub(dst, src1, src2, 7);
+		vpcmpub(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 7);
+		vpcmpub(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueub(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 7);
+		vpcmpub(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueub(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpub(dst, src1, src2, 7);
+		vpcmpub(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpud(dst, src1, src2, 7);
+		vpcmpud(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpud(dst, src1, src2, 7);
+		vpcmpud(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpud(dst, src1, src2, 7);
+		vpcmpud(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueud(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 7);
+		vpcmpud(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueud(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 7);
+		vpcmpud(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueud(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpud(dst, src1, src2, 7);
+		vpcmpud(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 7);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 7);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuq(dst, src1, src2, 7);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuq(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 7);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuq(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 7);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuq(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuq(dst, src1, src2, 7);
+		vpcmpuq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 7);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 7);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpuw(dst, src1, src2, 7);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuw(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 7);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuw(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 7);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptrueuw(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpuw(dst, src1, src2, 7);
+		vpcmpuw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptruew(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcmpw(dst, src1, src2, 7);
+		vpcmpw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptruew(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerRegisterYMM src2)
 	{
-		vpcmpw(dst, src1, src2, 7);
+		vpcmpw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptruew(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerRegisterZMM src2)
 	{
-		vpcmpw(dst, src1, src2, 7);
+		vpcmpw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptruew(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 7);
+		vpcmpw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptruew(AssemblerRegisterK dst, AssemblerRegisterYMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 7);
+		vpcmpw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmptruew(AssemblerRegisterK dst, AssemblerRegisterZMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcmpw(dst, src1, src2, 7);
+		vpcmpw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcmpub(AssemblerRegisterK dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2, std::int8_t imm)
@@ -40510,562 +40493,562 @@ namespace Iced::Intel
 
 	void Assembler::vpcomeqb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomb(dst, src1, src2, 4);
+		vpcomb(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomeqb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomb(dst, src1, src2, 4);
+		vpcomb(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomeqd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomd(dst, src1, src2, 4);
+		vpcomd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomeqd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomd(dst, src1, src2, 4);
+		vpcomd(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomeqq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomq(dst, src1, src2, 4);
+		vpcomq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomeqq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomq(dst, src1, src2, 4);
+		vpcomq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomequb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomub(dst, src1, src2, 4);
+		vpcomub(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomequb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomub(dst, src1, src2, 4);
+		vpcomub(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomequd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomud(dst, src1, src2, 4);
+		vpcomud(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomequd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomud(dst, src1, src2, 4);
+		vpcomud(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomequq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuq(dst, src1, src2, 4);
+		vpcomuq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomequq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuq(dst, src1, src2, 4);
+		vpcomuq(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomequw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuw(dst, src1, src2, 4);
+		vpcomuw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomequw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuw(dst, src1, src2, 4);
+		vpcomuw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomeqw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomw(dst, src1, src2, 4);
+		vpcomw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomeqw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomw(dst, src1, src2, 4);
+		vpcomw(dst, src1, src2, (std::uint8_t)4);
 	}
 
 	void Assembler::vpcomfalseb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomb(dst, src1, src2, 6);
+		vpcomb(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomb(dst, src1, src2, 6);
+		vpcomb(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalsed(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomd(dst, src1, src2, 6);
+		vpcomd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalsed(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomd(dst, src1, src2, 6);
+		vpcomd(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomq(dst, src1, src2, 6);
+		vpcomq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomq(dst, src1, src2, 6);
+		vpcomq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomub(dst, src1, src2, 6);
+		vpcomub(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomub(dst, src1, src2, 6);
+		vpcomub(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomud(dst, src1, src2, 6);
+		vpcomud(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomud(dst, src1, src2, 6);
+		vpcomud(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuq(dst, src1, src2, 6);
+		vpcomuq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuq(dst, src1, src2, 6);
+		vpcomuq(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuw(dst, src1, src2, 6);
+		vpcomuw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalseuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuw(dst, src1, src2, 6);
+		vpcomuw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalsew(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomw(dst, src1, src2, 6);
+		vpcomw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomfalsew(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomw(dst, src1, src2, 6);
+		vpcomw(dst, src1, src2, (std::uint8_t)6);
 	}
 
 	void Assembler::vpcomgeb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomb(dst, src1, src2, 3);
+		vpcomb(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomb(dst, src1, src2, 3);
+		vpcomb(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomged(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomd(dst, src1, src2, 3);
+		vpcomd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomged(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomd(dst, src1, src2, 3);
+		vpcomd(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomq(dst, src1, src2, 3);
+		vpcomq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomq(dst, src1, src2, 3);
+		vpcomq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomub(dst, src1, src2, 3);
+		vpcomub(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomub(dst, src1, src2, 3);
+		vpcomub(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomud(dst, src1, src2, 3);
+		vpcomud(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomud(dst, src1, src2, 3);
+		vpcomud(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuq(dst, src1, src2, 3);
+		vpcomuq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuq(dst, src1, src2, 3);
+		vpcomuq(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuw(dst, src1, src2, 3);
+		vpcomuw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgeuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuw(dst, src1, src2, 3);
+		vpcomuw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgew(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomw(dst, src1, src2, 3);
+		vpcomw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgew(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomw(dst, src1, src2, 3);
+		vpcomw(dst, src1, src2, (std::uint8_t)3);
 	}
 
 	void Assembler::vpcomgtb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomb(dst, src1, src2, 2);
+		vpcomb(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomb(dst, src1, src2, 2);
+		vpcomb(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomd(dst, src1, src2, 2);
+		vpcomd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomd(dst, src1, src2, 2);
+		vpcomd(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomq(dst, src1, src2, 2);
+		vpcomq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomq(dst, src1, src2, 2);
+		vpcomq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomub(dst, src1, src2, 2);
+		vpcomub(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomub(dst, src1, src2, 2);
+		vpcomub(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomud(dst, src1, src2, 2);
+		vpcomud(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomud(dst, src1, src2, 2);
+		vpcomud(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuq(dst, src1, src2, 2);
+		vpcomuq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuq(dst, src1, src2, 2);
+		vpcomuq(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuw(dst, src1, src2, 2);
+		vpcomuw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuw(dst, src1, src2, 2);
+		vpcomuw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomw(dst, src1, src2, 2);
+		vpcomw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomgtw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomw(dst, src1, src2, 2);
+		vpcomw(dst, src1, src2, (std::uint8_t)2);
 	}
 
 	void Assembler::vpcomleb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomb(dst, src1, src2, 1);
+		vpcomb(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomb(dst, src1, src2, 1);
+		vpcomb(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomled(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomd(dst, src1, src2, 1);
+		vpcomd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomled(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomd(dst, src1, src2, 1);
+		vpcomd(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomq(dst, src1, src2, 1);
+		vpcomq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomq(dst, src1, src2, 1);
+		vpcomq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomub(dst, src1, src2, 1);
+		vpcomub(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomub(dst, src1, src2, 1);
+		vpcomub(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomud(dst, src1, src2, 1);
+		vpcomud(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomud(dst, src1, src2, 1);
+		vpcomud(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuq(dst, src1, src2, 1);
+		vpcomuq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuq(dst, src1, src2, 1);
+		vpcomuq(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuw(dst, src1, src2, 1);
+		vpcomuw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomleuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuw(dst, src1, src2, 1);
+		vpcomuw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomlew(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomw(dst, src1, src2, 1);
+		vpcomw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomlew(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomw(dst, src1, src2, 1);
+		vpcomw(dst, src1, src2, (std::uint8_t)1);
 	}
 
 	void Assembler::vpcomltb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomb(dst, src1, src2, 0);
+		vpcomb(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomb(dst, src1, src2, 0);
+		vpcomb(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomd(dst, src1, src2, 0);
+		vpcomd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomd(dst, src1, src2, 0);
+		vpcomd(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomq(dst, src1, src2, 0);
+		vpcomq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomq(dst, src1, src2, 0);
+		vpcomq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomub(dst, src1, src2, 0);
+		vpcomub(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomub(dst, src1, src2, 0);
+		vpcomub(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomud(dst, src1, src2, 0);
+		vpcomud(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomud(dst, src1, src2, 0);
+		vpcomud(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuq(dst, src1, src2, 0);
+		vpcomuq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuq(dst, src1, src2, 0);
+		vpcomuq(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuw(dst, src1, src2, 0);
+		vpcomuw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuw(dst, src1, src2, 0);
+		vpcomuw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomw(dst, src1, src2, 0);
+		vpcomw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomltw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomw(dst, src1, src2, 0);
+		vpcomw(dst, src1, src2, (std::uint8_t)0);
 	}
 
 	void Assembler::vpcomneqb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomb(dst, src1, src2, 5);
+		vpcomb(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomneqb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomb(dst, src1, src2, 5);
+		vpcomb(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomneqd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomd(dst, src1, src2, 5);
+		vpcomd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomneqd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomd(dst, src1, src2, 5);
+		vpcomd(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomneqq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomq(dst, src1, src2, 5);
+		vpcomq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomneqq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomq(dst, src1, src2, 5);
+		vpcomq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomnequb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomub(dst, src1, src2, 5);
+		vpcomub(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomnequb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomub(dst, src1, src2, 5);
+		vpcomub(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomnequd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomud(dst, src1, src2, 5);
+		vpcomud(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomnequd(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomud(dst, src1, src2, 5);
+		vpcomud(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomnequq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuq(dst, src1, src2, 5);
+		vpcomuq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomnequq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuq(dst, src1, src2, 5);
+		vpcomuq(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomnequw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuw(dst, src1, src2, 5);
+		vpcomuw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomnequw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuw(dst, src1, src2, 5);
+		vpcomuw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomneqw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomw(dst, src1, src2, 5);
+		vpcomw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcomneqw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomw(dst, src1, src2, 5);
+		vpcomw(dst, src1, src2, (std::uint8_t)5);
 	}
 
 	void Assembler::vpcompressb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src)
@@ -41210,82 +41193,82 @@ namespace Iced::Intel
 
 	void Assembler::vpcomtrueb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomb(dst, src1, src2, 7);
+		vpcomb(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueb(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomb(dst, src1, src2, 7);
+		vpcomb(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrued(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomd(dst, src1, src2, 7);
+		vpcomd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrued(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomd(dst, src1, src2, 7);
+		vpcomd(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomq(dst, src1, src2, 7);
+		vpcomq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomq(dst, src1, src2, 7);
+		vpcomq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomub(dst, src1, src2, 7);
+		vpcomub(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomub(dst, src1, src2, 7);
+		vpcomub(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomud(dst, src1, src2, 7);
+		vpcomud(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueud(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomud(dst, src1, src2, 7);
+		vpcomud(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuq(dst, src1, src2, 7);
+		vpcomuq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueuq(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuq(dst, src1, src2, 7);
+		vpcomuq(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomuw(dst, src1, src2, 7);
+		vpcomuw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtrueuw(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomuw(dst, src1, src2, 7);
+		vpcomuw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtruew(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2)
 	{
-		vpcomw(dst, src1, src2, 7);
+		vpcomw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomtruew(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerMemoryOperand src2)
 	{
-		vpcomw(dst, src1, src2, 7);
+		vpcomw(dst, src1, src2, (std::uint8_t)7);
 	}
 
 	void Assembler::vpcomub(AssemblerRegisterXMM dst, AssemblerRegisterXMM src1, AssemblerRegisterXMM src2, std::int8_t imm)
@@ -43097,7 +43080,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vpgatherqd, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vpgatherqd, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst, src.ToMemoryOperand(GetBitness())), dst.Flags);
 	}
@@ -43120,7 +43103,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vpgatherqd, std::vector<std::any> {dst, src1, src2});
+			throw NoOpCodeFoundFor(Mnemonic::Vpgatherqd, dst, src1, src2);
 		}
 		AddInstruction(Instruction::Create(code, dst, src1.ToMemoryOperand(GetBitness()), src2));
 	}
@@ -46858,7 +46841,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vpscatterqd, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vpscatterqd, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src), dst.Flags);
 	}
@@ -51891,7 +51874,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Vscatterqps, std::vector<std::any> {dst, src});
+			throw NoOpCodeFoundFor(Mnemonic::Vscatterqps, dst, src);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), src), dst.Flags);
 	}
@@ -53434,7 +53417,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Xor, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Xor, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}
@@ -53491,7 +53474,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw NoOpCodeFoundFor(Mnemonic::Xor, std::vector<std::any> {dst, imm});
+			throw NoOpCodeFoundFor(Mnemonic::Xor, dst, imm);
 		}
 		AddInstruction(Instruction::Create(code, dst.ToMemoryOperand(GetBitness()), imm));
 	}

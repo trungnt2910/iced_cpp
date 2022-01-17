@@ -41,36 +41,36 @@ namespace Iced::Intel::DecoderInternal
 	{
 		/* readonly */
 	private:
-		OpCodeHandler* handlerMem;
+		std::shared_ptr<OpCodeHandler> handlerMem;
 	public:
-		OpCodeHandler_VEX2(OpCodeHandler* handlerMem);
+		OpCodeHandler_VEX2(std::shared_ptr<OpCodeHandler> handlerMem);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_VEX3 final : public OpCodeHandlerModRM
 	{
 		/* readonly */
 	private:
-		OpCodeHandler* handlerMem;
+		std::shared_ptr<OpCodeHandler> handlerMem;
 	public:
-		OpCodeHandler_VEX3(OpCodeHandler* handlerMem);
+		OpCodeHandler_VEX3(std::shared_ptr<OpCodeHandler> handlerMem);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_XOP final : public OpCodeHandlerModRM
 	{
 		/* readonly */
 	private:
-		OpCodeHandler* handler_reg0;
+		std::shared_ptr<OpCodeHandler> handler_reg0;
 	public:
-		OpCodeHandler_XOP(OpCodeHandler* handler_reg0);
+		OpCodeHandler_XOP(std::shared_ptr<OpCodeHandler> handler_reg0);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_EVEX final : public OpCodeHandlerModRM
 	{
 		/* readonly */
 	private:
-		OpCodeHandler* handlerMem;
+		std::shared_ptr<OpCodeHandler> handlerMem;
 	public:
-		OpCodeHandler_EVEX(OpCodeHandler* handlerMem);
+		OpCodeHandler_EVEX(std::shared_ptr<OpCodeHandler> handlerMem);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_PrefixEsCsSsDs final : public OpCodeHandler
@@ -125,11 +125,11 @@ namespace Iced::Intel::DecoderInternal
 	{
 		/* readonly */
 	private:
-		OpCodeHandler* handler;
+		std::shared_ptr<OpCodeHandler> handler;
 		/* readonly */
 		std::uint32_t rex = 0;
 	public:
-		OpCodeHandler_PrefixREX(OpCodeHandler* handler, std::uint32_t rex);
+		OpCodeHandler_PrefixREX(std::shared_ptr<OpCodeHandler> handler, std::uint32_t rex);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_Reg final : public OpCodeHandler
@@ -205,57 +205,57 @@ namespace Iced::Intel::DecoderInternal
 	{
 		/* readonly */
 	private:
-		std::vector<OpCodeHandler*> handlers;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers;
 	public:
-		OpCodeHandler_MandatoryPrefix(OpCodeHandler* handler, OpCodeHandler* handler66, OpCodeHandler* handlerF3, OpCodeHandler* handlerF2);
+		OpCodeHandler_MandatoryPrefix(std::shared_ptr<OpCodeHandler> handler, std::shared_ptr<OpCodeHandler> handler66, std::shared_ptr<OpCodeHandler> handlerF3, std::shared_ptr<OpCodeHandler> handlerF2);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_MandatoryPrefix3 final : public OpCodeHandlerModRM
 	{
+	private:
+		class Info
+		{
+		public:
+			std::shared_ptr<OpCodeHandler> handler;
+			bool mandatoryPrefix = false;
+			Info(std::shared_ptr<OpCodeHandler> handler, bool mandatoryPrefix);
+
+			Info() = default;
+		};
 		/* readonly */
 	private:
 		std::vector<Info> handlers_reg;
 		/* readonly */
 		std::vector<Info> handlers_mem;
 		/* readonly */
-	private:
-		class Info
-		{
-		public:
-			OpCodeHandler* handler;
-			bool mandatoryPrefix = false;
-			Info(OpCodeHandler* handler, bool mandatoryPrefix);
-
-			Info() = default;
-		};
 	public:
-		OpCodeHandler_MandatoryPrefix3(OpCodeHandler* handler_reg, OpCodeHandler* handler_mem, OpCodeHandler* handler66_reg, OpCodeHandler* handler66_mem, OpCodeHandler* handlerF3_reg, OpCodeHandler* handlerF3_mem, OpCodeHandler* handlerF2_reg, OpCodeHandler* handlerF2_mem, LegacyHandlerFlags flags);
+		OpCodeHandler_MandatoryPrefix3(std::shared_ptr<OpCodeHandler> handler_reg, std::shared_ptr<OpCodeHandler> handler_mem, std::shared_ptr<OpCodeHandler> handler66_reg, std::shared_ptr<OpCodeHandler> handler66_mem, std::shared_ptr<OpCodeHandler> handlerF3_reg, std::shared_ptr<OpCodeHandler> handlerF3_mem, std::shared_ptr<OpCodeHandler> handlerF2_reg, std::shared_ptr<OpCodeHandler> handlerF2_mem, LegacyHandlerFlags flags);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_MandatoryPrefix4 final : public OpCodeHandler
 	{
 		/* readonly */
 	private:
-		OpCodeHandler* handlerNP;
+		std::shared_ptr<OpCodeHandler> handlerNP;
 		/* readonly */
-		OpCodeHandler* handler66;
+		std::shared_ptr<OpCodeHandler> handler66;
 		/* readonly */
-		OpCodeHandler* handlerF3;
+		std::shared_ptr<OpCodeHandler> handlerF3;
 		/* readonly */
-		OpCodeHandler* handlerF2;
+		std::shared_ptr<OpCodeHandler> handlerF2;
 		/* readonly */
 		std::uint32_t flags = 0;
 	public:
-		OpCodeHandler_MandatoryPrefix4(OpCodeHandler* handlerNP, OpCodeHandler* handler66, OpCodeHandler* handlerF3, OpCodeHandler* handlerF2, std::uint32_t flags);
+		OpCodeHandler_MandatoryPrefix4(std::shared_ptr<OpCodeHandler> handlerNP, std::shared_ptr<OpCodeHandler> handler66, std::shared_ptr<OpCodeHandler> handlerF3, std::shared_ptr<OpCodeHandler> handlerF2, std::uint32_t flags);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_MandatoryPrefix_NoModRM final : public OpCodeHandler
 	{
 		/* readonly */
 	private:
-		std::vector<OpCodeHandler*> handlers;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers;
 	public:
-		OpCodeHandler_MandatoryPrefix_NoModRM(OpCodeHandler* handler, OpCodeHandler* handler66, OpCodeHandler* handlerF3, OpCodeHandler* handlerF2);
+		OpCodeHandler_MandatoryPrefix_NoModRM(std::shared_ptr<OpCodeHandler> handler, std::shared_ptr<OpCodeHandler> handler66, std::shared_ptr<OpCodeHandler> handlerF3, std::shared_ptr<OpCodeHandler> handlerF2);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_NIb final : public OpCodeHandlerModRM
@@ -271,11 +271,11 @@ namespace Iced::Intel::DecoderInternal
 	{
 		/* readonly */
 	private:
-		OpCodeHandler* reservedNopHandler;
+		std::shared_ptr<OpCodeHandler> reservedNopHandler;
 		/* readonly */
-		OpCodeHandler* otherHandler;
+		std::shared_ptr<OpCodeHandler> otherHandler;
 	public:
-		OpCodeHandler_Reservednop(OpCodeHandler* reservedNopHandler, OpCodeHandler* otherHandler);
+		OpCodeHandler_Reservednop(std::shared_ptr<OpCodeHandler> reservedNopHandler, std::shared_ptr<OpCodeHandler> otherHandler);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_Ev_Iz final : public OpCodeHandlerModRM

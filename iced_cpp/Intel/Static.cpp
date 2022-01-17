@@ -17,8 +17,4 @@
 
 namespace Iced::Intel
 {
-
-	void Static::Assert(std::uint8_t ignored)
-	{
-	}
 }

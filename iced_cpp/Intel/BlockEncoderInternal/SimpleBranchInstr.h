@@ -39,6 +39,19 @@ namespace Iced::Intel::BlockEncoderInternal
 	/// </summary>
 	class SimpleBranchInstr final : public Instr
 	{
+
+	private:
+		enum class InstrKind
+		{
+			Unchanged,
+			Short,
+			Near,
+			Long,
+			Uninitialized
+		};
+
+		DEFINE_COMP_FRIEND(InstrKind)
+			DEFINE_ARITH_FRIEND(InstrKind)
 		/* readonly */
 	private:
 		std::int32_t bitness = 0;
@@ -58,21 +71,9 @@ namespace Iced::Intel::BlockEncoderInternal
 		std::uint32_t nativeInstructionSize = 0;
 		/* readonly */
 		Code nativeCode = static_cast<Code>(0);
-	private:
-		enum class InstrKind
-		{
-			Unchanged,
-			Short,
-			Near,
-			Long,
-			Uninitialized
-		};
-
-		DEFINE_COMP(InstrKind)
-			DEFINE_ARITH(InstrKind)
 
 	public:
-		SimpleBranchInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction);
+		SimpleBranchInstr(BlockEncoder* blockEncoder,class  Block* block, Instruction const instruction);
 	private:
 		static Code ToNativeBranchCode(Code code, std::int32_t bitness);
 	public:

@@ -35,12 +35,12 @@ namespace Iced::Intel::GasFormatterInternal
 
 	std::string InstrInfos::AddSuffix(const std::string& s, std::vector<char>& ca)
 	{
-		return ca[0] == '\0' ? s : std::string::Intern(s + std::string(ca));
+		return ca[0] == '\0' ? s : (s + std::string(ca));
 	}
 
 	std::string InstrInfos::AddPrefix(const std::string& s, std::vector<char>& ca)
 	{
-		return std::string::Intern(std::string(ca) + s);
+		return (std::string(ca) + s);
 	}
 
 	std::vector<InstrInfo*> InstrInfos::ReadInfos()
@@ -155,9 +155,9 @@ namespace Iced::Intel::GasFormatterInternal
 				break;
 			case CtorKind::OpSize:
 				v = reader.ReadByte();
-				s2 = std::string::Intern(s + "w");
-				s3 = std::string::Intern(s + "l");
-				s4 = std::string::Intern(s + "q");
+				s2 = (s + "w");
+				s3 = (s + "l");
+				s4 = (s + "q");
 				instrInfo = new SimpleInstrInfo_OpSize(static_cast<CodeSize>(v), s, s2, s3, s4);
 				break;
 			case CtorKind::OpSize2_bnd:

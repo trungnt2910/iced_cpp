@@ -17,9 +17,4 @@
 
 namespace Iced::Intel
 {
-
-	bool IcedConstants::IsMvex(Code code)
-	{
-		return (static_cast<std::uint32_t>(code) - MvexStart) < MvexLength;
-	}
 }

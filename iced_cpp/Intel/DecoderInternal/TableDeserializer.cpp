@@ -21,26 +21,26 @@ using namespace Iced::Intel::Internal;
 namespace Iced::Intel::DecoderInternal
 {
 
-	HandlerInfo::HandlerInfo(OpCodeHandler* handler)
+	HandlerInfo::HandlerInfo(std::shared_ptr<OpCodeHandler> handler)
 	{
 		this->handler = handler;
-		handlers = nullptr;
+		handlers = std::nullopt;
 	}
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public HandlerInfo(OpCodeHandler?[] handlers)
-	HandlerInfo::HandlerInfo(std::vector<OpCodeHandler*>& handlers)
+	HandlerInfo::HandlerInfo(const std::vector<std::shared_ptr<OpCodeHandler>>& handlers)
 	{
 		handler = nullptr;
 		this->handlers = handlers;
 	}
 
-	TableDeserializer::TableDeserializer(OpCodeHandlerReader* handlerReader, std::int32_t maxIds, std::vector<std::uint8_t>& data)
+	TableDeserializer::TableDeserializer(OpCodeHandlerReader* handlerReader, std::int32_t maxIds, const std::vector<std::uint8_t>& data)
 	{
 		this->handlerReader = handlerReader;
 		reader = DataReader(data);
 		idToHandler = std::vector<HandlerInfo>(maxIds);
-		handlerArray = std::vector<OpCodeHandler*>(1);
+		handlerArray = std::vector<std::shared_ptr<OpCodeHandler>>(1);
 	}
 
 	void TableDeserializer::Deserialize()
@@ -125,9 +125,9 @@ namespace Iced::Intel::DecoderInternal
 		return static_cast<std::int32_t>(reader.ReadCompressedUInt32());
 	}
 
-	OpCodeHandler* TableDeserializer::ReadHandler()
+	std::shared_ptr<OpCodeHandler> TableDeserializer::ReadHandler()
 	{
-		Iced.Intel.DecoderInternal.OpCodeHandler tempVar = ReadHandlerOrNull();
+		std::shared_ptr<OpCodeHandler> tempVar = ReadHandlerOrNull();
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return ReadHandlerOrNull() ?? throw new InvalidOperationException();
 		return (tempVar != nullptr) ? tempVar : throw InvalidOperationException();
@@ -135,7 +135,7 @@ namespace Iced::Intel::DecoderInternal
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public OpCodeHandler? ReadHandlerOrNull()
-	OpCodeHandler* TableDeserializer::ReadHandlerOrNull()
+	std::shared_ptr<OpCodeHandler> TableDeserializer::ReadHandlerOrNull()
 	{
 		std::int32_t count = handlerReader->ReadHandlers(*this, handlerArray, 0);
 		if (count != 1)
@@ -147,11 +147,11 @@ namespace Iced::Intel::DecoderInternal
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public OpCodeHandler?[] ReadHandlers(int count)
-	std::vector<OpCodeHandler*> TableDeserializer::ReadHandlers(std::int32_t count)
+	std::vector<std::shared_ptr<OpCodeHandler>> TableDeserializer::ReadHandlers(std::int32_t count)
 	{
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-		//ORIGINAL LINE: var handlers = new OpCodeHandler?[count];
-		auto handlers = std::vector<OpCodeHandler*>(count);
+		//ORIGINAL LINE: var handlers = std::make_shared<OpCodeHandler>?[count];
+		auto handlers = std::vector<std::shared_ptr<OpCodeHandler>>(count);
 		for (std::int32_t i = 0; i < handlers.size();)
 		{
 			std::int32_t num = handlerReader->ReadHandlers(*this, handlers, i);
@@ -164,7 +164,7 @@ namespace Iced::Intel::DecoderInternal
 		return handlers;
 	}
 
-	OpCodeHandler* TableDeserializer::ReadHandlerReference()
+	std::shared_ptr<OpCodeHandler> TableDeserializer::ReadHandlerReference()
 	{
 		std::uint32_t index = reader.ReadByte();
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
@@ -172,7 +172,7 @@ namespace Iced::Intel::DecoderInternal
 		return ((idToHandler[static_cast<std::int32_t>(index)].handler) != nullptr) ? idToHandler[static_cast<std::int32_t>(index)].handler : throw InvalidOperationException();
 	}
 
-	std::vector<OpCodeHandler*> TableDeserializer::ReadArrayReference(std::uint32_t kind)
+	std::vector<std::shared_ptr<OpCodeHandler>> TableDeserializer::ReadArrayReference(std::uint32_t kind)
 	{
 		if (reader.ReadByte() != kind)
 		{
@@ -181,13 +181,12 @@ namespace Iced::Intel::DecoderInternal
 		return GetTable(reader.ReadByte());
 	}
 
-	std::vector<OpCodeHandler*> TableDeserializer::GetTable(std::uint32_t index)
+	std::vector<std::shared_ptr<OpCodeHandler>> TableDeserializer::GetTable(std::uint32_t index)
 	{
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to the C# 'null-forgiving operator':
 		//ORIGINAL LINE: return (idToHandler[(int)index].handlers ?? throw new InvalidOperationException())!;
 	//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 	//ORIGINAL LINE: return (idToHandler[(int)index].handlers ?? throw new InvalidOperationException());
-		InvalidOperationException tempVar();
-		return (((idToHandler[static_cast<std::int32_t>(index)].handlers) != nullptr) ? idToHandler[static_cast<std::int32_t>(index)].handlers : throw & tempVar);
+		return ((idToHandler[static_cast<std::int32_t>(index)].handlers) != std::nullopt) ? idToHandler[static_cast<std::int32_t>(index)].handlers.value() : throw InvalidOperationException();
 	}
 }

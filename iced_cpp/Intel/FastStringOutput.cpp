@@ -62,7 +62,7 @@ namespace Iced::Intel
 		auto bufferLen = this->bufferLen;
 		if (static_cast<std::uint32_t>(bufferLen) + value.length() > static_cast<std::uint32_t>(buffer.size()))
 		{
-			Resize(value.length());
+			Resize((std::int32_t)value.length());
 			buffer = this->buffer;
 		}
 		for (std::int32_t i = 0; i < value.length(); i++)
@@ -75,11 +75,11 @@ namespace Iced::Intel
 
 	void FastStringOutput::Resize(std::int32_t extraCount)
 	{
-		std::int32_t capacity = buffer.size();
+		std::int32_t capacity = (std::int32_t)buffer.size();
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'checked' in this context:
 		//ORIGINAL LINE: int newCount = checked(Math.Max(capacity * 2, capacity + extraCount));
 		std::int32_t newCount = std::max(capacity * 2, capacity + extraCount);
-		Array::Resize(buffer, newCount);
+		buffer.resize(newCount);
 	}
 
 	void FastStringOutput::CopyTo(std::vector<char>& array, std::int32_t arrayIndex)

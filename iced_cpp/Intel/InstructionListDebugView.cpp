@@ -22,7 +22,7 @@ namespace Iced::Intel
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.list = list ?? throw new ArgumentNullException(nameof(list));
-		this->list = (!list->empty()) ? list : throw std::invalid_argument("list");
+		this->list = (list->GetCount()) ? list : throw std::invalid_argument("list");
 	}
 
 	std::vector<Instruction> InstructionListDebugView::GetItems() const

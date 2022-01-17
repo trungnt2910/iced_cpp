@@ -31,8 +31,10 @@ namespace Iced::Intel
 	public:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool IsMvex(Code code)
-		static bool IsMvex(Code code);
-
+		constexpr static bool IsMvex(Code code)
+		{
+			return (static_cast<std::uint32_t>(code) - MvexStart) < MvexLength;
+		}
 
 		static constexpr std::int32_t MaxOpCount = 5;
 		static constexpr std::int32_t MaxInstructionLength = 15;

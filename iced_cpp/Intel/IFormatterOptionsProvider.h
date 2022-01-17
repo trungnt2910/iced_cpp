@@ -56,7 +56,7 @@ namespace Iced::Intel
 	private:
 		std::uint32_t flags = 0;
 	public:
-		enum class Flags : int
+		enum class Flags : uint
 		{
 			None = 0,
 			NoBranchSize = 0x00000001,
@@ -64,9 +64,9 @@ namespace Iced::Intel
 			MemorySizeShift = 30,
 			MemorySizeMask = 3U << static_cast<std::int32_t>(MemorySizeShift)
 		};
-		DEFINE_FLAGS(Flags)
-			DEFINE_COMP(Flags)
-			DEFINE_ARITH(Flags)
+		DEFINE_FLAGS_FRIEND(Flags)
+			DEFINE_COMP_FRIEND(Flags)
+			DEFINE_ARITH_FRIEND(Flags)
 
 			/// <summary>
 			/// Show branch size (eg. <c>SHORT</c>, <c>NEAR PTR</c>)

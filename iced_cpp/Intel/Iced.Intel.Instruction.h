@@ -56,9 +56,6 @@ namespace Iced::Intel
 	 /// <summary><c>REP</c>/<c>REPE</c> prefix</summary>
 	 /// <summary><c>REPNE</c> prefix</summary>
 
-	DEFINE_COMP(RepPrefixKind)
-		DEFINE_ARITH(RepPrefixKind)
-
 		// GENERATOR-END: RepPrefixKind
 		/// <summary>
 		/// A 16/32/64-bit instruction. Created by Decoder or by Instruction.Create() methods.
@@ -1424,9 +1421,9 @@ namespace Iced::Intel
 		std::uint32_t GetHasAnyOfLockRepRepnePrefix() const;
 		/* readonly */
 	private:
-		bool IsXacquireInstr();
+		bool IsXacquireInstr() const;
 		/* readonly */
-		bool IsXreleaseInstr();
+		bool IsXreleaseInstr() const;
 		/// <summary>
 		/// <see langword="true"/> if the instruction has the <c>XACQUIRE</c> prefix (<c>F2</c>)
 		/// </summary>
@@ -1557,7 +1554,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="operand">Operand number, 0-4</param>
 		/// <returns></returns>
-		OpKind GetOpKind(std::int32_t operand);
+		OpKind GetOpKind(std::int32_t operand) const;
 		/// <summary>
 		/// Gets whether a specific operand's kind exists
 		/// </summary>
@@ -1879,7 +1876,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="operand">Operand number, 0-4</param>
 		/// <returns></returns>
-		Register GetOpRegister(std::int32_t operand);
+		Register GetOpRegister(std::int32_t operand) const;
 		/// <summary>
 		/// Sets the operand's register value. Use this property if the operand has kind <see cref="OpKind.Register"/>
 		/// </summary>
@@ -1976,7 +1973,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="index">Index (0-15)</param>
 		/// <returns></returns>
-		std::uint8_t GetDeclareByteValue(std::int32_t index);
+		std::uint8_t GetDeclareByteValue(std::int32_t index) const;
 		/// <summary>
 		/// Sets a new 'dw' value, see also <see cref="DeclareDataCount"/>.
 		/// Can only be called if <see cref="Code"/> is <see cref="Code.DeclareWord"/>
@@ -1997,7 +1994,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="index">Index (0-7)</param>
 		/// <returns></returns>
-		std::uint16_t GetDeclareWordValue(std::int32_t index);
+		std::uint16_t GetDeclareWordValue(std::int32_t index) const;
 		/// <summary>
 		/// Sets a new 'dd' value, see also <see cref="DeclareDataCount"/>.
 		/// Can only be called if <see cref="Code"/> is <see cref="Code.DeclareDword"/>
@@ -2018,7 +2015,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="index">Index (0-3)</param>
 		/// <returns></returns>
-		std::uint32_t GetDeclareDwordValue(std::int32_t index);
+		std::uint32_t GetDeclareDwordValue(std::int32_t index) const;
 		/// <summary>
 		/// Sets a new 'dq' value, see also <see cref="DeclareDataCount"/>.
 		/// Can only be called if <see cref="Code"/> is <see cref="Code.DeclareQword"/>
@@ -2039,7 +2036,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="index">Index (0-1)</param>
 		/// <returns></returns>
-		std::uint64_t GetDeclareQwordValue(std::int32_t index);
+		std::uint64_t GetDeclareQwordValue(std::int32_t index) const;
 		/// <summary>
 		/// Checks if this is a VSIB instruction, see also <see cref="IsVsib32"/>, <see cref="IsVsib64"/>
 		/// </summary>
@@ -2058,7 +2055,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="vsib64">If it's a VSIB instruction, set to <see langword="true"/> if it's using 64-bit indexes, set to <see langword="false"/> if it's using 32-bit indexes</param>
 		/// <returns></returns>
-		bool TryGetVsib64(bool& vsib64);
+		bool TryGetVsib64(bool& vsib64) const;
 		/// <summary>
 		/// Suppress all exceptions (EVEX/MVEX encoded instructions). Note that if <see cref="RoundingControl"/> is
 		/// not <see cref="RoundingControl.None"/>, SAE is implied but this property will still return <see langword="false"/>.
@@ -2093,7 +2090,7 @@ namespace Iced::Intel
 		/// Formats the instruction using the default formatter with default formatter options
 		/// </summary>
 		/// <returns></returns>
-		std::string ToString();
+		std::string ToString() const;
 
 
 		/// <summary>
@@ -2145,7 +2142,7 @@ namespace Iced::Intel
 		bool IsSaveRestoreInstruction() const;
 		/* readonly */
 	private:
-		InstructionInfoInternal::RflagsInfo GetRflagsInfo();
+		InstructionInfoInternal::RflagsInfo GetRflagsInfo() const;
 		/// <summary>
 		/// All flags that are read by the CPU when executing the instruction. See also <see cref="RflagsModified"/>
 		/// </summary>

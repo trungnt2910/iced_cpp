@@ -19,6 +19,8 @@
 #include <string>
 #include <vector>
 
+#include <string_view>
+
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
@@ -61,19 +63,19 @@ namespace Iced::Intel
 		/// Constructor
 		/// </summary>
 		/// <param name="data">Data</param>
-		ByteArrayCodeReader(std::vector<std::uint8_t>& data);
+		ByteArrayCodeReader(const std::vector<std::uint8_t>& data);
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="data">Data</param>
 		/// <param name="index">Start index</param>
 		/// <param name="count">Number of bytes</param>
-		ByteArrayCodeReader(std::vector<std::uint8_t>& data, std::int32_t index, std::int32_t count);
+		ByteArrayCodeReader(const std::vector<std::uint8_t>& data, std::int32_t index, std::int32_t count);
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="data">Data</param>
-		ByteArrayCodeReader(ArraySegment<std::uint8_t> data);
+		ByteArrayCodeReader(const std::basic_string_view<std::uint8_t>& data);
 		/// <summary>
 		/// Reads the next byte or returns less than 0 if there are no more bytes
 		/// </summary>

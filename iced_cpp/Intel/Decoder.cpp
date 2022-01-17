@@ -73,19 +73,20 @@ namespace Iced::Intel
 	{
 		// Initialize cctors that are used by decoder related methods. It doesn't speed up
 		// decoding much, but getting instruction info is a little faster.
-		_ = OpCodeHandler_Invalid::Instance;
-		_ = InstructionMemorySizes::SizesNormal;
-		_ = OpCodeHandler_D3NOW::CodeValues;
-		_ = InstructionOpCounts::OpCount;
-		_ = MnemonicUtilsData::toMnemonic;
-		_ = TupleTypeTable::tupleTypeData;
-		_ = RegisterExtensions::RegisterInfos;
-		_ = MemorySizeExtensions::MemorySizeInfos;
-		_ = InstructionInfoInternal::InstrInfoTable::Data;
-		_ = InstructionInfoInternal::RflagsInfoConstants::flagsCleared;
-		_ = InstructionInfoInternal::CpuidFeatureInternalData::ToCpuidFeatures;
-		_ = InstructionInfoInternal::SimpleList<UsedRegister>::Empty;
-		_ = InstructionInfoInternal::SimpleList<UsedMemory>::Empty;
+		// Is this relevant in C++?
+		//_ = OpCodeHandler_Invalid::Instance;
+		//_ = InstructionMemorySizes::SizesNormal;
+		//_ = OpCodeHandler_D3NOW::CodeValues;
+		//_ = InstructionOpCounts::OpCount;
+		//_ = MnemonicUtilsData::toMnemonic;
+		//_ = TupleTypeTable::tupleTypeData;
+		//_ = RegisterExtensions::RegisterInfos;
+		//_ = MemorySizeExtensions::MemorySizeInfos;
+		//_ = InstructionInfoInternal::InstrInfoTable::Data;
+		//_ = InstructionInfoInternal::RflagsInfoConstants::flagsCleared;
+		//_ = InstructionInfoInternal::CpuidFeatureInternalData::ToCpuidFeatures;
+		//_ = InstructionInfoInternal::SimpleList<UsedRegister>::Empty;
+		//_ = InstructionInfoInternal::SimpleList<UsedMemory>::Empty;
 	}
 
 	Decoder::StaticConstructor Decoder::staticConstructor;
@@ -226,7 +227,7 @@ namespace Iced::Intel
 
 	Instruction Decoder::Decode()
 	{
-		Iced.Intel.Instruction instr;
+		Instruction instr;
 		Decode(instr);
 		return instr;
 	}
@@ -265,7 +266,7 @@ namespace Iced::Intel
 		auto flags = state.flags;
 		if ((flags & (StateFlags::IsInvalid | StateFlags::Lock)) != 0)
 		{
-			if ((flags & StateFlags::IsInvalid) != 0 || ((static_cast<std::uint32_t>((flags & (StateFlags::Lock | StateFlags::AllowLock)) & invalidCheckMask)) == static_cast<std::uint32_t>(StateFlags::Lock)))
+			if ((flags & StateFlags::IsInvalid) != 0 || ((static_cast<std::uint32_t>((uint32_t)(flags & (StateFlags::Lock | StateFlags::AllowLock)) & invalidCheckMask)) == static_cast<std::uint32_t>(StateFlags::Lock)))
 			{
 				instruction = Iced::Intel::Instruction();
 				Static::Assert(Code::INVALID == (Iced::Intel::Code)0 ? 0 : -1);
@@ -365,12 +366,12 @@ namespace Iced::Intel
 		state.flags |= StateFlags::IsInvalid;
 	}
 
-	void Decoder::DecodeTable(std::vector<OpCodeHandler*>& table, Instruction& instruction)
+	void Decoder::DecodeTable(std::vector<std::shared_ptr<OpCodeHandler>>& table, Instruction& instruction)
 	{
 		DecodeTable(table[static_cast<std::int32_t>(ReadByte())], instruction);
 	}
 
-	void Decoder::DecodeTable(OpCodeHandler* handler, Instruction& instruction)
+	void Decoder::DecodeTable(std::shared_ptr<OpCodeHandler> handler, Instruction& instruction)
 	{
 		if (handler->HasModRM)
 		{
@@ -596,7 +597,7 @@ namespace Iced::Intel
 					Static::Assert(static_cast<std::int32_t>(StateFlags::IsInvalid) == 0x40 ? 0 : -1);
 					state.flags |= static_cast<StateFlags>((~p2 & 8) << 3);
 				}
-				std::vector<OpCodeHandler*> handlers;
+				std::vector<std::shared_ptr<OpCodeHandler>> handlers;
 				switch (static_cast<std::int32_t>(p0 & 7))
 				{
 				case 1:
@@ -673,7 +674,7 @@ namespace Iced::Intel
 				p0x >>= 2;
 				state.extraBaseRegisterBaseEVEX = p0x & 0x18;
 				state.extraBaseRegisterBase = p0x & 8;
-				std::vector<OpCodeHandler*> handlers;
+				std::vector<std::shared_ptr<OpCodeHandler>> handlers;
 				switch (static_cast<std::int32_t>(p0 & 0xF))
 				{
 				case 1:
@@ -706,7 +707,7 @@ namespace Iced::Intel
 		std::uint32_t reg = state.reg;
 		if (reg < 6)
 		{
-			return Register::ES + static_cast<std::int32_t>(reg);
+			return (Register)(Register::ES + static_cast<std::int32_t>(reg));
 		}
 		SetInvalidInstruction();
 		return Register::None;
@@ -826,7 +827,7 @@ namespace Iced::Intel
 		indexReg = this->indexReg;
 	}
 
-	std::vector<RegInfo2> Decoder::s_memRegs16 = { RegInfo2(Register::BX, Register::SI), RegInfo2(Register::BX, Register::DI), RegInfo2(Register::BP, Register::SI), RegInfo2(Register::BP, Register::DI), RegInfo2(Register::SI, Register::None), RegInfo2(Register::DI, Register::None), RegInfo2(Register::BP, Register::None), RegInfo2(Register::BX, Register::None) };
+	std::vector<Decoder::RegInfo2> Decoder::s_memRegs16 = { RegInfo2(Register::BX, Register::SI), RegInfo2(Register::BX, Register::DI), RegInfo2(Register::BP, Register::SI), RegInfo2(Register::BP, Register::DI), RegInfo2(Register::SI, Register::None), RegInfo2(Register::DI, Register::None), RegInfo2(Register::BP, Register::None), RegInfo2(Register::BX, Register::None) };
 
 	void Decoder::ReadOpMem16(Instruction& instruction, TupleType tupleType)
 	{
@@ -915,7 +916,7 @@ namespace Iced::Intel
 			else
 			{
 				assert(0 <= state.rm && state.rm <= 7 && state.rm != 4 && state.rm != 5);
-				instruction.SetInternalMemoryBase(static_cast<std::int32_t>(state.extraBaseRegisterBase + state.rm) + baseReg);
+				instruction.SetInternalMemoryBase((Register)(static_cast<std::int32_t>(state.extraBaseRegisterBase + state.rm) + baseReg));
 				return false;
 			}
 		case 1:
@@ -961,7 +962,7 @@ namespace Iced::Intel
 						instruction.SetMemoryDisplacement64(GetDisp8N(tupleType) * static_cast<std::uint32_t>(static_cast<std::int8_t>(ReadByte())));
 					}
 				}
-				instruction.SetInternalMemoryBase(static_cast<std::int32_t>(state.extraBaseRegisterBase + state.rm) + baseReg);
+				instruction.SetInternalMemoryBase((Register)(static_cast<std::int32_t>(state.extraBaseRegisterBase + state.rm) + baseReg));
 				return false;
 			}
 		default:
@@ -988,7 +989,7 @@ namespace Iced::Intel
 					instruction.SetMemoryDisplacement64(ReadUInt32());
 					instruction.InternalSetMemoryDisplSize(3);
 				}
-				instruction.SetInternalMemoryBase(static_cast<std::int32_t>(state.extraBaseRegisterBase + state.rm) + baseReg);
+				instruction.SetInternalMemoryBase((Register)(static_cast<std::int32_t>(state.extraBaseRegisterBase + state.rm) + baseReg));
 				return false;
 			}
 		}
@@ -999,12 +1000,12 @@ namespace Iced::Intel
 		{
 			if (index != 4)
 			{
-				instruction.SetInternalMemoryIndex(static_cast<std::int32_t>(index) + indexReg);
+				instruction.SetInternalMemoryIndex((Register)(static_cast<std::int32_t>(index) + indexReg));
 			}
 		}
 		else
 		{
-			instruction.SetInternalMemoryIndex(static_cast<std::int32_t>(index + state.extraIndexRegisterBaseVSIB) + indexReg);
+			instruction.SetInternalMemoryIndex((Register)(static_cast<std::int32_t>(index + state.extraIndexRegisterBaseVSIB) + indexReg));
 		}
 		if (base == 5 && state.mod == 0)
 		{
@@ -1022,7 +1023,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			instruction.SetInternalMemoryBase(static_cast<std::int32_t>(base + state.extraBaseRegisterBase) + baseReg);
+			instruction.SetInternalMemoryBase((Register)(static_cast<std::int32_t>(base + state.extraBaseRegisterBase) + baseReg));
 			instruction.InternalSetMemoryDisplSize(displSizeScale);
 			if (state.addressSize == OpSize::Size64)
 			{
@@ -1159,47 +1160,5 @@ namespace Iced::Intel
 		}
 	after_imm_loop:
 		return constantOffsets;
-	}
-
-	Decoder::Enumerator::Enumerator(Decoder* decoder)
-	{
-		this->decoder = decoder;
-		instruction = Iced::Intel::Instruction();
-	}
-
-	Instruction Decoder::Enumerator::GetCurrent() const
-	{
-		return instruction;
-	}
-
-	bool Decoder::Enumerator::MoveNext()
-	{
-		decoder->Decode(instruction);
-		// If it has length 0, there was no more data
-		return instruction.GetLength() != 0;
-	}
-
-	void Decoder::Enumerator::Reset()
-	{
-		throw InvalidOperationException();
-	}
-
-	Decoder::Enumerator::~Enumerator()
-	{
-	}
-
-	Decoder::Enumerator Decoder::GetEnumerator()
-	{
-		return Enumerator(this);
-	}
-
-	IEnumerator<Instruction>* Decoder::IEnumerable_GetEnumerator()
-	{
-		return begin();
-	}
-
-	System::Collections::IEnumerator* Decoder::IEnumerable_GetEnumerator()
-	{
-		return begin();
 	}
 }

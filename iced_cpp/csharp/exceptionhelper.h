@@ -28,6 +28,29 @@ public:
 	{
 	}
 
+	ArgumentOutOfRangeException(const std::string& arg, const std::string& message) : msg("Argument " + arg + " is out of range: " + message)
+	{
+	}
+
+	const char* what() const noexcept
+	{
+		return msg.c_str();
+	}
+};
+
+class ArgumentNullException : public std::exception
+{
+private:
+	std::string msg;
+public:
+	ArgumentNullException(const std::string& message = "") : msg(message)
+	{
+	}
+
+	ArgumentNullException(const std::string& arg, const std::string& message) : msg("Argument " + arg + " is null: " + message)
+	{
+	}
+
 	const char* what() const noexcept
 	{
 		return msg.c_str();

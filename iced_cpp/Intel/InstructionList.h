@@ -38,7 +38,7 @@ namespace Iced::Intel
    //C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to the C# 'typeof' operator:
    //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
    //ORIGINAL LINE: [DebuggerDisplay("Count = {" + nameof(Count) + "}")][DebuggerTypeProxy(typeof(InstructionListDebugView))][System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] public sealed class InstructionList : IList<Instruction>, IReadOnlyList<Instruction>, System.Collections.IList
-	class InstructionList final : public IList<Instruction>, public IReadOnlyList<Instruction>, public System::Collections::IList
+	class InstructionList final : public IList<Instruction>
 	{
 	private:
 		std::vector<Instruction> elements;
@@ -49,20 +49,12 @@ namespace Iced::Intel
 	public:
 		std::int32_t GetCount() const override;
 	private:
-		std::int32_t ICollection = 0;
-		std::int32_t ICollection = 0;
-		std::int32_t IReadOnlyCollection = 0;
 		/// <summary>
 		/// Gets the size of the internal array
 		/// </summary>
 	public:
 		std::int32_t GetCapacity() const;
 	private:
-		bool ICollection = false;
-		bool IList = false;
-		bool IList = false;
-		bool ICollection = false;
-		std::any ICollection;
 		/// <summary>
 		/// Gets a reference to an element. The returned reference is valid until the internal array is resized.
 		/// </summary>
@@ -78,12 +70,12 @@ namespace Iced::Intel
 	  //  }
 	public:
 		Instruction& operator [](std::int32_t index);
+		const Instruction& operator [](std::int32_t index) const;
 	private:
 		Instruction IReadOnlyList;
 	public:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: Object? System.Collections.IList.this[int index]
-		std::any& operator [](std::int32_t index);
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -102,7 +94,7 @@ namespace Iced::Intel
 		/// Constructor
 		/// </summary>
 		/// <param name="collection">Collection that will be copied to this instance</param>
-		InstructionList(std::vector<Instruction>& collection);
+		InstructionList(const std::vector<Instruction>& collection);
 	private:
 		void SetMinCapacity(std::int32_t minCapacity);
 		/// <summary>
@@ -134,28 +126,22 @@ namespace Iced::Intel
 		/// <param name="instruction">Instruction to add</param>
 	public:
 		void Insert(std::int32_t index, Instruction const instruction) override;
-		void IList_Insert(std::int32_t index, Instruction instruction) override;
-		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-		//ORIGINAL LINE: void System.Collections.IList.Insert(int index, Object? value)
-		void System_Collections_IList_Insert(std::int32_t index, std::any value) override;
 		/// <summary>
 		/// Removes an element from the list
 		/// </summary>
 		/// <param name="index">Index of element to remove</param>
 		void RemoveAt(std::int32_t index) override;
-		void IList_RemoveAt(std::int32_t index) override;
-		void System_Collections_IList_RemoveAt(std::int32_t index) override;
 		/// <summary>
 		/// Adds a collection to the end of this list
 		/// </summary>
 		/// <param name="collection">Collection to add</param>
-		void AddRange(std::vector<Instruction>& collection);
+		void AddRange(const std::vector<Instruction>& collection);
 		/// <summary>
 		/// Inserts elements
 		/// </summary>
 		/// <param name="index">Index of element</param>
 		/// <param name="collection">Items to insert</param>
-		void InsertRange(std::int32_t index, std::vector<Instruction>& collection);
+		void InsertRange(std::int32_t index, const std::vector<Instruction>& collection);
 		/// <summary>
 		/// Removes elements
 		/// </summary>
@@ -169,36 +155,22 @@ namespace Iced::Intel
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public void Add(in Instruction instruction)
 		void Add(Instruction const instruction) override;
-		void ICollection_Add(Instruction instruction) override;
-		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-		//ORIGINAL LINE: int IList.Add(Object? value)
-		std::int32_t IList_Add(std::any value) override;
 		/// <summary>
 		/// Clears the list
 		/// </summary>
 		void Clear() override;
-		void ICollection_Clear() override;
-		void System_Collections_IList_Clear() override;
 		/// <summary>
 		/// Checks if <paramref name="instruction"/> exists in the list
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <returns></returns>
 		bool Contains(Instruction const instruction) override;
-		bool ICollection_Contains(Instruction instruction) override;
-		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-		//ORIGINAL LINE: bool IList.Contains(Object? value)
-		bool IList_Contains(std::any value) override;
 		/// <summary>
 		/// Gets the index of <paramref name="instruction"/> or -1 if it doesn't exist in the list
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <returns></returns>
 		std::int32_t IndexOf(Instruction const instruction) override;
-		std::int32_t IList_IndexOf(Instruction instruction) override;
-		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-		//ORIGINAL LINE: int IList.IndexOf(Object? value)
-		std::int32_t IList_IndexOf(std::any value) override;
 		/// <summary>
 		/// Gets the index of <paramref name="instruction"/> or -1 if it doesn't exist in the list
 		/// </summary>
@@ -241,10 +213,6 @@ namespace Iced::Intel
 		/// <param name="instruction">Instruction</param>
 		/// <returns></returns>
 		bool Remove(Instruction const instruction) override;
-		bool ICollection_Remove(Instruction instruction) override;
-		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-		//ORIGINAL LINE: void System.Collections.IList.Remove(Object? value)
-		void System_Collections_IList_Remove(std::any value) override;
 		/// <summary>
 		/// Copies this collection to <paramref name="array"/>
 		/// </summary>
@@ -256,8 +224,6 @@ namespace Iced::Intel
 		/// <param name="array">Destination array</param>
 		/// <param name="arrayIndex">Start index in <paramref name="array"/></param>
 		void CopyTo(std::vector<Instruction>& array, std::int32_t arrayIndex) override;
-		void ICollection_CopyTo(std::vector<Instruction>& array, std::int32_t arrayIndex) override;
-		void System_Collections_ICollection_CopyTo(Array* array, std::int32_t index) override;
 		/// <summary>
 		/// Copies this collection to <paramref name="array"/>
 		/// </summary>
@@ -273,39 +239,11 @@ namespace Iced::Intel
 		/// <param name="count">Number of instructions</param>
 		/// <returns></returns>
 		InstructionList* GetRange(std::int32_t index, std::int32_t count);
-	public:
-		class Enumerator : public IEnumerator<Instruction>
-		{
-			/* readonly */
-		private:
-			InstructionList* list;
-			std::int32_t index = 0;
-			//C# TO C++ CONVERTER TODO TASK: 'ref return' methods are not converted by C# to C++ Converter:
-			//   public ref Instruction Current
-			//   {
-			//	   get
-			//	   {
-			//		   return ref list.elements[index];
-			//	   }
-			//   }
-			Instruction IEnumerator;
-			std::any IEnumerator;
-		public:
-			Enumerator(InstructionList* list);
-			bool MoveNext() override;
-			void Reset() override;
-			~Enumerator();
-
-			Enumerator() = default;
-		};
 		/// <summary>
 		/// Gets a ref iterator (use 'foreach ref')
 		/// </summary>
 		/// <returns></returns>
 	public:
-		Enumerator GetEnumerator();
-		IEnumerator<Instruction>* IEnumerable_GetEnumerator() override;
-		System::Collections::IEnumerator* IEnumerable_GetEnumerator() override;
 		/// <summary>
 		/// Creates a new array with all instructions and returns it
 		/// </summary>

@@ -23,12 +23,12 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsSegmentRegister(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a SegmentRegister register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a SegmentRegister register", nameof(value)));
 		}
 		Value = value;
 	}
 
-	AssemblerRegisterSegment::operator Register()
+	AssemblerRegisterSegment::operator Register() const
 	{
 		return this->Value;
 	}
@@ -47,8 +47,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterSegment::Equals(std::any obj)
 	{
-		AssemblerRegisterSegment other = dynamic_cast<AssemblerRegisterSegment>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterSegment* other = std::any_cast<AssemblerRegisterSegment>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterSegment::operator == (AssemblerRegisterSegment right)

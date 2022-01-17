@@ -20,11 +20,12 @@
 #include "../Static.h"
 #include "../DecoderOptions.g.h"
 #include "../CodeSize.g.h"
+#include <csharp/exceptionhelper.h>
 
 namespace Iced::Intel::DecoderInternal
 {
 
-	OpCodeHandler_VEX2::OpCodeHandler_VEX2(OpCodeHandler* handlerMem)
+	OpCodeHandler_VEX2::OpCodeHandler_VEX2(std::shared_ptr<OpCodeHandler> handlerMem)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.handlerMem = handlerMem ?? throw new ArgumentNullException(nameof(handlerMem));
@@ -47,7 +48,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 	}
 
-	OpCodeHandler_VEX3::OpCodeHandler_VEX3(OpCodeHandler* handlerMem)
+	OpCodeHandler_VEX3::OpCodeHandler_VEX3(std::shared_ptr<OpCodeHandler> handlerMem)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.handlerMem = handlerMem ?? throw new ArgumentNullException(nameof(handlerMem));
@@ -70,7 +71,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 	}
 
-	OpCodeHandler_XOP::OpCodeHandler_XOP(OpCodeHandler* handler_reg0)
+	OpCodeHandler_XOP::OpCodeHandler_XOP(std::shared_ptr<OpCodeHandler> handler_reg0)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.handler_reg0 = handler_reg0 ?? throw new ArgumentNullException(nameof(handler_reg0));
@@ -89,7 +90,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 	}
 
-	OpCodeHandler_EVEX::OpCodeHandler_EVEX(OpCodeHandler* handlerMem)
+	OpCodeHandler_EVEX::OpCodeHandler_EVEX(std::shared_ptr<OpCodeHandler> handlerMem)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.handlerMem = handlerMem ?? throw new ArgumentNullException(nameof(handlerMem));
@@ -212,7 +213,7 @@ namespace Iced::Intel::DecoderInternal
 		decoder->CallOpCodeHandlerXXTable(instruction);
 	}
 
-	OpCodeHandler_PrefixREX::OpCodeHandler_PrefixREX(OpCodeHandler* handler, std::uint32_t rex)
+	OpCodeHandler_PrefixREX::OpCodeHandler_PrefixREX(std::shared_ptr<OpCodeHandler> handler, std::uint32_t rex)
 	{
 		assert(rex <= 0x0F);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
@@ -364,14 +365,14 @@ namespace Iced::Intel::DecoderInternal
 		instruction.SetInternalImmediate8(decoder->ReadByte());
 	}
 
-	OpCodeHandler_MandatoryPrefix::OpCodeHandler_MandatoryPrefix(OpCodeHandler* handler, OpCodeHandler* handler66, OpCodeHandler* handlerF3, OpCodeHandler* handlerF2)
+	OpCodeHandler_MandatoryPrefix::OpCodeHandler_MandatoryPrefix(std::shared_ptr<OpCodeHandler> handler, std::shared_ptr<OpCodeHandler> handler66, std::shared_ptr<OpCodeHandler> handlerF3, std::shared_ptr<OpCodeHandler> handlerF2)
 	{
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::None) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::P66) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF2) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers = new OpCodeHandler[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
+		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
 		handlers = { (handler != nullptr) ? handler : throw std::invalid_argument("handler"), (handler66 != nullptr) ? handler66 : throw std::invalid_argument("handler66"), (handlerF3 != nullptr) ? handlerF3 : throw std::invalid_argument("handlerF3"), (handlerF2 != nullptr) ? handlerF2 : throw std::invalid_argument("handlerF2") };
 		assert(handler->HasModRM == HasModRM);
 		assert(handler66->HasModRM == HasModRM);
@@ -386,13 +387,13 @@ namespace Iced::Intel::DecoderInternal
 		handlers[static_cast<std::int32_t>(decoder->state.mandatoryPrefix)]->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_MandatoryPrefix3::Info::Info(OpCodeHandler* handler, bool mandatoryPrefix)
+	OpCodeHandler_MandatoryPrefix3::Info::Info(std::shared_ptr<OpCodeHandler> handler, bool mandatoryPrefix)
 	{
 		this->handler = handler;
 		this->mandatoryPrefix = mandatoryPrefix;
 	}
 
-	OpCodeHandler_MandatoryPrefix3::OpCodeHandler_MandatoryPrefix3(OpCodeHandler* handler_reg, OpCodeHandler* handler_mem, OpCodeHandler* handler66_reg, OpCodeHandler* handler66_mem, OpCodeHandler* handlerF3_reg, OpCodeHandler* handlerF3_mem, OpCodeHandler* handlerF2_reg, OpCodeHandler* handlerF2_mem, LegacyHandlerFlags flags)
+	OpCodeHandler_MandatoryPrefix3::OpCodeHandler_MandatoryPrefix3(std::shared_ptr<OpCodeHandler> handler_reg, std::shared_ptr<OpCodeHandler> handler_mem, std::shared_ptr<OpCodeHandler> handler66_reg, std::shared_ptr<OpCodeHandler> handler66_mem, std::shared_ptr<OpCodeHandler> handlerF3_reg, std::shared_ptr<OpCodeHandler> handlerF3_mem, std::shared_ptr<OpCodeHandler> handlerF2_reg, std::shared_ptr<OpCodeHandler> handlerF2_mem, LegacyHandlerFlags flags)
 	{
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::None) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::P66) == 1 ? 0 : -1);
@@ -400,10 +401,22 @@ namespace Iced::Intel::DecoderInternal
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF2) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: handlers_reg = new Info[4] { new Info(handler_reg ?? throw new ArgumentNullException(nameof(handler_reg)), (flags & LegacyHandlerFlags.HandlerReg) == 0), new Info(handler66_reg ?? throw new ArgumentNullException(nameof(handler66_reg)), (flags & LegacyHandlerFlags.Handler66Reg) == 0), new Info(handlerF3_reg ?? throw new ArgumentNullException(nameof(handlerF3_reg)), (flags & LegacyHandlerFlags.HandlerF3Reg) == 0), new Info(handlerF2_reg ?? throw new ArgumentNullException(nameof(handlerF2_reg)), (flags & LegacyHandlerFlags.HandlerF2Reg) == 0)};
-		handlers_reg = { .new Info((handler_reg != nullptr) ? handler_reg : throw std::invalid_argument("handler_reg"), (flags & LegacyHandlerFlags::HandlerReg) == 0), .new Info((handler66_reg != nullptr) ? handler66_reg : throw std::invalid_argument("handler66_reg"), (flags & LegacyHandlerFlags::Handler66Reg) == 0), .new Info((handlerF3_reg != nullptr) ? handlerF3_reg : throw std::invalid_argument("handlerF3_reg"), (flags & LegacyHandlerFlags::HandlerF3Reg) == 0), .new Info((handlerF2_reg != nullptr) ? handlerF2_reg : throw std::invalid_argument("handlerF2_reg"), (flags & LegacyHandlerFlags::HandlerF2Reg) == 0) };
+		handlers_reg =
+		{
+			Info((handler_reg == nullptr) ? throw ArgumentNullException(nameof(handler_reg)) : handler_reg, (flags & LegacyHandlerFlags::HandlerReg) == 0),
+			Info((handler66_reg == nullptr) ? throw ArgumentNullException(nameof(handler66_reg)) : handler66_reg, (flags & LegacyHandlerFlags::Handler66Reg) == 0),
+			Info((handlerF3_reg == nullptr) ? throw new ArgumentNullException(nameof(handlerF3_reg)) : handlerF3_reg, (flags & LegacyHandlerFlags::HandlerF3Reg) == 0),
+			Info((handlerF2_reg == nullptr) ? throw new ArgumentNullException(nameof(handlerF2_reg)) : handlerF2_reg, (flags & LegacyHandlerFlags::HandlerF2Reg) == 0),
+		};
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: handlers_mem = new Info[4] { new Info(handler_mem ?? throw new ArgumentNullException(nameof(handler_mem)), (flags & LegacyHandlerFlags.HandlerMem) == 0), new Info(handler66_mem ?? throw new ArgumentNullException(nameof(handler66_mem)), (flags & LegacyHandlerFlags.Handler66Mem) == 0), new Info(handlerF3_mem ?? throw new ArgumentNullException(nameof(handlerF3_mem)), (flags & LegacyHandlerFlags.HandlerF3Mem) == 0), new Info(handlerF2_mem ?? throw new ArgumentNullException(nameof(handlerF2_mem)), (flags & LegacyHandlerFlags.HandlerF2Mem) == 0)};
-		handlers_mem = { .new Info((handler_mem != nullptr) ? handler_mem : throw std::invalid_argument("handler_mem"), (flags & LegacyHandlerFlags::HandlerMem) == 0), .new Info((handler66_mem != nullptr) ? handler66_mem : throw std::invalid_argument("handler66_mem"), (flags & LegacyHandlerFlags::Handler66Mem) == 0), .new Info((handlerF3_mem != nullptr) ? handlerF3_mem : throw std::invalid_argument("handlerF3_mem"), (flags & LegacyHandlerFlags::HandlerF3Mem) == 0), .new Info((handlerF2_mem != nullptr) ? handlerF2_mem : throw std::invalid_argument("handlerF2_mem"), (flags & LegacyHandlerFlags::HandlerF2Mem) == 0) };
+		handlers_mem =
+		{
+			Info((handler_mem == nullptr) ? throw ArgumentNullException(nameof(handler_mem)) : handler_mem, (flags & LegacyHandlerFlags::HandlerMem) == 0),
+			Info((handler66_mem == nullptr) ? throw ArgumentNullException(nameof(handler66_mem)) : handler66_mem, (flags & LegacyHandlerFlags::Handler66Mem) == 0),
+			Info((handlerF3_mem == nullptr) ? throw ArgumentNullException(nameof(handlerF3_mem)) : handlerF3_mem, (flags & LegacyHandlerFlags::HandlerF3Mem) == 0),
+			Info((handlerF2_mem == nullptr) ? throw ArgumentNullException(nameof(handlerF2_mem)) : handlerF2_mem, (flags & LegacyHandlerFlags::HandlerF2Mem) == 0),
+		};
 		assert(handler_reg->HasModRM == HasModRM);
 		assert(handler_mem->HasModRM == HasModRM);
 		assert(handler66_reg->HasModRM == HasModRM);
@@ -418,7 +431,7 @@ namespace Iced::Intel::DecoderInternal
 	{
 		assert(decoder->state.GetEncoding() == EncodingKind::Legacy);
 		auto handlers = decoder->state.mod == 3 ? handlers_reg : handlers_mem;
-		auto info = handlers[static_cast<std::int32_t>(decoder->state.mandatoryPrefix)];
+		Info& info = handlers[static_cast<std::int32_t>(decoder->state.mandatoryPrefix)];
 		if (info.mandatoryPrefix)
 		{
 			decoder->ClearMandatoryPrefix(instruction);
@@ -426,7 +439,7 @@ namespace Iced::Intel::DecoderInternal
 		info.handler->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_MandatoryPrefix4::OpCodeHandler_MandatoryPrefix4(OpCodeHandler* handlerNP, OpCodeHandler* handler66, OpCodeHandler* handlerF3, OpCodeHandler* handlerF2, std::uint32_t flags)
+	OpCodeHandler_MandatoryPrefix4::OpCodeHandler_MandatoryPrefix4(std::shared_ptr<OpCodeHandler> handlerNP, std::shared_ptr<OpCodeHandler> handler66, std::shared_ptr<OpCodeHandler> handlerF3, std::shared_ptr<OpCodeHandler> handlerF2, std::uint32_t flags)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.handlerNP = handlerNP ?? throw new ArgumentNullException(nameof(handlerNP));
@@ -446,7 +459,7 @@ namespace Iced::Intel::DecoderInternal
 	void OpCodeHandler_MandatoryPrefix4::Decode(Decoder* decoder, Instruction& instruction)
 	{
 		assert(decoder->state.GetEncoding() == EncodingKind::Legacy);
-		OpCodeHandler* handler;
+		std::shared_ptr<OpCodeHandler> handler;
 		auto prefix = decoder->state.mandatoryPrefix;
 		switch (prefix)
 		{
@@ -480,14 +493,14 @@ namespace Iced::Intel::DecoderInternal
 		handler->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_MandatoryPrefix_NoModRM::OpCodeHandler_MandatoryPrefix_NoModRM(OpCodeHandler* handler, OpCodeHandler* handler66, OpCodeHandler* handlerF3, OpCodeHandler* handlerF2)
+	OpCodeHandler_MandatoryPrefix_NoModRM::OpCodeHandler_MandatoryPrefix_NoModRM(std::shared_ptr<OpCodeHandler> handler, std::shared_ptr<OpCodeHandler> handler66, std::shared_ptr<OpCodeHandler> handlerF3, std::shared_ptr<OpCodeHandler> handlerF2)
 	{
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::None) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::P66) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF2) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers = new OpCodeHandler[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
+		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
 		handlers = { (handler != nullptr) ? handler : throw std::invalid_argument("handler"), (handler66 != nullptr) ? handler66 : throw std::invalid_argument("handler66"), (handlerF3 != nullptr) ? handlerF3 : throw std::invalid_argument("handlerF3"), (handlerF2 != nullptr) ? handlerF2 : throw std::invalid_argument("handlerF2") };
 		assert(handler->HasModRM == HasModRM);
 		assert(handler66->HasModRM == HasModRM);
@@ -512,13 +525,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{
@@ -528,7 +541,7 @@ namespace Iced::Intel::DecoderInternal
 		instruction.SetInternalImmediate8(decoder->ReadByte());
 	}
 
-	OpCodeHandler_Reservednop::OpCodeHandler_Reservednop(OpCodeHandler* reservedNopHandler, OpCodeHandler* otherHandler)
+	OpCodeHandler_Reservednop::OpCodeHandler_Reservednop(std::shared_ptr<OpCodeHandler> reservedNopHandler, std::shared_ptr<OpCodeHandler> otherHandler)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.reservedNopHandler = reservedNopHandler ?? throw new ArgumentNullException(nameof(reservedNopHandler));
@@ -564,23 +577,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->mod == 3)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -589,15 +602,15 @@ namespace Iced::Intel::DecoderInternal
 			decoder->ReadOpMem(instruction);
 			Static::Assert(static_cast<std::int32_t>(HandlerFlags::Lock) == 8 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(StateFlags::AllowLock) == 0x00002000 ? 0 : -1);
-			state->flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
+			state.flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			instruction.SetOp1Kind(OpKind::Immediate32);
 			instruction.SetImmediate32(decoder->ReadUInt32());
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			instruction.SetOp1Kind(OpKind::Immediate32to64);
@@ -631,23 +644,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->mod == 3)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -656,15 +669,15 @@ namespace Iced::Intel::DecoderInternal
 			decoder->ReadOpMem(instruction);
 			Static::Assert(static_cast<std::int32_t>(HandlerFlags::Lock) == 8 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(StateFlags::AllowLock) == 0x00002000 ? 0 : -1);
-			state->flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
+			state.flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			instruction.SetOp1Kind(OpKind::Immediate8to32);
 			instruction.SetInternalImmediate8(decoder->ReadByte());
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			instruction.SetOp1Kind(OpKind::Immediate8to64);
@@ -698,12 +711,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -711,22 +724,22 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -735,7 +748,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->ReadOpMem(instruction);
 			Static::Assert(static_cast<std::int32_t>(HandlerFlags::Lock) == 8 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(StateFlags::AllowLock) == 0x00002000 ? 0 : -1);
-			state->flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
+			state.flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
 		}
 		instruction.SetOp1Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
@@ -753,12 +766,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -766,22 +779,22 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -791,7 +804,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		instruction.SetOp1Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(1);
-		state->flags |= StateFlags::NoImm;
+		state.flags |= StateFlags::NoImm;
 	}
 
 	OpCodeHandler_Ev_CL::OpCodeHandler_Ev_CL(Code code16, Code code32, Code code64)
@@ -806,12 +819,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -819,22 +832,22 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -867,12 +880,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -880,22 +893,22 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -904,7 +917,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->ReadOpMem(instruction);
 			Static::Assert(static_cast<std::int32_t>(HandlerFlags::Lock) == 8 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(StateFlags::AllowLock) == 0x00002000 ? 0 : -1);
-			state->flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
+			state.flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
 		}
 	}
 
@@ -920,29 +933,29 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::AX));
 		}
-		assert(state->mod == 3);
+		assert(state.mod == 3);
 	}
 
 	OpCodeHandler_Rv_32_64::OpCodeHandler_Rv_32_64(Code code32, Code code64)
@@ -956,7 +969,7 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register baseReg;
 		if (decoder->is64bMode)
 		{
@@ -968,10 +981,10 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			baseReg = Register::EAX;
 		}
-		assert(state->mod == 3);
+		assert(state.mod == 3);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 	}
 
 	OpCodeHandler_Rq::OpCodeHandler_Rq(Code code)
@@ -984,12 +997,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		assert(state->mod == 3);
+		assert(state.mod == 3);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::RAX);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::RAX));
 	}
 
 	OpCodeHandler_Ev_REXW::OpCodeHandler_Ev_REXW(Code code32, Code code64, std::uint32_t flags)
@@ -1006,8 +1019,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 		}
@@ -1016,21 +1029,21 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 		}
 		Static::Assert(static_cast<std::uint32_t>(StateFlags::Has66) != 4 ? 0 : -1);
-		if ((static_cast <(flags & 4) | (std::uint32_t)(state::flags & StateFlags::Has66)*>(&decoder->invalidCheckMask)) == (4 | static_cast<std::uint32_t>(StateFlags::Has66)))
+		if ((((flags & 4) | (uint)(state.flags & StateFlags::Has66)) & decoder->invalidCheckMask) == (4 | (uint)StateFlags::Has66))
 		{
 			decoder->SetInvalidInstruction();
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			if ((state->flags & StateFlags::W) != 0)
+			if ((state.flags & StateFlags::W) != 0)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::EAX));
 			}
 			if ((disallowReg & decoder->invalidCheckMask) != 0)
 			{
@@ -1060,10 +1073,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if ((decoder->options & DecoderOptions::AMD) == 0 || state->operandSize != OpSize::Size16)
+			if ((decoder->options & DecoderOptions::AMD) == 0 || state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 			}
@@ -1071,17 +1084,17 @@ namespace Iced::Intel::DecoderInternal
 			{
 				instruction.SetCode(code16);
 			}
-			if (state->mod == 3)
+			if (state.mod == 3)
 			{
 				Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 				//instruction.Op0Kind = OpKind.Register;
-				if ((decoder->options & DecoderOptions::AMD) == 0 || state->operandSize != OpSize::Size16)
+				if ((decoder->options & DecoderOptions::AMD) == 0 || state.operandSize != OpSize::Size16)
 				{
-					instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::RAX);
+					instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::RAX));
 				}
 				else
 				{
-					instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::AX);
+					instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::AX));
 				}
 			}
 			else
@@ -1092,7 +1105,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 			}
@@ -1100,17 +1113,17 @@ namespace Iced::Intel::DecoderInternal
 			{
 				instruction.SetCode(code16);
 			}
-			if (state->mod == 3)
+			if (state.mod == 3)
 			{
 				Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 				//instruction.Op0Kind = OpKind.Register;
-				if (state->operandSize == OpSize::Size32)
+				if (state.operandSize == OpSize::Size32)
 				{
-					instruction.SetOp0Register(static_cast<std::int32_t>(state->rm) + Register::EAX);
+					instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm) + Register::EAX));
 				}
 				else
 				{
-					instruction.SetOp0Register(static_cast<std::int32_t>(state->rm) + Register::AX);
+					instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm) + Register::AX));
 				}
 			}
 			else
@@ -1133,12 +1146,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size64 && (decoder->options & DecoderOptions::AMD) == 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size64 && (decoder->options & DecoderOptions::AMD) == 0)
 		{
 			instruction.SetCode(code64);
 		}
-		else if (state->operandSize == OpSize::Size16)
+		else if (state.operandSize == OpSize::Size16)
 		{
 			instruction.SetCode(code16);
 		}
@@ -1146,7 +1159,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code32);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -1169,12 +1182,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -1182,22 +1195,22 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -1219,12 +1232,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -1232,22 +1245,22 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -1269,12 +1282,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
 			instruction.SetCode(code64);
 		}
-		else if (state->operandSize == OpSize::Size32)
+		else if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
@@ -1282,7 +1295,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		assert(state->mod != 3);
+		assert(state.mod != 3);
 		instruction.SetOp0Kind(OpKind::Memory);
 		decoder->ReadOpMem(instruction);
 	}
@@ -1299,44 +1312,44 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -1356,16 +1369,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::EAX));
 		}
 		else
 		{
@@ -1385,29 +1398,29 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -1430,44 +1443,44 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -1489,44 +1502,44 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -1548,40 +1561,40 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize != OpSize::Size16)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize != OpSize::Size16)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
 			else
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -1603,22 +1616,22 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::EAX));
 		}
-		auto extraRegisterBase = state->extraRegisterBase;
+		auto extraRegisterBase = state.extraRegisterBase;
 		// LOCK MOV CR0 is supported by some AMD CPUs
 		if (baseReg == Register::CR0 && instruction.GetHasLockPrefix() && (decoder->options & DecoderOptions::AMD) != 0)
 		{
@@ -1628,11 +1641,11 @@ namespace Iced::Intel::DecoderInternal
 			}
 			extraRegisterBase = 8;
 			instruction.InternalClearHasLockPrefix();
-			state->flags &= ~StateFlags::Lock;
+			state.flags &= ~StateFlags::Lock;
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		auto reg = static_cast<std::int32_t>(state->reg + extraRegisterBase);
+		auto reg = static_cast<std::int32_t>(state.reg + extraRegisterBase);
 		if (decoder->invalidCheckMask != 0)
 		{
 			if (baseReg == Register::CR0)
@@ -1655,7 +1668,7 @@ namespace Iced::Intel::DecoderInternal
 				assert(baseReg == Register::TR0);
 			}
 		}
-		instruction.SetOp1Register(reg + baseReg);
+		instruction.SetOp1Register((Register)(reg + baseReg));
 	}
 
 	OpCodeHandler_C_R::OpCodeHandler_C_R(Code code32, Code code64, Register baseReg)
@@ -1670,22 +1683,22 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::RAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::EAX));
 		}
-		auto extraRegisterBase = state->extraRegisterBase;
+		auto extraRegisterBase = state.extraRegisterBase;
 		// LOCK MOV CR0 is supported by some AMD CPUs
 		if (baseReg == Register::CR0 && instruction.GetHasLockPrefix() && (decoder->options & DecoderOptions::AMD) != 0)
 		{
@@ -1695,11 +1708,11 @@ namespace Iced::Intel::DecoderInternal
 			}
 			extraRegisterBase = 8;
 			instruction.InternalClearHasLockPrefix();
-			state->flags &= ~StateFlags::Lock;
+			state.flags &= ~StateFlags::Lock;
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		auto reg = static_cast<std::int32_t>(state->reg + extraRegisterBase);
+		auto reg = static_cast<std::int32_t>(state.reg + extraRegisterBase);
 		if (decoder->invalidCheckMask != 0)
 		{
 			if (baseReg == Register::CR0)
@@ -1722,7 +1735,7 @@ namespace Iced::Intel::DecoderInternal
 				assert(baseReg == Register::TR0);
 			}
 		}
-		instruction.SetOp0Register(reg + baseReg);
+		instruction.SetOp0Register((Register)(reg + baseReg));
 	}
 
 	OpCodeHandler_Jb::OpCodeHandler_Jb(Code code16, Code code32, Code code64)
@@ -1737,11 +1750,11 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		state->flags |= StateFlags::BranchImm8;
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		state.flags |= StateFlags::BranchImm8;
 		if (decoder->is64bMode)
 		{
-			if ((decoder->options & DecoderOptions::AMD) == 0 || state->operandSize != OpSize::Size16)
+			if ((decoder->options & DecoderOptions::AMD) == 0 || state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 				instruction.SetOp0Kind(OpKind::NearBranch64);
@@ -1756,7 +1769,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize != OpSize::Size16)
+			if (state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code32);
 				instruction.SetOp0Kind(OpKind::NearBranch32);
@@ -1783,17 +1796,17 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		state->flags |= StateFlags::Xbegin;
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		state.flags |= StateFlags::Xbegin;
 		if (decoder->is64bMode)
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 				instruction.SetOp0Kind(OpKind::NearBranch64);
 				instruction.SetNearBranch64(static_cast<std::uint64_t>(static_cast<std::int32_t>(decoder->ReadUInt32())) + decoder->GetCurrentInstructionPointer64());
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
 				instruction.SetCode(code64);
 				instruction.SetOp0Kind(OpKind::NearBranch64);
@@ -1809,7 +1822,7 @@ namespace Iced::Intel::DecoderInternal
 		else
 		{
 			assert(decoder->defaultCodeSize == CodeSize::Code16 || decoder->defaultCodeSize == CodeSize::Code32);
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 				instruction.SetOp0Kind(OpKind::NearBranch32);
@@ -1817,7 +1830,7 @@ namespace Iced::Intel::DecoderInternal
 			}
 			else
 			{
-				assert(state->operandSize == OpSize::Size16);
+				assert(state.operandSize == OpSize::Size16);
 				instruction.SetCode(code16);
 				instruction.SetOp0Kind(OpKind::NearBranch32);
 				instruction.SetNearBranch32(static_cast<std::uint32_t>(static_cast<std::int16_t>(decoder->ReadUInt16())) + decoder->GetCurrentInstructionPointer32());
@@ -1837,10 +1850,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if ((decoder->options & DecoderOptions::AMD) == 0 || state->operandSize != OpSize::Size16)
+			if ((decoder->options & DecoderOptions::AMD) == 0 || state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 				instruction.SetOp0Kind(OpKind::NearBranch64);
@@ -1855,7 +1868,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize != OpSize::Size16)
+			if (state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code32);
 				instruction.SetOp0Kind(OpKind::NearBranch32);
@@ -1886,13 +1899,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		state->flags |= StateFlags::BranchImm8;
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		state.flags |= StateFlags::BranchImm8;
 		if (decoder->is64bMode)
 		{
-			if ((decoder->options & DecoderOptions::AMD) == 0 || state->operandSize != OpSize::Size16)
+			if ((decoder->options & DecoderOptions::AMD) == 0 || state.operandSize != OpSize::Size16)
 			{
-				if (state->addressSize == OpSize::Size64)
+				if (state.addressSize == OpSize::Size64)
 				{
 					instruction.SetCode(code64_64);
 				}
@@ -1905,7 +1918,7 @@ namespace Iced::Intel::DecoderInternal
 			}
 			else
 			{
-				if (state->addressSize == OpSize::Size64)
+				if (state.addressSize == OpSize::Size64)
 				{
 					instruction.SetCode(code16_64);
 				}
@@ -1919,9 +1932,9 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
-				if (state->addressSize == OpSize::Size32)
+				if (state.addressSize == OpSize::Size32)
 				{
 					instruction.SetCode(code32_32);
 				}
@@ -1934,7 +1947,7 @@ namespace Iced::Intel::DecoderInternal
 			}
 			else
 			{
-				if (state->addressSize == OpSize::Size32)
+				if (state.addressSize == OpSize::Size32)
 				{
 					instruction.SetCode(code16_32);
 				}
@@ -1959,9 +1972,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		assert(!decoder->is64bMode);
-		if (state->operandSize != OpSize::Size16)
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 			instruction.SetOp0Kind(OpKind::NearBranch32);
@@ -1988,10 +2001,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if (state->operandSize != OpSize::Size16)
+			if (state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 			}
@@ -2002,7 +2015,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 			}
@@ -2028,10 +2041,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if (state->operandSize != OpSize::Size16)
+			if (state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 			}
@@ -2042,7 +2055,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 			}
@@ -2051,31 +2064,31 @@ namespace Iced::Intel::DecoderInternal
 				instruction.SetCode(code16);
 			}
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
 			if (decoder->is64bMode)
 			{
-				if (state->operandSize != OpSize::Size16)
+				if (state.operandSize != OpSize::Size16)
 				{
-					instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+					instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 				}
 				else
 				{
-					instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+					instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 				}
 			}
 			else
 			{
-				if (state->operandSize == OpSize::Size32)
+				if (state.operandSize == OpSize::Size32)
 				{
-					instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+					instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 				}
 				else
 				{
-					instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+					instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 				}
 			}
 		}
@@ -2106,23 +2119,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->mod == 3)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -2131,28 +2144,28 @@ namespace Iced::Intel::DecoderInternal
 			decoder->ReadOpMem(instruction);
 			Static::Assert(static_cast<std::int32_t>(HandlerFlags::Lock) == 8 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(StateFlags::AllowLock) == 0x00002000 ? 0 : -1);
-			state->flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
+			state.flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
 	}
 
@@ -2167,7 +2180,7 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register baseReg;
 		if (decoder->is64bMode)
 		{
@@ -2179,11 +2192,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			baseReg = Register::EAX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -2192,7 +2205,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
 	}
 
 	OpCodeHandler_Ev_Gv_Ib::OpCodeHandler_Ev_Gv_Ib(Code code16, Code code32, Code code64)
@@ -2207,23 +2220,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->mod == 3)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -2231,26 +2244,26 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetOp0Kind(OpKind::Memory);
 			decoder->ReadOpMem(instruction);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
 		instruction.SetOp2Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
@@ -2268,23 +2281,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->mod == 3)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -2292,26 +2305,26 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetOp0Kind(OpKind::Memory);
 			decoder->ReadOpMem(instruction);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op2Kind = OpKind.Register;
@@ -2330,29 +2343,29 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size64 && (decoder->options & DecoderOptions::AMD) == 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size64 && (decoder->options & DecoderOptions::AMD) == 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
-		else if (state->operandSize == OpSize::Size16)
+		else if (state.operandSize == OpSize::Size16)
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -2375,38 +2388,38 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 			{
 				index += 4;
 			}
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AL);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
 		}
 		else
 		{
@@ -2427,33 +2440,33 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::AX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::AX));
 		}
 		else
 		{
@@ -2508,12 +2521,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -2535,12 +2548,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -2564,10 +2577,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if (state->operandSize != OpSize::Size16)
+			if (state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 			}
@@ -2578,7 +2591,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 			}
@@ -2601,12 +2614,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
@@ -2628,21 +2641,21 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::RAX));
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::EAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::AX));
 		}
 	}
 
@@ -2657,8 +2670,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 		}
@@ -2682,39 +2695,39 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if (state->operandSize != OpSize::Size16)
+			if (state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 				Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 				//instruction.Op0Kind = OpKind.Register;
-				instruction.SetOp0Register(index + static_cast<std::int32_t>(state->extraBaseRegisterBase) + Register::RAX);
+				instruction.SetOp0Register((Register)(index + static_cast<std::int32_t>(state.extraBaseRegisterBase) + Register::RAX));
 			}
 			else
 			{
 				instruction.SetCode(code16);
 				Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 				//instruction.Op0Kind = OpKind.Register;
-				instruction.SetOp0Register(index + static_cast<std::int32_t>(state->extraBaseRegisterBase) + Register::AX);
+				instruction.SetOp0Register((Register)(index + static_cast<std::int32_t>(state.extraBaseRegisterBase) + Register::AX));
 			}
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 				Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 				//instruction.Op0Kind = OpKind.Register;
-				instruction.SetOp0Register(index + static_cast<std::int32_t>(state->extraBaseRegisterBase) + Register::EAX);
+				instruction.SetOp0Register((Register)(index + static_cast<std::int32_t>(state.extraBaseRegisterBase) + Register::EAX));
 			}
 			else
 			{
 				instruction.SetCode(code16);
 				Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 				//instruction.Op0Kind = OpKind.Register;
-				instruction.SetOp0Register(index + static_cast<std::int32_t>(state->extraBaseRegisterBase) + Register::AX);
+				instruction.SetOp0Register((Register)(index + static_cast<std::int32_t>(state.extraBaseRegisterBase) + Register::AX));
 			}
 		}
 	}
@@ -2731,17 +2744,17 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(static_cast<std::int32_t>(OpSize::Size16) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(OpSize::Size32) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(OpSize::Size64) == 2 ? 0 : -1);
-		std::int32_t sizeIndex = static_cast<std::int32_t>(state->operandSize);
-		instruction.SetCode(sizeIndex + code);
+		std::int32_t sizeIndex = static_cast<std::int32_t>(state.operandSize);
+		instruction.SetCode((Code)(sizeIndex + code));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
 		Static::Assert(Register::AX + 16 == Register::EAX ? 0 : -1);
 		Static::Assert(Register::AX + 32 == Register::RAX ? 0 : -1);
-		instruction.SetOp0Register(sizeIndex * 16 + index + static_cast<std::int32_t>(state->extraBaseRegisterBase) + Register::AX);
+		instruction.SetOp0Register((Register)(sizeIndex * 16 + (Register)(index + static_cast<std::int32_t>(state.extraBaseRegisterBase) + Register::AX)));
 	}
 
 	OpCodeHandler_Xchg_Reg_rAX::OpCodeHandler_Xchg_Reg_rAX(std::int32_t index)
@@ -2758,8 +2771,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (index == 0 && state->mandatoryPrefix == MandatoryPrefixByte::PF3 && (decoder->options & DecoderOptions::NoPause) == 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (index == 0 && state.mandatoryPrefix == MandatoryPrefixByte::PF3 && (decoder->options & DecoderOptions::NoPause) == 0)
 		{
 			decoder->ClearMandatoryPrefixF3(instruction);
 			instruction.SetCode(Code::Pause);
@@ -2769,8 +2782,8 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(static_cast<std::int32_t>(OpSize::Size16) == 0 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(OpSize::Size32) == 1 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(OpSize::Size64) == 2 ? 0 : -1);
-			std::int32_t sizeIndex = static_cast<std::int32_t>(state->operandSize);
-			std::int32_t codeIndex = index + static_cast<std::int32_t>(state->extraBaseRegisterBase);
+			std::int32_t sizeIndex = static_cast<std::int32_t>(state.operandSize);
+			std::int32_t codeIndex = index + static_cast<std::int32_t>(state.extraBaseRegisterBase);
 			instruction.SetCode(codes[sizeIndex * 16 + codeIndex]);
 			if (codeIndex != 0)
 			{
@@ -2779,10 +2792,10 @@ namespace Iced::Intel::DecoderInternal
 				auto reg = sizeIndex * 16 + codeIndex + Register::AX;
 				Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 				//instruction.Op0Kind = OpKind.Register;
-				instruction.SetOp0Register(reg);
+				instruction.SetOp0Register((Register)reg);
 				Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 				//instruction.Op1Kind = OpKind.Register;
-				instruction.SetOp1Register(sizeIndex * 16 + Register::AX);
+				instruction.SetOp1Register((Register)(sizeIndex * 16 + Register::AX));
 			}
 		}
 	}
@@ -2799,8 +2812,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -2809,7 +2822,7 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetOp1Kind(OpKind::Immediate32);
 			instruction.SetImmediate32(decoder->ReadUInt32());
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -2843,15 +2856,15 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register register_;
-		if ((state->flags & StateFlags::HasRex) != 0)
+		if ((state.flags & StateFlags::HasRex) != 0)
 		{
-			register_ = withRexPrefix[index + static_cast<std::int32_t>(state->extraBaseRegisterBase)];
+			register_ = withRexPrefix[index + static_cast<std::int32_t>(state.extraBaseRegisterBase)];
 		}
 		else
 		{
-			register_ = index + Register::AL;
+			register_ = (Register)(index + Register::AL);
 		}
 		instruction.SetCode(Code::Mov_r8_imm8);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -2872,22 +2885,22 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(Code::Mov_r32_imm32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(index + static_cast<std::int32_t>(state->extraBaseRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(index + static_cast<std::int32_t>(state.extraBaseRegisterBase) + Register::EAX));
 			instruction.SetOp1Kind(OpKind::Immediate32);
 			instruction.SetImmediate32(decoder->ReadUInt32());
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(Code::Mov_r64_imm64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(index + static_cast<std::int32_t>(state->extraBaseRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(index + static_cast<std::int32_t>(state.extraBaseRegisterBase) + Register::RAX));
 			instruction.SetOp1Kind(OpKind::Immediate64);
 			instruction.SetInternalImmediate64Lo(decoder->ReadUInt32());
 			instruction.SetInternalImmediate64Hi(decoder->ReadUInt32());
@@ -2897,7 +2910,7 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(Code::Mov_r16_imm16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(index + static_cast<std::int32_t>(state->extraBaseRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(index + static_cast<std::int32_t>(state.extraBaseRegisterBase) + Register::AX));
 			instruction.SetOp1Kind(OpKind::Immediate16);
 			instruction.SetInternalImmediate16(decoder->ReadUInt16());
 		}
@@ -2915,10 +2928,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if (state->operandSize != OpSize::Size16)
+			if (state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 				instruction.SetOp0Kind(OpKind::Immediate8to64);
@@ -2933,7 +2946,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 				instruction.SetOp0Kind(OpKind::Immediate8to32);
@@ -2960,10 +2973,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if (state->operandSize != OpSize::Size16)
+			if (state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 				instruction.SetOp0Kind(OpKind::Immediate32to64);
@@ -2978,7 +2991,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 				instruction.SetOp0Kind(OpKind::Immediate32);
@@ -3004,22 +3017,22 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize != OpSize::Size16)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
-		assert(state->mod != 3);
+		assert(state.mod != 3);
 		instruction.SetOp1Kind(OpKind::Memory);
 		decoder->ReadOpMem(instruction);
 	}
@@ -3035,25 +3048,25 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register baseReg;
-		if (state->operandSize != OpSize::Size16)
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 			baseReg = Register::EAX;
 		}
 		else
 		{
 			instruction.SetCode(code16);
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 			baseReg = Register::AX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -3076,23 +3089,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->mod == 3)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -3100,20 +3113,20 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetOp1Kind(OpKind::Memory);
 			decoder->ReadOpMem(instruction);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 			instruction.SetCode(code32);
 			instruction.SetOp2Kind(OpKind::Immediate8to32);
 			instruction.SetInternalImmediate8(decoder->ReadByte());
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 			instruction.SetCode(code64);
 			instruction.SetOp2Kind(OpKind::Immediate8to64);
 			instruction.SetInternalImmediate8(decoder->ReadByte());
@@ -3122,7 +3135,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 			instruction.SetCode(code16);
 			instruction.SetOp2Kind(OpKind::Immediate8to16);
 			instruction.SetInternalImmediate8(decoder->ReadByte());
@@ -3140,25 +3153,25 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		assert(state->mod == 3);
+		assert(state.mod == 3);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		instruction.SetOp2Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
 	}
@@ -3176,7 +3189,7 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register baseReg;
 		if (decoder->is64bMode)
 		{
@@ -3190,12 +3203,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + baseReg);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + baseReg));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 			if ((disallowReg & decoder->invalidCheckMask) != 0)
 			{
 				decoder->SetInvalidInstruction();
@@ -3224,23 +3237,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->mod == 3)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -3248,21 +3261,21 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetOp1Kind(OpKind::Memory);
 			decoder->ReadOpMem(instruction);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 			instruction.SetOp2Kind(OpKind::Immediate32);
 			instruction.SetImmediate32(decoder->ReadUInt32());
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 			instruction.SetOp2Kind(OpKind::Immediate32to64);
 			instruction.SetImmediate32(decoder->ReadUInt32());
 		}
@@ -3271,7 +3284,7 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 			instruction.SetOp2Kind(OpKind::Immediate16);
 			instruction.SetInternalImmediate16(decoder->ReadUInt16());
 		}
@@ -3288,13 +3301,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->addressSize == OpSize::Size64)
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESEDI);
 		}
@@ -3319,12 +3332,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESEDI);
 		}
@@ -3332,14 +3345,14 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESDI);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
 			instruction.SetOp1Register(Register::EAX);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -3366,12 +3379,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESEDI);
 		}
@@ -3379,7 +3392,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESDI);
 		}
-		if (state->operandSize != OpSize::Size16)
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -3406,16 +3419,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
 		instruction.SetOp0Register(reg);
-		if (state->addressSize == OpSize::Size64)
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp1Kind(OpKind::MemorySegRSI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp1Kind(OpKind::MemorySegESI);
 		}
@@ -3437,12 +3450,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp1Kind(OpKind::MemorySegRSI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp1Kind(OpKind::MemorySegESI);
 		}
@@ -3450,14 +3463,14 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetOp1Kind(OpKind::MemorySegSI);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
 			instruction.SetOp0Register(Register::EAX);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -3484,12 +3497,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp1Kind(OpKind::MemorySegRSI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp1Kind(OpKind::MemorySegESI);
 		}
@@ -3497,7 +3510,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetOp1Kind(OpKind::MemorySegSI);
 		}
-		if (state->operandSize != OpSize::Size16)
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -3524,16 +3537,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
 		instruction.SetOp0Register(reg);
-		if (state->addressSize == OpSize::Size64)
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp1Kind(OpKind::MemoryESRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp1Kind(OpKind::MemoryESEDI);
 		}
@@ -3555,12 +3568,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp1Kind(OpKind::MemoryESRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp1Kind(OpKind::MemoryESEDI);
 		}
@@ -3568,14 +3581,14 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetOp1Kind(OpKind::MemoryESDI);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
 			instruction.SetOp0Register(Register::EAX);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -3601,14 +3614,14 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->addressSize == OpSize::Size64)
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESRDI);
 			instruction.SetOp1Kind(OpKind::MemorySegRSI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESEDI);
 			instruction.SetOp1Kind(OpKind::MemorySegESI);
@@ -3632,13 +3645,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESRDI);
 			instruction.SetOp1Kind(OpKind::MemorySegRSI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemoryESEDI);
 			instruction.SetOp1Kind(OpKind::MemorySegESI);
@@ -3648,11 +3661,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetOp0Kind(OpKind::MemoryESDI);
 			instruction.SetOp1Kind(OpKind::MemorySegSI);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -3672,14 +3685,14 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->addressSize == OpSize::Size64)
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegRSI);
 			instruction.SetOp1Kind(OpKind::MemoryESRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegESI);
 			instruction.SetOp1Kind(OpKind::MemoryESEDI);
@@ -3703,13 +3716,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegRSI);
 			instruction.SetOp1Kind(OpKind::MemoryESRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegESI);
 			instruction.SetOp1Kind(OpKind::MemoryESEDI);
@@ -3719,11 +3732,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetOp0Kind(OpKind::MemorySegSI);
 			instruction.SetOp1Kind(OpKind::MemoryESDI);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -3745,12 +3758,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -3758,22 +3771,22 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -3796,9 +3809,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -3824,29 +3837,29 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -3869,12 +3882,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 		}
@@ -3890,22 +3903,22 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetOp0Register(sreg);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if (state->operandSize == OpSize::Size32)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if (state.operandSize == OpSize::Size32)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::EAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::EAX));
 			}
-			else if (state->operandSize == OpSize::Size64)
+			else if (state.operandSize == OpSize::Size64)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::RAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AX));
 			}
 		}
 		else
@@ -3925,12 +3938,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
 		instruction.SetOp0Register(decoder->ReadOpSegReg());
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -3952,8 +3965,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize != OpSize::Size16)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 		}
@@ -3961,7 +3974,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		if (state->operandSize != OpSize::Size16)
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetOp0Kind(OpKind::FarBranch32);
 			instruction.SetFarBranch32(decoder->ReadUInt32());
@@ -3985,23 +3998,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
 		instruction.SetOp0Register(reg);
-		decoder->displIndex = state->instructionLength;
-		if (state->addressSize == OpSize::Size64)
+		decoder->displIndex = state.instructionLength;
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.InternalSetMemoryDisplSize(4);
-			state->flags |= StateFlags::Addr64;
+			state.flags |= StateFlags::Addr64;
 			instruction.SetMemoryDisplacement64(decoder->ReadUInt64());
 			//instruction.InternalMemoryIndexScale = 0;
 			//instruction.InternalMemoryBase = Register.None;
 			//instruction.InternalMemoryIndex = Register.None;
 			instruction.SetOp1Kind(OpKind::Memory);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.InternalSetMemoryDisplSize(3);
 			instruction.SetMemoryDisplacement64(decoder->ReadUInt32());
@@ -4032,20 +4045,20 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		decoder->displIndex = state->instructionLength;
-		if (state->addressSize == OpSize::Size64)
+		decoder->displIndex = state.instructionLength;
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.InternalSetMemoryDisplSize(4);
-			state->flags |= StateFlags::Addr64;
+			state.flags |= StateFlags::Addr64;
 			instruction.SetMemoryDisplacement64(decoder->ReadUInt64());
 			//instruction.InternalMemoryIndexScale = 0;
 			//instruction.InternalMemoryBase = Register.None;
 			//instruction.InternalMemoryIndex = Register.None;
 			instruction.SetOp0Kind(OpKind::Memory);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.InternalSetMemoryDisplSize(3);
 			instruction.SetMemoryDisplacement64(decoder->ReadUInt32());
@@ -4080,19 +4093,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		decoder->displIndex = state->instructionLength;
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		decoder->displIndex = state.instructionLength;
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.InternalSetMemoryDisplSize(4);
-			state->flags |= StateFlags::Addr64;
+			state.flags |= StateFlags::Addr64;
 			instruction.SetMemoryDisplacement64(decoder->ReadUInt64());
 			//instruction.InternalMemoryIndexScale = 0;
 			//instruction.InternalMemoryBase = Register.None;
 			//instruction.InternalMemoryIndex = Register.None;
 			instruction.SetOp1Kind(OpKind::Memory);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.InternalSetMemoryDisplSize(3);
 			instruction.SetMemoryDisplacement64(decoder->ReadUInt32());
@@ -4110,14 +4123,14 @@ namespace Iced::Intel::DecoderInternal
 			//instruction.InternalMemoryIndex = Register.None;
 			instruction.SetOp1Kind(OpKind::Memory);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
 			instruction.SetOp0Register(Register::EAX);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -4145,19 +4158,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		decoder->displIndex = state->instructionLength;
-		if (state->addressSize == OpSize::Size64)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		decoder->displIndex = state.instructionLength;
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.InternalSetMemoryDisplSize(4);
-			state->flags |= StateFlags::Addr64;
+			state.flags |= StateFlags::Addr64;
 			instruction.SetMemoryDisplacement64(decoder->ReadUInt64());
 			//instruction.InternalMemoryIndexScale = 0;
 			//instruction.InternalMemoryBase = Register.None;
 			//instruction.InternalMemoryIndex = Register.None;
 			instruction.SetOp0Kind(OpKind::Memory);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.InternalSetMemoryDisplSize(3);
 			instruction.SetMemoryDisplacement64(decoder->ReadUInt32());
@@ -4175,14 +4188,14 @@ namespace Iced::Intel::DecoderInternal
 			//instruction.InternalMemoryIndex = Register.None;
 			instruction.SetOp0Kind(OpKind::Memory);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
 			instruction.SetOp1Register(Register::EAX);
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -4210,10 +4223,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if ((decoder->options & DecoderOptions::AMD) == 0 || state->operandSize != OpSize::Size16)
+			if ((decoder->options & DecoderOptions::AMD) == 0 || state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 			}
@@ -4224,7 +4237,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 			}
@@ -4283,10 +4296,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
-			if (state->operandSize != OpSize::Size16)
+			if (state.operandSize != OpSize::Size16)
 			{
 				instruction.SetCode(code64);
 			}
@@ -4297,7 +4310,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		else
 		{
-			if (state->operandSize == OpSize::Size32)
+			if (state.operandSize == OpSize::Size32)
 			{
 				instruction.SetCode(code32);
 			}
@@ -4323,10 +4336,10 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		if (state->operandSize != OpSize::Size16)
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 			instruction.SetOp0Register(Register::EAX);
@@ -4351,12 +4364,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetOp0Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		if (state->operandSize != OpSize::Size16)
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 			instruction.SetOp1Register(Register::EAX);
@@ -4379,8 +4392,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize != OpSize::Size16)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -4410,11 +4423,11 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
 		instruction.SetOp0Register(Register::DX);
-		if (state->operandSize != OpSize::Size16)
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -4446,18 +4459,18 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 			{
 				index += 4;
 			}
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AL);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
 		}
 		else
 		{
@@ -4465,7 +4478,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->ReadOpMem(instruction);
 			Static::Assert(static_cast<std::int32_t>(HandlerFlags::Lock) == 8 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(StateFlags::AllowLock) == 0x00002000 ? 0 : -1);
-			state->flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
+			state.flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
 		}
 		instruction.SetOp1Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
@@ -4481,18 +4494,18 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 			{
 				index += 4;
 			}
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AL);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
 		}
 		else
 		{
@@ -4501,7 +4514,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		instruction.SetOp1Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(1);
-		state->flags |= StateFlags::NoImm;
+		state.flags |= StateFlags::NoImm;
 	}
 
 	OpCodeHandler_Eb_CL::OpCodeHandler_Eb_CL(Code code)
@@ -4514,18 +4527,18 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 			{
 				index += 4;
 			}
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AL);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
 		}
 		else
 		{
@@ -4553,18 +4566,18 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 			{
 				index += 4;
 			}
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AL);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
 		}
 		else
 		{
@@ -4572,7 +4585,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->ReadOpMem(instruction);
 			Static::Assert(static_cast<std::int32_t>(HandlerFlags::Lock) == 8 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(StateFlags::AllowLock) == 0x00002000 ? 0 : -1);
-			state->flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
+			state.flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
 		}
 	}
 
@@ -4592,19 +4605,19 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		std::uint32_t index;
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
-			index = state->rm + state->extraBaseRegisterBase;
-			if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+			index = state.rm + state.extraBaseRegisterBase;
+			if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 			{
 				index += 4;
 			}
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AL);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
 		}
 		else
 		{
@@ -4612,16 +4625,16 @@ namespace Iced::Intel::DecoderInternal
 			decoder->ReadOpMem(instruction);
 			Static::Assert(static_cast<std::int32_t>(HandlerFlags::Lock) == 8 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(StateFlags::AllowLock) == 0x00002000 ? 0 : -1);
-			state->flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
+			state.flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
 		}
-		index = state->reg + state->extraRegisterBase;
-		if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+		index = state.reg + state.extraRegisterBase;
+		if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 		{
 			index += 4;
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AL);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
 	}
 
 	OpCodeHandler_Gb_Eb::OpCodeHandler_Gb_Eb(Code code)
@@ -4634,26 +4647,26 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		std::uint32_t index = state->reg + state->extraRegisterBase;
-		if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+		std::uint32_t index = state.reg + state.extraRegisterBase;
+		if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 		{
 			index += 4;
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(index) + Register::AL);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
+		if (state.mod == 3)
 		{
-			index = state->rm + state->extraBaseRegisterBase;
-			if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+			index = state.rm + state.extraBaseRegisterBase;
+			if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 			{
 				index += 4;
 			}
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AL);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
 		}
 		else
 		{
@@ -4679,8 +4692,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(codeW1);
 		}
@@ -4688,7 +4701,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(codeW0);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -4718,8 +4731,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 		}
@@ -4727,21 +4740,21 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code32);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		else
 		{
 			instruction.SetOp0Kind(OpKind::Memory);
-			auto flags = (state->flags & StateFlags::W) != 0 ? flags64 : flags32;
+			auto flags = (state.flags & StateFlags::W) != 0 ? flags64 : flags32;
 			if ((flags & (HandlerFlags::Xacquire | HandlerFlags::Xrelease)) != 0)
 			{
 				decoder->SetXacquireXrelease(instruction);
 			}
 			Static::Assert(static_cast<std::int32_t>(HandlerFlags::Lock) == 8 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(StateFlags::AllowLock) == 0x00002000 ? 0 : -1);
-			state->flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
+			state.flags |= static_cast<StateFlags>(static_cast<std::uint32_t>(flags & HandlerFlags::Lock) << (13 - 3));
 			decoder->ReadOpMem(instruction);
 		}
 	}
@@ -4756,16 +4769,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		//instruction.MemoryDisplacement64 = 0;
 		//instruction.InternalMemoryIndexScale = 0;
 		//instruction.InternalSetMemoryDisplSize(0);
-		if (state->addressSize == OpSize::Size64)
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetInternalMemoryBase(Register::RBX);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetInternalMemoryBase(Register::EBX);
 		}
@@ -4794,16 +4807,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			instruction.SetCode(codeR);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -4823,13 +4836,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -4838,7 +4851,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
 	}
 
 	OpCodeHandler_rDI_VX_RX::OpCodeHandler_rDI_VX_RX(Code code)
@@ -4851,13 +4864,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->addressSize == OpSize::Size64)
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegEDI);
 		}
@@ -4867,12 +4880,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -4890,13 +4903,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->addressSize == OpSize::Size64)
+		if (state.addressSize == OpSize::Size64)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegRDI);
 		}
-		else if (state->addressSize == OpSize::Size32)
+		else if (state.addressSize == OpSize::Size32)
 		{
 			instruction.SetOp0Kind(OpKind::MemorySegEDI);
 		}
@@ -4906,12 +4919,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
-		if (state->mod == 3)
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
-			instruction.SetOp2Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{
@@ -4929,12 +4942,12 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -4955,9 +4968,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -4968,7 +4981,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
 	}
 
 	OpCodeHandler_VQ::OpCodeHandler_VQ(Code code)
@@ -4981,16 +4994,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{
@@ -5009,16 +5022,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{
@@ -5037,13 +5050,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{
@@ -5052,7 +5065,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
 	}
 
 	OpCodeHandler_MP::OpCodeHandler_MP(Code code)
@@ -5065,9 +5078,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -5078,7 +5091,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
 	}
 
 	OpCodeHandler_P_Q_Ib::OpCodeHandler_P_Q_Ib(Code code)
@@ -5091,16 +5104,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{
@@ -5121,16 +5134,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -5149,16 +5162,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -5177,9 +5190,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -5191,12 +5204,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -5216,9 +5229,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -5230,12 +5243,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -5257,9 +5270,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -5269,11 +5282,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			gpr = Register::EAX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -5282,7 +5295,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
 	}
 
 	OpCodeHandler_Gv_W::OpCodeHandler_Gv_W(Code codeW0, Code codeW1)
@@ -5296,26 +5309,26 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(codeW1);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(codeW0);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -5335,9 +5348,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
-		if (state->operandSize != OpSize::Size64)
+		if (state.operandSize != OpSize::Size64)
 		{
 			instruction.SetCode(codeW0);
 			gpr = Register::EAX;
@@ -5349,12 +5362,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -5380,8 +5393,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(codeW1);
 		}
@@ -5391,12 +5404,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -5417,16 +5430,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -5448,13 +5461,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -5476,13 +5489,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -5503,9 +5516,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -5515,11 +5528,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			gpr = Register::EAX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -5528,7 +5541,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
 		instruction.SetOp2Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
 	}
@@ -5544,9 +5557,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -5558,12 +5571,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -5583,9 +5596,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -5595,11 +5608,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			gpr = Register::EAX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -5608,7 +5621,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
 	}
 
 	OpCodeHandler_VX_E_Ib::OpCodeHandler_VX_E_Ib(Code code32, Code code64)
@@ -5622,9 +5635,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -5636,12 +5649,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -5663,8 +5676,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 		}
@@ -5674,19 +5687,19 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::XMM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::XMM0));
 		}
 		else
 		{
@@ -5704,16 +5717,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->reg > 3 || (state->extraRegisterBase & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.reg > 3 || (state.extraRegisterBase & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::BND0);
-		assert(state->mod != 3);
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::BND0));
+		assert(state.mod != 3);
 		instruction.SetOp1Kind(OpKind::Memory);
 		decoder->ReadOpMem_MPX(instruction);
 		// It can't be EIP since if it's MPX + 64-bit, the address size is always 64-bit
@@ -5733,13 +5746,13 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->reg > 3 || (state->extraRegisterBase & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.reg > 3 || (state.extraRegisterBase & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
 		instruction.SetCode(code);
-		assert(state->mod != 3);
+		assert(state.mod != 3);
 		instruction.SetOp0Kind(OpKind::Memory);
 		decoder->ReadOpMem_MPX(instruction);
 		// It can't be EIP since if it's MPX + 64-bit, the address size is always 64-bit
@@ -5749,7 +5762,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg) + Register::BND0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg) + Register::BND0));
 	}
 
 	OpCodeHandler_B_BM::OpCodeHandler_B_BM(Code code32, Code code64)
@@ -5763,8 +5776,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->reg > 3 || (state->extraRegisterBase & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.reg > 3 || (state.extraRegisterBase & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -5778,13 +5791,13 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::BND0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::BND0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::BND0);
-			if (state->rm > 3 || (state->extraBaseRegisterBase & decoder->invalidCheckMask) != 0)
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::BND0));
+			if (state.rm > 3 || (state.extraBaseRegisterBase & decoder->invalidCheckMask) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -5807,8 +5820,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->reg > 3 || ((state->extraRegisterBase & decoder->invalidCheckMask) != 0))
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.reg > 3 || ((state.extraRegisterBase & decoder->invalidCheckMask) != 0))
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -5820,12 +5833,12 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code32);
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm) + Register::BND0);
-			if (state->rm > 3 || (state->extraBaseRegisterBase & decoder->invalidCheckMask) != 0)
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm) + Register::BND0));
+			if (state.rm > 3 || (state.extraBaseRegisterBase & decoder->invalidCheckMask) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -5837,7 +5850,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg) + Register::BND0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg) + Register::BND0));
 	}
 
 	OpCodeHandler_B_Ev::OpCodeHandler_B_Ev(Code code32, Code code64, bool supportsRipRel)
@@ -5852,8 +5865,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->reg > 3 || (state->extraRegisterBase & decoder->invalidCheckMask) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.reg > 3 || (state.extraRegisterBase & decoder->invalidCheckMask) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -5870,12 +5883,12 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::BND0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::BND0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + baseReg);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + baseReg));
 		}
 		else
 		{
@@ -5900,8 +5913,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->mod == 3)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -5910,19 +5923,19 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetOp0Kind(OpKind::Memory);
 			decoder->ReadOpMem(instruction);
 		}
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
 	}
 
@@ -5937,8 +5950,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 		}
@@ -5948,19 +5961,19 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{
@@ -5981,8 +5994,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 		}
@@ -5992,19 +6005,19 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{
@@ -6022,16 +6035,16 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{
@@ -6051,29 +6064,29 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize == OpSize::Size32)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -6096,8 +6109,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->mod == 3)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.mod == 3)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -6106,26 +6119,26 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetOp0Kind(OpKind::Memory);
 			decoder->ReadOpMem(instruction);
 		}
-		if (state->operandSize == OpSize::Size32)
+		if (state.operandSize == OpSize::Size32)
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		else if (state->operandSize == OpSize::Size64)
+		else if (state.operandSize == OpSize::Size64)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code16);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::AX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::AX));
 		}
 	}
 
@@ -6140,31 +6153,31 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
-			std::uint32_t index = state->rm + state->extraBaseRegisterBase;
-			if ((state->flags & StateFlags::HasRex) != 0 && index >= 4)
+			std::uint32_t index = state.rm + state.extraBaseRegisterBase;
+			if ((state.flags & StateFlags::HasRex) != 0 && index >= 4)
 			{
 				index += 4;
 			}
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(index) + Register::AL);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(index) + Register::AL));
 		}
 		else
 		{
@@ -6184,32 +6197,32 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if ((state->flags & StateFlags::W) != 0)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			if ((state->flags & StateFlags::W) != 0)
+			if ((state.flags & StateFlags::W) != 0)
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::RAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::RAX));
 			}
 			else
 			{
-				instruction.SetOp1Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + Register::EAX);
+				instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + Register::EAX));
 			}
 		}
 		else
@@ -6230,23 +6243,23 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		assert(state->mod != 3);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		assert(state.mod != 3);
 		instruction.SetOp0Kind(OpKind::Memory);
 		decoder->ReadOpMem(instruction);
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::RAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::RAX));
 		}
 		else
 		{
 			instruction.SetCode(code32);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::EAX);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::EAX));
 		}
 	}
 
@@ -6261,9 +6274,9 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
-		if ((state->flags & StateFlags::W) != 0)
+		if ((state.flags & StateFlags::W) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -6273,11 +6286,11 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 			gpr = Register::EAX;
 		}
-		if (state->mod == 3)
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
-			instruction.SetOp0Register(static_cast<std::int32_t>(state->rm + state->extraBaseRegisterBase) + gpr);
+			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBase) + gpr));
 		}
 		else
 		{
@@ -6286,7 +6299,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(static_cast<std::int32_t>(state->reg + state->extraRegisterBase) + Register::XMM0);
+		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase) + Register::XMM0));
 		instruction.SetOp2Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
 	}

@@ -66,15 +66,15 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
+		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(static_cast<std::int32_t>(state->reg) + Register::MM0);
-		if (state->mod == 3)
+		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.reg) + Register::MM0));
+		if (state.mod == 3)
 		{
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
-			instruction.SetOp1Register(static_cast<std::int32_t>(state->rm) + Register::MM0);
+			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm) + Register::MM0));
 		}
 		else
 		{

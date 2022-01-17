@@ -46,12 +46,5 @@ namespace Iced::Intel
 		/// <param name="message">Exception message</param>
 		/// <param name="instruction">Instruction</param>
 		EncoderException(const std::string& message, Iced::Intel::Instruction const instruction);
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="info"></param>
-		/// <param name="context"></param>
-	protected:
-		EncoderException(SerializationInfo* info, StreamingContext context);
 	};
 }

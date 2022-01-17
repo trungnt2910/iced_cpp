@@ -36,4 +36,9 @@ namespace System::Diagnostics
 	{
 		assert(condition);
 	}
+
+	void Debug2::Fail(const std::string& str)
+	{
+		std::cerr << "Fail: " << str << std::endl;
+	}
 }

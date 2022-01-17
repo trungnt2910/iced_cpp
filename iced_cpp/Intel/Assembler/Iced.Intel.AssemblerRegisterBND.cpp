@@ -23,12 +23,12 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsBND(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a BND register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a BND register", nameof(value)));
 		}
 		Value = value;
 	}
 
-	AssemblerRegisterBND::operator Register()
+	AssemblerRegisterBND::operator Register() const
 	{
 		return this->Value;
 	}
@@ -47,8 +47,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterBND::Equals(std::any obj)
 	{
-		AssemblerRegisterBND other = dynamic_cast<AssemblerRegisterBND>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterBND* other = std::any_cast<AssemblerRegisterBND>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterBND::operator == (AssemblerRegisterBND right)

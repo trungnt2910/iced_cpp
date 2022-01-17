@@ -24,9 +24,6 @@
 
 namespace Iced::Intel::EncoderInternal
 {
-
-	std::vector<std::string> InstructionFormatter::ConvFnNames = { "Sf32", "Sf64", "Si32", "Si64", "Uf32", "Uf64", "Ui32", "Ui64", "Df32", "Df64", "Di32", "Di64" };
-
 	std::int32_t InstructionFormatter::GetKIndex()
 	{
 		k_index++;
@@ -292,7 +289,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 		sb->setLength(0);
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		Write(opCode - to_string(> GetMnemonic()), true);
+		Write(to_string(opCode->GetMnemonic()), true);
 		if (startOpIndex < opCount)
 		{
 			sb->append(' ');
@@ -556,7 +553,7 @@ namespace Iced::Intel::EncoderInternal
 					sb->append("imm8");
 					break;
 				case OpCodeOperandKind::imm8_const_1:
-					_ = sb->append('1');
+					sb->append('1');
 					break;
 				case OpCodeOperandKind::imm16:
 					sb->append("imm16");
@@ -837,7 +834,7 @@ namespace Iced::Intel::EncoderInternal
 		for (std::int32_t i = 0; i < s.length(); i++)
 		{
 			auto c = s[i];
-			c = upper ? char::ToUpperInvariant(c) : char::ToLowerInvariant(c);
+			c = upper ? toupper(c) : tolower(c);
 			sb->append(c);
 		}
 	}

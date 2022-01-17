@@ -55,7 +55,7 @@ namespace Iced::Intel
 		/// </summary>
 		bool IsEmpty() const;
 		/// <inheritdoc />
-		std::string ToString();
+		std::string ToString() const;
 		/// <inheritdoc />
 		bool Equals(Label* other) override;
 		/// <inheritdoc />

@@ -666,9 +666,6 @@
     <ClInclude Include="csharp\interfaces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="csharp\stream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="csharp\classes.h">
       <Filter>Header Files</Filter>
     </ClInclude>

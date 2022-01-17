@@ -18,7 +18,7 @@
 namespace Iced::Intel::FormatterInternal
 {
 
-	FormatterString MnemonicCC::GetMnemonicCC(FormatterOptions* options, std::int32_t ccIndex, std::vector<FormatterString>& mnemonics)
+	FormatterString MnemonicCC::GetMnemonicCC(FormatterOptions* options, std::int32_t ccIndex, const std::vector<FormatterString>& mnemonics)
 	{
 		std::int32_t index;
 		switch (ccIndex)

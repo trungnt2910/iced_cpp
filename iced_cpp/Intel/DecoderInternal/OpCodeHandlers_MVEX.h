@@ -32,11 +32,11 @@ namespace Iced::Intel::DecoderInternal
 	{
 		/* readonly */
 	private:
-		OpCodeHandler* handlerEH0;
+		std::shared_ptr<OpCodeHandler> handlerEH0;
 		/* readonly */
-		OpCodeHandler* handlerEH1;
+		std::shared_ptr<OpCodeHandler> handlerEH1;
 	public:
-		OpCodeHandler_EH(OpCodeHandler* handlerEH0, OpCodeHandler* handlerEH1);
+		OpCodeHandler_EH(std::shared_ptr<OpCodeHandler> handlerEH0, std::shared_ptr<OpCodeHandler> handlerEH1);
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
 	class OpCodeHandler_MVEX_M final : public OpCodeHandlerModRM

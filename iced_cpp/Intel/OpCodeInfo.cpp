@@ -130,12 +130,11 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: string? toInstructionStringValue = null;
 		std::string toInstructionStringValue = "";
-		std::vector<std::uint8_t> opKinds;
 		switch (static_cast<EncodingKind>(encoding))
 		{
 		case EncodingKind::Legacy:
 		{
-			opKinds = OpCodeOperandKinds::LegacyOpKinds;
+			const auto &opKinds = OpCodeOperandKinds::LegacyOpKinds;
 			op0Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::Legacy_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::Legacy_OpMask))];
 			op1Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::Legacy_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::Legacy_OpMask))];
 			op2Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::Legacy_Op2Shift)) & static_cast<std::uint32_t>(EncFlags1::Legacy_OpMask))];
@@ -150,7 +149,7 @@ namespace Iced::Intel
 		}
 		case EncodingKind::VEX:
 		{
-			opKinds = OpCodeOperandKinds::VexOpKinds;
+			const auto& opKinds = OpCodeOperandKinds::VexOpKinds;
 			op0Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::VEX_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::VEX_OpMask))];
 			op1Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::VEX_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::VEX_OpMask))];
 			op2Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::VEX_Op2Shift)) & static_cast<std::uint32_t>(EncFlags1::VEX_OpMask))];
@@ -166,7 +165,7 @@ namespace Iced::Intel
 		}
 		case EncodingKind::EVEX:
 		{
-			opKinds = OpCodeOperandKinds::EvexOpKinds;
+			const auto& opKinds = OpCodeOperandKinds::EvexOpKinds;
 			op0Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::EVEX_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::EVEX_OpMask))];
 			op1Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::EVEX_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::EVEX_OpMask))];
 			op2Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::EVEX_Op2Shift)) & static_cast<std::uint32_t>(EncFlags1::EVEX_OpMask))];
@@ -181,7 +180,7 @@ namespace Iced::Intel
 		}
 		case EncodingKind::XOP:
 		{
-			opKinds = OpCodeOperandKinds::XopOpKinds;
+			const auto& opKinds = OpCodeOperandKinds::XopOpKinds;
 			op0Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::XOP_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::XOP_OpMask))];
 			op1Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::XOP_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::XOP_OpMask))];
 			op2Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::XOP_Op2Shift)) & static_cast<std::uint32_t>(EncFlags1::XOP_OpMask))];
@@ -201,7 +200,7 @@ namespace Iced::Intel
 			break;
 		case EncodingKind::MVEX:
 		{
-			opKinds = OpCodeOperandKinds::MvexOpKinds;
+			const auto& opKinds = OpCodeOperandKinds::MvexOpKinds;
 			op0Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::MVEX_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::MVEX_OpMask))];
 			op1Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::MVEX_Op1Shift)) & static_cast<std::uint32_t>(EncFlags1::MVEX_OpMask))];
 			op2Kind = opKinds[static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::MVEX_Op2Shift)) & static_cast<std::uint32_t>(EncFlags1::MVEX_OpMask))];
@@ -809,7 +808,7 @@ namespace Iced::Intel
 		return static_cast<OpCodeOperandKind>(op4Kind);
 	}
 
-	OpCodeOperandKind OpCodeInfo::GetOpKind(std::int32_t operand)
+	OpCodeOperandKind OpCodeInfo::GetOpKind(std::int32_t operand) const
 	{
 		auto switchTempVar_9 = operand;
 

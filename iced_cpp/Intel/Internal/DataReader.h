@@ -38,8 +38,8 @@ namespace Iced::Intel::Internal
 		std::int32_t GetIndex() const;
 		void SetIndex(std::int32_t value);
 		bool GetCanRead() const;
-		DataReader(std::vector<std::uint8_t>& data);
-		DataReader(std::vector<std::uint8_t>& data, std::int32_t maxStringLength);
+		DataReader(const std::vector<std::uint8_t>& data);
+		DataReader(const std::vector<std::uint8_t>& data, std::int32_t maxStringLength);
 		std::uint8_t ReadByte();
 		std::uint32_t ReadCompressedUInt32();
 		std::string ReadAsciiString();

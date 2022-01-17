@@ -24,6 +24,8 @@
 // Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel::BlockEncoderInternal
 {
+	class Instr;
+	class Block;
 	/* readonly */
 	class TargetInstr
 	{
@@ -31,7 +33,7 @@ namespace Iced::Intel::BlockEncoderInternal
 	private:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: Instr? instruction;
-		Instr* instruction;
+		Instr* instruction = nullptr;
 		/* readonly */
 		std::uint64_t address = 0;
 	public:

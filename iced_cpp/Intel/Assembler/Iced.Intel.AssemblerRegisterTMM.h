@@ -48,7 +48,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="reg">AssemblerRegisterTMM</param>
 		/// <returns></returns>
-		operator Register();
+		operator Register() const;
 		/// <inheritdoc />
 		bool Equals(AssemblerRegisterTMM other) override;
 		/// <inheritdoc />
@@ -71,6 +71,9 @@ namespace Iced::Intel
 		/// <param name="right">Register</param>
 		/// <returns></returns>
 		bool operator != (AssemblerRegisterTMM right);
+
+		inline bool operator == (Register right) { return (Register)(*this) == right; }
+		inline std::string ToString() const { return to_string(Value); }
 
 		AssemblerRegisterTMM() = default;
 	};

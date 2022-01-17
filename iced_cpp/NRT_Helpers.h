@@ -47,5 +47,6 @@ namespace System::Diagnostics
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [Conditional("DEBUG")] public static void Assert([DoesNotReturnIf(false)] bool condition)
 		static void Assert(bool condition);
+		static void Fail(const std::string& str);
 	};
 }

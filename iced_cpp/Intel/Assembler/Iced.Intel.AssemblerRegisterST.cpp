@@ -23,12 +23,12 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsST(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a ST register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a ST register", nameof(value)));
 		}
 		Value = value;
 	}
 
-	AssemblerRegisterST::operator Register()
+	AssemblerRegisterST::operator Register() const
 	{
 		return this->Value;
 	}
@@ -47,8 +47,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterST::Equals(std::any obj)
 	{
-		AssemblerRegisterST other = dynamic_cast<AssemblerRegisterST>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterST* other = std::any_cast<AssemblerRegisterST>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterST::operator == (AssemblerRegisterST right)

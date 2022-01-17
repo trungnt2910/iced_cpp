@@ -36,7 +36,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		Flags = static_cast<InstrOpInfoFlags>((static_cast<std::uint32_t>(Flags) & ~(static_cast<std::uint32_t>(InstrOpInfoFlags::MemorySizeMask) << static_cast<std::int32_t>(InstrOpInfoFlags::MemorySizeShift))) | ((static_cast<std::uint32_t>(value) & static_cast<std::uint32_t>(InstrOpInfoFlags::MemorySizeMask)) << static_cast<std::int32_t>(InstrOpInfoFlags::MemorySizeShift)));
 	}
 
-	Iced::Intel::Register InstrOpInfo::GetOpRegister(std::int32_t operand)
+	Iced::Intel::Register InstrOpInfo::GetOpRegister(std::int32_t operand) const
 	{
 		auto switchTempVar_0 = operand;
 
@@ -45,7 +45,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		return (switchTempVar_0 == 0) ? static_cast<Register>(Op0Register) : (switchTempVar_0 == 1) ? static_cast<Register>(Op1Register) : (switchTempVar_0 == 2) ? static_cast<Register>(Op2Register) : (switchTempVar_0 == 3) ? static_cast<Register>(Op3Register) : (switchTempVar_0 == 4) ? static_cast<Register>(Op4Register) : throw ArgumentOutOfRangeException("operand");
 	}
 
-	InstrOpKind InstrOpInfo::GetOpKind(std::int32_t operand)
+	InstrOpKind InstrOpInfo::GetOpKind(std::int32_t operand) const
 	{
 		switch (operand)
 		{
@@ -65,7 +65,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		}
 	}
 
-	std::int32_t InstrOpInfo::GetInstructionIndex(std::int32_t operand)
+	std::int32_t InstrOpInfo::GetInstructionIndex(std::int32_t operand) const
 	{
 		std::int32_t instructionOperand;
 		switch (operand)
@@ -127,7 +127,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		return false;
 	}
 
-	std::int32_t InstrOpInfo::GetOperandIndex(std::int32_t instructionOperand)
+	std::int32_t InstrOpInfo::GetOperandIndex(std::int32_t instructionOperand) const
 	{
 		std::int32_t index;
 		if (instructionOperand == Op0Index)
@@ -250,7 +250,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		info = InstrOpInfo(mnemonic, instruction, flags);
 	}
 
-	SimpleInstrInfo_cc::SimpleInstrInfo_cc(std::int32_t ccIndex, std::vector<std::string>& mnemonics)
+	SimpleInstrInfo_cc::SimpleInstrInfo_cc(std::int32_t ccIndex, const std::vector<std::string>& mnemonics)
 	{
 		this->ccIndex = ccIndex;
 		this->mnemonics = FormatterString::Create(mnemonics);
@@ -373,7 +373,7 @@ namespace Iced::Intel::NasmFormatterInternal
 	{
 		if (instruction.GetImmediate8() == 10)
 		{
-			info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+			info = InstrOpInfo();
 			info.Mnemonic = mnemonic;
 		}
 		else
@@ -404,7 +404,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		case OpKind::MemoryESRDI:
 			return InstrOpInfoFlags::AddrSize64;
 		default:
-			return 0;
+			return (InstrOpInfoFlags)0;
 		}
 	}
 
@@ -418,12 +418,12 @@ namespace Iced::Intel::NasmFormatterInternal
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var instrFlags = (switchTempVar_2 == CodeSize.Unknown) ? opKindFlags : (switchTempVar_2 == CodeSize.Code16) ? InstrOpInfoFlags.AddrSize16 : (switchTempVar_2 == CodeSize.Code32) ? InstrOpInfoFlags.AddrSize32 : (switchTempVar_2 == CodeSize.Code64) ? InstrOpInfoFlags.AddrSize64 : throw new InvalidOperationException();
 		auto instrFlags = (switchTempVar_2 == CodeSize::Unknown) ? opKindFlags : (switchTempVar_2 == CodeSize::Code16) ? InstrOpInfoFlags::AddrSize16 : (switchTempVar_2 == CodeSize::Code32) ? InstrOpInfoFlags::AddrSize32 : (switchTempVar_2 == CodeSize::Code64) ? InstrOpInfoFlags::AddrSize64 : throw InvalidOperationException();
-		InstrOpInfoFlags flags = (Iced::Intel::GasFormatterInternal::InstrOpInfoFlags)0;
+		InstrOpInfoFlags flags = (InstrOpInfoFlags)0;
 		if (opKindFlags != instrFlags)
 		{
 			flags |= opKindFlags;
 		}
-		info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+		info = InstrOpInfo();
 		info.Flags = flags;
 		info.Mnemonic = mnemonic;
 	}
@@ -441,7 +441,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var baseReg = (switchTempVar_3 == CodeSize.Unknown) ? instruction.MemoryBase : (switchTempVar_3 == CodeSize.Code16) ? Register.BX : (switchTempVar_3 == CodeSize.Code32) ? Register.EBX : (switchTempVar_3 == CodeSize.Code64) ? Register.RBX : throw new InvalidOperationException();
 		auto baseReg = (switchTempVar_3 == CodeSize::Unknown) ? instruction.GetMemoryBase() : (switchTempVar_3 == CodeSize::Code16) ? Register::BX : (switchTempVar_3 == CodeSize::Code32) ? Register::EBX : (switchTempVar_3 == CodeSize::Code64) ? Register::RBX : throw InvalidOperationException();
-		InstrOpInfoFlags flags = (Iced::Intel::GasFormatterInternal::InstrOpInfoFlags)0;
+		InstrOpInfoFlags flags = (InstrOpInfoFlags)0;
 		auto memBaseReg = instruction.GetMemoryBase();
 		if (memBaseReg != baseReg)
 		{
@@ -458,7 +458,7 @@ namespace Iced::Intel::NasmFormatterInternal
 				flags |= InstrOpInfoFlags::AddrSize64;
 			}
 		}
-		info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+		info = InstrOpInfo();
 		info.Flags = flags;
 		info.Mnemonic = mnemonic;
 	}
@@ -481,10 +481,10 @@ namespace Iced::Intel::NasmFormatterInternal
 		}
 		else
 		{
-			info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+			info = InstrOpInfo();
 			info.Mnemonic = str_xchg;
 			info.OpCount = 2;
-			Static::Assert(InstrOpKind::Register == (Iced::Intel::GasFormatterInternal::InstrOpKind)0 ? 0 : -1);
+			Static::Assert(InstrOpKind::Register == (InstrOpKind)0 ? 0 : -1);
 			//info.Op0Kind = InstrOpKind.Register;
 			//info.Op1Kind = InstrOpKind.Register;
 			Static::Assert(InstrOpInfo::TEST_RegisterBits == 8 ? 0 : -1);
@@ -504,14 +504,14 @@ namespace Iced::Intel::NasmFormatterInternal
 
 	void SimpleInstrInfo_STIG1::GetOpInfo(FormatterOptions* options, Instruction const instruction, InstrOpInfo& info)
 	{
-		info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+		info = InstrOpInfo();
 		info.Mnemonic = mnemonic;
 		assert(instruction.GetOpCount() == 2);
 		assert(instruction.GetOp0Kind() == OpKind::Register && instruction.GetOp0Register() == Register::ST0);
 		if (!pseudoOp || !(options->GetUsePseudoOps() && instruction.GetOp1Register() == Register::ST1))
 		{
 			info.OpCount = 1;
-			Static::Assert(InstrOpKind::Register == (Iced::Intel::GasFormatterInternal::InstrOpKind)0 ? 0 : -1);
+			Static::Assert(InstrOpKind::Register == (InstrOpKind)0 ? 0 : -1);
 			//info.Op0Kind = InstrOpKind.Register;
 			Static::Assert(InstrOpInfo::TEST_RegisterBits == 8 ? 0 : -1);
 			info.Op0Register = static_cast<std::uint8_t>(instruction.GetOp1Register());
@@ -519,7 +519,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		}
 	}
 
-	SimpleInstrInfo_STIG2::SimpleInstrInfo_STIG2(const std::string& mnemonic, bool pseudoOp) : SimpleInstrInfo_STIG2(mnemonic, 0, pseudoOp)
+	SimpleInstrInfo_STIG2::SimpleInstrInfo_STIG2(const std::string& mnemonic, bool pseudoOp) : SimpleInstrInfo_STIG2(mnemonic, (InstrOpInfoFlags)0, pseudoOp)
 	{
 	}
 
@@ -536,7 +536,7 @@ namespace Iced::Intel::NasmFormatterInternal
 
 	void SimpleInstrInfo_STIG2::GetOpInfo(FormatterOptions* options, Instruction const instruction, InstrOpInfo& info)
 	{
-		info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+		info = InstrOpInfo();
 		info.Flags = flags;
 		info.Mnemonic = mnemonic;
 		assert(instruction.GetOpCount() == 2);
@@ -544,7 +544,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		if (!pseudoOp || !(options->GetUsePseudoOps() && instruction.GetOp0Register() == Register::ST1))
 		{
 			info.OpCount = 1;
-			Static::Assert(InstrOpKind::Register == (Iced::Intel::GasFormatterInternal::InstrOpKind)0 ? 0 : -1);
+			Static::Assert(InstrOpKind::Register == (InstrOpKind)0 ? 0 : -1);
 			//info.Op0Kind = InstrOpKind.Register;
 			Static::Assert(InstrOpInfo::TEST_RegisterBits == 8 ? 0 : -1);
 			info.Op0Register = static_cast<std::uint8_t>(instruction.GetOp0Register());
@@ -592,7 +592,7 @@ namespace Iced::Intel::NasmFormatterInternal
 
 
 		auto bitness = (switchTempVar_4 == OpKind::MemorySegDI) ? static_cast<std::uint8_t>(16) : (switchTempVar_4 == OpKind::MemorySegEDI) ? static_cast<std::uint8_t>(32) : (switchTempVar_4 == OpKind::MemorySegRDI) ? static_cast<std::uint8_t>(64) : instrBitness;
-		info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+		info = InstrOpInfo();
 		info.Mnemonic = mnemonic;
 		info.OpCount = 2;
 		info.Op0Kind = static_cast<InstrOpKind>(instruction.GetOp1Kind());
@@ -628,7 +628,7 @@ namespace Iced::Intel::NasmFormatterInternal
 
 	void SimpleInstrInfo_pblendvb::GetOpInfo(FormatterOptions* options, Instruction const instruction, InstrOpInfo& info)
 	{
-		info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+		info = InstrOpInfo();
 		assert(instruction.GetOpCount() == 2);
 		info.Mnemonic = mnemonic;
 		info.OpCount = 3;
@@ -639,11 +639,11 @@ namespace Iced::Intel::NasmFormatterInternal
 		info.Op1Index = 1;
 		Static::Assert(InstrOpInfo::TEST_RegisterBits == 8 ? 0 : -1);
 		info.Op1Register = static_cast<std::uint8_t>(instruction.GetOp1Register());
-		Static::Assert(InstrOpKind::Register == (Iced::Intel::GasFormatterInternal::InstrOpKind)0 ? 0 : -1);
+		Static::Assert(InstrOpKind::Register == (InstrOpKind)0 ? 0 : -1);
 		//info.Op2Kind = InstrOpKind.Register;
 		Static::Assert(InstrOpInfo::TEST_RegisterBits == 8 ? 0 : -1);
 		info.Op2Register = static_cast<std::uint8_t>(Register::XMM0);
-		info.MemorySize = memSize;
+		info.SetMemorySize(memSize);
 		info.Op2Index = OpAccess_Read;
 	}
 
@@ -654,7 +654,7 @@ namespace Iced::Intel::NasmFormatterInternal
 
 	void SimpleInstrInfo_reverse::GetOpInfo(FormatterOptions* options, Instruction const instruction, InstrOpInfo& info)
 	{
-		info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+		info = InstrOpInfo();
 		info.Mnemonic = mnemonic;
 		assert(instruction.GetOpCount() == 2);
 		info.OpCount = 2;
@@ -665,7 +665,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		info.Op1Kind = static_cast<InstrOpKind>(instruction.GetOp0Kind());
 		Static::Assert(InstrOpInfo::TEST_RegisterBits == 8 ? 0 : -1);
 		info.Op1Register = static_cast<std::uint8_t>(instruction.GetOp0Register());
-		info.MemorySize = instruction.GetMemorySize();
+		info.SetMemorySize(instruction.GetMemorySize());
 	}
 
 	SimpleInstrInfo_OpSize::SimpleInstrInfo_OpSize(CodeSize codeSize, const std::string& mnemonic, const std::string& mnemonic16, const std::string& mnemonic32, const std::string& mnemonic64)
@@ -862,12 +862,12 @@ namespace Iced::Intel::NasmFormatterInternal
 			else if (Register::EAX <= reg && reg <= Register::R15D)
 			{
 				regSize = 32;
-				reg = reg - Register::EAX + Register::AX;
+				reg = (Register)(reg - Register::EAX + Register::AX);
 			}
 			else if (Register::RAX <= reg && reg <= Register::R15)
 			{
 				regSize = 64;
-				reg = reg - Register::RAX + Register::AX;
+				reg = (Register)(reg - Register::RAX + Register::AX);
 			}
 			assert(regSize != 0);
 			if (regSize != 0)
@@ -893,11 +893,11 @@ namespace Iced::Intel::NasmFormatterInternal
 		}
 	}
 
-	SimpleInstrInfo_os_jcc::SimpleInstrInfo_os_jcc(std::int32_t bitness, std::int32_t ccIndex, std::vector<std::string>& mnemonics) : SimpleInstrInfo_os_jcc(bitness, ccIndex, mnemonics, InstrOpInfoFlags::None)
+	SimpleInstrInfo_os_jcc::SimpleInstrInfo_os_jcc(std::int32_t bitness, std::int32_t ccIndex, const std::vector<std::string>& mnemonics) : SimpleInstrInfo_os_jcc(bitness, ccIndex, mnemonics, InstrOpInfoFlags::None)
 	{
 	}
 
-	SimpleInstrInfo_os_jcc::SimpleInstrInfo_os_jcc(std::int32_t bitness, std::int32_t ccIndex, std::vector<std::string>& mnemonics, InstrOpInfoFlags flags)
+	SimpleInstrInfo_os_jcc::SimpleInstrInfo_os_jcc(std::int32_t bitness, std::int32_t ccIndex, const std::vector<std::string>& mnemonics, InstrOpInfoFlags flags)
 	{
 		this->bitness = bitness;
 		this->ccIndex = ccIndex;
@@ -960,7 +960,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		info = InstrOpInfo(mnemonic, instruction, flags);
 	}
 
-	SimpleInstrInfo_os_loop::SimpleInstrInfo_os_loop(std::int32_t bitness, std::int32_t ccIndex, Register register_, std::vector<std::string>& mnemonics)
+	SimpleInstrInfo_os_loop::SimpleInstrInfo_os_loop(std::int32_t bitness, std::int32_t ccIndex, Register register_, const std::vector<std::string>& mnemonics)
 	{
 		this->bitness = bitness;
 		this->ccIndex = ccIndex;
@@ -1287,7 +1287,7 @@ namespace Iced::Intel::NasmFormatterInternal
 	void SimpleInstrInfo_bcst::GetOpInfo(FormatterOptions* options, Instruction const instruction, InstrOpInfo& info)
 	{
 		auto memInfo = MemorySizes::AllMemorySizes[static_cast<std::int32_t>(instruction.GetMemorySize())];
-		auto flags = memInfo.bcstTo->Length != 0 ? InstrOpInfoFlags::None : flagsNoBroadcast;
+		auto flags = memInfo.bcstTo.GetLength() != 0 ? InstrOpInfoFlags::None : flagsNoBroadcast;
 		info = InstrOpInfo(mnemonic, instruction, flags);
 	}
 
@@ -1307,7 +1307,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		info = InstrOpInfo(mnemonic, instruction, flags);
 	}
 
-	SimpleInstrInfo_pops::SimpleInstrInfo_pops(const std::string& mnemonic, std::vector<FormatterString>& pseudo_ops)
+	SimpleInstrInfo_pops::SimpleInstrInfo_pops(const std::string& mnemonic, const std::vector<FormatterString>& pseudo_ops)
 	{
 		this->mnemonic = FormatterString(mnemonic);
 		this->pseudo_ops = pseudo_ops;
@@ -1347,7 +1347,7 @@ namespace Iced::Intel::NasmFormatterInternal
 		info.OpCount--;
 	}
 
-	SimpleInstrInfo_pclmulqdq::SimpleInstrInfo_pclmulqdq(const std::string& mnemonic, std::vector<FormatterString>& pseudo_ops)
+	SimpleInstrInfo_pclmulqdq::SimpleInstrInfo_pclmulqdq(const std::string& mnemonic, const std::vector<FormatterString>& pseudo_ops)
 	{
 		this->mnemonic = FormatterString(mnemonic);
 		this->pseudo_ops = pseudo_ops;
@@ -1448,7 +1448,7 @@ namespace Iced::Intel::NasmFormatterInternal
 
 	void SimpleInstrInfo_invlpga::GetOpInfo(FormatterOptions* options, Instruction const instruction, InstrOpInfo& info)
 	{
-		info = Iced::Intel::GasFormatterInternal::InstrOpInfo();
+		info = InstrOpInfo();
 		info.Mnemonic = mnemonic;
 		info.OpCount = 2;
 		info.Op0Kind = InstrOpKind::Register;

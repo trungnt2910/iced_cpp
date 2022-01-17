@@ -36,7 +36,7 @@ namespace Iced::Intel::DecoderInternal
 		instruction.SetOp0Register(Register::ST0);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
-		instruction.SetOp1Register(Register::ST0 + static_cast<std::int32_t>(decoder->state.rm));
+		instruction.SetOp1Register(((Register)(Register::ST0 + static_cast<std::int32_t>(decoder->state.rm))));
 	}
 
 	OpCodeHandler_STi_ST::OpCodeHandler_STi_ST(Code code)
@@ -50,7 +50,7 @@ namespace Iced::Intel::DecoderInternal
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(Register::ST0 + static_cast<std::int32_t>(decoder->state.rm));
+		instruction.SetOp0Register((Register)(Register::ST0 + static_cast<std::int32_t>(decoder->state.rm)));
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
 		instruction.SetOp1Register(Register::ST0);
@@ -67,7 +67,7 @@ namespace Iced::Intel::DecoderInternal
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
-		instruction.SetOp0Register(Register::ST0 + static_cast<std::int32_t>(decoder->state.rm));
+		instruction.SetOp0Register((Register)(Register::ST0 + static_cast<std::int32_t>(decoder->state.rm)));
 	}
 
 	OpCodeHandler_Mf::OpCodeHandler_Mf(Code code)
@@ -87,8 +87,8 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		assert(state->Encoding == EncodingKind::Legacy);
-		if (state->operandSize != OpSize::Size16)
+		assert(state.GetEncoding() == EncodingKind::Legacy);
+		if (state.operandSize != OpSize::Size16)
 		{
 			instruction.SetCode(code32);
 		}
@@ -96,7 +96,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetCode(code16);
 		}
-		assert(state->mod != 3);
+		assert(state.mod != 3);
 		instruction.SetOp0Kind(OpKind::Memory);
 		decoder->ReadOpMem(instruction);
 	}

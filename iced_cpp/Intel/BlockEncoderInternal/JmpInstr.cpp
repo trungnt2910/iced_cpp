@@ -20,7 +20,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	JmpInstr::JmpInstr(BlockEncoder* blockEncoder, Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	JmpInstr::JmpInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
 	{
 		bitness = blockEncoder->GetBitness();
 		this->instruction = instruction;
@@ -141,6 +141,7 @@ namespace Iced::Intel::BlockEncoderInternal
 				instruction.InternalSetCodeNoCheck(Iced::Intel::InstructionInfoExtensions::ToNearBranch(instruction.GetCode()));
 			}
 			instruction.SetNearBranch64(targetInstr.GetAddress());
+			std::uint32_t _;
 			if (!encoder->TryEncode(instruction, IP, _, errorMessage))
 			{
 				constantOffsets = Iced::Intel::ConstantOffsets();
@@ -149,7 +150,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			constantOffsets = encoder->GetConstantOffsets();
 			return "";
 		case InstrKind::Long:
-			Debug2::Assert(pointerData != nullptr);
+			System::Diagnostics::Debug2::Assert(pointerData != nullptr);
 			isOriginalInstruction = false;
 			constantOffsets = Iced::Intel::ConstantOffsets();
 			pointerData->Data = targetInstr.GetAddress();

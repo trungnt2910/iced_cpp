@@ -28,9 +28,9 @@ namespace Iced::Intel::DecoderInternal
 	class OpCodeHandlersTables_XOP final
 	{
 	public:
-		static std::vector<OpCodeHandler*> Handlers_MAP8;
-		static std::vector<OpCodeHandler*> Handlers_MAP9;
-		static std::vector<OpCodeHandler*> Handlers_MAP10;
+		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_MAP8;
+		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_MAP9;
+		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_MAP10;
 	private:
 		class StaticConstructor
 		{

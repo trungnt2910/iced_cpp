@@ -43,7 +43,7 @@ namespace Iced::Intel
 				fullReg++;
 				if (reg == Register::AH)
 				{
-					fullReg -= 4;
+					fullReg = (Register)(fullReg - 4);
 				}
 			}
 		}

@@ -40,4 +40,7 @@ namespace System
 			static std::vector<T> Empty;
 		};
 	};
+
+	template <typename T>
+	std::vector<T> Array2::EmptyClass<T>::Empty = std::vector<T>();
 }

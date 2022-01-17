@@ -25,12 +25,12 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsGPR16(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a GPR16 register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a GPR16 register", nameof(value)));
 		}
 		Value = value;
 	}
 
-	AssemblerRegister16::operator Register()
+	AssemblerRegister16::operator Register() const
 	{
 		return this->Value;
 	}
@@ -69,8 +69,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegister16::Equals(std::any obj)
 	{
-		AssemblerRegister16 other = dynamic_cast<AssemblerRegister16>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegister16* other = std::any_cast<AssemblerRegister16>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegister16::operator == (AssemblerRegister16 right)

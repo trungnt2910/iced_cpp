@@ -217,8 +217,8 @@ namespace Iced::Intel
 		void FormatRegister(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, Register reg);
 		void FormatMemory(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, InstrOpInfoFlags flags);
 		void FormatMemorySize(FormatterOutput* output, SymbolResult& symbol, MemorySize memSize, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions, bool useSymbol);
-		bool IsSameMemSize(std::vector<FormatterString>& memSizeStrings, SymbolResult& symbol);
-		static bool IsSameMemSize(std::vector<FormatterString>& a, std::vector<FormatterString>& b);
+		bool IsSameMemSize(const std::vector<FormatterString>& memSizeStrings, SymbolResult& symbol);
+		static bool IsSameMemSize(const std::vector<FormatterString>& a, const std::vector<FormatterString>& b);
 		void FormatKeyword(FormatterOutput* output, FormatterString keyword);
 		/// <summary>
 		/// Formats a register

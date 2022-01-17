@@ -33,14 +33,12 @@
 #include <csharp/exceptionhelper.h>
 #include <cassert>
 
-//C# TO C++ CONVERTER NOTE: Forward class declarations:
-namespace Iced::Intel { class RegInfo2; }
+namespace Iced::Intel::DecoderInternal { class OpCodeHandler; }
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
-using namespace Iced::Intel::DecoderInternal;
 namespace Iced::Intel
 {
 	// GENERATOR-BEGIN: OpSize
@@ -92,65 +90,48 @@ namespace Iced::Intel
 		class Decoder final : public std::vector<Instruction>
 	{
 	private:
+		class RegInfo2;
+		using OpCodeHandler = DecoderInternal::OpCodeHandler;
+	private:
 		std::int32_t Bitness = 0;
 
 		std::uint64_t instructionPointer = 0;
 		/* readonly */
 		CodeReader* reader;
 		/* readonly */
-		std::vector<RegInfo2> memRegs16;
+		std::vector<Decoder::RegInfo2> memRegs16;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_MAP0;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_MAP0;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_VEX_MAP0;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_VEX_MAP0;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_VEX_0F;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_VEX_0F;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_VEX_0F38;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_VEX_0F38;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_VEX_0F3A;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_VEX_0F3A;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_EVEX_0F;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_0F;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_EVEX_0F38;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_0F38;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_EVEX_0F3A;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_0F3A;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_EVEX_MAP5;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_MAP5;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_EVEX_MAP6;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_MAP6;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_XOP_MAP8;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_XOP_MAP8;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_XOP_MAP9;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_XOP_MAP9;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_XOP_MAP10;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_XOP_MAP10;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_MVEX_0F;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_MVEX_0F;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_MVEX_0F38;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_MVEX_0F38;
 		/* readonly */
-		std::vector<OpCodeHandler*> handlers_MVEX_0F3A;
-	public:
-		State state;
-		std::uint32_t displIndex = 0;
-		DecoderOptions options = static_cast<DecoderOptions>(0);
-		std::uint32_t invalidCheckMask = 0; // All 1s if we should check for invalid instructions, else 0
-		std::uint32_t is64bMode_and_W = 0; // StateFlags.W if 64-bit mode, 0 if 16/32-bit mode
-		std::uint32_t reg15Mask = 0; // 7 in 16/32-bit mode, 15 in 64-bit mode
-		/* readonly */
-	private:
-		std::uint32_t mask64b = 0;
-	public:
-		CodeSize defaultCodeSize = static_cast<CodeSize>(0);
-		OpSize defaultOperandSize = static_cast<OpSize>(0);
-		/* readonly */
-	private:
-		OpSize defaultAddressSize = static_cast<OpSize>(0);
-	public:
-		OpSize defaultInvertedOperandSize = static_cast<OpSize>(0);
-		OpSize defaultInvertedAddressSize = static_cast<OpSize>(0);
-		bool is64bMode = false;
+		std::vector<std::shared_ptr<OpCodeHandler>> handlers_MVEX_0F3A;
 	public:
 		class State
 		{
@@ -176,6 +157,26 @@ namespace Iced::Intel
 			EncodingKind GetEncoding() const;
 			std::int32_t GetSss() const;
 		};
+	public:
+		State state;
+		std::uint32_t displIndex = 0;
+		DecoderOptions options = static_cast<DecoderOptions>(0);
+		std::uint32_t invalidCheckMask = 0; // All 1s if we should check for invalid instructions, else 0
+		std::uint32_t is64bMode_and_W = 0; // StateFlags.W if 64-bit mode, 0 if 16/32-bit mode
+		std::uint32_t reg15Mask = 0; // 7 in 16/32-bit mode, 15 in 64-bit mode
+		/* readonly */
+	private:
+		std::uint32_t mask64b = 0;
+	public:
+		CodeSize defaultCodeSize = static_cast<CodeSize>(0);
+		OpSize defaultOperandSize = static_cast<OpSize>(0);
+		/* readonly */
+	private:
+		OpSize defaultAddressSize = static_cast<OpSize>(0);
+	public:
+		OpSize defaultInvertedOperandSize = static_cast<OpSize>(0);
+		OpSize defaultInvertedAddressSize = static_cast<OpSize>(0);
+		bool is64bMode = false;
 		/// <summary>
 		/// Current <c>IP</c>/<c>EIP</c>/<c>RIP</c> value.<br/>
 		/// <br/>
@@ -292,11 +293,11 @@ namespace Iced::Intel
 		void SetInvalidInstruction();
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal void DecodeTable(OpCodeHandler[] table, ref Instruction instruction)
-		void DecodeTable(std::vector<OpCodeHandler*>& table, Instruction& instruction);
+		void DecodeTable(std::vector<std::shared_ptr<OpCodeHandler>>& table, Instruction& instruction);
 	private:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] void DecodeTable(OpCodeHandler handler, ref Instruction instruction)
-		void DecodeTable(OpCodeHandler* handler, Instruction& instruction);
+		void DecodeTable(std::shared_ptr<OpCodeHandler> handler, Instruction& instruction);
 	public:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal void ReadModRM()
@@ -354,48 +355,5 @@ namespace Iced::Intel
 		/// <returns></returns>
 	public:
 		ConstantOffsets GetConstantOffsets(Instruction const instruction);
-		/// <summary>
-		/// An <see cref="Instruction"/> enumerator
-		/// </summary>
-	public:
-		class Enumerator : public IEnumerator<Instruction>
-		{
-			/* readonly */
-		private:
-			Decoder* decoder;
-			Instruction instruction;
-
-		public:
-			Enumerator(Decoder* decoder);
-
-				/// <summary>
-				/// Gets the current instruction
-				/// </summary>
-				Instruction GetCurrent() const override;
-		private:
-			Instruction IEnumerator;
-			std::any IEnumerator;
-			/// <summary>
-			/// Decodes the next instruction
-			/// </summary>
-			/// <returns></returns>
-		public:
-			bool MoveNext() override;
-			void Reset() override;
-			/// <summary>
-			/// Disposes of this instance
-			/// </summary>
-			~Enumerator();
-
-			Enumerator() = default;
-		};
-		/// <summary>
-		/// Gets the <see cref="Instruction"/> enumerator
-		/// </summary>
-		/// <returns></returns>
-	public:
-		Enumerator GetEnumerator();
-		IEnumerator<Instruction>* IEnumerable_GetEnumerator() override;
-		System::Collections::IEnumerator* IEnumerable_GetEnumerator() override;
 	};
 }

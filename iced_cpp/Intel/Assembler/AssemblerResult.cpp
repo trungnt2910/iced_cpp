@@ -18,12 +18,12 @@
 namespace Iced::Intel
 {
 
-	AssemblerResult::AssemblerResult(std::vector<BlockEncoderResult>& result)
+	AssemblerResult::AssemblerResult(const std::vector<BlockEncoderResult>& result)
 	{
 		Result = result;
 	}
 
-	std::uint64_t AssemblerResult::GetLabelRIP(Label* const label, std::int32_t index)
+	std::uint64_t AssemblerResult::GetLabelRIP(const Label& label, std::int32_t index)
 	{
 		if (label.IsEmpty())
 		{
@@ -44,7 +44,7 @@ namespace Iced::Intel
 		auto result = Result[index];
 		if (result.NewInstructionOffsets.empty() || label.GetInstructionIndex() >= result.NewInstructionOffsets.size())
 		{
-			throw ArgumentOutOfRangeException("label", std::format("The label instruction index {0:s} is out of range of the instruction offsets results {1:s}. Did you forget to pass {2:s}.{3:s} to {4:s}.{5:s}/{6:s}?", label.GetInstructionIndex(), result.NewInstructionOffsets.empty() ? nullptr : ((result.NewInstructionOffsets.size() != nullptr) ? result.NewInstructionOffsets.size() : 0), "BlockEncoderOptions", "ReturnNewInstructionOffsets", "Assembler", "Assemble", "TryAssemble"));
+			throw ArgumentOutOfRangeException("label" ", " + std::format("The label instruction index {0:s} is out of range of the instruction offsets results {1:s}. Did you forget to pass {2:s}.{3:s} to {4:s}.{5:s}/{6:s}?", label.GetInstructionIndex(), result.NewInstructionOffsets.size(), "BlockEncoderOptions", "ReturnNewInstructionOffsets", "Assembler", "Assemble", "TryAssemble"));
 		}
 		return result.RIP + result.NewInstructionOffsets[label.GetInstructionIndex()];
 	}

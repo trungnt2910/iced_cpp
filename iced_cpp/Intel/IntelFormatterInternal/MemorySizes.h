@@ -33,7 +33,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		public:
 			std::vector<FormatterString> keywords;
 			FormatterString bcstTo;
-			Info(std::vector<FormatterString>& keywords, FormatterString bcstTo);
+			Info(const std::vector<FormatterString>& keywords, FormatterString bcstTo);
 
 			Info() = default;
 		};

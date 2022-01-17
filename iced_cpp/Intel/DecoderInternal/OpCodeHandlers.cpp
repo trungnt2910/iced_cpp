@@ -34,7 +34,7 @@ namespace Iced::Intel::DecoderInternal
 	{
 	}
 
-	OpCodeHandler_Invalid* OpCodeHandler_Invalid::Instance = new OpCodeHandler_Invalid();
+	std::shared_ptr<OpCodeHandler_Invalid> OpCodeHandler_Invalid::Instance = std::shared_ptr<OpCodeHandler_Invalid>(new OpCodeHandler_Invalid);
 
 	OpCodeHandler_Invalid::OpCodeHandler_Invalid()
 	{
@@ -45,7 +45,7 @@ namespace Iced::Intel::DecoderInternal
 		decoder->SetInvalidInstruction();
 	}
 
-	OpCodeHandler_Invalid_NoModRM* OpCodeHandler_Invalid_NoModRM::Instance = new OpCodeHandler_Invalid_NoModRM();
+	std::shared_ptr<OpCodeHandler_Invalid_NoModRM> OpCodeHandler_Invalid_NoModRM::Instance = std::shared_ptr<OpCodeHandler_Invalid_NoModRM>(new OpCodeHandler_Invalid_NoModRM);
 
 	OpCodeHandler_Invalid_NoModRM::OpCodeHandler_Invalid_NoModRM()
 	{
@@ -76,7 +76,7 @@ namespace Iced::Intel::DecoderInternal
 		instruction.SetCode(code);
 	}
 
-	OpCodeHandler_Group8x8::OpCodeHandler_Group8x8(std::vector<OpCodeHandler*>& tableLow, std::vector<OpCodeHandler*>& tableHigh)
+	OpCodeHandler_Group8x8::OpCodeHandler_Group8x8(const std::vector<std::shared_ptr<OpCodeHandler>>& tableLow, const std::vector<std::shared_ptr<OpCodeHandler>>& tableHigh)
 	{
 		if (tableLow.size() != 8)
 		{
@@ -95,21 +95,21 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		OpCodeHandler* handler;
-		if (state->mod == 3)
+		std::shared_ptr<OpCodeHandler> handler;
+		if (state.mod == 3)
 		{
-			handler = tableHigh[state->reg];
+			handler = tableHigh[state.reg];
 		}
 		else
 		{
-			handler = tableLow[state->reg];
+			handler = tableLow[state.reg];
 		}
 		handler->Decode(decoder, instruction);
 	}
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public OpCodeHandler_Group8x64(OpCodeHandler[] tableLow, OpCodeHandler?[] tableHigh)
-	OpCodeHandler_Group8x64::OpCodeHandler_Group8x64(std::vector<OpCodeHandler*>& tableLow, std::vector<OpCodeHandler*>& tableHigh)
+	OpCodeHandler_Group8x64::OpCodeHandler_Group8x64(const std::vector<std::shared_ptr<OpCodeHandler>>& tableLow, const std::vector<std::shared_ptr<OpCodeHandler>>& tableHigh)
 	{
 		if (tableLow.size() != 8)
 		{
@@ -128,24 +128,24 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: ref var state = ref decoder.state;
 		auto state = decoder->state;
-		OpCodeHandler* handler;
-		if (state->mod == 3)
+		std::shared_ptr<OpCodeHandler> handler;
+		if (state.mod == 3)
 		{
 			// A handler can be null in tableHigh, useful in 0F01 table and similar tables
-			handler = (tableHigh[state->modrm & 0x3F] != nullptr) ? tableHigh[state->modrm & 0x3F] : tableLow[state->reg];
+			handler = (tableHigh[state.modrm & 0x3F] != nullptr) ? tableHigh[state.modrm & 0x3F] : tableLow[state.reg];
 		}
 		else
 		{
-			handler = tableLow[state->reg];
+			handler = tableLow[state.reg];
 		}
 		handler->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_Group::OpCodeHandler_Group(std::vector<OpCodeHandler*>& groupHandlers)
+	OpCodeHandler_Group::OpCodeHandler_Group(const std::vector<std::shared_ptr<OpCodeHandler>>& groupHandlers)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.groupHandlers = groupHandlers ?? throw new ArgumentNullException(nameof(groupHandlers));
-		this->groupHandlers = groupHandlers ? groupHandlers : throw std::invalid_argument("groupHandlers");
+		this->groupHandlers = groupHandlers;
 	}
 
 	void OpCodeHandler_Group::Decode(Decoder* decoder, Instruction& instruction)
@@ -153,11 +153,11 @@ namespace Iced::Intel::DecoderInternal
 		groupHandlers[decoder->state.reg]->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_AnotherTable::OpCodeHandler_AnotherTable(std::vector<OpCodeHandler*>& otherTable)
+	OpCodeHandler_AnotherTable::OpCodeHandler_AnotherTable(const std::vector<std::shared_ptr<OpCodeHandler>>& otherTable)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.otherTable = otherTable ?? throw new ArgumentNullException(nameof(otherTable));
-		this->otherTable = otherTable ? otherTable : throw std::invalid_argument("otherTable");
+		this->otherTable = otherTable;
 	}
 
 	void OpCodeHandler_AnotherTable::Decode(Decoder* decoder, Instruction& instruction)
@@ -165,18 +165,18 @@ namespace Iced::Intel::DecoderInternal
 		decoder->DecodeTable(otherTable, instruction);
 	}
 
-	OpCodeHandler_MandatoryPrefix2::OpCodeHandler_MandatoryPrefix2(OpCodeHandler* handler) : OpCodeHandler_MandatoryPrefix2(handler, OpCodeHandler_Invalid::Instance, OpCodeHandler_Invalid::Instance, OpCodeHandler_Invalid::Instance)
+	OpCodeHandler_MandatoryPrefix2::OpCodeHandler_MandatoryPrefix2(std::shared_ptr<OpCodeHandler> handler) : OpCodeHandler_MandatoryPrefix2(handler, OpCodeHandler_Invalid::Instance, OpCodeHandler_Invalid::Instance, OpCodeHandler_Invalid::Instance)
 	{
 	}
 
-	OpCodeHandler_MandatoryPrefix2::OpCodeHandler_MandatoryPrefix2(OpCodeHandler* handler, OpCodeHandler* handler66, OpCodeHandler* handlerF3, OpCodeHandler* handlerF2)
+	OpCodeHandler_MandatoryPrefix2::OpCodeHandler_MandatoryPrefix2(std::shared_ptr<OpCodeHandler> handler, std::shared_ptr<OpCodeHandler> handler66, std::shared_ptr<OpCodeHandler> handlerF3, std::shared_ptr<OpCodeHandler> handlerF2)
 	{
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::None) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::P66) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF2) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers = new OpCodeHandler[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
+		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
 		handlers = { (handler != nullptr) ? handler : throw std::invalid_argument("handler"), (handler66 != nullptr) ? handler66 : throw std::invalid_argument("handler66"), (handlerF3 != nullptr) ? handlerF3 : throw std::invalid_argument("handlerF3"), (handlerF2 != nullptr) ? handlerF2 : throw std::invalid_argument("handlerF2") };
 		assert(handler->HasModRM == HasModRM);
 		assert(handler66->HasModRM == HasModRM);
@@ -190,14 +190,14 @@ namespace Iced::Intel::DecoderInternal
 		handlers[static_cast<std::int32_t>(decoder->state.mandatoryPrefix)]->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_MandatoryPrefix2_NoModRM::OpCodeHandler_MandatoryPrefix2_NoModRM(OpCodeHandler* handler, OpCodeHandler* handler66, OpCodeHandler* handlerF3, OpCodeHandler* handlerF2)
+	OpCodeHandler_MandatoryPrefix2_NoModRM::OpCodeHandler_MandatoryPrefix2_NoModRM(std::shared_ptr<OpCodeHandler> handler, std::shared_ptr<OpCodeHandler> handler66, std::shared_ptr<OpCodeHandler> handlerF3, std::shared_ptr<OpCodeHandler> handlerF2)
 	{
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::None) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::P66) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF2) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers = new OpCodeHandler[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
+		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
 		handlers = { (handler != nullptr) ? handler : throw std::invalid_argument("handler"), (handler66 != nullptr) ? handler66 : throw std::invalid_argument("handler66"), (handlerF3 != nullptr) ? handlerF3 : throw std::invalid_argument("handlerF3"), (handlerF2 != nullptr) ? handlerF2 : throw std::invalid_argument("handlerF2") };
 		assert(handler->HasModRM == HasModRM);
 		assert(handler66->HasModRM == HasModRM);
@@ -211,7 +211,7 @@ namespace Iced::Intel::DecoderInternal
 		handlers[static_cast<std::int32_t>(decoder->state.mandatoryPrefix)]->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_W::OpCodeHandler_W(OpCodeHandler* handlerW0, OpCodeHandler* handlerW1)
+	OpCodeHandler_W::OpCodeHandler_W(std::shared_ptr<OpCodeHandler> handlerW0, std::shared_ptr<OpCodeHandler> handlerW1)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.handlerW0 = handlerW0 ?? throw new ArgumentNullException(nameof(handlerW0));
@@ -229,7 +229,7 @@ namespace Iced::Intel::DecoderInternal
 		((decoder->state.flags & StateFlags::W) != 0 ? handlerW1 : handlerW0)->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_Bitness::OpCodeHandler_Bitness(OpCodeHandler* handler1632, OpCodeHandler* handler64)
+	OpCodeHandler_Bitness::OpCodeHandler_Bitness(std::shared_ptr<OpCodeHandler> handler1632, std::shared_ptr<OpCodeHandler> handler64)
 	{
 		this->handler1632 = handler1632;
 		this->handler64 = handler64;
@@ -237,7 +237,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Bitness::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		OpCodeHandler* handler;
+		std::shared_ptr<OpCodeHandler> handler;
 		if (decoder->is64bMode)
 		{
 			handler = handler64;
@@ -253,7 +253,7 @@ namespace Iced::Intel::DecoderInternal
 		handler->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_Bitness_DontReadModRM::OpCodeHandler_Bitness_DontReadModRM(OpCodeHandler* handler1632, OpCodeHandler* handler64)
+	OpCodeHandler_Bitness_DontReadModRM::OpCodeHandler_Bitness_DontReadModRM(std::shared_ptr<OpCodeHandler> handler1632, std::shared_ptr<OpCodeHandler> handler64)
 	{
 		this->handler1632 = handler1632;
 		this->handler64 = handler64;
@@ -261,7 +261,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Bitness_DontReadModRM::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		OpCodeHandler* handler;
+		std::shared_ptr<OpCodeHandler> handler;
 		if (decoder->is64bMode)
 		{
 			handler = handler64;
@@ -273,7 +273,7 @@ namespace Iced::Intel::DecoderInternal
 		handler->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_RM::OpCodeHandler_RM(OpCodeHandler* reg, OpCodeHandler* mem)
+	OpCodeHandler_RM::OpCodeHandler_RM(std::shared_ptr<OpCodeHandler> reg, std::shared_ptr<OpCodeHandler> mem)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.reg = reg ?? throw new ArgumentNullException(nameof(reg));
@@ -288,13 +288,13 @@ namespace Iced::Intel::DecoderInternal
 		(decoder->state.mod == 3 ? reg : mem)->Decode(decoder, instruction);
 	}
 
-	HandlerOptions::HandlerOptions(OpCodeHandler* handler, DecoderOptions options)
+	HandlerOptions::HandlerOptions(std::shared_ptr<OpCodeHandler> handler, DecoderOptions options)
 	{
 		this->handler = handler;
 		this->options = options;
 	}
 
-	OpCodeHandler_Options1632::OpCodeHandler_Options1632(OpCodeHandler* defaultHandler, OpCodeHandler* handler1, DecoderOptions options1)
+	OpCodeHandler_Options1632::OpCodeHandler_Options1632(std::shared_ptr<OpCodeHandler> defaultHandler, std::shared_ptr<OpCodeHandler> handler1, DecoderOptions options1)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.defaultHandler = defaultHandler ?? throw new ArgumentNullException(nameof(defaultHandler));
@@ -303,7 +303,7 @@ namespace Iced::Intel::DecoderInternal
 		infoOptions = options1;
 	}
 
-	OpCodeHandler_Options1632::OpCodeHandler_Options1632(OpCodeHandler* defaultHandler, OpCodeHandler* handler1, DecoderOptions options1, OpCodeHandler* handler2, DecoderOptions options2)
+	OpCodeHandler_Options1632::OpCodeHandler_Options1632(std::shared_ptr<OpCodeHandler> defaultHandler, std::shared_ptr<OpCodeHandler> handler1, DecoderOptions options1, std::shared_ptr<OpCodeHandler> handler2, DecoderOptions options2)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.defaultHandler = defaultHandler ?? throw new ArgumentNullException(nameof(defaultHandler));
@@ -336,7 +336,7 @@ namespace Iced::Intel::DecoderInternal
 		handler->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_Options::OpCodeHandler_Options(OpCodeHandler* defaultHandler, OpCodeHandler* handler1, DecoderOptions options1)
+	OpCodeHandler_Options::OpCodeHandler_Options(std::shared_ptr<OpCodeHandler> defaultHandler, std::shared_ptr<OpCodeHandler> handler1, DecoderOptions options1)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.defaultHandler = defaultHandler ?? throw new ArgumentNullException(nameof(defaultHandler));
@@ -345,7 +345,7 @@ namespace Iced::Intel::DecoderInternal
 		infoOptions = options1;
 	}
 
-	OpCodeHandler_Options::OpCodeHandler_Options(OpCodeHandler* defaultHandler, OpCodeHandler* handler1, DecoderOptions options1, OpCodeHandler* handler2, DecoderOptions options2)
+	OpCodeHandler_Options::OpCodeHandler_Options(std::shared_ptr<OpCodeHandler> defaultHandler, std::shared_ptr<OpCodeHandler> handler1, DecoderOptions options1, std::shared_ptr<OpCodeHandler> handler2, DecoderOptions options2)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.defaultHandler = defaultHandler ?? throw new ArgumentNullException(nameof(defaultHandler));
@@ -378,7 +378,7 @@ namespace Iced::Intel::DecoderInternal
 		handler->Decode(decoder, instruction);
 	}
 
-	OpCodeHandler_Options_DontReadModRM::OpCodeHandler_Options_DontReadModRM(OpCodeHandler* defaultHandler, OpCodeHandler* handler1, DecoderOptions options1)
+	OpCodeHandler_Options_DontReadModRM::OpCodeHandler_Options_DontReadModRM(std::shared_ptr<OpCodeHandler> defaultHandler, std::shared_ptr<OpCodeHandler> handler1, DecoderOptions options1)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.defaultHandler = defaultHandler ?? throw new ArgumentNullException(nameof(defaultHandler));

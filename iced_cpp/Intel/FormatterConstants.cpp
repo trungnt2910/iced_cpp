@@ -31,7 +31,7 @@ namespace Iced::Intel
 
 	FormatterConstants::StaticConstructor::StaticConstructor()
 	{
-		auto cc = { "eq", "lt", "le", "unord", "neq", "nlt", "nle", "ord", "eq_uq", "nge", "ngt", "false", "neq_oq", "ge", "gt", "true", "eq_os", "lt_oq", "le_oq", "unord_s", "neq_us", "nlt_uq", "nle_uq", "ord_s", "eq_us", "nge_uq", "ngt_uq", "false_os", "neq_os", "ge_oq", "gt_oq", "true_us" };
+		static const std::vector<std::string> cc = { "eq", "lt", "le", "unord", "neq", "nlt", "nle", "ord", "eq_uq", "nge", "ngt", "false", "neq_oq", "ge", "gt", "true", "eq_os", "lt_oq", "le_oq", "unord_s", "neq_us", "nlt_uq", "nle_uq", "ord_s", "eq_us", "nge_uq", "ngt_uq", "false_os", "neq_os", "ge_oq", "gt_oq", "true_us" };
 		cmpps_pseudo_ops = Create(cc, 8, "cmp", "ps");
 		vcmpps_pseudo_ops = Create(cc, 32, "vcmp", "ps");
 		cmppd_pseudo_ops = Create(cc, 8, "cmp", "pd");
@@ -44,10 +44,10 @@ namespace Iced::Intel
 		vcmpsh_pseudo_ops = Create(cc, 32, "vcmp", "sh");
 		vcmpps8_pseudo_ops = Create(cc, 8, "vcmp", "ps");
 		vcmppd8_pseudo_ops = Create(cc, 8, "vcmp", "pd");
-		auto cc6 = { "eq", "lt", "le", "??", "neq", "nlt", "nle", "???" };
+		static const std::vector<std::string> cc6 = { "eq", "lt", "le", "??", "neq", "nlt", "nle", "???" };
 		vpcmpd6_pseudo_ops = Create(cc6, 8, "vpcmp", "d");
 		vpcmpud6_pseudo_ops = Create(cc6, 8, "vpcmp", "ud");
-		auto xopcc = { "lt", "le", "gt", "ge", "eq", "neq", "false", "true" };
+		static const std::vector<std::string> xopcc = { "lt", "le", "gt", "ge", "eq", "neq", "false", "true" };
 		vpcomb_pseudo_ops = Create(xopcc, 8, "vpcom", "b");
 		vpcomw_pseudo_ops = Create(xopcc, 8, "vpcom", "w");
 		vpcomd_pseudo_ops = Create(xopcc, 8, "vpcom", "d");
@@ -56,7 +56,7 @@ namespace Iced::Intel
 		vpcomuw_pseudo_ops = Create(xopcc, 8, "vpcom", "uw");
 		vpcomud_pseudo_ops = Create(xopcc, 8, "vpcom", "ud");
 		vpcomuq_pseudo_ops = Create(xopcc, 8, "vpcom", "uq");
-		auto pcmpcc = { "eq", "lt", "le", "false", "neq", "nlt", "nle", "true" };
+		static const std::vector<std::string> pcmpcc = { "eq", "lt", "le", "false", "neq", "nlt", "nle", "true" };
 		vpcmpb_pseudo_ops = Create(pcmpcc, 8, "vpcmp", "b");
 		vpcmpw_pseudo_ops = Create(pcmpcc, 8, "vpcmp", "w");
 		vpcmpd_pseudo_ops = Create(pcmpcc, 8, "vpcmp", "d");
@@ -69,7 +69,7 @@ namespace Iced::Intel
 
 	FormatterConstants::StaticConstructor FormatterConstants::staticConstructor;
 
-	std::vector<FormatterString> FormatterConstants::Create(std::vector<std::string>& cc, std::int32_t size, const std::string& prefix, const std::string& suffix)
+	std::vector<FormatterString> FormatterConstants::Create(const std::vector<std::string>& cc, std::int32_t size, const std::string& prefix, const std::string& suffix)
 	{
 		auto strings = std::vector<FormatterString>(size);
 		for (std::int32_t i = 0; i < strings.size(); i++)

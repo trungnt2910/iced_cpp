@@ -22,6 +22,16 @@
 
 namespace Iced::Intel
 {
+	inline static std::underlying_type_t<MvexInfoFlags1> operator&(std::uint8_t a, MvexInfoFlags1 flags)
+	{
+		return (std::underlying_type_t<MvexInfoFlags1>)a & (std::underlying_type_t<MvexInfoFlags1>)flags;
+	}
+
+	inline static std::underlying_type_t<MvexInfoFlags2> operator&(std::uint8_t a, MvexInfoFlags2 flags)
+	{
+		return (std::underlying_type_t<MvexInfoFlags2>)a & (std::underlying_type_t<MvexInfoFlags2>)flags;
+	}
+
 
 	MvexTupleTypeLutKind MvexInfo::GetTupleTypeLutKind() const
 	{

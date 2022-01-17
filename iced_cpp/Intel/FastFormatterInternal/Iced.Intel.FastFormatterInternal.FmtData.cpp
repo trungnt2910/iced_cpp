@@ -18,8 +18,9 @@
 #include "../FormatterInternal/Iced.Intel.FormatterInternal.FormatterStringsTable.h"
 #include "../Iced.Intel.IcedConstants.h"
 
-using namespace Iced::Intel::FormatterInternal;
 using namespace Iced::Intel::Internal;
+using namespace Iced::Intel::FormatterInternal;
+
 
 namespace Iced::Intel::FastFormatterInternal
 {
@@ -58,7 +59,7 @@ namespace Iced::Intel::FastFormatterInternal
 			else if ((f & FastFmtFlags::HasVPrefix) != 0)
 			{
 				ca[0] = 'v';
-				mnemonic = std::string::Intern(std::string(ca) + mnemonic);
+				mnemonic = (std::string(ca) + mnemonic);
 			}
 			flags[i] = f;
 			mnemonics[i] = mnemonic;

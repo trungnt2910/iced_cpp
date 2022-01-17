@@ -74,24 +74,24 @@ namespace Iced::Intel
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] static NumberFormatterFlags GetFlags(bool leadingZeros, bool smallHexNumbersInDecimal)
 		static NumberFormatterFlags GetFlags(bool leadingZeros, bool smallHexNumbersInDecimal);
 	public:
-		std::string FormatInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int8_t value);
-		std::string FormatInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int16_t value);
-		std::string FormatInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int32_t value);
-		std::string FormatInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int64_t value);
-		std::string FormatUInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint8_t value);
-		std::string FormatUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value);
-		std::string FormatUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value);
-		std::string FormatUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value);
-		std::string FormatDisplUInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint8_t value);
-		std::string FormatDisplUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value);
-		std::string FormatDisplUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value);
-		std::string FormatDisplUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value);
-		std::string FormatUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value, bool leadingZeros);
-		std::string FormatUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value, bool leadingZeros);
-		std::string FormatUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value, bool leadingZeros);
+		std::string FormatInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int8_t value) const;
+		std::string FormatInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int16_t value) const;
+		std::string FormatInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int32_t value) const;
+		std::string FormatInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::int64_t value) const;
+		std::string FormatUInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint8_t value) const;
+		std::string FormatUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value) const;
+		std::string FormatUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value) const;
+		std::string FormatUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value) const;
+		std::string FormatDisplUInt8(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint8_t value) const;
+		std::string FormatDisplUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value) const;
+		std::string FormatDisplUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value) const;
+		std::string FormatDisplUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value) const;
+		std::string FormatUInt16(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint16_t value, bool leadingZeros) const;
+		std::string FormatUInt32(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint32_t value, bool leadingZeros) const;
+		std::string FormatUInt64(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value, bool leadingZeros) const;
 	private:
 		static std::vector<std::string> smallDecimalValues;
-		std::string FormatUnsignedInteger(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value, std::int32_t valueSize, NumberFormatterFlags flags);
+		std::string FormatUnsignedInteger(FormatterOptions* formatterOptions, NumberFormattingOptions const options, std::uint64_t value, std::int32_t valueSize, NumberFormatterFlags flags) const;
 
 		NumberFormatter() = default;
 	};

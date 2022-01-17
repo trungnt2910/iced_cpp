@@ -36,8 +36,8 @@ namespace Iced::Intel::FormatterInternal
 	public:
 		std::int32_t GetLength() const;
 		FormatterString(const std::string& lower);
-		static std::vector<FormatterString> Create(std::vector<std::string>& strings);
-		std::string Get(bool upper);
+		static std::vector<FormatterString> Create(const std::vector<std::string>& strings);
+		std::string Get(bool upper) const;
 		std::string GetLower() const;
 
 		FormatterString() = default;

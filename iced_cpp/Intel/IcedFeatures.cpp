@@ -72,7 +72,7 @@ namespace Iced::Intel
 	void IcedFeatures::Initialize()
 	{
 		// The decoder already initializes this stuff, but when it's called, it's a little bit too late.
-   //C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to the C# 'typeof' operator:
-		RuntimeHelpers::RunClassConstructor(typeof(Decoder)->TypeHandle);
+		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to the C# 'typeof' operator:
+		//RuntimeHelpers::RunClassConstructor(typeof(Decoder)->TypeHandle);
 	}
 }

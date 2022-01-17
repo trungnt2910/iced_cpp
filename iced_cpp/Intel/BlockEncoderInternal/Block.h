@@ -23,7 +23,9 @@
 #include <csharp/exceptionhelper.h>
 
 //C# TO C++ CONVERTER NOTE: Forward class declarations:
-namespace Iced::Intel::BlockEncoderInternal { class BlockData; }
+namespace Iced::Intel::BlockEncoderInternal { class BlockData; class Instr; }
+
+namespace Iced::Intel { class RelocInfo; class CodeWriter; class BlockEncoder; }
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
@@ -34,7 +36,7 @@ namespace Iced::Intel::BlockEncoderInternal
 	class Block final
 	{
 	public:
-		CodeWriterImpl* CodeWriter;
+		CodeWriterImpl CodeWriter;
 		std::uint64_t RIP = 0;
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public List<RelocInfo>? relocInfos;
@@ -53,7 +55,7 @@ namespace Iced::Intel::BlockEncoderInternal
 	public:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public Block(BlockEncoder blockEncoder, CodeWriter codeWriter, ulong rip, List<RelocInfo>? relocInfos)
-		Block(BlockEncoder* blockEncoder, CodeWriter* codeWriter, std::uint64_t rip, std::vector<RelocInfo>& relocInfos);
+		Block(::Iced::Intel::BlockEncoder* blockEncoder, Iced::Intel::CodeWriter* codeWriter, std::uint64_t rip, const std::vector<RelocInfo>& relocInfos);
 		void SetInstructions(std::vector<Instr*>& instructions);
 		BlockData* AllocPointerLocation();
 		void InitializeData();

@@ -36,7 +36,6 @@ namespace Iced::Intel
 		Zword
 	};
 
-	DEFINE_COMP(MemoryOperandSize)
 		DEFINE_ARITH(MemoryOperandSize)
 
 }

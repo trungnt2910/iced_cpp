@@ -24,7 +24,7 @@ namespace Iced::Intel
 	{
 		if (!Iced::Intel::RegisterExtensions::IsZMM(value))
 		{
-			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a ZMM register", value), "value");
+			throw ArgumentOutOfRangeException(std::format("Invalid register {0:s}. Must be a ZMM register", nameof(value)));
 		}
 		Value = value;
 		Flags = AssemblerOperandFlags::None;
@@ -101,7 +101,7 @@ namespace Iced::Intel
 		return AssemblerRegisterZMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundTowardZero);
 	}
 
-	AssemblerRegisterZMM::operator Register()
+	AssemblerRegisterZMM::operator Register() const
 	{
 		return this->Value;
 	}
@@ -135,8 +135,8 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public override bool Equals(Object? obj)
 	bool AssemblerRegisterZMM::Equals(std::any obj)
 	{
-		AssemblerRegisterZMM other = dynamic_cast<AssemblerRegisterZMM>(obj);
-		return other != nullptr && Equals(other);
+		AssemblerRegisterZMM* other = std::any_cast<AssemblerRegisterZMM>(&obj);
+		return other != nullptr && Equals(*other);
 	}
 
 	bool AssemblerRegisterZMM::operator == (AssemblerRegisterZMM right)

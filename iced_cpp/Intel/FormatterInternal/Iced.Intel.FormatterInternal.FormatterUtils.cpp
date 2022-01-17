@@ -452,7 +452,7 @@ namespace Iced::Intel::FormatterInternal
 		Static::Assert(PrefixKind::ES + 3 == PrefixKind::DS ? 0 : -1);
 		Static::Assert(PrefixKind::ES + 4 == PrefixKind::FS ? 0 : -1);
 		Static::Assert(PrefixKind::ES + 5 == PrefixKind::GS ? 0 : -1);
-		return (register_ - Register::ES) + PrefixKind::ES;
+		return (PrefixKind)((register_ - Register::ES) + PrefixKind::ES);
 	}
 
 	bool FormatterUtils::ShowIndexScale(Instruction const instruction, FormatterOptions* options)

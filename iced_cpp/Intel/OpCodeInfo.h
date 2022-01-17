@@ -40,7 +40,6 @@
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
-using namespace Iced::Intel::EncoderInternal;
 namespace Iced::Intel
 {
 	/// <summary>
@@ -48,6 +47,31 @@ namespace Iced::Intel
 	/// </summary>
 	class OpCodeInfo final
 	{
+	private:
+		using EncFlags1 = EncoderInternal::EncFlags1;
+		using EncFlags2 = EncoderInternal::EncFlags2;
+		using EncFlags3 = EncoderInternal::EncFlags3;
+		using OpCodeInfoFlags1 = EncoderInternal::OpCodeInfoFlags1;
+		using OpCodeInfoFlags2 = EncoderInternal::OpCodeInfoFlags2;
+
+	private:
+		enum class Flags : uint
+		{
+			None = 0,
+			IgnoresRoundingControl = 0x00000001,
+			AmdLockRegBit = 0x00000002,
+			LIG = 0x00000004,
+			W = 0x00000008,
+			WIG = 0x00000010,
+			WIG32 = 0x00000020,
+			CPL0 = 0x00000040,
+			CPL1 = 0x00000080,
+			CPL2 = 0x00000100,
+			CPL3 = 0x00000200
+		};
+		DEFINE_FLAGS_FRIEND(Flags)
+			DEFINE_COMP_FRIEND(Flags)
+			DEFINE_ARITH_FRIEND(Flags)
 		/* readonly */
 	private:
 		std::string toOpCodeStringValue;
@@ -93,24 +117,6 @@ namespace Iced::Intel
 		std::uint8_t op4Kind = 0;
 		/* readonly */
 		Flags flags = static_cast<Flags>(0);
-	private:
-		enum class Flags : int
-		{
-			None = 0,
-			IgnoresRoundingControl = 0x00000001,
-			AmdLockRegBit = 0x00000002,
-			LIG = 0x00000004,
-			W = 0x00000008,
-			WIG = 0x00000010,
-			WIG32 = 0x00000020,
-			CPL0 = 0x00000040,
-			CPL1 = 0x00000080,
-			CPL2 = 0x00000100,
-			CPL3 = 0x00000200
-		};
-		DEFINE_FLAGS_FRIEND(Flags)
-			DEFINE_COMP_FRIEND(Flags)
-			DEFINE_ARITH_FRIEND(Flags)
 
 	public:
 		OpCodeInfo(Iced::Intel::Code code, EncFlags1 encFlags1, EncFlags2 encFlags2, EncFlags3 encFlags3, OpCodeInfoFlags1 opcFlags1, OpCodeInfoFlags2 opcFlags2, StringBuilder* sb);
@@ -597,7 +603,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="operand">Operand number, 0-4</param>
 		/// <returns></returns>
-		OpCodeOperandKind GetOpKind(std::int32_t operand);
+		OpCodeOperandKind GetOpKind(std::int32_t operand) const;
 		/// <summary>
 		/// Checks if the instruction is available in 16-bit mode, 32-bit mode or 64-bit mode
 		/// </summary>

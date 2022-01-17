@@ -34,14 +34,14 @@ namespace Iced::Intel::Internal
 		return static_cast<std::uint32_t>(index) < static_cast<std::uint32_t>(data.size());
 	}
 
-	DataReader::DataReader(std::vector<std::uint8_t>& data) : DataReader(data, 0)
+	DataReader::DataReader(const std::vector<std::uint8_t>& data) : DataReader(data, 0)
 	{
 	}
 
-	DataReader::DataReader(std::vector<std::uint8_t>& data, std::int32_t maxStringLength)
+	DataReader::DataReader(const std::vector<std::uint8_t>& data, std::int32_t maxStringLength)
 	{
 		this->data = data;
-		stringData = maxStringLength == 0 ? Array2::Empty<char>() : std::vector<char>(maxStringLength);
+		stringData = maxStringLength == 0 ? System::Array2::Empty<char>() : std::vector<char>(maxStringLength);
 		index = 0;
 	}
 

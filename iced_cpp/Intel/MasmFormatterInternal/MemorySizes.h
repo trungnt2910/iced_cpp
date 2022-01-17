@@ -40,7 +40,7 @@ namespace Iced::Intel::MasmFormatterInternal
 			bool isBroadcast = false;
 			std::int32_t size = 0;
 			std::vector<FormatterString> keywords;
-			Info(bool isBroadcast, std::int32_t size, std::vector<FormatterString>& keywords);
+			Info(bool isBroadcast, std::int32_t size, const std::vector<FormatterString>& keywords);
 
 			Info() = default;
 		};

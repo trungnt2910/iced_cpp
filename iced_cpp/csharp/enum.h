@@ -5,6 +5,12 @@
 #include <type_traits>
 #include <string>
 
+#include <climits>
+
+#define MAGIC_ENUM_RANGE_MIN 0
+// Iced::Intel::Code
+#define MAGIC_ENUM_RANGE_MAX 5000
+
 //  __  __             _        ______                          _____
 // |  \/  |           (_)      |  ____|                        / ____|_     _
 // | \  / | __ _  __ _ _  ___  | |__   _ __  _   _ _ __ ___   | |   _| |_ _| |_
@@ -1025,6 +1031,21 @@ template<typename T,
 
 template<typename T,
 	typename = typename std::enable_if< std::is_enum<T>::value, T >::type>
+	inline constexpr T& enum_add_eq(T& t1, const T& t2)
+{
+	return t1 = (T)((std::underlying_type_t<T>)t1 + (std::underlying_type_t<T>)t2);
+}
+
+template<typename T,
+	typename = typename std::enable_if< std::is_enum<T>::value, T >::type>
+	inline constexpr T& enum_sub_eq(T& t1, const T& t2)
+{
+	return t1 = (T)((std::underlying_type_t<T>)t1 - (std::underlying_type_t<T>)t2);
+}
+
+
+template<typename T,
+	typename = typename std::enable_if< std::is_enum<T>::value, T >::type>
 	inline constexpr T enum_or(const T& t1, const T& t2)
 {
 	return (T)((std::underlying_type_t<T>)t1 | (std::underlying_type_t<T>)t2);
@@ -1075,8 +1096,8 @@ template<typename T,
 #define DEFINE_NOT(enum_name) inline static constexpr enum_name operator~(const enum_name& e1) { return enum_not(e1); }
 
 // Enums in C# can compare with 0. Define these functions to allow the same in C++.
-#define DEFINE_EQ(enum_name) inline static constexpr bool operator==(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return (std::underlying_type_t<enum_name>)e1 == i; }
-#define DEFINE_NEQ(enum_name) inline static constexpr bool operator!=(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return (std::underlying_type_t<enum_name>)e1 != i; }
+#define DEFINE_EQ(enum_name) inline static constexpr bool operator==(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return static_cast<std::underlying_type_t<enum_name>>(e1) == i; }
+#define DEFINE_NEQ(enum_name) inline static constexpr bool operator!=(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return static_cast<std::underlying_type_t<enum_name>>(e1) != i; }
 
 // Some code also uses addition and subtraction.
 #define DEFINE_ADD(enum_name) inline static constexpr std::underlying_type_t<enum_name> operator+(const enum_name& e1, const enum_name& e2) { return static_cast<std::underlying_type_t<enum_name>>(enum_add(e1, e2)); }
@@ -1085,6 +1106,11 @@ template<typename T,
 #define DEFINE_SUB(enum_name) inline static constexpr std::underlying_type_t<enum_name> operator-(const enum_name& e1, const enum_name& e2) { return static_cast<std::underlying_type_t<enum_name>>(enum_sub(e1, e2)); }
 #define DEFINE_SUB1(enum_name) inline static constexpr std::underlying_type_t<enum_name> operator-(const enum_name& e1, const std::underlying_type_t<enum_name>& e2) { return static_cast<std::underlying_type_t<enum_name>>(enum_sub(e1, static_cast<enum_name>(e2))); }
 #define DEFINE_SUB2(enum_name) inline static constexpr std::underlying_type_t<enum_name> operator-(const std::underlying_type_t<enum_name>& e1, const enum_name& e2) { return e2 - e1; }
+#define DEFINE_INC_PRE(enum_name) inline static constexpr enum_name& operator++(enum_name& e) { return enum_add_eq(e, static_cast<enum_name>(1)); }
+#define DEFINE_INC_POST(enum_name) inline static constexpr enum_name operator++(enum_name& e, int) { auto temp = e; ++e; return temp; }
+#define DEFINE_DEC_PRE(enum_name) inline static constexpr enum_name& operator--(enum_name& e) { return enum_sub_eq(e, static_cast<enum_name>(1)); }
+#define DEFINE_DEC_POST(enum_name) inline static constexpr enum_name operator--(enum_name& e, int) { auto temp = e; --e; return temp; }
+
 
 // For private nested enums.
 #define DEFINE_AND_FRIEND(enum_name) friend inline static constexpr enum_name operator&(const enum_name& e1, const enum_name& e2) { return enum_and(e1, e2); }
@@ -1095,8 +1121,8 @@ template<typename T,
 #define DEFINE_XOR_EQ_FRIEND(enum_name) friend inline static constexpr enum_name& operator^=(enum_name& e1, const enum_name& e2) { return enum_xor_eq(e1, e2); }
 #define DEFINE_NOT_FRIEND(enum_name) friend inline static constexpr enum_name operator~(const enum_name& e1) { return enum_not(e1); }
 
-#define DEFINE_EQ_FRIEND(enum_name) friend inline static constexpr bool operator==(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return (std::underlying_type_t<enum_name>)e1 == i; }
-#define DEFINE_NEQ_FRIEND(enum_name) friend inline static constexpr bool operator!=(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return (std::underlying_type_t<enum_name>)e1 != i; }
+#define DEFINE_EQ_FRIEND(enum_name) friend inline static constexpr bool operator==(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return static_cast<std::underlying_type_t<enum_name>>(e1) == i; }
+#define DEFINE_NEQ_FRIEND(enum_name) friend inline static constexpr bool operator!=(const enum_name& e1, const std::underlying_type_t<enum_name>& i) { return static_cast<std::underlying_type_t<enum_name>>(e1) != i; }
 
 #define DEFINE_ADD_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator+(const enum_name& e1, const enum_name& e2) { return static_cast<std::underlying_type_t<enum_name>>(enum_add(e1, e2)); }
 #define DEFINE_ADD1_FRIEND(enum_name) friend inline static constexpr std::underlying_type_t<enum_name> operator+(const enum_name& e1, const std::underlying_type_t<enum_name>& e2) { return static_cast<std::underlying_type_t<enum_name>>(enum_add(e1, static_cast<enum_name>(e2))); }
@@ -1107,16 +1133,8 @@ template<typename T,
 
 #define DEFINE_COMP(enum_name) DEFINE_EQ(enum_name) DEFINE_NEQ(enum_name)
 #define DEFINE_FLAGS(enum_name) DEFINE_AND(enum_name) DEFINE_OR(enum_name) DEFINE_XOR(enum_name) DEFINE_AND_EQ(enum_name) DEFINE_OR_EQ(enum_name) DEFINE_XOR_EQ(enum_name) DEFINE_NOT(enum_name)
-#define DEFINE_ARITH(enum_name) DEFINE_ADD(enum_name) DEFINE_ADD1(enum_name) DEFINE_ADD2(enum_name) DEFINE_SUB(enum_name) DEFINE_SUB1(enum_name) DEFINE_SUB2(enum_name)
+#define DEFINE_ARITH(enum_name) DEFINE_ADD(enum_name) DEFINE_ADD1(enum_name) DEFINE_ADD2(enum_name) DEFINE_SUB(enum_name) DEFINE_SUB1(enum_name) DEFINE_SUB2(enum_name) DEFINE_INC_PRE(enum_name) DEFINE_INC_POST(enum_name) DEFINE_DEC_PRE(enum_name) DEFINE_DEC_POST(enum_name)
 
 #define DEFINE_COMP_FRIEND(enum_name) DEFINE_EQ_FRIEND(enum_name) DEFINE_NEQ_FRIEND(enum_name)
 #define DEFINE_FLAGS_FRIEND(enum_name) DEFINE_AND_FRIEND(enum_name) DEFINE_OR_FRIEND(enum_name) DEFINE_XOR_FRIEND(enum_name) DEFINE_AND_EQ_FRIEND(enum_name) DEFINE_OR_EQ_FRIEND(enum_name) DEFINE_XOR_EQ_FRIEND(enum_name) DEFINE_NOT_FRIEND(enum_name)
 #define DEFINE_ARITH_FRIEND(enum_name) DEFINE_ADD_FRIEND(enum_name) DEFINE_ADD1_FRIEND(enum_name) DEFINE_ADD2_FRIEND(enum_name) DEFINE_SUB_FRIEND(enum_name) DEFINE_SUB1_FRIEND(enum_name) DEFINE_SUB2_FRIEND(enum_name)
-
-// Enum members to string
-template<typename T,
-	typename = typename std::enable_if< std::is_enum<T>::value, T >::type>
-	std::string to_string(const T& t)
-{
-	return magic_enum::enum_name(t);
-}

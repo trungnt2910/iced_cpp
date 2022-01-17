@@ -15,6 +15,28 @@
 
 #pragma once
 
+// These registers depend on each other, better forward declare them all.
+namespace Iced::Intel
+{
+	class AssemblerMemoryOperand;
+	class AssemblerRegister8;
+	class AssemblerRegister16;
+	class AssemblerRegister32;
+	class AssemblerRegister64;
+	class AssemblerRegisterBND;
+	class AssemblerRegisterCR;
+	class AssemblerRegisterDR;
+	class AssemblerRegisterK;
+	class AssemblerRegisterMM;
+	class AssemblerRegisterST;
+	class AssemblerRegisterTMM;
+	class AssemblerRegisterTR;
+	class AssemblerRegisterXMM;
+	class AssemblerRegisterYMM;
+	class AssemblerRegisterZMM;
+	class AssemblerRegisterSegment;
+}
+
 #include "../Register.g.h"
 #include "AssemblerOperandFlags.h"
 #include "MemoryOperandSize.g.h"
@@ -175,6 +197,23 @@ namespace Iced::Intel
 		/// <param name="right">Right operand</param>
 		/// <returns><c>true</c> if not equal; otherwise <c>false</c></returns>
 		bool operator != (AssemblerMemoryOperand right);
+
+		//AssemblerMemoryOperand(MemoryOperandSize size, Register segment, Register base, Register index, std::int32_t scale, std::int64_t displacement, AssemblerOperandFlags flags);
+
+
+		inline std::string ToString() const
+		{
+			return nameof(AssemblerMemoryOperand)"(" +
+#define LIST_PARAM(s) std::string(nameof((s))"=" + to_string((s)))
+				LIST_PARAM(Size) + "," +
+				LIST_PARAM(Segment) + "," +
+				LIST_PARAM(Base) + "," +
+				LIST_PARAM(Index) + "," +
+				LIST_PARAM(Scale) + "," +
+				LIST_PARAM(Displacement) + "," +
+				LIST_PARAM(Flags) + ")";
+#undef LIST_PARAM
+		}
 
 		AssemblerMemoryOperand() = default;
 	};

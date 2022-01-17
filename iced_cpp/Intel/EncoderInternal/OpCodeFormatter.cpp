@@ -56,7 +56,7 @@ namespace Iced::Intel::EncoderInternal
 	void OpCodeFormatter::AppendHexByte(std::uint8_t value)
 	{
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		sb->append(value.ToString("X2"));
+		sb->append(std::format("{:X}", value));
 	}
 
 	void OpCodeFormatter::AppendOpCode(std::uint32_t value, std::int32_t valueLen, bool sep)
