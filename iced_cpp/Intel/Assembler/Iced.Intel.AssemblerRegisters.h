@@ -45,324 +45,323 @@ namespace Iced::Intel
 	/// <summary>
 	/// Registers used for <see cref="Assembler"/>. 
 	/// </summary>
-	class AssemblerRegisters final
+	namespace AssemblerRegisters
 	{
-	public:
-		static AssemblerRegister8 al;
-		static AssemblerRegister8 cl;
-		static AssemblerRegister8 dl;
-		static AssemblerRegister8 bl;
-		static AssemblerRegister8 ah;
-		static AssemblerRegister8 ch;
-		static AssemblerRegister8 dh;
-		static AssemblerRegister8 bh;
-		static AssemblerRegister8 spl;
-		static AssemblerRegister8 bpl;
-		static AssemblerRegister8 sil;
-		static AssemblerRegister8 dil;
-		static AssemblerRegister8 r8b;
-		static AssemblerRegister8 r9b;
-		static AssemblerRegister8 r10b;
-		static AssemblerRegister8 r11b;
-		static AssemblerRegister8 r12b;
-		static AssemblerRegister8 r13b;
-		static AssemblerRegister8 r14b;
-		static AssemblerRegister8 r15b;
-		static AssemblerRegister16 ax;
-		static AssemblerRegister16 cx;
-		static AssemblerRegister16 dx;
-		static AssemblerRegister16 bx;
-		static AssemblerRegister16 sp;
-		static AssemblerRegister16 bp;
-		static AssemblerRegister16 si;
-		static AssemblerRegister16 di;
-		static AssemblerRegister16 r8w;
-		static AssemblerRegister16 r9w;
-		static AssemblerRegister16 r10w;
-		static AssemblerRegister16 r11w;
-		static AssemblerRegister16 r12w;
-		static AssemblerRegister16 r13w;
-		static AssemblerRegister16 r14w;
-		static AssemblerRegister16 r15w;
-		static AssemblerRegister32 eax;
-		static AssemblerRegister32 ecx;
-		static AssemblerRegister32 edx;
-		static AssemblerRegister32 ebx;
-		static AssemblerRegister32 esp;
-		static AssemblerRegister32 ebp;
-		static AssemblerRegister32 esi;
-		static AssemblerRegister32 edi;
-		static AssemblerRegister32 r8d;
-		static AssemblerRegister32 r9d;
-		static AssemblerRegister32 r10d;
-		static AssemblerRegister32 r11d;
-		static AssemblerRegister32 r12d;
-		static AssemblerRegister32 r13d;
-		static AssemblerRegister32 r14d;
-		static AssemblerRegister32 r15d;
-		static AssemblerRegister64 rax;
-		static AssemblerRegister64 rcx;
-		static AssemblerRegister64 rdx;
-		static AssemblerRegister64 rbx;
-		static AssemblerRegister64 rsp;
-		static AssemblerRegister64 rbp;
-		static AssemblerRegister64 rsi;
-		static AssemblerRegister64 rdi;
-		static AssemblerRegister64 r8;
-		static AssemblerRegister64 r9;
-		static AssemblerRegister64 r10;
-		static AssemblerRegister64 r11;
-		static AssemblerRegister64 r12;
-		static AssemblerRegister64 r13;
-		static AssemblerRegister64 r14;
-		static AssemblerRegister64 r15;
-		static AssemblerRegisterSegment es;
-		static AssemblerRegisterSegment cs;
-		static AssemblerRegisterSegment ss;
-		static AssemblerRegisterSegment ds;
-		static AssemblerRegisterSegment fs;
-		static AssemblerRegisterSegment gs;
-		static AssemblerRegisterST st0;
-		static AssemblerRegisterST st1;
-		static AssemblerRegisterST st2;
-		static AssemblerRegisterST st3;
-		static AssemblerRegisterST st4;
-		static AssemblerRegisterST st5;
-		static AssemblerRegisterST st6;
-		static AssemblerRegisterST st7;
-		static AssemblerRegisterCR cr0;
-		static AssemblerRegisterCR cr1;
-		static AssemblerRegisterCR cr2;
-		static AssemblerRegisterCR cr3;
-		static AssemblerRegisterCR cr4;
-		static AssemblerRegisterCR cr5;
-		static AssemblerRegisterCR cr6;
-		static AssemblerRegisterCR cr7;
-		static AssemblerRegisterCR cr8;
-		static AssemblerRegisterCR cr9;
-		static AssemblerRegisterCR cr10;
-		static AssemblerRegisterCR cr11;
-		static AssemblerRegisterCR cr12;
-		static AssemblerRegisterCR cr13;
-		static AssemblerRegisterCR cr14;
-		static AssemblerRegisterCR cr15;
-		static AssemblerRegisterDR dr0;
-		static AssemblerRegisterDR dr1;
-		static AssemblerRegisterDR dr2;
-		static AssemblerRegisterDR dr3;
-		static AssemblerRegisterDR dr4;
-		static AssemblerRegisterDR dr5;
-		static AssemblerRegisterDR dr6;
-		static AssemblerRegisterDR dr7;
-		static AssemblerRegisterDR dr8;
-		static AssemblerRegisterDR dr9;
-		static AssemblerRegisterDR dr10;
-		static AssemblerRegisterDR dr11;
-		static AssemblerRegisterDR dr12;
-		static AssemblerRegisterDR dr13;
-		static AssemblerRegisterDR dr14;
-		static AssemblerRegisterDR dr15;
-		static AssemblerRegisterTR tr0;
-		static AssemblerRegisterTR tr1;
-		static AssemblerRegisterTR tr2;
-		static AssemblerRegisterTR tr3;
-		static AssemblerRegisterTR tr4;
-		static AssemblerRegisterTR tr5;
-		static AssemblerRegisterTR tr6;
-		static AssemblerRegisterTR tr7;
-		static AssemblerRegisterBND bnd0;
-		static AssemblerRegisterBND bnd1;
-		static AssemblerRegisterBND bnd2;
-		static AssemblerRegisterBND bnd3;
-		static AssemblerRegisterK k0;
-		static AssemblerRegisterK k1;
-		static AssemblerRegisterK k2;
-		static AssemblerRegisterK k3;
-		static AssemblerRegisterK k4;
-		static AssemblerRegisterK k5;
-		static AssemblerRegisterK k6;
-		static AssemblerRegisterK k7;
-		static AssemblerRegisterMM mm0;
-		static AssemblerRegisterMM mm1;
-		static AssemblerRegisterMM mm2;
-		static AssemblerRegisterMM mm3;
-		static AssemblerRegisterMM mm4;
-		static AssemblerRegisterMM mm5;
-		static AssemblerRegisterMM mm6;
-		static AssemblerRegisterMM mm7;
-		static AssemblerRegisterXMM xmm0;
-		static AssemblerRegisterXMM xmm1;
-		static AssemblerRegisterXMM xmm2;
-		static AssemblerRegisterXMM xmm3;
-		static AssemblerRegisterXMM xmm4;
-		static AssemblerRegisterXMM xmm5;
-		static AssemblerRegisterXMM xmm6;
-		static AssemblerRegisterXMM xmm7;
-		static AssemblerRegisterXMM xmm8;
-		static AssemblerRegisterXMM xmm9;
-		static AssemblerRegisterXMM xmm10;
-		static AssemblerRegisterXMM xmm11;
-		static AssemblerRegisterXMM xmm12;
-		static AssemblerRegisterXMM xmm13;
-		static AssemblerRegisterXMM xmm14;
-		static AssemblerRegisterXMM xmm15;
-		static AssemblerRegisterXMM xmm16;
-		static AssemblerRegisterXMM xmm17;
-		static AssemblerRegisterXMM xmm18;
-		static AssemblerRegisterXMM xmm19;
-		static AssemblerRegisterXMM xmm20;
-		static AssemblerRegisterXMM xmm21;
-		static AssemblerRegisterXMM xmm22;
-		static AssemblerRegisterXMM xmm23;
-		static AssemblerRegisterXMM xmm24;
-		static AssemblerRegisterXMM xmm25;
-		static AssemblerRegisterXMM xmm26;
-		static AssemblerRegisterXMM xmm27;
-		static AssemblerRegisterXMM xmm28;
-		static AssemblerRegisterXMM xmm29;
-		static AssemblerRegisterXMM xmm30;
-		static AssemblerRegisterXMM xmm31;
-		static AssemblerRegisterYMM ymm0;
-		static AssemblerRegisterYMM ymm1;
-		static AssemblerRegisterYMM ymm2;
-		static AssemblerRegisterYMM ymm3;
-		static AssemblerRegisterYMM ymm4;
-		static AssemblerRegisterYMM ymm5;
-		static AssemblerRegisterYMM ymm6;
-		static AssemblerRegisterYMM ymm7;
-		static AssemblerRegisterYMM ymm8;
-		static AssemblerRegisterYMM ymm9;
-		static AssemblerRegisterYMM ymm10;
-		static AssemblerRegisterYMM ymm11;
-		static AssemblerRegisterYMM ymm12;
-		static AssemblerRegisterYMM ymm13;
-		static AssemblerRegisterYMM ymm14;
-		static AssemblerRegisterYMM ymm15;
-		static AssemblerRegisterYMM ymm16;
-		static AssemblerRegisterYMM ymm17;
-		static AssemblerRegisterYMM ymm18;
-		static AssemblerRegisterYMM ymm19;
-		static AssemblerRegisterYMM ymm20;
-		static AssemblerRegisterYMM ymm21;
-		static AssemblerRegisterYMM ymm22;
-		static AssemblerRegisterYMM ymm23;
-		static AssemblerRegisterYMM ymm24;
-		static AssemblerRegisterYMM ymm25;
-		static AssemblerRegisterYMM ymm26;
-		static AssemblerRegisterYMM ymm27;
-		static AssemblerRegisterYMM ymm28;
-		static AssemblerRegisterYMM ymm29;
-		static AssemblerRegisterYMM ymm30;
-		static AssemblerRegisterYMM ymm31;
-		static AssemblerRegisterZMM zmm0;
-		static AssemblerRegisterZMM zmm1;
-		static AssemblerRegisterZMM zmm2;
-		static AssemblerRegisterZMM zmm3;
-		static AssemblerRegisterZMM zmm4;
-		static AssemblerRegisterZMM zmm5;
-		static AssemblerRegisterZMM zmm6;
-		static AssemblerRegisterZMM zmm7;
-		static AssemblerRegisterZMM zmm8;
-		static AssemblerRegisterZMM zmm9;
-		static AssemblerRegisterZMM zmm10;
-		static AssemblerRegisterZMM zmm11;
-		static AssemblerRegisterZMM zmm12;
-		static AssemblerRegisterZMM zmm13;
-		static AssemblerRegisterZMM zmm14;
-		static AssemblerRegisterZMM zmm15;
-		static AssemblerRegisterZMM zmm16;
-		static AssemblerRegisterZMM zmm17;
-		static AssemblerRegisterZMM zmm18;
-		static AssemblerRegisterZMM zmm19;
-		static AssemblerRegisterZMM zmm20;
-		static AssemblerRegisterZMM zmm21;
-		static AssemblerRegisterZMM zmm22;
-		static AssemblerRegisterZMM zmm23;
-		static AssemblerRegisterZMM zmm24;
-		static AssemblerRegisterZMM zmm25;
-		static AssemblerRegisterZMM zmm26;
-		static AssemblerRegisterZMM zmm27;
-		static AssemblerRegisterZMM zmm28;
-		static AssemblerRegisterZMM zmm29;
-		static AssemblerRegisterZMM zmm30;
-		static AssemblerRegisterZMM zmm31;
-		static AssemblerRegisterTMM tmm0;
-		static AssemblerRegisterTMM tmm1;
-		static AssemblerRegisterTMM tmm2;
-		static AssemblerRegisterTMM tmm3;
-		static AssemblerRegisterTMM tmm4;
-		static AssemblerRegisterTMM tmm5;
-		static AssemblerRegisterTMM tmm6;
-		static AssemblerRegisterTMM tmm7;
+		extern AssemblerRegister8 al;
+		extern AssemblerRegister8 cl;
+		extern AssemblerRegister8 dl;
+		extern AssemblerRegister8 bl;
+		extern AssemblerRegister8 ah;
+		extern AssemblerRegister8 ch;
+		extern AssemblerRegister8 dh;
+		extern AssemblerRegister8 bh;
+		extern AssemblerRegister8 spl;
+		extern AssemblerRegister8 bpl;
+		extern AssemblerRegister8 sil;
+		extern AssemblerRegister8 dil;
+		extern AssemblerRegister8 r8b;
+		extern AssemblerRegister8 r9b;
+		extern AssemblerRegister8 r10b;
+		extern AssemblerRegister8 r11b;
+		extern AssemblerRegister8 r12b;
+		extern AssemblerRegister8 r13b;
+		extern AssemblerRegister8 r14b;
+		extern AssemblerRegister8 r15b;
+		extern AssemblerRegister16 ax;
+		extern AssemblerRegister16 cx;
+		extern AssemblerRegister16 dx;
+		extern AssemblerRegister16 bx;
+		extern AssemblerRegister16 sp;
+		extern AssemblerRegister16 bp;
+		extern AssemblerRegister16 si;
+		extern AssemblerRegister16 di;
+		extern AssemblerRegister16 r8w;
+		extern AssemblerRegister16 r9w;
+		extern AssemblerRegister16 r10w;
+		extern AssemblerRegister16 r11w;
+		extern AssemblerRegister16 r12w;
+		extern AssemblerRegister16 r13w;
+		extern AssemblerRegister16 r14w;
+		extern AssemblerRegister16 r15w;
+		extern AssemblerRegister32 eax;
+		extern AssemblerRegister32 ecx;
+		extern AssemblerRegister32 edx;
+		extern AssemblerRegister32 ebx;
+		extern AssemblerRegister32 esp;
+		extern AssemblerRegister32 ebp;
+		extern AssemblerRegister32 esi;
+		extern AssemblerRegister32 edi;
+		extern AssemblerRegister32 r8d;
+		extern AssemblerRegister32 r9d;
+		extern AssemblerRegister32 r10d;
+		extern AssemblerRegister32 r11d;
+		extern AssemblerRegister32 r12d;
+		extern AssemblerRegister32 r13d;
+		extern AssemblerRegister32 r14d;
+		extern AssemblerRegister32 r15d;
+		extern AssemblerRegister64 rax;
+		extern AssemblerRegister64 rcx;
+		extern AssemblerRegister64 rdx;
+		extern AssemblerRegister64 rbx;
+		extern AssemblerRegister64 rsp;
+		extern AssemblerRegister64 rbp;
+		extern AssemblerRegister64 rsi;
+		extern AssemblerRegister64 rdi;
+		extern AssemblerRegister64 r8;
+		extern AssemblerRegister64 r9;
+		extern AssemblerRegister64 r10;
+		extern AssemblerRegister64 r11;
+		extern AssemblerRegister64 r12;
+		extern AssemblerRegister64 r13;
+		extern AssemblerRegister64 r14;
+		extern AssemblerRegister64 r15;
+		extern AssemblerRegisterSegment es;
+		extern AssemblerRegisterSegment cs;
+		extern AssemblerRegisterSegment ss;
+		extern AssemblerRegisterSegment ds;
+		extern AssemblerRegisterSegment fs;
+		extern AssemblerRegisterSegment gs;
+		extern AssemblerRegisterST st0;
+		extern AssemblerRegisterST st1;
+		extern AssemblerRegisterST st2;
+		extern AssemblerRegisterST st3;
+		extern AssemblerRegisterST st4;
+		extern AssemblerRegisterST st5;
+		extern AssemblerRegisterST st6;
+		extern AssemblerRegisterST st7;
+		extern AssemblerRegisterCR cr0;
+		extern AssemblerRegisterCR cr1;
+		extern AssemblerRegisterCR cr2;
+		extern AssemblerRegisterCR cr3;
+		extern AssemblerRegisterCR cr4;
+		extern AssemblerRegisterCR cr5;
+		extern AssemblerRegisterCR cr6;
+		extern AssemblerRegisterCR cr7;
+		extern AssemblerRegisterCR cr8;
+		extern AssemblerRegisterCR cr9;
+		extern AssemblerRegisterCR cr10;
+		extern AssemblerRegisterCR cr11;
+		extern AssemblerRegisterCR cr12;
+		extern AssemblerRegisterCR cr13;
+		extern AssemblerRegisterCR cr14;
+		extern AssemblerRegisterCR cr15;
+		extern AssemblerRegisterDR dr0;
+		extern AssemblerRegisterDR dr1;
+		extern AssemblerRegisterDR dr2;
+		extern AssemblerRegisterDR dr3;
+		extern AssemblerRegisterDR dr4;
+		extern AssemblerRegisterDR dr5;
+		extern AssemblerRegisterDR dr6;
+		extern AssemblerRegisterDR dr7;
+		extern AssemblerRegisterDR dr8;
+		extern AssemblerRegisterDR dr9;
+		extern AssemblerRegisterDR dr10;
+		extern AssemblerRegisterDR dr11;
+		extern AssemblerRegisterDR dr12;
+		extern AssemblerRegisterDR dr13;
+		extern AssemblerRegisterDR dr14;
+		extern AssemblerRegisterDR dr15;
+		extern AssemblerRegisterTR tr0;
+		extern AssemblerRegisterTR tr1;
+		extern AssemblerRegisterTR tr2;
+		extern AssemblerRegisterTR tr3;
+		extern AssemblerRegisterTR tr4;
+		extern AssemblerRegisterTR tr5;
+		extern AssemblerRegisterTR tr6;
+		extern AssemblerRegisterTR tr7;
+		extern AssemblerRegisterBND bnd0;
+		extern AssemblerRegisterBND bnd1;
+		extern AssemblerRegisterBND bnd2;
+		extern AssemblerRegisterBND bnd3;
+		extern AssemblerRegisterK k0;
+		extern AssemblerRegisterK k1;
+		extern AssemblerRegisterK k2;
+		extern AssemblerRegisterK k3;
+		extern AssemblerRegisterK k4;
+		extern AssemblerRegisterK k5;
+		extern AssemblerRegisterK k6;
+		extern AssemblerRegisterK k7;
+		extern AssemblerRegisterMM mm0;
+		extern AssemblerRegisterMM mm1;
+		extern AssemblerRegisterMM mm2;
+		extern AssemblerRegisterMM mm3;
+		extern AssemblerRegisterMM mm4;
+		extern AssemblerRegisterMM mm5;
+		extern AssemblerRegisterMM mm6;
+		extern AssemblerRegisterMM mm7;
+		extern AssemblerRegisterXMM xmm0;
+		extern AssemblerRegisterXMM xmm1;
+		extern AssemblerRegisterXMM xmm2;
+		extern AssemblerRegisterXMM xmm3;
+		extern AssemblerRegisterXMM xmm4;
+		extern AssemblerRegisterXMM xmm5;
+		extern AssemblerRegisterXMM xmm6;
+		extern AssemblerRegisterXMM xmm7;
+		extern AssemblerRegisterXMM xmm8;
+		extern AssemblerRegisterXMM xmm9;
+		extern AssemblerRegisterXMM xmm10;
+		extern AssemblerRegisterXMM xmm11;
+		extern AssemblerRegisterXMM xmm12;
+		extern AssemblerRegisterXMM xmm13;
+		extern AssemblerRegisterXMM xmm14;
+		extern AssemblerRegisterXMM xmm15;
+		extern AssemblerRegisterXMM xmm16;
+		extern AssemblerRegisterXMM xmm17;
+		extern AssemblerRegisterXMM xmm18;
+		extern AssemblerRegisterXMM xmm19;
+		extern AssemblerRegisterXMM xmm20;
+		extern AssemblerRegisterXMM xmm21;
+		extern AssemblerRegisterXMM xmm22;
+		extern AssemblerRegisterXMM xmm23;
+		extern AssemblerRegisterXMM xmm24;
+		extern AssemblerRegisterXMM xmm25;
+		extern AssemblerRegisterXMM xmm26;
+		extern AssemblerRegisterXMM xmm27;
+		extern AssemblerRegisterXMM xmm28;
+		extern AssemblerRegisterXMM xmm29;
+		extern AssemblerRegisterXMM xmm30;
+		extern AssemblerRegisterXMM xmm31;
+		extern AssemblerRegisterYMM ymm0;
+		extern AssemblerRegisterYMM ymm1;
+		extern AssemblerRegisterYMM ymm2;
+		extern AssemblerRegisterYMM ymm3;
+		extern AssemblerRegisterYMM ymm4;
+		extern AssemblerRegisterYMM ymm5;
+		extern AssemblerRegisterYMM ymm6;
+		extern AssemblerRegisterYMM ymm7;
+		extern AssemblerRegisterYMM ymm8;
+		extern AssemblerRegisterYMM ymm9;
+		extern AssemblerRegisterYMM ymm10;
+		extern AssemblerRegisterYMM ymm11;
+		extern AssemblerRegisterYMM ymm12;
+		extern AssemblerRegisterYMM ymm13;
+		extern AssemblerRegisterYMM ymm14;
+		extern AssemblerRegisterYMM ymm15;
+		extern AssemblerRegisterYMM ymm16;
+		extern AssemblerRegisterYMM ymm17;
+		extern AssemblerRegisterYMM ymm18;
+		extern AssemblerRegisterYMM ymm19;
+		extern AssemblerRegisterYMM ymm20;
+		extern AssemblerRegisterYMM ymm21;
+		extern AssemblerRegisterYMM ymm22;
+		extern AssemblerRegisterYMM ymm23;
+		extern AssemblerRegisterYMM ymm24;
+		extern AssemblerRegisterYMM ymm25;
+		extern AssemblerRegisterYMM ymm26;
+		extern AssemblerRegisterYMM ymm27;
+		extern AssemblerRegisterYMM ymm28;
+		extern AssemblerRegisterYMM ymm29;
+		extern AssemblerRegisterYMM ymm30;
+		extern AssemblerRegisterYMM ymm31;
+		extern AssemblerRegisterZMM zmm0;
+		extern AssemblerRegisterZMM zmm1;
+		extern AssemblerRegisterZMM zmm2;
+		extern AssemblerRegisterZMM zmm3;
+		extern AssemblerRegisterZMM zmm4;
+		extern AssemblerRegisterZMM zmm5;
+		extern AssemblerRegisterZMM zmm6;
+		extern AssemblerRegisterZMM zmm7;
+		extern AssemblerRegisterZMM zmm8;
+		extern AssemblerRegisterZMM zmm9;
+		extern AssemblerRegisterZMM zmm10;
+		extern AssemblerRegisterZMM zmm11;
+		extern AssemblerRegisterZMM zmm12;
+		extern AssemblerRegisterZMM zmm13;
+		extern AssemblerRegisterZMM zmm14;
+		extern AssemblerRegisterZMM zmm15;
+		extern AssemblerRegisterZMM zmm16;
+		extern AssemblerRegisterZMM zmm17;
+		extern AssemblerRegisterZMM zmm18;
+		extern AssemblerRegisterZMM zmm19;
+		extern AssemblerRegisterZMM zmm20;
+		extern AssemblerRegisterZMM zmm21;
+		extern AssemblerRegisterZMM zmm22;
+		extern AssemblerRegisterZMM zmm23;
+		extern AssemblerRegisterZMM zmm24;
+		extern AssemblerRegisterZMM zmm25;
+		extern AssemblerRegisterZMM zmm26;
+		extern AssemblerRegisterZMM zmm27;
+		extern AssemblerRegisterZMM zmm28;
+		extern AssemblerRegisterZMM zmm29;
+		extern AssemblerRegisterZMM zmm30;
+		extern AssemblerRegisterZMM zmm31;
+		extern AssemblerRegisterTMM tmm0;
+		extern AssemblerRegisterTMM tmm1;
+		extern AssemblerRegisterTMM tmm2;
+		extern AssemblerRegisterTMM tmm3;
+		extern AssemblerRegisterTMM tmm4;
+		extern AssemblerRegisterTMM tmm5;
+		extern AssemblerRegisterTMM tmm6;
+		extern AssemblerRegisterTMM tmm7;
 
 
 		/// <summary>
 		/// Gets a memory operand with no size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __;
+		extern AssemblerMemoryOperandFactory __;
 		/// <summary>
 		/// Gets a memory operand with a <c>BYTE PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __byte_ptr;
+		extern AssemblerMemoryOperandFactory __byte_ptr;
 		/// <summary>
 		/// Gets a memory operand with a <c>WORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __word_ptr;
+		extern AssemblerMemoryOperandFactory __word_ptr;
 		/// <summary>
 		/// Gets a memory operand with a <c>DWORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __dword_ptr;
+		extern AssemblerMemoryOperandFactory __dword_ptr;
 		/// <summary>
 		/// Gets a memory operand with a <c>QWORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __qword_ptr;
+		extern AssemblerMemoryOperandFactory __qword_ptr;
 		/// <summary>
 		/// Gets a memory operand with an <c>MMWORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __mmword_ptr;
+		extern AssemblerMemoryOperandFactory __mmword_ptr;
 		/// <summary>
 		/// Gets a memory operand with a <c>TBYTE PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __tbyte_ptr;
+		extern AssemblerMemoryOperandFactory __tbyte_ptr;
 		/// <summary>
 		/// Gets a memory operand with a <c>TWORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __tword_ptr;
+		extern AssemblerMemoryOperandFactory __tword_ptr;
 		/// <summary>
 		/// Gets a memory operand with an <c>FWORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __fword_ptr;
+		extern AssemblerMemoryOperandFactory __fword_ptr;
 		/// <summary>
 		/// Gets a memory operand with an <c>OWORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __oword_ptr;
+		extern AssemblerMemoryOperandFactory __oword_ptr;
 		/// <summary>
 		/// Gets a memory operand with an <c>XMMWORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __xmmword_ptr;
+		extern AssemblerMemoryOperandFactory __xmmword_ptr;
 		/// <summary>
 		/// Gets a memory operand with a <c>YMMWORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __ymmword_ptr;
+		extern AssemblerMemoryOperandFactory __ymmword_ptr;
 		/// <summary>
 		/// Gets a memory operand with a <c>ZMMWORD PTR</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __zmmword_ptr;
+		extern AssemblerMemoryOperandFactory __zmmword_ptr;
 		/// <summary>
 		/// Gets a broadcast memory operand with no size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __bcst;
+		extern AssemblerMemoryOperandFactory __bcst;
 		/// <summary>
 		/// Gets a broadcast memory operand with a <c>WORD BCST</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __word_bcst;
+		extern AssemblerMemoryOperandFactory __word_bcst;
 		/// <summary>
 		/// Gets a broadcast memory operand with a <c>DWORD BCST</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __dword_bcst;
+		extern AssemblerMemoryOperandFactory __dword_bcst;
 		/// <summary>
 		/// Gets a broadcast memory operand with a <c>QWORD BCST</c> size hint
 		/// </summary>
-		static AssemblerMemoryOperandFactory __qword_bcst;
+		extern AssemblerMemoryOperandFactory __qword_bcst;
 	};
 }
