@@ -19,7 +19,7 @@
 #include "InstructionOpCounts.g.h"
 #include "MnemonicUtilsData.g.h"
 #include "TupleTypeTable.h"
-#include "Iced.Intel.RegisterExtensions.h"
+#include "RegisterExtensions.h"
 #include "Iced.Intel.MemorySizeExtensions.h"
 #include "InstructionInfoInternal/InstrInfoTable.g.h"
 #include "InstructionInfoInternal/RflagsInfoConstants.g.h"

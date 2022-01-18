@@ -22,7 +22,7 @@
 #include "Static.h"
 #include "Iced.Intel.MemorySizeExtensions.h"
 #include "InstructionUtils.h"
-#include "Iced.Intel.RegisterExtensions.h"
+#include "RegisterExtensions.h"
 
 #include "EncoderInternal/EncoderOpCodeHandler.h"
 

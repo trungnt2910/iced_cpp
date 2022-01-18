@@ -20,7 +20,7 @@
 #include "../MemoryOperand.h"
 #include "../../Array2.h"
 #include "MemoryOperandSize.g.h"
-#include "../Iced.Intel.RegisterExtensions.h"
+#include "../RegisterExtensions.h"
 
 #include "Iced.Intel.AssemblerRegisters.h"
 

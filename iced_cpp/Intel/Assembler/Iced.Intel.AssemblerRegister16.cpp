@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "Iced.Intel.AssemblerRegister16.h"
-#include "../Iced.Intel.RegisterExtensions.h"
+#include "../RegisterExtensions.h"
 #include "AssemblerOperandFlags.h"
 #include "MemoryOperandSize.g.h"
 

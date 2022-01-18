@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "Iced.Intel.AssemblerRegisterYMM.h"
-#include "../Iced.Intel.RegisterExtensions.h"
+#include "../RegisterExtensions.h"
 #include "MemoryOperandSize.g.h"
 
 namespace Iced::Intel

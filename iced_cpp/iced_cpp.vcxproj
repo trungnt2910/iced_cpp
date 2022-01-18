@@ -306,7 +306,7 @@
     <ClInclude Include="Intel\Iced.Intel.Instruction.h" />
     <ClInclude Include="Intel\Iced.Intel.InstructionInfoExtensions.h" />
     <ClInclude Include="Intel\Iced.Intel.MemorySizeExtensions.h" />
-    <ClInclude Include="Intel\Iced.Intel.RegisterExtensions.h" />
+    <ClInclude Include="Intel\RegisterExtensions.defs.h" />
     <ClInclude Include="Intel\IcedFeatures.h" />
     <ClInclude Include="Intel\IFormatterOptionsProvider.h" />
     <ClInclude Include="Intel\Instruction.Create.h" />
@@ -379,7 +379,7 @@
     <ClInclude Include="Intel\OpCodeTableKind.g.h" />
     <ClInclude Include="Intel\OpKind.g.h" />
     <ClInclude Include="Intel\Register.g.h" />
-    <ClInclude Include="Intel\RegisterExtensions.1.h" />
+    <ClInclude Include="Intel\RegisterInfo.h" />
     <ClInclude Include="Intel\RflagsBits.g.h" />
     <ClInclude Include="Intel\RoundingControl.g.h" />
     <ClInclude Include="Intel\Static.h" />
@@ -521,7 +521,7 @@
     <ClCompile Include="Intel\Iced.Intel.Instruction.cpp" />
     <ClCompile Include="Intel\Iced.Intel.InstructionInfoExtensions.cpp" />
     <ClCompile Include="Intel\Iced.Intel.MemorySizeExtensions.cpp" />
-    <ClCompile Include="Intel\Iced.Intel.RegisterExtensions.cpp" />
+    <ClCompile Include="Intel\RegisterExtensions.h" />
     <ClCompile Include="Intel\IcedFeatures.cpp" />
     <ClCompile Include="Intel\IFormatterOptionsProvider.cpp" />
     <ClCompile Include="Intel\Instruction.Create.cpp" />
@@ -594,7 +594,6 @@
     <ClCompile Include="Intel\OpCodeTableKind.g.cpp" />
     <ClCompile Include="Intel\OpKind.g.cpp" />
     <ClCompile Include="Intel\Register.g.cpp" />
-    <ClCompile Include="Intel\RegisterExtensions.1.cpp" />
     <ClCompile Include="Intel\RflagsBits.g.cpp" />
     <ClCompile Include="Intel\RoundingControl.g.cpp" />
     <ClCompile Include="Intel\Static.cpp" />

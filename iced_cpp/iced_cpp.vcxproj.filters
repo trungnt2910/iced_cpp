@@ -468,7 +468,7 @@
     <ClInclude Include="Intel\Iced.Intel.MemorySizeExtensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Iced.Intel.RegisterExtensions.h">
+    <ClInclude Include="Intel\RegisterExtensions.defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\IcedFeatures.h">
@@ -597,7 +597,7 @@
     <ClInclude Include="Intel\Register.g.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\RegisterExtensions.1.h">
+    <ClInclude Include="Intel\RegisterInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\RflagsBits.g.h">
@@ -1124,7 +1124,7 @@
     <ClCompile Include="Intel\Iced.Intel.MemorySizeExtensions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\Iced.Intel.RegisterExtensions.cpp">
+    <ClCompile Include="Intel\RegisterExtensions.h">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\IcedFeatures.cpp">
@@ -1251,9 +1251,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Register.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\RegisterExtensions.1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\RflagsBits.g.cpp">

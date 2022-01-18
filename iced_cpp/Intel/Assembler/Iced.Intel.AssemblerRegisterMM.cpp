@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "Iced.Intel.AssemblerRegisterMM.h"
-#include "../Iced.Intel.RegisterExtensions.h"
+#include "../RegisterExtensions.h"
 
 namespace Iced::Intel
 {

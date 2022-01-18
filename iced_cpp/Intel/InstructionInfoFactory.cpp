@@ -15,7 +15,7 @@
 
 #include "InstructionInfoFactory.h"
 #include "Static.h"
-#include "Iced.Intel.RegisterExtensions.h"
+#include "RegisterExtensions.h"
 #include "OpKind.g.h"
 #include "UsedMemory.h"
 #include "UsedRegister.h"
