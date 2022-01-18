@@ -154,7 +154,7 @@ namespace Iced::Intel
 		definedAnonLabel = true;
 	}
 
-	Iced::Intel::Label Assembler::GetB() const
+	Iced::Intel::Label Assembler::B() const
 	{
 		if (currentAnonLabel.IsEmpty())
 		{
@@ -163,7 +163,7 @@ namespace Iced::Intel
 		return currentAnonLabel;
 	}
 
-	Iced::Intel::Label Assembler::GetF()
+	Iced::Intel::Label Assembler::F()
 	{
 		if (nextAnonLabel.IsEmpty())
 		{

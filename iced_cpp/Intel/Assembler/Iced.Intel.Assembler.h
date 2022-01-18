@@ -146,13 +146,13 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Label @B
-		Iced::Intel::Label GetB() const;
+		Iced::Intel::Label B() const;
 		/// <summary>
 		/// References the next anonymous label created by a future call to <see cref="AnonymousLabel"/>
 		/// </summary>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Label @F
-		Iced::Intel::Label GetF();
+		Iced::Intel::Label F();
 		/// <summary>
 		/// Add an instruction directly to the flow of instructions.
 		/// </summary>
