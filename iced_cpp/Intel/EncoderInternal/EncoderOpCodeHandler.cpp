@@ -42,7 +42,8 @@ namespace Iced::Intel::EncoderInternal
 		IsDeclareData = isDeclareData;
 		OpSize = static_cast<CodeSize>((static_cast<std::uint32_t>(encFlags3) >> static_cast<std::int32_t>(EncFlags3::OperandSizeShift)) & static_cast<std::uint32_t>(EncFlags3::OperandSizeMask));
 		AddrSize = static_cast<CodeSize>((static_cast<std::uint32_t>(encFlags3) >> static_cast<std::int32_t>(EncFlags3::AddressSizeShift)) & static_cast<std::uint32_t>(EncFlags3::AddressSizeMask));
-		TryConvertToDisp8N = tryConvertToDisp8N;
+		// HACK: C++'s nullptr resovles to an std::optional _with_ a value but still invalid. Ignore that.
+		TryConvertToDisp8N = (tryConvertToDisp8N.value_or(nullptr)) ? tryConvertToDisp8N : std::optional<TryConvertToDisp8N_>(std::nullopt);
 		Operands = operands;
 	}
 

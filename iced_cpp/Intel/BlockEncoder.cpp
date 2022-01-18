@@ -304,9 +304,8 @@ namespace Iced::Intel
 		}
 		else
 		{
-			instr = toInstr_iterator->second;
+			return TargetInstr(address);
 		}
-		return TargetInstr(address);
 	}
 
 	std::uint32_t BlockEncoder::GetInstructionSize(Instruction const instruction, std::uint64_t ip)

@@ -214,7 +214,7 @@ namespace Iced::Intel
 	void InstructionList::Add(Instruction const instruction)
 	{
 		auto count = this->count;
-		auto elements = this->elements;
+		auto& elements = this->elements;
 		if (count == elements.size())
 		{
 			SetMinCapacity(count + 1);
