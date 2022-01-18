@@ -1,19 +1,7 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
 #pragma once
+
+#include <csharp/classes.h>
+#include <string>
 
 // These registers depend on each other, better forward declare them all.
 namespace Iced::Intel
@@ -40,11 +28,10 @@ namespace Iced::Intel
 #include "../Register.g.h"
 #include "AssemblerOperandFlags.h"
 #include "MemoryOperandSize.g.h"
-#include "Iced.Intel.AssemblerRegister16.h"
-#include "Iced.Intel.AssemblerRegister32.h"
-#include "Iced.Intel.AssemblerRegister64.h"
+#include "AssemblerRegister16.defs.h"
+#include "AssemblerRegister32.defs.h"
+#include "AssemblerRegister64.defs.h"
 #include "../MemoryOperand.h"
-#include <any>
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
@@ -57,7 +44,7 @@ namespace Iced::Intel
 	/// </summary>
    //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
    //ORIGINAL LINE: [DebuggerDisplay("{" + nameof(Base) + "} + {" + nameof(Index) + "} * {" + nameof(Scale) + "} + {" + nameof(Displacement) + "}")][EditorBrowsable(EditorBrowsableState.Never)] public struct AssemblerMemoryOperand : IEquatable<AssemblerMemoryOperand>
-	class AssemblerMemoryOperand : public IEquatable<AssemblerMemoryOperand>
+	class AssemblerMemoryOperand
 	{
 		/// <summary>
 		/// Creates a new instance.
@@ -70,7 +57,7 @@ namespace Iced::Intel
 		/// <param name="displacement">Displacement.</param>
 		/// <param name="flags">Flags attached to this operand.</param>
 	public:
-		AssemblerMemoryOperand(MemoryOperandSize size, Register segment, Register base, Register index, std::int32_t scale, std::int64_t displacement, AssemblerOperandFlags flags);
+		constexpr AssemblerMemoryOperand(MemoryOperandSize size, Register segment, Register base, Register index, std::int32_t scale, std::int64_t displacement, AssemblerOperandFlags flags);
 		/// <summary>
 		/// Gets the size of the operand.
 		/// </summary>
@@ -102,119 +89,216 @@ namespace Iced::Intel
 		/// <summary>
 		/// Gets a boolean indicating if this memory operand is a broadcast.
 		/// </summary>
-		bool IsBroadcast() const;
+		constexpr bool IsBroadcast() const;
 		/// <summary>
 		/// Gets a boolean indicating if this memory operand is a memory access using displacement only (no base and index registers are used).
 		/// </summary>
-		bool IsDisplacementOnly() const;
+		constexpr bool IsDisplacementOnly() const;
 		/// <summary>
 		/// Apply mask Register K1.
 		/// </summary>
-		AssemblerMemoryOperand k1() const;
+		constexpr AssemblerMemoryOperand k1() const;
 		/// <summary>
 		/// Apply mask Register K2.
 		/// </summary>
-		AssemblerMemoryOperand k2() const;
+		constexpr AssemblerMemoryOperand k2() const;
 		/// <summary>
 		/// Apply mask Register K3.
 		/// </summary>
-		AssemblerMemoryOperand k3() const;
+		constexpr AssemblerMemoryOperand k3() const;
 		/// <summary>
 		/// Apply mask Register K4.
 		/// </summary>
-		AssemblerMemoryOperand k4() const;
+		constexpr AssemblerMemoryOperand k4() const;
 		/// <summary>
 		/// Apply mask Register K5.
 		/// </summary>
-		AssemblerMemoryOperand k5() const;
+		constexpr AssemblerMemoryOperand k5() const;
 		/// <summary>
 		/// Apply mask Register K6.
 		/// </summary>
-		AssemblerMemoryOperand k6() const;
+		constexpr AssemblerMemoryOperand k6() const;
 		/// <summary>
 		/// Apply mask Register K7.
 		/// </summary>
-		AssemblerMemoryOperand k7() const;
+		constexpr AssemblerMemoryOperand k7() const;
 		/// <summary>
 		/// Adds a 16-bit memory operand with an new base or index.
 		/// </summary>
 		/// <param name="left">The base or index.</param>
 		/// <param name="right">The memory operand.</param>
 		/// <returns></returns>
-		friend   static AssemblerMemoryOperand operator + (AssemblerRegister16 left, AssemblerMemoryOperand right);
+		constexpr friend   static AssemblerMemoryOperand operator + (AssemblerRegister16 left, AssemblerMemoryOperand right);
 		/// <summary>
 		/// Adds a 32-bit memory operand with an new base or index.
 		/// </summary>
 		/// <param name="left">The base or index.</param>
 		/// <param name="right">The memory operand.</param>
 		/// <returns></returns>
-		friend   static AssemblerMemoryOperand operator + (AssemblerRegister32 left, AssemblerMemoryOperand right);
+		constexpr friend   static AssemblerMemoryOperand operator + (AssemblerRegister32 left, AssemblerMemoryOperand right);
 		/// <summary>
 		/// Adds a 64-bit memory operand with an new base or index.
 		/// </summary>
 		/// <param name="left">The base or index.</param>
 		/// <param name="right">The memory operand.</param>
 		/// <returns></returns>
-		friend   static AssemblerMemoryOperand operator + (AssemblerRegister64 left, AssemblerMemoryOperand right);
+		constexpr friend   static AssemblerMemoryOperand operator + (AssemblerRegister64 left, AssemblerMemoryOperand right);
 		/// <summary>
 		/// Adds a displacement to a memory operand.
 		/// </summary>
 		/// <param name="left">The memory operand.</param>
 		/// <param name="displacement">displacement.</param>
 		/// <returns></returns>
-		AssemblerMemoryOperand operator + (std::int64_t displacement);
+		constexpr AssemblerMemoryOperand operator + (std::int64_t displacement) const;
 		/// <summary>
 		/// Subtracts a displacement to a memory operand.
 		/// </summary>
 		/// <param name="left">The memory operand.</param>
 		/// <param name="displacement">displacement.</param>
 		/// <returns></returns>
-		AssemblerMemoryOperand operator - (std::int64_t displacement);
+		constexpr AssemblerMemoryOperand operator - (std::int64_t displacement) const;
 		/// <summary>
 		/// Gets a memory operand for the specified bitness.
 		/// </summary>
 		/// <param name="bitness">The bitness</param>
-		MemoryOperand ToMemoryOperand(std::int32_t bitness);
+		constexpr MemoryOperand ToMemoryOperand(std::int32_t bitness) const;
 		/// <inheritdoc />
-		bool Equals(AssemblerMemoryOperand other) override;
-		/// <inheritdoc />
-	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-	  //ORIGINAL LINE: public override bool Equals(Object? obj)
-		bool Equals(std::any obj);
-		/// <inheritdoc />
-		std::int32_t GetHashCode();
+		inline std::int32_t GetHashCode() const;
 		/// <summary>
 		/// Equality operator for <see cref="AssemblerMemoryOperand"/>.
 		/// </summary>
 		/// <param name="left">Left operand</param>
 		/// <param name="right">Right operand</param>
 		/// <returns><c>true</c> if equal; otherwise <c>false</c></returns>
-		bool operator == (AssemblerMemoryOperand right);
+		constexpr bool operator == (AssemblerMemoryOperand right) const;
 		/// <summary>
 		/// Inequality operator for <see cref="AssemblerMemoryOperand"/>.
 		/// </summary>
 		/// <param name="left">Left operand</param>
 		/// <param name="right">Right operand</param>
 		/// <returns><c>true</c> if not equal; otherwise <c>false</c></returns>
-		bool operator != (AssemblerMemoryOperand right);
+		constexpr bool operator != (AssemblerMemoryOperand right) const;
 
-		//AssemblerMemoryOperand(MemoryOperandSize size, Register segment, Register base, Register index, std::int32_t scale, std::int64_t displacement, AssemblerOperandFlags flags);
+		inline std::string ToString() const;
 
-
-		inline std::string ToString() const
-		{
-			return nameof(AssemblerMemoryOperand)"(" +
-#define LIST_PARAM(s) std::string(nameof((s))"=" + to_string((s)))
-				LIST_PARAM(Size) + "," +
-				LIST_PARAM(Segment) + "," +
-				LIST_PARAM(Base) + "," +
-				LIST_PARAM(Index) + "," +
-				LIST_PARAM(Scale) + "," +
-				LIST_PARAM(Displacement) + "," +
-				LIST_PARAM(Flags) + ")";
-#undef LIST_PARAM
-		}
-
-		AssemblerMemoryOperand() = default;
+		constexpr AssemblerMemoryOperand() = default;
 	};
+
+	constexpr AssemblerMemoryOperand::AssemblerMemoryOperand(MemoryOperandSize size, Register segment, Register base, Register index, std::int32_t scale, std::int64_t displacement, AssemblerOperandFlags flags)
+	{
+		Size = size;
+		Segment = segment;
+		Base = base;
+		Index = index;
+		Scale = scale;
+		Displacement = displacement;
+		Flags = flags;
+	}
+
+	constexpr bool AssemblerMemoryOperand::IsBroadcast() const
+	{
+		return (Flags & AssemblerOperandFlags::Broadcast) != 0;
+	}
+
+	constexpr bool AssemblerMemoryOperand::IsDisplacementOnly() const
+	{
+		return Base == Register::None && Index == Register::None;
+	}
+
+	constexpr AssemblerMemoryOperand AssemblerMemoryOperand::k1() const
+	{
+		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K1);
+	}
+
+	constexpr AssemblerMemoryOperand AssemblerMemoryOperand::k2() const
+	{
+		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K2);
+	}
+
+	constexpr AssemblerMemoryOperand AssemblerMemoryOperand::k3() const
+	{
+		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K3);
+	}
+
+	constexpr AssemblerMemoryOperand AssemblerMemoryOperand::k4() const
+	{
+		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K4);
+	}
+
+	constexpr AssemblerMemoryOperand AssemblerMemoryOperand::k5() const
+	{
+		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K5);
+	}
+
+	constexpr AssemblerMemoryOperand AssemblerMemoryOperand::k6() const
+	{
+		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K6);
+	}
+
+	constexpr AssemblerMemoryOperand AssemblerMemoryOperand::k7() const
+	{
+		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K7);
+	}
+	
+	constexpr AssemblerMemoryOperand AssemblerMemoryOperand::operator + (std::int64_t displacement) const 
+	{
+		return AssemblerMemoryOperand(this->Size, Register::None, this->Base, this->Index, this->Scale, this->Displacement + displacement, this->Flags);
+	}
+
+	constexpr AssemblerMemoryOperand AssemblerMemoryOperand::operator - (std::int64_t displacement) const 
+	{
+		return AssemblerMemoryOperand(this->Size, Register::None, this->Base, this->Index, this->Scale, this->Displacement - displacement, this->Flags);
+	}
+
+	constexpr MemoryOperand AssemblerMemoryOperand::ToMemoryOperand(std::int32_t bitness) const 
+	{
+		std::int32_t dispSize = 1;
+		if (IsDisplacementOnly()) 
+		{
+			dispSize = bitness / 8;
+		}
+		else if (Displacement == 0) 
+		{
+			dispSize = 0;
+		}
+		return MemoryOperand(Base, Index, Scale, Displacement, dispSize, (Flags & AssemblerOperandFlags::Broadcast) != 0, Segment);
+	}
+
+	inline std::int32_t AssemblerMemoryOperand::GetHashCode() const 
+	{
+		//	 unchecked
+		auto hashCode = static_cast<std::int32_t>(Size);
+		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Segment);
+		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Base);
+		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Index);
+		hashCode = (hashCode * 397) ^ Scale;
+		hashCode = (hashCode * 397) ^ ::GetHashCode(Displacement);
+		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Flags);
+		return hashCode;
+		//C# TO C++ CONVERTER TODO TASK: End of the original C# 'unchecked' block.
+	}
+
+	constexpr bool AssemblerMemoryOperand::operator == (AssemblerMemoryOperand right) const 
+	{
+		return Size == right.Size && Segment == right.Segment && Base == right.Base && Index == right.Index && Scale == right.Scale && Displacement == right.Displacement && Flags == right.Flags;
+	}
+
+	constexpr bool AssemblerMemoryOperand::operator != (AssemblerMemoryOperand right) const 
+	{
+		return !((*this) == right);
+	}
+
+	inline std::string AssemblerMemoryOperand::ToString() const
+	{
+		return nameof(AssemblerMemoryOperand)"(" +
+#define LIST_PARAM(s) std::string(nameof((s))"=" + to_string((s))) 
+			LIST_PARAM(Size) + "," +
+			LIST_PARAM(Segment) + "," +
+			LIST_PARAM(Base) + "," +
+			LIST_PARAM(Index) + "," +
+			LIST_PARAM(Scale) + "," +
+			LIST_PARAM(Displacement) + "," +
+			LIST_PARAM(Flags) + ")";
+#undef LIST_PARAM
+	}
 }

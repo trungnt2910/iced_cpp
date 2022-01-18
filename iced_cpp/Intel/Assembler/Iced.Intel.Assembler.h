@@ -25,10 +25,10 @@
 #include "../Mnemonic.g.h"
 #include "Iced.Intel.AssemblerRegister8.h"
 #include "AssemblerMemoryOperand.h"
-#include "Iced.Intel.AssemblerRegister16.h"
-#include "Iced.Intel.AssemblerRegister32.h"
-#include "Iced.Intel.AssemblerRegister64.h"
-#include "Iced.Intel.AssemblerRegisterXMM.h"
+#include "AssemblerRegister16.h"
+#include "AssemblerRegister32.h"
+#include "AssemblerRegister64.h"
+#include "AssemblerRegisterXMM.h"
 #include "Iced.Intel.AssemblerRegisterBND.h"
 #include "Iced.Intel.AssemblerRegisterMM.h"
 #include "Iced.Intel.AssemblerRegisterST.h"
@@ -38,8 +38,8 @@
 #include "Iced.Intel.AssemblerRegisterDR.h"
 #include "Iced.Intel.AssemblerRegisterTR.h"
 #include "Iced.Intel.AssemblerRegisterTMM.h"
-#include "Iced.Intel.AssemblerRegisterZMM.h"
-#include "Iced.Intel.AssemblerRegisterYMM.h"
+#include "AssemblerRegisterZMM.h"
+#include "AssemblerRegisterYMM.h"
 #include <string>
 #include <vector>
 #include <cmath>

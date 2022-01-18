@@ -16,9 +16,9 @@
 #pragma once
 
 #include "Iced.Intel.AssemblerRegister8.h"
-#include "Iced.Intel.AssemblerRegister16.h"
-#include "Iced.Intel.AssemblerRegister32.h"
-#include "Iced.Intel.AssemblerRegister64.h"
+#include "AssemblerRegister16.h"
+#include "AssemblerRegister32.h"
+#include "AssemblerRegister64.h"
 #include "Iced.Intel.AssemblerRegisterSegment.h"
 #include "Iced.Intel.AssemblerRegisterST.h"
 #include "Iced.Intel.AssemblerRegisterCR.h"
@@ -27,9 +27,9 @@
 #include "Iced.Intel.AssemblerRegisterBND.h"
 #include "Iced.Intel.AssemblerRegisterK.h"
 #include "Iced.Intel.AssemblerRegisterMM.h"
-#include "Iced.Intel.AssemblerRegisterXMM.h"
-#include "Iced.Intel.AssemblerRegisterYMM.h"
-#include "Iced.Intel.AssemblerRegisterZMM.h"
+#include "AssemblerRegisterXMM.h"
+#include "AssemblerRegisterYMM.h"
+#include "AssemblerRegisterZMM.h"
 #include "Iced.Intel.AssemblerRegisterTMM.h"
 #include "Iced.Intel.AssemblerMemoryOperandFactory.h"
 

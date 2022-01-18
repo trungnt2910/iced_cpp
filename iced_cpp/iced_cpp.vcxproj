@@ -190,9 +190,9 @@
     <ClInclude Include="Intel\Assembler\AssemblerResult.h" />
     <ClInclude Include="Intel\Assembler\Iced.Intel.Assembler.h" />
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerMemoryOperandFactory.h" />
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegister16.h" />
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegister32.h" />
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegister64.h" />
+    <ClInclude Include="Intel\Assembler\AssemblerRegister16.defs.h" />
+    <ClInclude Include="Intel\Assembler\AssemblerRegister32.defs.h" />
+    <ClInclude Include="Intel\Assembler\AssemblerRegister64.defs.h" />
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegister8.h" />
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterBND.h" />
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterCR.h" />
@@ -204,9 +204,9 @@
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterST.h" />
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTMM.h" />
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTR.h" />
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterXMM.h" />
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterYMM.h" />
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterZMM.h" />
+    <ClInclude Include="Intel\Assembler\AssemblerRegisterXMM.h" />
+    <ClInclude Include="Intel\Assembler\AssemblerRegisterYMM.h" />
+    <ClInclude Include="Intel\Assembler\AssemblerRegisterZMM.h" />
     <ClInclude Include="Intel\Assembler\Label.h" />
     <ClInclude Include="Intel\Assembler\MemoryOperandSize.g.h" />
     <ClInclude Include="Intel\BlockEncoder.h" />
@@ -405,9 +405,9 @@
     <ClCompile Include="Intel\Assembler\AssemblerResult.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.Assembler.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerMemoryOperandFactory.cpp" />
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegister16.cpp" />
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegister32.cpp" />
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegister64.cpp" />
+    <ClCompile Include="Intel\Assembler\AssemblerRegister16.h" />
+    <ClCompile Include="Intel\Assembler\AssemblerRegister32.h" />
+    <ClCompile Include="Intel\Assembler\AssemblerRegister64.h" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegister8.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterBND.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterCR.cpp" />
@@ -419,8 +419,6 @@
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterST.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTMM.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTR.cpp" />
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterXMM.cpp" />
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterYMM.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterZMM.cpp" />
     <ClCompile Include="Intel\Assembler\Label.cpp" />
     <ClCompile Include="Intel\Assembler\MemoryOperandSize.g.cpp" />

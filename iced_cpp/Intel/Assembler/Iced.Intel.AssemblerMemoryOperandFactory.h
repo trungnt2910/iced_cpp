@@ -20,9 +20,9 @@
 #include "AssemblerOperandFlags.h"
 #include "AssemblerMemoryOperand.h"
 #include "Label.h"
-#include "Iced.Intel.AssemblerRegister16.h"
-#include "Iced.Intel.AssemblerRegister32.h"
-#include "Iced.Intel.AssemblerRegister64.h"
+#include "AssemblerRegister16.h"
+#include "AssemblerRegister32.h"
+#include "AssemblerRegister64.h"
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.

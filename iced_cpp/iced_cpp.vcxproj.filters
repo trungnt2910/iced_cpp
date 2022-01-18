@@ -33,13 +33,13 @@
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegister8.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegister16.h">
+    <ClInclude Include="Intel\Assembler\AssemblerRegister16.defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegister32.h">
+    <ClInclude Include="Intel\Assembler\AssemblerRegister32.defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegister64.h">
+    <ClInclude Include="Intel\Assembler\AssemblerRegister64.defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterBND.h">
@@ -72,13 +72,13 @@
     <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterXMM.h">
+    <ClInclude Include="Intel\Assembler\AssemblerRegisterXMM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterYMM.h">
+    <ClInclude Include="Intel\Assembler\AssemblerRegisterYMM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Assembler\Iced.Intel.AssemblerRegisterZMM.h">
+    <ClInclude Include="Intel\Assembler\AssemblerRegisterZMM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\Assembler\Label.h">
@@ -689,13 +689,13 @@
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegister8.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegister16.cpp">
+    <ClCompile Include="Intel\Assembler\AssemblerRegister16.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegister32.cpp">
+    <ClCompile Include="Intel\Assembler\AssemblerRegister32.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegister64.cpp">
+    <ClCompile Include="Intel\Assembler\AssemblerRegister64.h">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterBND.cpp">
@@ -726,12 +726,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTR.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterXMM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterYMM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterZMM.cpp">
