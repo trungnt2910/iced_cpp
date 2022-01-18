@@ -281,7 +281,7 @@ namespace Iced::Intel
 		/// <param name="options">Encoding options.</param>
 		/// <returns></returns>
 		/// <exception cref="InvalidOperationException"></exception>
-		AssemblerResult Assemble(CodeWriter* writer, std::uint64_t rip, BlockEncoderOptions options = BlockEncoderOptions::None);
+		AssemblerResult Assemble(CodeWriter& writer, std::uint64_t rip, BlockEncoderOptions options = BlockEncoderOptions::None);
 		/// <summary>
 		/// Tries to assemble the instructions of this assembler with the specified options.
 		/// </summary>
@@ -294,7 +294,7 @@ namespace Iced::Intel
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public bool TryAssemble(CodeWriter writer, ulong rip, [NotNullWhen(false)] out string? errorMessage, out AssemblerResult assemblerResult, BlockEncoderOptions options = BlockEncoderOptions.None)
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-		bool TryAssemble(CodeWriter* writer, std::uint64_t rip, std::string& errorMessage, AssemblerResult& assemblerResult, BlockEncoderOptions options = BlockEncoderOptions::None);
+		bool TryAssemble(CodeWriter& writer, std::uint64_t rip, std::string& errorMessage, AssemblerResult& assemblerResult, BlockEncoderOptions options = BlockEncoderOptions::None);
 		/// <summary>
 		/// Internal method used to throw an InvalidOperationException if it was not possible to encode an OpCode.
 		/// </summary>

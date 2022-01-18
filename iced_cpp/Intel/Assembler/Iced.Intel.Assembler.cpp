@@ -445,7 +445,7 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER TODO TASK: Local functions are not converted by C# to C++ Converter:
 	}
 
-	AssemblerResult Assembler::Assemble(CodeWriter* writer, std::uint64_t rip, BlockEncoderOptions options)
+	AssemblerResult Assembler::Assemble(CodeWriter& writer, std::uint64_t rip, BlockEncoderOptions options)
 	{
 		std::string errorMessage;
 		Iced::Intel::AssemblerResult assemblerResult;
@@ -459,12 +459,8 @@ namespace Iced::Intel
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public bool TryAssemble(CodeWriter writer, ulong rip, [NotNullWhen(false)] out string? errorMessage, out AssemblerResult assemblerResult, BlockEncoderOptions options = BlockEncoderOptions.None)
 	//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-	bool Assembler::TryAssemble(CodeWriter* writer, std::uint64_t rip, std::string& errorMessage, AssemblerResult& assemblerResult, BlockEncoderOptions options)
+	bool Assembler::TryAssemble(CodeWriter& writer, std::uint64_t rip, std::string& errorMessage, AssemblerResult& assemblerResult, BlockEncoderOptions options)
 	{
-		if (writer == nullptr)
-		{
-			ThrowHelper::ThrowArgumentNullException_writer();
-		}
 		assemblerResult = Iced::Intel::AssemblerResult();
 		// Protect against using a prefix without actually using it
 		if (prefixFlags != PrefixFlags::None)
@@ -488,7 +484,7 @@ namespace Iced::Intel
 			errorMessage = "Found an @F anonymous label reference but there was no call to " "AnonymousLabel";
 			return false;
 		}
-		auto blocks = std::vector<InstructionBlock>{ InstructionBlock(writer, instructions->ToArray(), rip)};
+		auto blocks = std::vector<InstructionBlock>{ InstructionBlock(&writer, instructions->ToArray(), rip)};
 		std::vector<BlockEncoderResult> blockResults;
 		if (BlockEncoder::TryEncode(GetBitness(), blocks, errorMessage, blockResults, options))
 		{
