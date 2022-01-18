@@ -184,7 +184,7 @@ namespace Iced::Intel
 		if (instrLen < IcedConstants::MaxInstructionLength)
 		{
 			std::uint32_t b = static_cast<std::uint32_t>(reader->ReadByte());
-			assert(b <= std::numeric_limits<std::uint8_t>::max() || b > std::numeric_limits<std::int32_t>::max());
+			assert(b <= std::numeric_limits<std::uint8_t>::max() || b > (std::uint32_t)std::numeric_limits<std::int32_t>::max());
 			if (b <= std::numeric_limits<std::uint8_t>::max())
 			{
 				state.instructionLength = instrLen + 1;

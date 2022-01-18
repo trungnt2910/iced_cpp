@@ -2865,7 +2865,7 @@ namespace Iced::Intel
 		}
 		if (access != OpAccess::NoMemAccess)
 		{
-			std::int32_t arrayLength = info.usedMemoryLocations.Array.size();
+			std::int32_t arrayLength = (std::int32_t)info.usedMemoryLocations.Array.size();
 			std::int32_t validLen = info.usedMemoryLocations.ValidLength;
 			if (arrayLength == validLen)
 			{
@@ -2922,7 +2922,7 @@ namespace Iced::Intel
 		}
 		auto array = info.usedRegisters.Array;
 		std::int32_t validLen = info.usedRegisters.ValidLength;
-		std::int32_t arrayLength = array.size();
+		std::int32_t arrayLength = (std::int32_t)array.size();
 		std::int32_t numRegs = writeReg == reg ? 1 : 2;
 		if (validLen + numRegs > arrayLength)
 		{

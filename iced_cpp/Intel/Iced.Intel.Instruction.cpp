@@ -1797,7 +1797,7 @@ namespace Iced::Intel
 		{
 			ThrowHelper::ThrowArgumentNullException_data();
 		}
-		return CreateDeclareByte(data, 0, data.size());
+		return CreateDeclareByte(data, 0, (std::int32_t)data.size());
 	}
 
 	Instruction Instruction::CreateDeclareByte(std::vector<std::uint8_t>& data, std::int32_t index, std::int32_t length)
@@ -1939,7 +1939,7 @@ namespace Iced::Intel
 		{
 			ThrowHelper::ThrowArgumentNullException_data();
 		}
-		return CreateDeclareWord(data, 0, data.size());
+		return CreateDeclareWord(data, 0, (std::int32_t)data.size());
 	}
 
 	Instruction Instruction::CreateDeclareWord(std::vector<std::uint8_t>& data, std::int32_t index, std::int32_t length)
@@ -1974,7 +1974,7 @@ namespace Iced::Intel
 		{
 			ThrowHelper::ThrowArgumentNullException_data();
 		}
-		return CreateDeclareWord(data, 0, data.size());
+		return CreateDeclareWord(data, 0, (std::int32_t)data.size());
 	}
 
 	Instruction Instruction::CreateDeclareWord(std::vector<std::uint16_t>& data, std::int32_t index, std::int32_t length)
@@ -2054,7 +2054,7 @@ namespace Iced::Intel
 		{
 			ThrowHelper::ThrowArgumentNullException_data();
 		}
-		return CreateDeclareDword(data, 0, data.size());
+		return CreateDeclareDword(data, 0, (std::int32_t)data.size());
 	}
 
 	Instruction Instruction::CreateDeclareDword(std::vector<std::uint8_t>& data, std::int32_t index, std::int32_t length)
@@ -2089,7 +2089,7 @@ namespace Iced::Intel
 		{
 			ThrowHelper::ThrowArgumentNullException_data();
 		}
-		return CreateDeclareDword(data, 0, data.size());
+		return CreateDeclareDword(data, 0, (std::int32_t)data.size());
 	}
 
 	Instruction Instruction::CreateDeclareDword(std::vector<std::uint32_t>& data, std::int32_t index, std::int32_t length)
@@ -2144,7 +2144,7 @@ namespace Iced::Intel
 		{
 			ThrowHelper::ThrowArgumentNullException_data();
 		}
-		return CreateDeclareQword(data, 0, data.size());
+		return CreateDeclareQword(data, 0, (std::int32_t)data.size());
 	}
 
 	Instruction Instruction::CreateDeclareQword(std::vector<std::uint8_t>& data, std::int32_t index, std::int32_t length)
@@ -2180,7 +2180,7 @@ namespace Iced::Intel
 		{
 			ThrowHelper::ThrowArgumentNullException_data();
 		}
-		return CreateDeclareQword(data, 0, data.size());
+		return CreateDeclareQword(data, 0, (std::int32_t)data.size());
 	}
 
 	Instruction Instruction::CreateDeclareQword(std::vector<std::uint64_t>& data, std::int32_t index, std::int32_t length)

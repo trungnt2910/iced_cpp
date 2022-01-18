@@ -33,7 +33,7 @@ public:
 	{
 		typename std::vector<T>::iterator it = std::find(list.begin(), list.end(), item);
 		if (it != list.end())
-			return std::distance(list.begin(), it);
+			return (int)std::distance(list.begin(), it);
 		else
 			return -1;
 	}

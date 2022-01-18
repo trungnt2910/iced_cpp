@@ -27,7 +27,7 @@ namespace Iced::Intel
 
 	std::int32_t InstructionList::GetCapacity() const
 	{
-		return elements.size();
+		return (std::int32_t)elements.size();
 	}
 
 	Instruction& InstructionList::operator [](std::int32_t index)

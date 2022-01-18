@@ -23,7 +23,7 @@
 namespace Iced::Intel
 {
 	/// <summary>A register</summary>
-	enum class Register
+	enum class Register : uint
 	{
 		None = 0,
 		AL = 1,
