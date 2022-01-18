@@ -54,35 +54,35 @@ namespace Iced::Intel
 		/// <summary>
 		/// Apply mask Register K1.
 		/// </summary>
-		AssemblerRegisterK GetK1() const;
+		AssemblerRegisterK k1() const;
 		/// <summary>
 		/// Apply mask Register K2.
 		/// </summary>
-		AssemblerRegisterK GetK2() const;
+		AssemblerRegisterK k2() const;
 		/// <summary>
 		/// Apply mask Register K3.
 		/// </summary>
-		AssemblerRegisterK GetK3() const;
+		AssemblerRegisterK k3() const;
 		/// <summary>
 		/// Apply mask Register K4.
 		/// </summary>
-		AssemblerRegisterK GetK4() const;
+		AssemblerRegisterK k4() const;
 		/// <summary>
 		/// Apply mask Register K5.
 		/// </summary>
-		AssemblerRegisterK GetK5() const;
+		AssemblerRegisterK k5() const;
 		/// <summary>
 		/// Apply mask Register K6.
 		/// </summary>
-		AssemblerRegisterK GetK6() const;
+		AssemblerRegisterK k6() const;
 		/// <summary>
 		/// Apply mask Register K7.
 		/// </summary>
-		AssemblerRegisterK GetK7() const;
+		AssemblerRegisterK k7() const;
 		/// <summary>
 		/// Apply mask Zeroing.
 		/// </summary>
-		AssemblerRegisterK GetZ() const;
+		AssemblerRegisterK z() const;
 		/// <summary>
 		/// Converts a <see cref="AssemblerRegisterK"/> to a <see cref="Register"/>.
 		/// </summary>

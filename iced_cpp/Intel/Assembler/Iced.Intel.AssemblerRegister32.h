@@ -58,55 +58,55 @@ namespace Iced::Intel
 		/// <summary>
 		/// Apply mask Register K1.
 		/// </summary>
-		AssemblerRegister32 GetK1() const;
+		AssemblerRegister32 k1() const;
 		/// <summary>
 		/// Apply mask Register K2.
 		/// </summary>
-		AssemblerRegister32 GetK2() const;
+		AssemblerRegister32 k2() const;
 		/// <summary>
 		/// Apply mask Register K3.
 		/// </summary>
-		AssemblerRegister32 GetK3() const;
+		AssemblerRegister32 k3() const;
 		/// <summary>
 		/// Apply mask Register K4.
 		/// </summary>
-		AssemblerRegister32 GetK4() const;
+		AssemblerRegister32 k4() const;
 		/// <summary>
 		/// Apply mask Register K5.
 		/// </summary>
-		AssemblerRegister32 GetK5() const;
+		AssemblerRegister32 k5() const;
 		/// <summary>
 		/// Apply mask Register K6.
 		/// </summary>
-		AssemblerRegister32 GetK6() const;
+		AssemblerRegister32 k6() const;
 		/// <summary>
 		/// Apply mask Register K7.
 		/// </summary>
-		AssemblerRegister32 GetK7() const;
+		AssemblerRegister32 k7() const;
 		/// <summary>
 		/// Apply mask Zeroing.
 		/// </summary>
-		AssemblerRegister32 GetZ() const;
+		AssemblerRegister32 z() const;
 		/// <summary>
 		/// Suppress all exceptions
 		/// </summary>
-		AssemblerRegister32 GetSae() const;
+		AssemblerRegister32 sae() const;
 		/// <summary>
 		/// Round to nearest (even)
 		/// </summary>
-		AssemblerRegister32 GetRnSae() const;
+		AssemblerRegister32 rn_sae() const;
 		/// <summary>
 		/// Round down (toward -inf)
 		/// </summary>
-		AssemblerRegister32 GetRdSae() const;
+		AssemblerRegister32 rd_sae() const;
 		/// <summary>
 		/// Round up (toward +inf)
 		/// </summary>
-		AssemblerRegister32 GetRuSae() const;
+		AssemblerRegister32 ru_sae() const;
 		/// <summary>
 		/// Round toward zero (truncate)
 		/// </summary>
-		AssemblerRegister32 GetRzSae() const;
+		AssemblerRegister32 rz_sae() const;
 		/// <summary>
 		/// Converts a <see cref="AssemblerRegister32"/> to a <see cref="Register"/>.
 		/// </summary>

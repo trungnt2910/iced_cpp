@@ -110,31 +110,31 @@ namespace Iced::Intel
 		/// <summary>
 		/// Apply mask Register K1.
 		/// </summary>
-		AssemblerMemoryOperand GetK1() const;
+		AssemblerMemoryOperand k1() const;
 		/// <summary>
 		/// Apply mask Register K2.
 		/// </summary>
-		AssemblerMemoryOperand GetK2() const;
+		AssemblerMemoryOperand k2() const;
 		/// <summary>
 		/// Apply mask Register K3.
 		/// </summary>
-		AssemblerMemoryOperand GetK3() const;
+		AssemblerMemoryOperand k3() const;
 		/// <summary>
 		/// Apply mask Register K4.
 		/// </summary>
-		AssemblerMemoryOperand GetK4() const;
+		AssemblerMemoryOperand k4() const;
 		/// <summary>
 		/// Apply mask Register K5.
 		/// </summary>
-		AssemblerMemoryOperand GetK5() const;
+		AssemblerMemoryOperand k5() const;
 		/// <summary>
 		/// Apply mask Register K6.
 		/// </summary>
-		AssemblerMemoryOperand GetK6() const;
+		AssemblerMemoryOperand k6() const;
 		/// <summary>
 		/// Apply mask Register K7.
 		/// </summary>
-		AssemblerMemoryOperand GetK7() const;
+		AssemblerMemoryOperand k7() const;
 		/// <summary>
 		/// Adds a 16-bit memory operand with an new base or index.
 		/// </summary>

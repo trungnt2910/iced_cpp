@@ -36,67 +36,67 @@ namespace Iced::Intel
 		Flags = flags;
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetK1() const
+	AssemblerRegister64 AssemblerRegister64::k1() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K1);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetK2() const
+	AssemblerRegister64 AssemblerRegister64::k2() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K2);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetK3() const
+	AssemblerRegister64 AssemblerRegister64::k3() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K3);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetK4() const
+	AssemblerRegister64 AssemblerRegister64::k4() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K4);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetK5() const
+	AssemblerRegister64 AssemblerRegister64::k5() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K5);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetK6() const
+	AssemblerRegister64 AssemblerRegister64::k6() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K6);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetK7() const
+	AssemblerRegister64 AssemblerRegister64::k7() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K7);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetZ() const
+	AssemblerRegister64 AssemblerRegister64::z() const
 	{
 		return AssemblerRegister64(Value, Flags | AssemblerOperandFlags::Zeroing);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetSae() const
+	AssemblerRegister64 AssemblerRegister64::sae() const
 	{
 		return AssemblerRegister64(Value, Flags | AssemblerOperandFlags::SuppressAllExceptions);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetRnSae() const
+	AssemblerRegister64 AssemblerRegister64::rn_sae() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundToNearest);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetRdSae() const
+	AssemblerRegister64 AssemblerRegister64::rd_sae() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundDown);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetRuSae() const
+	AssemblerRegister64 AssemblerRegister64::ru_sae() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundUp);
 	}
 
-	AssemblerRegister64 AssemblerRegister64::GetRzSae() const
+	AssemblerRegister64 AssemblerRegister64::rz_sae() const
 	{
 		return AssemblerRegister64(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundTowardZero);
 	}

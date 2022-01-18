@@ -35,42 +35,42 @@ namespace Iced::Intel
 		Flags = flags;
 	}
 
-	AssemblerRegisterK AssemblerRegisterK::GetK1() const
+	AssemblerRegisterK AssemblerRegisterK::k1() const
 	{
 		return AssemblerRegisterK(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K1);
 	}
 
-	AssemblerRegisterK AssemblerRegisterK::GetK2() const
+	AssemblerRegisterK AssemblerRegisterK::k2() const
 	{
 		return AssemblerRegisterK(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K2);
 	}
 
-	AssemblerRegisterK AssemblerRegisterK::GetK3() const
+	AssemblerRegisterK AssemblerRegisterK::k3() const
 	{
 		return AssemblerRegisterK(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K3);
 	}
 
-	AssemblerRegisterK AssemblerRegisterK::GetK4() const
+	AssemblerRegisterK AssemblerRegisterK::k4() const
 	{
 		return AssemblerRegisterK(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K4);
 	}
 
-	AssemblerRegisterK AssemblerRegisterK::GetK5() const
+	AssemblerRegisterK AssemblerRegisterK::k5() const
 	{
 		return AssemblerRegisterK(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K5);
 	}
 
-	AssemblerRegisterK AssemblerRegisterK::GetK6() const
+	AssemblerRegisterK AssemblerRegisterK::k6() const
 	{
 		return AssemblerRegisterK(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K6);
 	}
 
-	AssemblerRegisterK AssemblerRegisterK::GetK7() const
+	AssemblerRegisterK AssemblerRegisterK::k7() const
 	{
 		return AssemblerRegisterK(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K7);
 	}
 
-	AssemblerRegisterK AssemblerRegisterK::GetZ() const
+	AssemblerRegisterK AssemblerRegisterK::z() const
 	{
 		return AssemblerRegisterK(Value, Flags | AssemblerOperandFlags::Zeroing);
 	}

@@ -36,67 +36,67 @@ namespace Iced::Intel
 		Flags = flags;
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetK1() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::k1() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K1);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetK2() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::k2() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K2);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetK3() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::k3() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K3);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetK4() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::k4() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K4);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetK5() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::k5() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K5);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetK6() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::k6() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K6);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetK7() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::k7() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K7);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetZ() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::z() const
 	{
 		return AssemblerRegisterXMM(Value, Flags | AssemblerOperandFlags::Zeroing);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetSae() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::sae() const
 	{
 		return AssemblerRegisterXMM(Value, Flags | AssemblerOperandFlags::SuppressAllExceptions);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetRnSae() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::rn_sae() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundToNearest);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetRdSae() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::rd_sae() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundDown);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetRuSae() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::ru_sae() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundUp);
 	}
 
-	AssemblerRegisterXMM AssemblerRegisterXMM::GetRzSae() const
+	AssemblerRegisterXMM AssemblerRegisterXMM::rz_sae() const
 	{
 		return AssemblerRegisterXMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundTowardZero);
 	}

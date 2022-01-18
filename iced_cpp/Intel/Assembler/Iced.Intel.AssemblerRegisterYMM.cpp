@@ -36,67 +36,67 @@ namespace Iced::Intel
 		Flags = flags;
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetK1() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::k1() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K1);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetK2() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::k2() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K2);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetK3() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::k3() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K3);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetK4() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::k4() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K4);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetK5() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::k5() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K5);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetK6() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::k6() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K6);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetK7() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::k7() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K7);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetZ() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::z() const
 	{
 		return AssemblerRegisterYMM(Value, Flags | AssemblerOperandFlags::Zeroing);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetSae() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::sae() const
 	{
 		return AssemblerRegisterYMM(Value, Flags | AssemblerOperandFlags::SuppressAllExceptions);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetRnSae() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::rn_sae() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundToNearest);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetRdSae() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::rd_sae() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundDown);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetRuSae() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::ru_sae() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundUp);
 	}
 
-	AssemblerRegisterYMM AssemblerRegisterYMM::GetRzSae() const
+	AssemblerRegisterYMM AssemblerRegisterYMM::rz_sae() const
 	{
 		return AssemblerRegisterYMM(Value, (Flags & ~AssemblerOperandFlags::RoundControlMask) | AssemblerOperandFlags::RoundTowardZero);
 	}

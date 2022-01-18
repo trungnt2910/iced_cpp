@@ -39,37 +39,37 @@ namespace Iced::Intel
 		return Base == Register::None && Index == Register::None;
 	}
 
-	AssemblerMemoryOperand AssemblerMemoryOperand::GetK1() const
+	AssemblerMemoryOperand AssemblerMemoryOperand::k1() const
 	{
 		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K1);
 	}
 
-	AssemblerMemoryOperand AssemblerMemoryOperand::GetK2() const
+	AssemblerMemoryOperand AssemblerMemoryOperand::k2() const
 	{
 		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K2);
 	}
 
-	AssemblerMemoryOperand AssemblerMemoryOperand::GetK3() const
+	AssemblerMemoryOperand AssemblerMemoryOperand::k3() const
 	{
 		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K3);
 	}
 
-	AssemblerMemoryOperand AssemblerMemoryOperand::GetK4() const
+	AssemblerMemoryOperand AssemblerMemoryOperand::k4() const
 	{
 		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K4);
 	}
 
-	AssemblerMemoryOperand AssemblerMemoryOperand::GetK5() const
+	AssemblerMemoryOperand AssemblerMemoryOperand::k5() const
 	{
 		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K5);
 	}
 
-	AssemblerMemoryOperand AssemblerMemoryOperand::GetK6() const
+	AssemblerMemoryOperand AssemblerMemoryOperand::k6() const
 	{
 		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K6);
 	}
 
-	AssemblerMemoryOperand AssemblerMemoryOperand::GetK7() const
+	AssemblerMemoryOperand AssemblerMemoryOperand::k7() const
 	{
 		return AssemblerMemoryOperand(Size, Segment, Base, Index, Scale, Displacement, (Flags & ~AssemblerOperandFlags::RegisterMask) | AssemblerOperandFlags::K7);
 	}

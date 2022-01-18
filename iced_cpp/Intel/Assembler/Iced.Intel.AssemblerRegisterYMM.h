@@ -55,55 +55,55 @@ namespace Iced::Intel
 		/// <summary>
 		/// Apply mask Register K1.
 		/// </summary>
-		AssemblerRegisterYMM GetK1() const;
+		AssemblerRegisterYMM k1() const;
 		/// <summary>
 		/// Apply mask Register K2.
 		/// </summary>
-		AssemblerRegisterYMM GetK2() const;
+		AssemblerRegisterYMM k2() const;
 		/// <summary>
 		/// Apply mask Register K3.
 		/// </summary>
-		AssemblerRegisterYMM GetK3() const;
+		AssemblerRegisterYMM k3() const;
 		/// <summary>
 		/// Apply mask Register K4.
 		/// </summary>
-		AssemblerRegisterYMM GetK4() const;
+		AssemblerRegisterYMM k4() const;
 		/// <summary>
 		/// Apply mask Register K5.
 		/// </summary>
-		AssemblerRegisterYMM GetK5() const;
+		AssemblerRegisterYMM k5() const;
 		/// <summary>
 		/// Apply mask Register K6.
 		/// </summary>
-		AssemblerRegisterYMM GetK6() const;
+		AssemblerRegisterYMM k6() const;
 		/// <summary>
 		/// Apply mask Register K7.
 		/// </summary>
-		AssemblerRegisterYMM GetK7() const;
+		AssemblerRegisterYMM k7() const;
 		/// <summary>
 		/// Apply mask Zeroing.
 		/// </summary>
-		AssemblerRegisterYMM GetZ() const;
+		AssemblerRegisterYMM z() const;
 		/// <summary>
 		/// Suppress all exceptions
 		/// </summary>
-		AssemblerRegisterYMM GetSae() const;
+		AssemblerRegisterYMM sae() const;
 		/// <summary>
 		/// Round to nearest (even)
 		/// </summary>
-		AssemblerRegisterYMM GetRnSae() const;
+		AssemblerRegisterYMM rn_sae() const;
 		/// <summary>
 		/// Round down (toward -inf)
 		/// </summary>
-		AssemblerRegisterYMM GetRdSae() const;
+		AssemblerRegisterYMM rd_sae() const;
 		/// <summary>
 		/// Round up (toward +inf)
 		/// </summary>
-		AssemblerRegisterYMM GetRuSae() const;
+		AssemblerRegisterYMM ru_sae() const;
 		/// <summary>
 		/// Round toward zero (truncate)
 		/// </summary>
-		AssemblerRegisterYMM GetRzSae() const;
+		AssemblerRegisterYMM rz_sae() const;
 		/// <summary>
 		/// Converts a <see cref="AssemblerRegisterYMM"/> to a <see cref="Register"/>.
 		/// </summary>
