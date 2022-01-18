@@ -1,21 +1,8 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
 #pragma once
 
 #include "CodeWriter.h"
+
+#include <ostream>
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
@@ -30,19 +17,26 @@ namespace Iced::Intel
 	{
 	private:
 		/// <summary>
+		/// The stream this instance is writing to
+		/// </summary>
+		std::ostream* _stream;
+
+		bool _owns;
+
+		/// <summary>
 		/// Creates a new instance of <see cref="StreamCodeWriter"/>. 
 		/// </summary>
 		/// <param name="stream">The output stream</param>
 	public:
-		StreamCodeWriter(class Stream* stream);
-		/// <summary>
-		/// The stream this instance is writing to
-		/// </summary>
-		class Stream* Stream;
+		StreamCodeWriter(std::ostream* stream, bool owns = false) : _stream(stream), _owns(owns) { }
 		/// <summary>
 		/// Writes the next byte
 		/// </summary>
 		/// <param name="value">Value</param>
-		void WriteByte(std::uint8_t value) override;
+		void WriteByte(std::uint8_t value) override { _stream->put(value); }
+
+		std::ostream& GetStream() { return *_stream; }
+
+		~StreamCodeWriter() { if (_owns) delete _stream; }
 	};
 }

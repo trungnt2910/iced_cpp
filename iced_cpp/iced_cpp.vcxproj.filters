@@ -1256,12 +1256,6 @@
     <ClCompile Include="Intel\Static.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\StreamCodeReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\StreamCodeWriter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\StringOutput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

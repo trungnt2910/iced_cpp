@@ -595,8 +595,6 @@
     <ClCompile Include="Intel\RflagsBits.g.cpp" />
     <ClCompile Include="Intel\RoundingControl.g.cpp" />
     <ClCompile Include="Intel\Static.cpp" />
-    <ClCompile Include="Intel\StreamCodeReader.cpp" />
-    <ClCompile Include="Intel\StreamCodeWriter.cpp" />
     <ClCompile Include="Intel\StringOutput.cpp" />
     <ClCompile Include="Intel\ThrowHelper.cpp" />
     <ClCompile Include="Intel\TupleType.g.cpp" />
