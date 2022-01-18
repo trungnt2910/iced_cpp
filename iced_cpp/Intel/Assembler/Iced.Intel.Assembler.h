@@ -172,84 +172,84 @@ namespace Iced::Intel
 	public:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler @lock
-		Assembler& GetLock() ;
+		Assembler& lock() ;
 		/// <summary>
 		/// Add xacquire prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler xacquire
-		Assembler& GetXacquire() ;
+		Assembler& xacquire() ;
 		/// <summary>
 		/// Add xrelease prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler xrelease
-		Assembler& GetXrelease() ;
+		Assembler& xrelease() ;
 		/// <summary>
 		/// Add rep prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler rep
-		Assembler& GetRep() ;
+		Assembler& rep() ;
 		/// <summary>
 		/// Add repe/repz prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler repe
-		Assembler& GetRepe() ;
+		Assembler& repe() ;
 		/// <summary>
 		/// Add repe/repz prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler repz
-		Assembler& GetRepz() ;
+		Assembler& repz() ;
 		/// <summary>
 		/// Add repne/repnz prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler repne
-		Assembler& GetRepne() ;
+		Assembler& repne() ;
 		/// <summary>
 		/// Add repne/repnz prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler repnz
-		Assembler& GetRepnz() ;
+		Assembler& repnz() ;
 		/// <summary>
 		/// Add bnd prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler bnd
-		Assembler& GetBnd() ;
+		Assembler& bnd() ;
 		/// <summary>
 		/// Add notrack prefix before the next instruction.
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler notrack
-		Assembler& GetNotrack() ;
+		Assembler& notrack() ;
 		/// <summary>
 		/// Prefer VEX encoding if the next instruction can be VEX and EVEX encoded
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler vex
-		Assembler& GetVex() ;
+		Assembler& vex() ;
 		/// <summary>
 		/// Prefer EVEX encoding if the next instruction can be VEX and EVEX encoded
 		/// </summary>
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [DebuggerBrowsable(DebuggerBrowsableState.Never)] public Assembler evex
-		Assembler& GetEvex() ;
+		Assembler& evex() ;
 		/// <summary>
 		/// Adds data
 		/// </summary>

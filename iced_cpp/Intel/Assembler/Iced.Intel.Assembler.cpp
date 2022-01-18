@@ -241,71 +241,71 @@ namespace Iced::Intel
 		AddInstruction(instruction);
 	}
 
-	Assembler& Assembler::GetLock()
+	Assembler& Assembler::lock()
 	{
 		prefixFlags |= PrefixFlags::Lock;
 		return *this;
 	}
 
-	Assembler& Assembler::GetXacquire()
+	Assembler& Assembler::xacquire()
 	{
 		prefixFlags |= PrefixFlags::Repne;
 		return *this;
 	}
 
-	Assembler& Assembler::GetXrelease()
+	Assembler& Assembler::xrelease()
 	{
 		prefixFlags |= PrefixFlags::Repe;
 		return *this;
 	}
 
-	Assembler& Assembler::GetRep()
+	Assembler& Assembler::rep()
 	{
 		prefixFlags |= PrefixFlags::Repe;
 		return *this;
 	}
 
-	Assembler& Assembler::GetRepe()
+	Assembler& Assembler::repe()
 	{
 		prefixFlags |= PrefixFlags::Repe;
 		return *this;
 	}
 
-	Assembler& Assembler::GetRepz()
+	Assembler& Assembler::repz()
 	{
-		return GetRepe();
+		return repe();
 	}
 
-	Assembler& Assembler::GetRepne()
+	Assembler& Assembler::repne()
 	{
 		prefixFlags |= PrefixFlags::Repne;
 		return *this;
 	}
 
-	Assembler& Assembler::GetRepnz()
+	Assembler& Assembler::repnz()
 	{
-		return GetRepne();
+		return repne();
 	}
 
-	Assembler& Assembler::GetBnd()
+	Assembler& Assembler::bnd()
 	{
 		prefixFlags |= PrefixFlags::Repne;
 		return *this;
 	}
 
-	Assembler& Assembler::GetNotrack()
+	Assembler& Assembler::notrack()
 	{
 		prefixFlags |= PrefixFlags::Notrack;
 		return *this;
 	}
 
-	Assembler& Assembler::GetVex()
+	Assembler& Assembler::vex()
 	{
 		prefixFlags |= PrefixFlags::PreferVex;
 		return *this;
 	}
 
-	Assembler& Assembler::GetEvex()
+	Assembler& Assembler::evex()
 	{
 		prefixFlags |= PrefixFlags::PreferEvex;
 		return *this;
