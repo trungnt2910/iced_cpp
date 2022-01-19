@@ -18,7 +18,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	SimpleInstr::SimpleInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	SimpleInstr::SimpleInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction) : Instr(block, instruction.GetIP())
 	{
 		this->instruction = instruction;
 		Size = blockEncoder->GetInstructionSize(instruction, instruction.GetIP());

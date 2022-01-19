@@ -60,7 +60,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		std::uint32_t nearInstructionSize = 0;
 	private:
 	public:
-		XbeginInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction);
+		XbeginInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 	private:

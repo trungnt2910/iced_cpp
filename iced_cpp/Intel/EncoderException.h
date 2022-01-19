@@ -33,18 +33,23 @@ namespace Iced::Intel
 	class EncoderException : public std::runtime_error
 	{
 	private:
-		Iced::Intel::Instruction Instruction;
+		const class Instruction Instruction;
 
 		/// <summary>
 		/// The instruction that couldn't be encoded
 		/// </summary>
 	public:
-		Iced::Intel::Instruction GetInstruction() const;
+		const class Instruction& GetInstruction() const
+		{
+			return Instruction;
+		}
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="message">Exception message</param>
 		/// <param name="instruction">Instruction</param>
-		EncoderException(const std::string& message, Iced::Intel::Instruction const instruction);
+		EncoderException(const std::string& message, const class Instruction& instruction) : std::runtime_error(message), Instruction(instruction)
+		{
+		}
 	};
 }

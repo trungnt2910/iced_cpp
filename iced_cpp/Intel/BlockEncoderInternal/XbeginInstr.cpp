@@ -19,7 +19,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	XbeginInstr::XbeginInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	XbeginInstr::XbeginInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction) : Instr(block, instruction.GetIP())
 	{
 		this->instruction = instruction;
 		instrKind = InstrKind::Uninitialized;

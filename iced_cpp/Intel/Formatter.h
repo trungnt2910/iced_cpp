@@ -62,20 +62,20 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
-		void FormatMnemonic(Instruction const instruction, FormatterOutput* output);
+		void FormatMnemonic(const Instruction& instruction, FormatterOutput* output);
 		/// <summary>
 		/// Formats the mnemonic and/or any prefixes
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
 		/// <param name="options">Options</param>
-		virtual void FormatMnemonic(Instruction const instruction, FormatterOutput* output, FormatMnemonicOptions options) = 0;
+		virtual void FormatMnemonic(const Instruction& instruction, FormatterOutput* output, FormatMnemonicOptions options) = 0;
 		/// <summary>
 		/// Gets the number of operands that will be formatted. A formatter can add and remove operands
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <returns></returns>
-		virtual std::int32_t GetOperandCount(Instruction const instruction) = 0;
+		virtual std::int32_t GetOperandCount(const Instruction& instruction) = 0;
 		/// <summary>
 		/// Returns the operand access but only if it's an operand added by the formatter. If it's an
 		/// operand that is part of <see cref="Instruction"/>, you should call eg. <see cref="InstructionInfoFactory.GetInfo(in Instruction)"/>.
@@ -85,7 +85,7 @@ namespace Iced::Intel
 		/// See <see cref="GetOperandCount(in Instruction)"/></param>
 		/// <param name="access">Updated with operand access if successful</param>
 		/// <returns></returns>
-		virtual bool TryGetOpAccess(Instruction const instruction, std::int32_t operand, OpAccess& access) = 0;
+		virtual bool TryGetOpAccess(const Instruction& instruction, std::int32_t operand, OpAccess& access) = 0;
 		/// <summary>
 		/// Converts a formatter operand index to an instruction operand index. Returns -1 if it's an operand added by the formatter
 		/// </summary>
@@ -93,14 +93,14 @@ namespace Iced::Intel
 		/// <param name="operand">Operand number, 0-based. This is a formatter operand and isn't necessarily the same as an instruction operand.
 		/// See <see cref="GetOperandCount(in Instruction)"/></param>
 		/// <returns></returns>
-		virtual std::int32_t GetInstructionOperand(Instruction const instruction, std::int32_t operand) = 0;
+		virtual std::int32_t GetInstructionOperand(const Instruction& instruction, std::int32_t operand) = 0;
 		/// <summary>
 		/// Converts an instruction operand index to a formatter operand index. Returns -1 if the instruction operand isn't used by the formatter
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="instructionOperand">Instruction operand</param>
 		/// <returns></returns>
-		virtual std::int32_t GetFormatterOperand(Instruction const instruction, std::int32_t instructionOperand) = 0;
+		virtual std::int32_t GetFormatterOperand(const Instruction& instruction, std::int32_t instructionOperand) = 0;
 		/// <summary>
 		/// Formats an operand. This is a formatter operand and not necessarily a real instruction operand.
 		/// A formatter can add and remove operands.
@@ -109,25 +109,25 @@ namespace Iced::Intel
 		/// <param name="output">Output</param>
 		/// <param name="operand">Operand number, 0-based. This is a formatter operand and isn't necessarily the same as an instruction operand.
 		/// See <see cref="GetOperandCount(in Instruction)"/></param>
-		virtual void FormatOperand(Instruction const instruction, FormatterOutput* output, std::int32_t operand) = 0;
+		virtual void FormatOperand(const Instruction& instruction, FormatterOutput* output, std::int32_t operand) = 0;
 		/// <summary>
 		/// Formats an operand separator
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
-		virtual void FormatOperandSeparator(Instruction const instruction, FormatterOutput* output) = 0;
+		virtual void FormatOperandSeparator(const Instruction& instruction, FormatterOutput* output) = 0;
 		/// <summary>
 		/// Formats all operands
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
-		virtual void FormatAllOperands(Instruction const instruction, FormatterOutput* output) = 0;
+		virtual void FormatAllOperands(const Instruction& instruction, FormatterOutput* output) = 0;
 		/// <summary>
 		/// Formats the whole instruction: prefixes, mnemonic, operands
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
-		virtual void Format(Instruction const instruction, FormatterOutput* output) = 0;
+		virtual void Format(const Instruction& instruction, FormatterOutput* output) = 0;
 		/// <summary>
 		/// Formats a register
 		/// </summary>

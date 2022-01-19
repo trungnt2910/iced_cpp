@@ -60,9 +60,9 @@ namespace Iced::Intel::BlockEncoderInternal
 		//ORIGINAL LINE: public abstract string? TryEncode(Encoder encoder, out ConstantOffsets constantOffsets, out bool isOriginalInstruction);
 		virtual std::string TryEncode(Encoder* encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction) = 0;
 	protected:
-		static std::string CreateErrorMessage(const std::string& errorMessage, Instruction const instruction);
+		static std::string CreateErrorMessage(const std::string& errorMessage, const Instruction& instruction);
 	public:
-		static std::shared_ptr<Instr> Create(::Iced::Intel::BlockEncoder* blockEncoder, class Block* block, Instruction const instruction);
+		static std::shared_ptr<Instr> Create(::Iced::Intel::BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction);
 	protected:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: protected string? EncodeBranchToPointerData(Encoder encoder, bool isCall, ulong ip, BlockData pointerData, out uint size, uint minSize)

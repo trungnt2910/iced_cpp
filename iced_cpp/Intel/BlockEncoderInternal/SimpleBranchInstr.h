@@ -73,7 +73,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		Code nativeCode = static_cast<Code>(0);
 
 	public:
-		SimpleBranchInstr(BlockEncoder* blockEncoder,class  Block* block, Instruction const instruction);
+		SimpleBranchInstr(BlockEncoder* blockEncoder,class  Block* block, const Instruction& instruction);
 	private:
 		static Code ToNativeBranchCode(Code code, std::int32_t bitness);
 	public:

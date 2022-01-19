@@ -68,10 +68,10 @@ namespace Iced::Intel::BlockEncoderInternal
 		std::uint32_t nearInstructionSize = 0;
 		/* readonly */
 		std::uint32_t longInstructionSize64 = 0;
-		static std::uint32_t GetLongInstructionSize64(Instruction const instruction);
+		static std::uint32_t GetLongInstructionSize64(const Instruction& instruction);
 
 	public:
-		JccInstr(BlockEncoder* blockEncoder, ::Iced::Intel::BlockEncoderInternal::Block* block, Instruction const instruction);
+		JccInstr(BlockEncoder* blockEncoder, ::Iced::Intel::BlockEncoderInternal::Block* block, const Instruction& instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 	private:

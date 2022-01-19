@@ -45,9 +45,9 @@ namespace Iced::Intel::FormatterInternal
 		static bool IsNotrackPrefixBranch(Code code);
 	private:
 		static bool IsCode64(CodeSize codeSize);
-		static Register GetDefaultSegmentRegister(Instruction const instruction);
+		static Register GetDefaultSegmentRegister(const Instruction& instruction);
 	public:
-		static bool ShowSegmentPrefix(Register defaultSegReg, Instruction const instruction, bool showUselessPrefixes);
+		static bool ShowSegmentPrefix(Register defaultSegReg, const Instruction& instruction, bool showUselessPrefixes);
 		static bool ShowRepOrRepePrefix(Code code, bool showUselessPrefixes);
 		static bool ShowRepnePrefix(Code code, bool showUselessPrefixes);
 		static bool IsRepeOrRepneInstruction(Code code);
@@ -64,14 +64,14 @@ namespace Iced::Intel::FormatterInternal
 		static void AddStrings(FormatterOutput* output, std::vector<std::string>& strings, std::int32_t count);
 	public:
 		static bool IsCall(FormatterFlowControl kind);
-		static FormatterFlowControl GetFlowControl(Instruction const instruction);
+		static FormatterFlowControl GetFlowControl(const Instruction& instruction);
 		static bool ShowRepOrRepePrefix(Code code, FormatterOptions* options);
 		static bool ShowRepnePrefix(Code code, FormatterOptions* options);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static PrefixKind GetSegmentRegisterPrefixKind(Register register)
 		static PrefixKind GetSegmentRegisterPrefixKind(Register register_);
-		static bool ShowIndexScale(Instruction const instruction, FormatterOptions* options);
-		static bool ShowSegmentPrefix(Register defaultSegReg, Instruction const instruction, FormatterOptions* options);
-		static bool CanShowRoundingControl(Instruction const instruction, FormatterOptions* options);
+		static bool ShowIndexScale(const Instruction& instruction, FormatterOptions* options);
+		static bool ShowSegmentPrefix(Register defaultSegReg, const Instruction& instruction, FormatterOptions* options);
+		static bool CanShowRoundingControl(const Instruction& instruction, FormatterOptions* options);
 	};
 }

@@ -303,7 +303,7 @@ namespace Iced::Intel
 		}
 	}
 
-	std::uint32_t BlockEncoder::GetInstructionSize(Instruction const instruction, std::uint64_t ip)
+	std::uint32_t BlockEncoder::GetInstructionSize(const Instruction& instruction, std::uint64_t ip)
 	{
 		std::uint32_t size;
 		std::string _;

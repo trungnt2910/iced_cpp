@@ -107,7 +107,7 @@ namespace Iced::Intel
 	std::vector<FormatterString> NasmFormatter::s_mvexRegMemConsts64 = { FormatterString(""), FormatterString(""), FormatterString("cdab"), FormatterString("badc"), FormatterString("dacb"), FormatterString("aaaa"), FormatterString("bbbb"), FormatterString("cccc"), FormatterString("dddd"), FormatterString(""), FormatterString("1to8"), FormatterString("4to8"), FormatterString("float16"), FormatterString("uint8"), FormatterString("sint8"), FormatterString("uint16"), FormatterString("sint16") };
 	FormatterString NasmFormatter::str_eh = FormatterString("eh");
 
-	void NasmFormatter::FormatMnemonic(Instruction const instruction, FormatterOutput* output, FormatMnemonicOptions options)
+	void NasmFormatter::FormatMnemonic(const Instruction& instruction, FormatterOutput* output, FormatMnemonicOptions options)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -117,7 +117,7 @@ namespace Iced::Intel
 		FormatMnemonic(instruction, output, opInfo, column, options);
 	}
 
-	std::int32_t NasmFormatter::GetOperandCount(Instruction const instruction)
+	std::int32_t NasmFormatter::GetOperandCount(const Instruction& instruction)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -126,7 +126,7 @@ namespace Iced::Intel
 		return opInfo.OpCount;
 	}
 
-	bool NasmFormatter::TryGetOpAccess(Instruction const instruction, std::int32_t operand, OpAccess& access)
+	bool NasmFormatter::TryGetOpAccess(const Instruction& instruction, std::int32_t operand, OpAccess& access)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -140,7 +140,7 @@ namespace Iced::Intel
 		return opInfo.TryGetOpAccess(operand, access);
 	}
 
-	std::int32_t NasmFormatter::GetInstructionOperand(Instruction const instruction, std::int32_t operand)
+	std::int32_t NasmFormatter::GetInstructionOperand(const Instruction& instruction, std::int32_t operand)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -153,7 +153,7 @@ namespace Iced::Intel
 		return opInfo.GetInstructionIndex(operand);
 	}
 
-	std::int32_t NasmFormatter::GetFormatterOperand(Instruction const instruction, std::int32_t instructionOperand)
+	std::int32_t NasmFormatter::GetFormatterOperand(const Instruction& instruction, std::int32_t instructionOperand)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -166,7 +166,7 @@ namespace Iced::Intel
 		return opInfo.GetOperandIndex(instructionOperand);
 	}
 
-	void NasmFormatter::FormatOperand(Instruction const instruction, FormatterOutput* output, std::int32_t operand)
+	void NasmFormatter::FormatOperand(const Instruction& instruction, FormatterOutput* output, std::int32_t operand)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -179,7 +179,7 @@ namespace Iced::Intel
 		FormatOperand(instruction, output, opInfo, operand);
 	}
 
-	void NasmFormatter::FormatOperandSeparator(Instruction const instruction, FormatterOutput* output)
+	void NasmFormatter::FormatOperandSeparator(const Instruction& instruction, FormatterOutput* output)
 	{
 		if (output == nullptr)
 		{
@@ -192,7 +192,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void NasmFormatter::FormatAllOperands(Instruction const instruction, FormatterOutput* output)
+	void NasmFormatter::FormatAllOperands(const Instruction& instruction, FormatterOutput* output)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -201,7 +201,7 @@ namespace Iced::Intel
 		FormatOperands(instruction, output, opInfo);
 	}
 
-	void NasmFormatter::Format(Instruction const instruction, FormatterOutput* output)
+	void NasmFormatter::Format(const Instruction& instruction, FormatterOutput* output)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -216,7 +216,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void NasmFormatter::FormatMnemonic(Instruction const instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions)
+	void NasmFormatter::FormatMnemonic(const Instruction& instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions)
 	{
 		if (output == nullptr)
 		{
@@ -303,7 +303,7 @@ namespace Iced::Intel
 		}
 	}
 
-	bool NasmFormatter::ShowSegmentPrefix(Instruction const instruction, InstrOpInfo const opInfo)
+	bool NasmFormatter::ShowSegmentPrefix(const Instruction& instruction, InstrOpInfo const opInfo)
 	{
 		if ((opInfo.Flags & (InstrOpInfoFlags::JccNotTaken | InstrOpInfoFlags::JccTaken)) != 0)
 		{
@@ -397,7 +397,7 @@ namespace Iced::Intel
 		return options->GetShowUselessPrefixes();
 	}
 
-	void NasmFormatter::FormatPrefix(FormatterOutput* output, Instruction const instruction, std::int32_t& column, FormatterString prefix, PrefixKind prefixKind, bool& needSpace)
+	void NasmFormatter::FormatPrefix(FormatterOutput* output, const Instruction& instruction, std::int32_t& column, FormatterString prefix, PrefixKind prefixKind, bool& needSpace)
 	{
 		if (needSpace)
 		{
@@ -409,7 +409,7 @@ namespace Iced::Intel
 		needSpace = true;
 	}
 
-	void NasmFormatter::FormatOperands(Instruction const instruction, FormatterOutput* output, InstrOpInfo const opInfo)
+	void NasmFormatter::FormatOperands(const Instruction& instruction, FormatterOutput* output, InstrOpInfo const opInfo)
 	{
 		if (output == nullptr)
 		{
@@ -429,7 +429,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void NasmFormatter::FormatOperand(Instruction const instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t operand)
+	void NasmFormatter::FormatOperand(const Instruction& instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t operand)
 	{
 		assert(static_cast<std::uint32_t>(operand) < static_cast<std::uint32_t>(opInfo.OpCount));
 		if (output == nullptr)
@@ -932,7 +932,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void NasmFormatter::FormatDecorator(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterString text, DecoratorKind decorator)
+	void NasmFormatter::FormatDecorator(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterString text, DecoratorKind decorator)
 	{
 		output->Write("{", FormatterTextKind::Punctuation);
 		output->WriteDecorator(instruction, operand, instructionOperand, text.Get(options->GetUppercaseDecorators() || options->GetUppercaseAll()), decorator);
@@ -946,12 +946,12 @@ namespace Iced::Intel
 		return regStr.Get(options->GetUppercaseRegisters() || options->GetUppercaseAll());
 	}
 
-	void NasmFormatter::FormatRegister(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, Register reg)
+	void NasmFormatter::FormatRegister(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, Register reg)
 	{
 		output->WriteRegister(instruction, operand, instructionOperand, ToRegisterString(reg), static_cast<Register>(reg));
 	}
 
-	void NasmFormatter::FormatMemory(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, MemorySize memSize, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, InstrOpInfoFlags flags)
+	void NasmFormatter::FormatMemory(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, MemorySize memSize, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, InstrOpInfoFlags flags)
 	{
 		assert(static_cast<std::uint32_t>(scale) < static_cast<std::uint32_t>(scaleNumbers.size()));
 		assert((InstructionUtils::GetAddressSizeInBytes(baseReg, indexReg, displSize, instruction.GetCodeSize()) == addrSize));

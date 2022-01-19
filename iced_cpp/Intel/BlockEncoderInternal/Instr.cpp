@@ -34,13 +34,13 @@ namespace Iced::Intel::BlockEncoderInternal
 		Block = block;
 	}
 
-	std::string Instr::CreateErrorMessage(const std::string& errorMessage, Instruction const instruction)
+	std::string Instr::CreateErrorMessage(const std::string& errorMessage, const Instruction& instruction)
 	{
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
 		return std::format("{0:s} : 0x{1:0>X} {2:s}", errorMessage, instruction.GetIP(), to_string(instruction));
 	}
 
-	std::shared_ptr<Instr> Instr::Create(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction)
+	std::shared_ptr<Instr> Instr::Create(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction)
 	{
 		switch (instruction.GetCode())
 		{

@@ -18,32 +18,32 @@
 namespace Iced::Intel
 {
 
-	void FormatterOutput::WritePrefix(Instruction const instruction, const std::string& text, PrefixKind prefix)
+	void FormatterOutput::WritePrefix(const Instruction& instruction, const std::string& text, PrefixKind prefix)
 	{
 		Write(text, FormatterTextKind::Prefix);
 	}
 
-	void FormatterOutput::WriteMnemonic(Instruction const instruction, const std::string& text)
+	void FormatterOutput::WriteMnemonic(const Instruction& instruction, const std::string& text)
 	{
 		Write(text, FormatterTextKind::Mnemonic);
 	}
 
-	void FormatterOutput::WriteNumber(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, std::uint64_t value, NumberKind numberKind, FormatterTextKind kind)
+	void FormatterOutput::WriteNumber(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, std::uint64_t value, NumberKind numberKind, FormatterTextKind kind)
 	{
 		Write(text, kind);
 	}
 
-	void FormatterOutput::WriteDecorator(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, DecoratorKind decorator)
+	void FormatterOutput::WriteDecorator(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, DecoratorKind decorator)
 	{
 		Write(text, FormatterTextKind::Decorator);
 	}
 
-	void FormatterOutput::WriteRegister(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, Register register_)
+	void FormatterOutput::WriteRegister(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, Register register_)
 	{
 		Write(text, FormatterTextKind::Register);
 	}
 
-	void FormatterOutput::WriteSymbol(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, std::uint64_t address, SymbolResult const symbol)
+	void FormatterOutput::WriteSymbol(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, std::uint64_t address, SymbolResult const symbol)
 	{
 		const auto& text = symbol.Text;
 		auto array = text.TextArray;
@@ -64,12 +64,12 @@ namespace Iced::Intel
 		}
 	}
 
-	void FormatterOutput::Write(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOptions* options, NumberFormatter const numberFormatter, NumberFormattingOptions const numberOptions, std::uint64_t address, SymbolResult const symbol, bool showSymbolAddress)
+	void FormatterOutput::Write(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOptions* options, NumberFormatter const numberFormatter, NumberFormattingOptions const numberOptions, std::uint64_t address, SymbolResult const symbol, bool showSymbolAddress)
 	{
 		Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, address, symbol, showSymbolAddress, true, false);
 	}
 
-	void FormatterOutput::Write(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOptions* options, NumberFormatter const numberFormatter, NumberFormattingOptions const numberOptions, std::uint64_t address, SymbolResult const symbol, bool showSymbolAddress, bool writeMinusIfSigned, bool spacesBetweenOp)
+	void FormatterOutput::Write(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOptions* options, NumberFormatter const numberFormatter, NumberFormattingOptions const numberOptions, std::uint64_t address, SymbolResult const symbol, bool showSymbolAddress, bool writeMinusIfSigned, bool spacesBetweenOp)
 	{
 		std::int64_t displ = static_cast<std::int64_t>(address - symbol.Address);
 		if ((symbol.Flags & SymbolFlags::Signed) != 0)

@@ -94,7 +94,7 @@ namespace Iced::Intel
 	std::vector<FormatterString> MasmFormatter::s_mvexRegMemConsts64 = { FormatterString(""), FormatterString(""), FormatterString("cdab"), FormatterString("badc"), FormatterString("dacb"), FormatterString("aaaa"), FormatterString("bbbb"), FormatterString("cccc"), FormatterString("dddd"), FormatterString(""), FormatterString("1to8"), FormatterString("4to8"), FormatterString("float16"), FormatterString("uint8"), FormatterString("sint8"), FormatterString("uint16"), FormatterString("sint16") };
 	FormatterString MasmFormatter::str_eh = FormatterString("eh");
 
-	void MasmFormatter::FormatMnemonic(Instruction const instruction, FormatterOutput* output, FormatMnemonicOptions options)
+	void MasmFormatter::FormatMnemonic(const Instruction& instruction, FormatterOutput* output, FormatMnemonicOptions options)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -104,7 +104,7 @@ namespace Iced::Intel
 		FormatMnemonic(instruction, output, opInfo, column, options);
 	}
 
-	std::int32_t MasmFormatter::GetOperandCount(Instruction const instruction)
+	std::int32_t MasmFormatter::GetOperandCount(const Instruction& instruction)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -113,7 +113,7 @@ namespace Iced::Intel
 		return opInfo.OpCount;
 	}
 
-	bool MasmFormatter::TryGetOpAccess(Instruction const instruction, std::int32_t operand, OpAccess& access)
+	bool MasmFormatter::TryGetOpAccess(const Instruction& instruction, std::int32_t operand, OpAccess& access)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -127,7 +127,7 @@ namespace Iced::Intel
 		return opInfo.TryGetOpAccess(operand, access);
 	}
 
-	std::int32_t MasmFormatter::GetInstructionOperand(Instruction const instruction, std::int32_t operand)
+	std::int32_t MasmFormatter::GetInstructionOperand(const Instruction& instruction, std::int32_t operand)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -140,7 +140,7 @@ namespace Iced::Intel
 		return opInfo.GetInstructionIndex(operand);
 	}
 
-	std::int32_t MasmFormatter::GetFormatterOperand(Instruction const instruction, std::int32_t instructionOperand)
+	std::int32_t MasmFormatter::GetFormatterOperand(const Instruction& instruction, std::int32_t instructionOperand)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -153,7 +153,7 @@ namespace Iced::Intel
 		return opInfo.GetOperandIndex(instructionOperand);
 	}
 
-	void MasmFormatter::FormatOperand(Instruction const instruction, FormatterOutput* output, std::int32_t operand)
+	void MasmFormatter::FormatOperand(const Instruction& instruction, FormatterOutput* output, std::int32_t operand)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -166,7 +166,7 @@ namespace Iced::Intel
 		FormatOperand(instruction, output, opInfo, operand);
 	}
 
-	void MasmFormatter::FormatOperandSeparator(Instruction const instruction, FormatterOutput* output)
+	void MasmFormatter::FormatOperandSeparator(const Instruction& instruction, FormatterOutput* output)
 	{
 		if (output == nullptr)
 		{
@@ -179,7 +179,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void MasmFormatter::FormatAllOperands(Instruction const instruction, FormatterOutput* output)
+	void MasmFormatter::FormatAllOperands(const Instruction& instruction, FormatterOutput* output)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -188,7 +188,7 @@ namespace Iced::Intel
 		FormatOperands(instruction, output, opInfo);
 	}
 
-	void MasmFormatter::Format(Instruction const instruction, FormatterOutput* output)
+	void MasmFormatter::Format(const Instruction& instruction, FormatterOutput* output)
 	{
 		assert(static_cast<std::uint32_t>(instruction.GetCode()) < static_cast<std::uint32_t>(instrInfos.size()));
 		auto instrInfo = instrInfos[static_cast<std::int32_t>(instruction.GetCode())];
@@ -203,7 +203,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void MasmFormatter::FormatMnemonic(Instruction const instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions)
+	void MasmFormatter::FormatMnemonic(const Instruction& instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions)
 	{
 		if (output == nullptr)
 		{
@@ -286,7 +286,7 @@ namespace Iced::Intel
 		}
 	}
 
-	bool MasmFormatter::ShowSegmentPrefix(Instruction const instruction, InstrOpInfo const opInfo)
+	bool MasmFormatter::ShowSegmentPrefix(const Instruction& instruction, InstrOpInfo const opInfo)
 	{
 		if ((opInfo.Flags & (InstrOpInfoFlags::JccNotTaken | InstrOpInfoFlags::JccTaken)) != 0)
 		{
@@ -353,7 +353,7 @@ namespace Iced::Intel
 		return options->GetShowUselessPrefixes();
 	}
 
-	void MasmFormatter::FormatPrefix(FormatterOutput* output, Instruction const instruction, std::int32_t& column, FormatterString prefix, PrefixKind prefixKind, bool& needSpace)
+	void MasmFormatter::FormatPrefix(FormatterOutput* output, const Instruction& instruction, std::int32_t& column, FormatterString prefix, PrefixKind prefixKind, bool& needSpace)
 	{
 		if (needSpace)
 		{
@@ -365,7 +365,7 @@ namespace Iced::Intel
 		needSpace = true;
 	}
 
-	void MasmFormatter::FormatOperands(Instruction const instruction, FormatterOutput* output, InstrOpInfo const opInfo)
+	void MasmFormatter::FormatOperands(const Instruction& instruction, FormatterOutput* output, InstrOpInfo const opInfo)
 	{
 		if (output == nullptr)
 		{
@@ -385,7 +385,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void MasmFormatter::FormatOperand(Instruction const instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t operand)
+	void MasmFormatter::FormatOperand(const Instruction& instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t operand)
 	{
 		assert(static_cast<std::uint32_t>(operand) < static_cast<std::uint32_t>(opInfo.OpCount));
 		if (output == nullptr)
@@ -853,7 +853,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void MasmFormatter::FormatDecorator(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterString text, DecoratorKind decorator)
+	void MasmFormatter::FormatDecorator(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterString text, DecoratorKind decorator)
 	{
 		output->Write("{", FormatterTextKind::Punctuation);
 		output->WriteDecorator(instruction, operand, instructionOperand, text.Get(options->GetUppercaseDecorators() || options->GetUppercaseAll()), decorator);
@@ -871,12 +871,12 @@ namespace Iced::Intel
 		return regStr.Get(options->GetUppercaseRegisters() || options->GetUppercaseAll());
 	}
 
-	void MasmFormatter::FormatRegister(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, Register reg)
+	void MasmFormatter::FormatRegister(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, Register reg)
 	{
 		output->WriteRegister(instruction, operand, instructionOperand, ToRegisterString(reg), reg);
 	}
 
-	void MasmFormatter::FormatMemory(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, InstrOpInfoFlags flags)
+	void MasmFormatter::FormatMemory(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, InstrOpInfoFlags flags)
 	{
 		assert(static_cast<std::uint32_t>(scale) < static_cast<std::uint32_t>(scaleNumbers.size()));
 		assert((InstructionUtils::GetAddressSizeInBytes(baseReg, indexReg, displSize, instruction.GetCodeSize()) == addrSize));
@@ -1046,7 +1046,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void MasmFormatter::FormatMemoryDispl(FormatterOutput* output, Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, SymbolResult const symbol, NumberFormattingOptions& numberOptions, std::uint64_t absAddr, std::int64_t displ, std::int32_t displSize, std::int32_t addrSize, bool useSymbol, bool needPlus, bool forceDispl)
+	void MasmFormatter::FormatMemoryDispl(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, SymbolResult const symbol, NumberFormattingOptions& numberOptions, std::uint64_t absAddr, std::int64_t displ, std::int32_t displSize, std::int32_t addrSize, bool useSymbol, bool needPlus, bool forceDispl)
 	{
 		if (useSymbol)
 		{
@@ -1186,7 +1186,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void MasmFormatter::FormatMemorySize(FormatterOutput* output, Instruction const instruction, SymbolResult& symbol, MemorySize memSize, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions, bool useSymbol)
+	void MasmFormatter::FormatMemorySize(FormatterOutput* output, const Instruction& instruction, SymbolResult& symbol, MemorySize memSize, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions, bool useSymbol)
 	{
 		auto memSizeOptions = operandOptions.GetMemorySizeOptions();
 		if (memSizeOptions == MemorySizeOptions::Never)

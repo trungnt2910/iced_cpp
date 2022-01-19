@@ -1046,7 +1046,7 @@ namespace Iced::Intel
 		return TupleTypeTable::GetDisp8N(tupleType, (state.flags & StateFlags::b) != 0);
 	}
 
-	ConstantOffsets Decoder::GetConstantOffsets(Instruction const instruction)
+	ConstantOffsets Decoder::GetConstantOffsets(const Instruction& instruction)
 	{
 		ConstantOffsets constantOffsets = Iced::Intel::ConstantOffsets();
 		std::int32_t displSize = instruction.GetMemoryDisplSize();

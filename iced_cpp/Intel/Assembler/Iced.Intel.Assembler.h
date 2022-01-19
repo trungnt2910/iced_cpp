@@ -113,7 +113,11 @@ namespace Iced::Intel
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		IReadOnlyList<Instruction>* GetInstructions() const;
+		InstructionList* GetInstructions();
+		/// <summary>
+		/// Gets the instructions.
+		/// </summary>
+		const InstructionList* GetInstructions() const;
 		/// <summary>
 		/// Reset the current set of instructions and labels added to this instance.
 		/// </summary>

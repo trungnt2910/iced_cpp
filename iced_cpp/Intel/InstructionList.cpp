@@ -138,7 +138,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionList::Insert(std::int32_t index, Instruction const instruction)
+	void InstructionList::Insert(std::int32_t index, const Instruction& instruction)
 	{
 		auto count = this->count;
 		if (static_cast<std::uint32_t>(index) > static_cast<std::uint32_t>(count))
@@ -211,7 +211,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionList::Add(Instruction const instruction)
+	void InstructionList::Add(const Instruction& instruction)
 	{
 		auto count = this->count;
 		auto& elements = this->elements;
@@ -229,12 +229,12 @@ namespace Iced::Intel
 		count = 0;
 	} // There are no GC refs in Instruction, so we don't have to clear the elements
 
-	bool InstructionList::Contains(Instruction const instruction)
+	bool InstructionList::Contains(const Instruction& instruction)
 	{
 		return VectorHelper::indexOf(elements, instruction) >= 0;
 	}
 
-	std::int32_t InstructionList::IndexOf(Instruction const instruction)
+	std::int32_t InstructionList::IndexOf(const Instruction& instruction)
 	{
 		auto elements = this->elements;
 		std::int32_t count = this->count;
@@ -248,7 +248,7 @@ namespace Iced::Intel
 		return -1;
 	}
 
-	std::int32_t InstructionList::IndexOf(Instruction const instruction, std::int32_t index)
+	std::int32_t InstructionList::IndexOf(const Instruction& instruction, std::int32_t index)
 	{
 		std::int32_t count = this->count;
 		if (static_cast<std::uint32_t>(index) > static_cast<std::uint32_t>(count))
@@ -266,7 +266,7 @@ namespace Iced::Intel
 		return -1;
 	}
 
-	std::int32_t InstructionList::IndexOf(Instruction const instruction, std::int32_t index, std::int32_t count)
+	std::int32_t InstructionList::IndexOf(const Instruction& instruction, std::int32_t index, std::int32_t count)
 	{
 		if (index < 0)
 		{
@@ -292,7 +292,7 @@ namespace Iced::Intel
 		return -1;
 	}
 
-	std::int32_t InstructionList::LastIndexOf(Instruction const instruction)
+	std::int32_t InstructionList::LastIndexOf(const Instruction& instruction)
 	{
 		for (std::int32_t i = count - 1; i >= 0; i--)
 		{
@@ -304,7 +304,7 @@ namespace Iced::Intel
 		return -1;
 	}
 
-	std::int32_t InstructionList::LastIndexOf(Instruction const instruction, std::int32_t index)
+	std::int32_t InstructionList::LastIndexOf(const Instruction& instruction, std::int32_t index)
 	{
 		std::int32_t count = this->count;
 		if (static_cast<std::uint32_t>(index) > static_cast<std::uint32_t>(count))
@@ -322,7 +322,7 @@ namespace Iced::Intel
 		return -1;
 	}
 
-	std::int32_t InstructionList::LastIndexOf(Instruction const instruction, std::int32_t index, std::int32_t count)
+	std::int32_t InstructionList::LastIndexOf(const Instruction& instruction, std::int32_t index, std::int32_t count)
 	{
 		if (index < 0)
 		{
@@ -348,7 +348,7 @@ namespace Iced::Intel
 		return -1;
 	}
 
-	bool InstructionList::Remove(Instruction const instruction)
+	bool InstructionList::Remove(const Instruction& instruction)
 	{
 		std::int32_t index = VectorHelper::indexOf(elements, instruction);
 		if (index >= 0)

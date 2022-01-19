@@ -20,7 +20,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	JmpInstr::JmpInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	JmpInstr::JmpInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction) : Instr(block, instruction.GetIP())
 	{
 		bitness = blockEncoder->GetBitness();
 		this->instruction = instruction;

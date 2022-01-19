@@ -156,9 +156,9 @@ namespace Iced::Intel
 		/// <param name="instruction">Instruction to encode</param>
 		/// <param name="rip">RIP of the encoded instruction</param>
 		/// <returns></returns>
-		std::uint32_t Encode(Instruction const instruction, std::uint64_t rip);
+		std::uint32_t Encode(const Instruction& instruction, std::uint64_t rip);
 	private:
-		static void ThrowEncoderException(Instruction const instruction, const std::string& errorMessage);
+		static void ThrowEncoderException(const Instruction& instruction, const std::string& errorMessage);
 		/// <summary>
 		/// Encodes an instruction
 		/// </summary>
@@ -171,7 +171,7 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public bool TryEncode(in Instruction instruction, ulong rip, out uint encodedLength, [NotNullWhen(false)] out string? errorMessage)
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-		bool TryEncode(Instruction const instruction, std::uint64_t rip, std::uint32_t& encodedLength, std::string& errorMessage);
+		bool TryEncode(const Instruction& instruction, std::uint64_t rip, std::uint32_t& encodedLength, std::string& errorMessage);
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: internal string? ErrorMessage
 		void SetErrorMessage(const std::string& value);
@@ -184,26 +184,26 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal bool Verify(int operand, Register register, Register regLo, Register regHi)
 		bool Verify(std::int32_t operand, Register register_, Register regLo, Register regHi);
-		void AddBranch(OpKind opKind, std::int32_t immSize, Instruction const instruction, std::int32_t operand);
-		void AddBranchX(std::int32_t immSize, Instruction const instruction, std::int32_t operand);
-		void AddBranchDisp(std::int32_t displSize, Instruction const instruction, std::int32_t operand);
-		void AddFarBranch(Instruction const instruction, std::int32_t operand, std::int32_t size);
+		void AddBranch(OpKind opKind, std::int32_t immSize, const Instruction& instruction, std::int32_t operand);
+		void AddBranchX(std::int32_t immSize, const Instruction& instruction, std::int32_t operand);
+		void AddBranchDisp(std::int32_t displSize, const Instruction& instruction, std::int32_t operand);
+		void AddFarBranch(const Instruction& instruction, std::int32_t operand, std::int32_t size);
 		void SetAddrSize(std::int32_t regSize);
-		void AddAbsMem(Instruction const instruction, std::int32_t operand);
-		void AddModRMRegister(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi);
-		void AddReg(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi);
+		void AddAbsMem(const Instruction& instruction, std::int32_t operand);
+		void AddModRMRegister(const Instruction& instruction, std::int32_t operand, Register regLo, Register regHi);
+		void AddReg(const Instruction& instruction, std::int32_t operand, Register regLo, Register regHi);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal void AddRegOrMem(in Instruction instruction, int operand, Register regLo, Register regHi, bool allowMemOp, bool allowRegOp)
-		void AddRegOrMem(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi, bool allowMemOp, bool allowRegOp);
-		void AddRegOrMem(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi, Register vsibIndexRegLo, Register vsibIndexRegHi, bool allowMemOp, bool allowRegOp);
+		void AddRegOrMem(const Instruction& instruction, std::int32_t operand, Register regLo, Register regHi, bool allowMemOp, bool allowRegOp);
+		void AddRegOrMem(const Instruction& instruction, std::int32_t operand, Register regLo, Register regHi, Register vsibIndexRegLo, Register vsibIndexRegHi, bool allowMemOp, bool allowRegOp);
 	private:
-		static std::int32_t GetRegisterOpSize(Instruction const instruction);
-		bool TryConvertToDisp8N(Instruction const instruction, std::int32_t displ, std::int8_t& compressedValue);
-		void AddMemOp16(Instruction const instruction, std::int32_t operand);
-		void AddMemOp(Instruction const instruction, std::int32_t operand, std::int32_t addrSize, Register vsibIndexRegLo, Register vsibIndexRegHi);
+		static std::int32_t GetRegisterOpSize(const Instruction& instruction);
+		bool TryConvertToDisp8N(const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue);
+		void AddMemOp16(const Instruction& instruction, std::int32_t operand);
+		void AddMemOp(const Instruction& instruction, std::int32_t operand, std::int32_t addrSize, Register vsibIndexRegLo, Register vsibIndexRegHi);
 		static std::vector<std::uint8_t> SegmentOverrides;
 	public:
-		void WritePrefixes(Instruction const instruction, bool canWriteF3 = true);
+		void WritePrefixes(const Instruction& instruction, bool canWriteF3 = true);
 	private:
 		void WriteModRM();
 		void WriteImmediate();

@@ -46,7 +46,7 @@ namespace Iced::Intel
 		/// <param name="options">Options. Only those options that will be used by the formatter are initialized.</param>
 		/// <param name="numberOptions">Number formatting options</param>
 	public:
-		virtual void GetOperandOptions(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOperandOptions& options, NumberFormattingOptions& numberOptions) = 0;
+		virtual void GetOperandOptions(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOperandOptions& options, NumberFormattingOptions& numberOptions) = 0;
 	};
 	/// <summary>
 	/// Operand options

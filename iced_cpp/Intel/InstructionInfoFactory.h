@@ -373,34 +373,34 @@ namespace Iced::Intel
 	  //  }
 	private:
 		static Register GetXSP(CodeSize codeSize, std::uint64_t& xspMask, CodeSize& addressSize);
-		void AddImpliedAccesses(ImpliedAccess impliedAccess, Instruction const instruction, Flags flags);
+		void AddImpliedAccesses(ImpliedAccess impliedAccess, const Instruction& instruction, Flags flags);
 		static Register GetARDI(Instruction instruction);
 		static Register GetSegDefaultDS(Instruction instruction);
-		void CommandPush(Instruction const instruction, Flags flags, std::int32_t count, std::uint32_t opSize);
-		void CommandPop(Instruction const instruction, Flags flags, std::int32_t count, std::uint32_t opSize);
-		void CommandPopRm(Instruction const instruction, Flags flags, std::uint32_t opSize);
-		void CommandPusha(Instruction const instruction, Flags flags, std::uint32_t opSize);
-		void CommandPopa(Instruction const instruction, Flags flags, std::uint32_t opSize);
-		void CommandIns(Instruction const instruction, Flags flags);
-		void CommandOuts(Instruction const instruction, Flags flags);
-		void CommandMovs(Instruction const instruction, Flags flags);
-		void CommandCmps(Instruction const instruction, Flags flags);
-		void CommandStos(Instruction const instruction, Flags flags);
-		void CommandLods(Instruction const instruction, Flags flags);
-		void CommandScas(Instruction const instruction, Flags flags);
-		void CommandXstore(Instruction const instruction, Flags flags, std::uint32_t size);
-		void CommandEnter(Instruction const instruction, Flags flags, std::uint32_t opSize);
-		void CommandLeave(Instruction const instruction, Flags flags, std::uint32_t opSize);
-		void CommandClearRflags(Instruction const instruction, Flags flags);
+		void CommandPush(const Instruction& instruction, Flags flags, std::int32_t count, std::uint32_t opSize);
+		void CommandPop(const Instruction& instruction, Flags flags, std::int32_t count, std::uint32_t opSize);
+		void CommandPopRm(const Instruction& instruction, Flags flags, std::uint32_t opSize);
+		void CommandPusha(const Instruction& instruction, Flags flags, std::uint32_t opSize);
+		void CommandPopa(const Instruction& instruction, Flags flags, std::uint32_t opSize);
+		void CommandIns(const Instruction& instruction, Flags flags);
+		void CommandOuts(const Instruction& instruction, Flags flags);
+		void CommandMovs(const Instruction& instruction, Flags flags);
+		void CommandCmps(const Instruction& instruction, Flags flags);
+		void CommandStos(const Instruction& instruction, Flags flags);
+		void CommandLods(const Instruction& instruction, Flags flags);
+		void CommandScas(const Instruction& instruction, Flags flags);
+		void CommandXstore(const Instruction& instruction, Flags flags, std::uint32_t size);
+		void CommandEnter(const Instruction& instruction, Flags flags, std::uint32_t opSize);
+		void CommandLeave(const Instruction& instruction, Flags flags, std::uint32_t opSize);
+		void CommandClearRflags(const Instruction& instruction, Flags flags);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] static bool IsClearInstr(in Instruction instruction)
-		static bool IsClearInstr(Instruction const instruction);
-		void CommandClearRegRegmem(Instruction const instruction, Flags flags);
-		void CommandClearRegRegRegmem(Instruction const instruction, Flags flags);
-		void CommandArpl(Instruction const instruction, Flags flags);
-		void CommandLastGpr(Instruction const instruction, Flags flags, Register baseReg);
-		void CommandLea(Instruction const instruction, Flags flags);
-		void CommandEmmi(Instruction const instruction, Flags flags, OpAccess opAccess);
+		static bool IsClearInstr(const Instruction& instruction);
+		void CommandClearRegRegmem(const Instruction& instruction, Flags flags);
+		void CommandClearRegRegRegmem(const Instruction& instruction, Flags flags);
+		void CommandArpl(const Instruction& instruction, Flags flags);
+		void CommandLastGpr(const Instruction& instruction, Flags flags, Register baseReg);
+		void CommandLea(const Instruction& instruction, Flags flags);
+		void CommandEmmi(const Instruction& instruction, Flags flags, OpAccess opAccess);
 		void CommandMemDispl(Flags flags, std::int32_t extraDispl);
 		static std::int32_t TryGetGpr163264Index(Register register_);
 		void AddMemory(Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::uint64_t displ, MemorySize memorySize, OpAccess access, CodeSize addressSize, std::int32_t vsibSize);

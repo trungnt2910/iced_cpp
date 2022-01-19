@@ -84,7 +84,12 @@ namespace Iced::Intel
 		return GetPreferVex();
 	}
 
-	IReadOnlyList<Instruction>* Assembler::GetInstructions() const
+	InstructionList* Assembler::GetInstructions()
+	{
+		return instructions;
+	}
+
+	const InstructionList* Assembler::GetInstructions() const
 	{
 		return instructions;
 	}

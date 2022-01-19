@@ -74,7 +74,7 @@ namespace Iced::Intel
 		 /// <param name="increment"></param>
 		 /// <param name="conditional"></param>
 		 /// <param name="writesTop"></param>
-		class Instruction : public IEquatable<Instruction>
+		class Instruction
 	{
 	private:
 		static void InitializeSignedImmediate(Instruction& instruction, std::int32_t operand, std::int64_t immediate);
@@ -1286,24 +1286,10 @@ namespace Iced::Intel
 		std::uint8_t len = 0;
 		std::uint8_t pad = 0;
 	public:
-		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(in Instruction left, in Instruction right)
-		bool operator == (Instruction const right);
-		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(in Instruction left, in Instruction right)
-		bool operator != (Instruction const right);
-		/// <summary>
-		/// Checks if this instance equals <paramref name="other"/>
-		/// </summary>
-		/// <param name="other">Other instruction</param>
-		/// <returns></returns>
-	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-	  //ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(in Instruction other)
-		bool Equals(Instruction const other) override;
-		/* readonly */
-		bool IEquatable_Equals(Instruction other) override;
+		bool operator == (const Instruction& right) const;
+		bool operator != (const Instruction& right) const;
 	private:
-		static bool EqualsInternal(Instruction const a, Instruction const b);
+		static bool EqualsInternal(const Instruction& a, const Instruction& b);
 		/// <summary>
 		/// Gets the hash code
 		/// </summary>
@@ -1324,7 +1310,7 @@ namespace Iced::Intel
 		/// <param name="a">Instruction #1</param>
 		/// <param name="b">Instruction #2</param>
 		/// <returns></returns>
-		static bool EqualsAllBits(Instruction const a, Instruction const b);
+		static bool EqualsAllBits(const Instruction& a, const Instruction& b);
 		/// <summary>
 		/// 16-bit IP of the instruction
 		/// </summary>

@@ -19,7 +19,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	IpRelMemOpInstr::IpRelMemOpInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	IpRelMemOpInstr::IpRelMemOpInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction) : Instr(block, instruction.GetIP())
 	{
 		assert(instruction.IsIPRelativeMemoryOperand());
 		this->instruction = instruction;

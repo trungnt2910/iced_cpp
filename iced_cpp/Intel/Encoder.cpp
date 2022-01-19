@@ -131,7 +131,7 @@ namespace Iced::Intel
 		return (switchTempVar_0 == 16 || switchTempVar_0 == 32 || switchTempVar_0 == 64) ? new Encoder(writer, bitness) : throw ArgumentOutOfRangeException("bitness");
 	}
 
-	std::uint32_t Encoder::Encode(Instruction const instruction, std::uint64_t rip)
+	std::uint32_t Encoder::Encode(const Instruction& instruction, std::uint64_t rip)
 	{
 		uint result;
 		std::string errorMessage;
@@ -142,7 +142,7 @@ namespace Iced::Intel
 		return result;
 	}
 
-	void Encoder::ThrowEncoderException(Instruction const instruction, const std::string& errorMessage)
+	void Encoder::ThrowEncoderException(const Instruction& instruction, const std::string& errorMessage)
 	{
 		throw EncoderException(errorMessage, instruction);
 	}
@@ -150,7 +150,7 @@ namespace Iced::Intel
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public bool TryEncode(in Instruction instruction, ulong rip, out uint encodedLength, [NotNullWhen(false)] out string? errorMessage)
 	//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-	bool Encoder::TryEncode(Instruction const instruction, std::uint64_t rip, std::uint32_t& encodedLength, std::string& errorMessage)
+	bool Encoder::TryEncode(const Instruction& instruction, std::uint64_t rip, std::uint32_t& encodedLength, std::string& errorMessage)
 	{
 		currentRip = rip;
 		eip = static_cast<std::uint32_t>(rip);
@@ -320,7 +320,7 @@ namespace Iced::Intel
 		return false;
 	}
 
-	void Encoder::AddBranch(OpKind opKind, std::int32_t immSize, Instruction const instruction, std::int32_t operand)
+	void Encoder::AddBranch(OpKind opKind, std::int32_t immSize, const Instruction& instruction, std::int32_t operand)
 	{
 		if (!Verify(operand, opKind, instruction.GetOpKind(operand)))
 		{
@@ -387,7 +387,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void Encoder::AddBranchX(std::int32_t immSize, Instruction const instruction, std::int32_t operand)
+	void Encoder::AddBranchX(std::int32_t immSize, const Instruction& instruction, std::int32_t operand)
 	{
 		if (bitness == 64)
 		{
@@ -441,7 +441,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void Encoder::AddBranchDisp(std::int32_t displSize, Instruction const instruction, std::int32_t operand)
+	void Encoder::AddBranchDisp(std::int32_t displSize, const Instruction& instruction, std::int32_t operand)
 	{
 		assert(displSize == 2 || displSize == 4);
 		OpKind opKind;
@@ -466,7 +466,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void Encoder::AddFarBranch(Instruction const instruction, std::int32_t operand, std::int32_t size)
+	void Encoder::AddFarBranch(const Instruction& instruction, std::int32_t operand, std::int32_t size)
 	{
 		if (size == 2)
 		{
@@ -533,7 +533,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void Encoder::AddAbsMem(Instruction const instruction, std::int32_t operand)
+	void Encoder::AddAbsMem(const Instruction& instruction, std::int32_t operand)
 	{
 		EncoderFlags |= EncoderFlags::Displ;
 		auto opKind = instruction.GetOpKind(operand);
@@ -603,7 +603,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void Encoder::AddModRMRegister(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi)
+	void Encoder::AddModRMRegister(const Instruction& instruction, std::int32_t operand, Register regLo, Register regHi)
 	{
 		if (!Verify(operand, OpKind::Register, instruction.GetOpKind(operand)))
 		{
@@ -636,7 +636,7 @@ namespace Iced::Intel
 		EncoderFlags |= static_cast<enum EncoderFlags>((regNum & 0x10) << (9 - 4));
 	}
 
-	void Encoder::AddReg(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi)
+	void Encoder::AddReg(const Instruction& instruction, std::int32_t operand, Register regLo, Register regHi)
 	{
 		if (!Verify(operand, OpKind::Register, instruction.GetOpKind(operand)))
 		{
@@ -667,12 +667,12 @@ namespace Iced::Intel
 		EncoderFlags |= static_cast<enum EncoderFlags>(regNum >> 3); // regNum <= 15, so no need to mask out anything
 	}
 
-	void Encoder::AddRegOrMem(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi, bool allowMemOp, bool allowRegOp)
+	void Encoder::AddRegOrMem(const Instruction& instruction, std::int32_t operand, Register regLo, Register regHi, bool allowMemOp, bool allowRegOp)
 	{
 		AddRegOrMem(instruction, operand, regLo, regHi, Register::None, Register::None, allowMemOp, allowRegOp);
 	}
 
-	void Encoder::AddRegOrMem(Instruction const instruction, std::int32_t operand, Register regLo, Register regHi, Register vsibIndexRegLo, Register vsibIndexRegHi, bool allowMemOp, bool allowRegOp)
+	void Encoder::AddRegOrMem(const Instruction& instruction, std::int32_t operand, Register regLo, Register regHi, Register vsibIndexRegLo, Register vsibIndexRegHi, bool allowMemOp, bool allowRegOp)
 	{
 		auto opKind = instruction.GetOpKind(operand);
 		EncoderFlags |= EncoderFlags::ModRM;
@@ -774,7 +774,7 @@ namespace Iced::Intel
 		}
 	}
 
-	std::int32_t Encoder::GetRegisterOpSize(Instruction const instruction)
+	std::int32_t Encoder::GetRegisterOpSize(const Instruction& instruction)
 	{
 		assert(instruction.GetOp0Kind() == OpKind::Register);
 		if (instruction.GetOp0Kind() == OpKind::Register)
@@ -796,7 +796,7 @@ namespace Iced::Intel
 		return 0;
 	}
 
-	bool Encoder::TryConvertToDisp8N(Instruction const instruction, std::int32_t displ, std::int8_t& compressedValue)
+	bool Encoder::TryConvertToDisp8N(const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)
 	{
 		auto tryConvertToDisp8N = handler->TryConvertToDisp8N;
 		if (tryConvertToDisp8N != std::nullopt)
@@ -812,7 +812,7 @@ namespace Iced::Intel
 		return false;
 	}
 
-	void Encoder::AddMemOp16(Instruction const instruction, std::int32_t operand)
+	void Encoder::AddMemOp16(const Instruction& instruction, std::int32_t operand)
 	{
 		if (bitness == 64)
 		{
@@ -932,7 +932,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void Encoder::AddMemOp(Instruction const instruction, std::int32_t operand, std::int32_t addrSize, Register vsibIndexRegLo, Register vsibIndexRegHi)
+	void Encoder::AddMemOp(const Instruction& instruction, std::int32_t operand, std::int32_t addrSize, Register vsibIndexRegLo, Register vsibIndexRegHi)
 	{
 		assert(addrSize == 32 || addrSize == 64);
 		if (bitness != 64 && addrSize == 64)
@@ -1171,7 +1171,7 @@ namespace Iced::Intel
 
 	std::vector<std::uint8_t> Encoder::SegmentOverrides = { 0x26, 0x2E, 0x36, 0x3E, 0x64, 0x65 };
 
-	void Encoder::WritePrefixes(Instruction const instruction, bool canWriteF3)
+	void Encoder::WritePrefixes(const Instruction& instruction, bool canWriteF3)
 	{
 		assert(!handler->IsDeclareData);
 		auto seg = instruction.GetSegmentPrefix();

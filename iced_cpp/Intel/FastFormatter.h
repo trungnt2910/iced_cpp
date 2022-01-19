@@ -96,12 +96,12 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
-		void Format(Instruction const instruction, FastStringOutput* output);
+		void Format(const Instruction& instruction, FastStringOutput* output);
 		// Only one caller
 	private:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] static bool ShowSegmentPrefix(in Instruction instruction, int opCount)
-		static bool ShowSegmentPrefix(Instruction const instruction, std::int32_t opCount);
+		static bool ShowSegmentPrefix(const Instruction& instruction, std::int32_t opCount);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] void FormatRegister(FastStringOutput output, Register register)
 		void FormatRegister(FastStringOutput* output, Register register_);
@@ -110,6 +110,6 @@ namespace Iced::Intel
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] void WriteSymbol(FastStringOutput output, ulong address, in SymbolResult symbol)
 		void WriteSymbol(FastStringOutput* output, std::uint64_t address, SymbolResult const symbol);
 		void WriteSymbol(FastStringOutput* output, std::uint64_t address, SymbolResult const symbol, bool writeMinusIfSigned);
-		void FormatMemory(FastStringOutput* output, Instruction const instruction, std::int32_t operand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize);
+		void FormatMemory(FastStringOutput* output, const Instruction& instruction, std::int32_t operand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize);
 	};
 }

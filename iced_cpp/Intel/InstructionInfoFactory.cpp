@@ -52,7 +52,7 @@ namespace Iced::Intel
 		return Register::SP;
 	}
 
-	void InstructionInfoFactory::AddImpliedAccesses(ImpliedAccess impliedAccess, Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::AddImpliedAccesses(ImpliedAccess impliedAccess, const Instruction& instruction, Flags flags)
 	{
 		assert(impliedAccess != ImpliedAccess::None);
 		switch (impliedAccess)
@@ -1696,7 +1696,7 @@ namespace Iced::Intel
 		return seg == Register::None ? Register::DS : seg;
 	}
 
-	void InstructionInfoFactory::CommandPush(Instruction const instruction, Flags flags, std::int32_t count, std::uint32_t opSize)
+	void InstructionInfoFactory::CommandPush(const Instruction& instruction, Flags flags, std::int32_t count, std::uint32_t opSize)
 	{
 		assert(count > 0);
 		std::uint64_t xspMask;
@@ -1734,7 +1734,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandPop(Instruction const instruction, Flags flags, std::int32_t count, std::uint32_t opSize)
+	void InstructionInfoFactory::CommandPop(const Instruction& instruction, Flags flags, std::int32_t count, std::uint32_t opSize)
 	{
 		assert(count > 0);
 		::Iced::Intel::CodeSize addressSize;
@@ -1772,7 +1772,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandPopRm(Instruction const instruction, Flags flags, std::uint32_t opSize)
+	void InstructionInfoFactory::CommandPopRm(const Instruction& instruction, Flags flags, std::uint32_t opSize)
 	{
 		::Iced::Intel::CodeSize addressSize;
 		uint64_t _;
@@ -1819,7 +1819,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandPusha(Instruction const instruction, Flags flags, std::uint32_t opSize)
+	void InstructionInfoFactory::CommandPusha(const Instruction& instruction, Flags flags, std::uint32_t opSize)
 	{
 		std::uint64_t xspMask;
 		::Iced::Intel::CodeSize addressSize;
@@ -1861,7 +1861,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandPopa(Instruction const instruction, Flags flags, std::uint32_t opSize)
+	void InstructionInfoFactory::CommandPopa(const Instruction& instruction, Flags flags, std::uint32_t opSize)
 	{
 		std::uint64_t xspMask;
 		::Iced::Intel::CodeSize addressSize;
@@ -1904,7 +1904,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandIns(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandIns(const Instruction& instruction, Flags flags)
 	{
 		CodeSize addressSize;
 		Register rDI, rCX;
@@ -1972,7 +1972,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandOuts(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandOuts(const Instruction& instruction, Flags flags)
 	{
 		CodeSize addressSize;
 		Register rSI, rCX;
@@ -2034,7 +2034,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandMovs(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandMovs(const Instruction& instruction, Flags flags)
 	{
 		CodeSize addressSize;
 		Register rSI, rDI, rCX;
@@ -2110,7 +2110,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandCmps(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandCmps(const Instruction& instruction, Flags flags)
 	{
 		CodeSize addressSize;
 		Register rSI, rDI, rCX;
@@ -2186,7 +2186,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandStos(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandStos(const Instruction& instruction, Flags flags)
 	{
 		CodeSize addressSize;
 		Register rDI, rCX;
@@ -2254,7 +2254,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandLods(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandLods(const Instruction& instruction, Flags flags)
 	{
 		CodeSize addressSize;
 		Register rSI, rCX;
@@ -2316,7 +2316,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandScas(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandScas(const Instruction& instruction, Flags flags)
 	{
 		CodeSize addressSize;
 		Register rDI, rCX;
@@ -2384,7 +2384,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandXstore(Instruction const instruction, Flags flags, std::uint32_t size)
+	void InstructionInfoFactory::CommandXstore(const Instruction& instruction, Flags flags, std::uint32_t size)
 	{
 		CodeSize addressSize;
 		Register rDI, rCX;
@@ -2445,7 +2445,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandEnter(Instruction const instruction, Flags flags, std::uint32_t opSize)
+	void InstructionInfoFactory::CommandEnter(const Instruction& instruction, Flags flags, std::uint32_t opSize)
 	{
 		std::uint64_t xspMask;
 		::Iced::Intel::CodeSize addressSize;
@@ -2516,7 +2516,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandLeave(Instruction const instruction, Flags flags, std::uint32_t opSize)
+	void InstructionInfoFactory::CommandLeave(const Instruction& instruction, Flags flags, std::uint32_t opSize)
 	{
 		::Iced::Intel::CodeSize addressSize;
 		uint64_t _;
@@ -2589,7 +2589,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandClearRflags(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandClearRflags(const Instruction& instruction, Flags flags)
 	{
 		if (instruction.GetOp0Register() != instruction.GetOp1Register())
 		{
@@ -2617,7 +2617,7 @@ namespace Iced::Intel
 		}
 	}
 
-	bool InstructionInfoFactory::IsClearInstr(Instruction const instruction)
+	bool InstructionInfoFactory::IsClearInstr(const Instruction& instruction)
 	{
 		switch (instruction.GetMvexRegMemConv())
 		{
@@ -2629,7 +2629,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandClearRegRegmem(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandClearRegRegmem(const Instruction& instruction, Flags flags)
 	{
 		if (instruction.GetOp0Register() != instruction.GetOp1Register())
 		{
@@ -2661,7 +2661,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandClearRegRegRegmem(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandClearRegRegRegmem(const Instruction& instruction, Flags flags)
 	{
 		if (instruction.GetOp1Register() != instruction.GetOp2Register())
 		{
@@ -2694,7 +2694,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandArpl(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandArpl(const Instruction& instruction, Flags flags)
 	{
 		if ((flags & Flags::NoRegisterUsage) == 0)
 		{
@@ -2721,7 +2721,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandLastGpr(Instruction const instruction, Flags flags, Register baseReg)
+	void InstructionInfoFactory::CommandLastGpr(const Instruction& instruction, Flags flags, Register baseReg)
 	{
 		if ((flags & Flags::NoRegisterUsage) == 0)
 		{
@@ -2747,7 +2747,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandLea(Instruction const instruction, Flags flags)
+	void InstructionInfoFactory::CommandLea(const Instruction& instruction, Flags flags)
 	{
 		if ((flags & Flags::NoRegisterUsage) == 0)
 		{
@@ -2783,7 +2783,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void InstructionInfoFactory::CommandEmmi(Instruction const instruction, Flags flags, OpAccess opAccess)
+	void InstructionInfoFactory::CommandEmmi(const Instruction& instruction, Flags flags, OpAccess opAccess)
 	{
 		if ((flags & Flags::NoRegisterUsage) == 0)
 		{

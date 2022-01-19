@@ -38,7 +38,7 @@ namespace Iced::Intel
    //C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to the C# 'typeof' operator:
    //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
    //ORIGINAL LINE: [DebuggerDisplay("Count = {" + nameof(Count) + "}")][DebuggerTypeProxy(typeof(InstructionListDebugView))][System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] public sealed class InstructionList : IList<Instruction>, IReadOnlyList<Instruction>, System.Collections.IList
-	class InstructionList final : public IList<Instruction>
+	class InstructionList final
 	{
 	private:
 		std::vector<Instruction> elements;
@@ -47,7 +47,7 @@ namespace Iced::Intel
 		/// Gets the number of valid elements
 		/// </summary>
 	public:
-		std::int32_t GetCount() const override;
+		std::int32_t GetCount() const;
 	private:
 		/// <summary>
 		/// Gets the size of the internal array
@@ -125,12 +125,12 @@ namespace Iced::Intel
 		/// <param name="index">Index of element</param>
 		/// <param name="instruction">Instruction to add</param>
 	public:
-		void Insert(std::int32_t index, Instruction const instruction) override;
+		void Insert(std::int32_t index, const Instruction& instruction);
 		/// <summary>
 		/// Removes an element from the list
 		/// </summary>
 		/// <param name="index">Index of element to remove</param>
-		void RemoveAt(std::int32_t index) override;
+		void RemoveAt(std::int32_t index);
 		/// <summary>
 		/// Adds a collection to the end of this list
 		/// </summary>
@@ -154,30 +154,30 @@ namespace Iced::Intel
 		/// <param name="instruction">Instruction to add</param>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public void Add(in Instruction instruction)
-		void Add(Instruction const instruction) override;
+		void Add(const Instruction& instruction);
 		/// <summary>
 		/// Clears the list
 		/// </summary>
-		void Clear() override;
+		void Clear();
 		/// <summary>
 		/// Checks if <paramref name="instruction"/> exists in the list
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <returns></returns>
-		bool Contains(Instruction const instruction) override;
+		bool Contains(const Instruction& instruction);
 		/// <summary>
 		/// Gets the index of <paramref name="instruction"/> or -1 if it doesn't exist in the list
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <returns></returns>
-		std::int32_t IndexOf(Instruction const instruction) override;
+		std::int32_t IndexOf(const Instruction& instruction);
 		/// <summary>
 		/// Gets the index of <paramref name="instruction"/> or -1 if it doesn't exist in the list
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="index">Start index</param>
 		/// <returns></returns>
-		std::int32_t IndexOf(Instruction const instruction, std::int32_t index);
+		std::int32_t IndexOf(const Instruction& instruction, std::int32_t index);
 		/// <summary>
 		/// Gets the index of <paramref name="instruction"/> or -1 if it doesn't exist in the list
 		/// </summary>
@@ -185,20 +185,20 @@ namespace Iced::Intel
 		/// <param name="index">Start index</param>
 		/// <param name="count">Number of instructions to check</param>
 		/// <returns></returns>
-		std::int32_t IndexOf(Instruction const instruction, std::int32_t index, std::int32_t count);
+		std::int32_t IndexOf(const Instruction& instruction, std::int32_t index, std::int32_t count);
 		/// <summary>
 		/// Gets the last index of <paramref name="instruction"/> or -1 if it doesn't exist in the list
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <returns></returns>
-		std::int32_t LastIndexOf(Instruction const instruction);
+		std::int32_t LastIndexOf(const Instruction& instruction);
 		/// <summary>
 		/// Gets the last index of <paramref name="instruction"/> or -1 if it doesn't exist in the list
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="index">Start index</param>
 		/// <returns></returns>
-		std::int32_t LastIndexOf(Instruction const instruction, std::int32_t index);
+		std::int32_t LastIndexOf(const Instruction& instruction, std::int32_t index);
 		/// <summary>
 		/// Gets the last index of <paramref name="instruction"/> or -1 if it doesn't exist in the list
 		/// </summary>
@@ -206,13 +206,13 @@ namespace Iced::Intel
 		/// <param name="index">Start index</param>
 		/// <param name="count">Number of instructions to check</param>
 		/// <returns></returns>
-		std::int32_t LastIndexOf(Instruction const instruction, std::int32_t index, std::int32_t count);
+		std::int32_t LastIndexOf(const Instruction& instruction, std::int32_t index, std::int32_t count);
 		/// <summary>
 		/// Removes the first copy of <paramref name="instruction"/> and returns <see langword="true"/> if it was removed
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <returns></returns>
-		bool Remove(Instruction const instruction) override;
+		bool Remove(const Instruction& instruction);
 		/// <summary>
 		/// Copies this collection to <paramref name="array"/>
 		/// </summary>
@@ -223,7 +223,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="array">Destination array</param>
 		/// <param name="arrayIndex">Start index in <paramref name="array"/></param>
-		void CopyTo(std::vector<Instruction>& array, std::int32_t arrayIndex) override;
+		void CopyTo(std::vector<Instruction>& array, std::int32_t arrayIndex);
 		/// <summary>
 		/// Copies this collection to <paramref name="array"/>
 		/// </summary>

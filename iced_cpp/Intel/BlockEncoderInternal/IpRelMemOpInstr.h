@@ -61,7 +61,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		TargetInstr targetInstr;
 
 	public:
-		IpRelMemOpInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction);
+		IpRelMemOpInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 	private:

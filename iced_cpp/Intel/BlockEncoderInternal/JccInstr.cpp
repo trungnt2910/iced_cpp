@@ -22,7 +22,7 @@
 
 namespace Iced::Intel::BlockEncoderInternal
 {
-	std::uint32_t JccInstr::GetLongInstructionSize64(Instruction const instruction)
+	std::uint32_t JccInstr::GetLongInstructionSize64(const Instruction& instruction)
 	{
 		// Check if JKZD/JKNZD
 		if (instruction.GetOpCount() == 2)
@@ -36,7 +36,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		return 2 + CallOrJmpPointerDataInstructionSize64;
 	}
 
-	JccInstr::JccInstr(BlockEncoder* blockEncoder, ::Iced::Intel::BlockEncoderInternal::Block* block, Instruction const instruction) : Instr(block, instruction.GetIP())
+	JccInstr::JccInstr(BlockEncoder* blockEncoder, ::Iced::Intel::BlockEncoderInternal::Block* block, const Instruction& instruction) : Instr(block, instruction.GetIP())
 	{
 		bitness = blockEncoder->GetBitness();
 		this->instruction = instruction;

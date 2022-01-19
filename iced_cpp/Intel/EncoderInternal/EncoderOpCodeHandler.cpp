@@ -58,7 +58,7 @@ namespace Iced::Intel::EncoderInternal
 	{
 	}
 
-	void InvalidHandler::Encode(Encoder* encoder, Instruction const instruction)
+	void InvalidHandler::Encode(Encoder* encoder, const Instruction& instruction)
 	{
 		encoder->SetErrorMessage(ERROR_MESSAGE);
 	}
@@ -74,7 +74,7 @@ namespace Iced::Intel::EncoderInternal
 		maxLength = 16 / elemLength;
 	}
 
-	void DeclareDataHandler::Encode(Encoder* encoder, Instruction const instruction)
+	void DeclareDataHandler::Encode(Encoder* encoder, const Instruction& instruction)
 	{
 		auto declDataCount = instruction.GetDeclareDataCount();
 		if (declDataCount < 1 || declDataCount > maxLength)
@@ -148,7 +148,7 @@ namespace Iced::Intel::EncoderInternal
 		mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte::None) ? static_cast<std::uint8_t>(0x0) : (switchTempVar_1 == MandatoryPrefixByte::P66) ? static_cast<std::uint8_t>(0x66) : (switchTempVar_1 == MandatoryPrefixByte::PF3) ? static_cast<std::uint8_t>(0xF3) : (switchTempVar_1 == MandatoryPrefixByte::PF2) ? static_cast<std::uint8_t>(0xF2) : throw InvalidOperationException();
 	}
 
-	void LegacyHandler::Encode(Encoder* encoder, Instruction const instruction)
+	void LegacyHandler::Encode(Encoder* encoder, const Instruction& instruction)
 	{
 		std::uint32_t b = mandatoryPrefix;
 		encoder->WritePrefixes(instruction, b != 0xF3);
@@ -245,7 +245,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	void VexHandler::Encode(Encoder* encoder, Instruction const instruction)
+	void VexHandler::Encode(Encoder* encoder, const Instruction& instruction)
 	{
 		encoder->WritePrefixes(instruction);
 		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder->EncoderFlags);
@@ -330,7 +330,7 @@ namespace Iced::Intel::EncoderInternal
 		lastByte |= (static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncFlags2::MandatoryPrefixShift)) & static_cast<std::uint32_t>(EncFlags2::MandatoryPrefixMask);
 	}
 
-	void XopHandler::Encode(Encoder* encoder, Instruction const instruction)
+	void XopHandler::Encode(Encoder* encoder, const Instruction& instruction)
 	{
 		encoder->WritePrefixes(instruction);
 		encoder->WriteByteInternal(0x8F);
@@ -421,7 +421,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	bool EvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, Instruction const instruction, std::int32_t displ, std::int8_t& compressedValue)
+	bool EvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)
 	{
 		auto evexHandler = std::dynamic_pointer_cast<EvexHandler>(handler);
 		std::int32_t n = static_cast<std::int32_t>(TupleTypeTable::GetDisp8N(evexHandler->tupleType, (encoder->EncoderFlags & EncoderFlags::Broadcast) != 0));
@@ -435,7 +435,7 @@ namespace Iced::Intel::EncoderInternal
 		return false;
 	}
 
-	void EvexHandler::Encode(Encoder* encoder, Instruction const instruction)
+	void EvexHandler::Encode(Encoder* encoder, const Instruction& instruction)
 	{
 		encoder->WritePrefixes(instruction);
 		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder->EncoderFlags);
@@ -570,7 +570,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	bool MvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, Instruction const instruction, std::int32_t displ, std::int8_t& compressedValue)
+	bool MvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)
 	{
 		auto mvex = MvexInfo(instruction.GetCode());
 		std::int32_t sss = (static_cast<std::int32_t>(instruction.GetMvexRegMemConv()) - static_cast<std::int32_t>(MvexRegMemConv::MemConvNone)) & 7;
@@ -586,7 +586,7 @@ namespace Iced::Intel::EncoderInternal
 		return false;
 	}
 
-	void MvexHandler::Encode(Encoder* encoder, Instruction const instruction)
+	void MvexHandler::Encode(Encoder* encoder, const Instruction& instruction)
 	{
 		encoder->WritePrefixes(instruction);
 		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder->EncoderFlags);
@@ -727,7 +727,7 @@ namespace Iced::Intel::EncoderInternal
 		assert(immediate <= std::numeric_limits<std::uint8_t>::max());
 	}
 
-	void D3nowHandler::Encode(Encoder* encoder, Instruction const instruction)
+	void D3nowHandler::Encode(Encoder* encoder, const Instruction& instruction)
 	{
 		encoder->WritePrefixes(instruction);
 		encoder->WriteByteInternal(0x0F);

@@ -2208,27 +2208,17 @@ namespace Iced::Intel
 		return instruction;
 	}
 
-	bool Instruction::operator == (Instruction const right)
+	bool Instruction::operator == (const Instruction& right) const
 	{
 		return EqualsInternal(*this, right);
 	}
 
-	bool Instruction::operator != (Instruction const right)
+	bool Instruction::operator != (const Instruction& right) const
 	{
 		return !EqualsInternal(*this, right);
 	}
 
-	bool Instruction::Equals(Instruction const other)
-	{
-		return EqualsInternal(*this, other);
-	}
-
-	bool Instruction::IEquatable_Equals(Instruction other)
-	{
-		return EqualsInternal(*this, other);
-	}
-
-	bool Instruction::EqualsInternal(Instruction const a, Instruction const b)
+	bool Instruction::EqualsInternal(const Instruction& a, const Instruction& b)
 	{
 		return a.memDispl == b.memDispl && ((a.flags1 ^ b.flags1) & ~static_cast<std::uint32_t>(InstrFlags1::EqualsIgnoreMask)) == 0 && a.immediate == b.immediate && a.code == b.code && a.memBaseReg == b.memBaseReg && a.memIndexReg == b.memIndexReg && a.reg0 == b.reg0 && a.reg1 == b.reg1 && a.reg2 == b.reg2 && a.reg3 == b.reg3 && a.opKind0 == b.opKind0 && a.opKind1 == b.opKind1 && a.opKind2 == b.opKind2 && a.opKind3 == b.opKind3 && a.scale == b.scale && a.displSize == b.displSize && a.pad == b.pad;
 	}
@@ -2264,7 +2254,7 @@ namespace Iced::Intel
 		return other != nullptr && EqualsInternal(*this, *other);
 	}
 
-	bool Instruction::EqualsAllBits(Instruction const a, Instruction const b)
+	bool Instruction::EqualsAllBits(const Instruction& a, const Instruction& b)
 	{
 		return a.nextRip == b.nextRip && a.memDispl == b.memDispl && a.flags1 == b.flags1 && a.immediate == b.immediate && a.code == b.code && a.memBaseReg == b.memBaseReg && a.memIndexReg == b.memIndexReg && a.reg0 == b.reg0 && a.reg1 == b.reg1 && a.reg2 == b.reg2 && a.reg3 == b.reg3 && a.opKind0 == b.opKind0 && a.opKind1 == b.opKind1 && a.opKind2 == b.opKind2 && a.opKind3 == b.opKind3 && a.scale == b.scale && a.displSize == b.displSize && a.len == b.len && a.pad == b.pad;
 	}

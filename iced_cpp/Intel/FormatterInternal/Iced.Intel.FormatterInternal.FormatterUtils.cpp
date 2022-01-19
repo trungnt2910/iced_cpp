@@ -35,7 +35,7 @@ namespace Iced::Intel::FormatterInternal
 		return codeSize == CodeSize::Code64 || codeSize == CodeSize::Unknown;
 	}
 
-	Iced::Intel::Register FormatterUtils::GetDefaultSegmentRegister(Instruction const instruction)
+	Iced::Intel::Register FormatterUtils::GetDefaultSegmentRegister(const Instruction& instruction)
 	{
 		auto baseReg = instruction.GetMemoryBase();
 		if (baseReg == Register::BP || baseReg == Register::EBP || baseReg == Register::ESP || baseReg == Register::RBP || baseReg == Register::RSP)
@@ -45,7 +45,7 @@ namespace Iced::Intel::FormatterInternal
 		return Register::DS;
 	}
 
-	bool FormatterUtils::ShowSegmentPrefix(Register defaultSegReg, Instruction const instruction, bool showUselessPrefixes)
+	bool FormatterUtils::ShowSegmentPrefix(Register defaultSegReg, const Instruction& instruction, bool showUselessPrefixes)
 	{
 		if (Iced::Intel::CodeExtensions::IgnoresSegment(instruction.GetCode()))
 		{
@@ -270,7 +270,7 @@ namespace Iced::Intel::FormatterInternal
 		return kind == FormatterFlowControl::NearCall || kind == FormatterFlowControl::FarCall;
 	}
 
-	FormatterFlowControl FormatterUtils::GetFlowControl(Instruction const instruction)
+	FormatterFlowControl FormatterUtils::GetFlowControl(const Instruction& instruction)
 	{
 		switch (instruction.GetCode())
 		{
@@ -455,17 +455,17 @@ namespace Iced::Intel::FormatterInternal
 		return (PrefixKind)((register_ - Register::ES) + PrefixKind::ES);
 	}
 
-	bool FormatterUtils::ShowIndexScale(Instruction const instruction, FormatterOptions* options)
+	bool FormatterUtils::ShowIndexScale(const Instruction& instruction, FormatterOptions* options)
 	{
 		return options->GetShowUselessPrefixes() || !Iced::Intel::CodeExtensions::IgnoresIndex(instruction.GetCode());
 	}
 
-	bool FormatterUtils::ShowSegmentPrefix(Register defaultSegReg, Instruction const instruction, FormatterOptions* options)
+	bool FormatterUtils::ShowSegmentPrefix(Register defaultSegReg, const Instruction& instruction, FormatterOptions* options)
 	{
 		return ShowSegmentPrefix(defaultSegReg, instruction, options->GetShowUselessPrefixes());
 	}
 
-	bool FormatterUtils::CanShowRoundingControl(Instruction const instruction, FormatterOptions* options)
+	bool FormatterUtils::CanShowRoundingControl(const Instruction& instruction, FormatterOptions* options)
 	{
 		switch (instruction.GetCode())
 		{

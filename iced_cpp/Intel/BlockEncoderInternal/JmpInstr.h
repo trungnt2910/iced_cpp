@@ -66,7 +66,7 @@ namespace Iced::Intel::BlockEncoderInternal
 	private:
 
 	public:
-		JmpInstr(BlockEncoder* blockEncoder, class Block* block, Instruction const instruction);
+		JmpInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 	private:

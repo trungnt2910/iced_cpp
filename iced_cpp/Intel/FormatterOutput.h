@@ -121,13 +121,13 @@ namespace Iced::Intel
 		/// <param name="instruction">Instruction</param>
 		/// <param name="text">Prefix text</param>
 		/// <param name="prefix">Prefix</param>
-		virtual void WritePrefix(Instruction const instruction, const std::string& text, PrefixKind prefix);
+		virtual void WritePrefix(const Instruction& instruction, const std::string& text, PrefixKind prefix);
 		/// <summary>
 		/// Writes a mnemonic (see <see cref="Instruction.Mnemonic"/>)
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="text">Mnemonic text</param>
-		virtual void WriteMnemonic(Instruction const instruction, const std::string& text);
+		virtual void WriteMnemonic(const Instruction& instruction, const std::string& text);
 		/// <summary>
 		/// Writes a number
 		/// </summary>
@@ -138,7 +138,7 @@ namespace Iced::Intel
 		/// <param name="value">Value</param>
 		/// <param name="numberKind">Number kind</param>
 		/// <param name="kind">Text kind</param>
-		virtual void WriteNumber(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, std::uint64_t value, NumberKind numberKind, FormatterTextKind kind);
+		virtual void WriteNumber(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, std::uint64_t value, NumberKind numberKind, FormatterTextKind kind);
 		/// <summary>
 		/// Writes a decorator
 		/// </summary>
@@ -147,7 +147,7 @@ namespace Iced::Intel
 		/// <param name="instructionOperand">Instruction operand number, 0-based, or -1 if it's an operand created by the formatter.</param>
 		/// <param name="text">Decorator text</param>
 		/// <param name="decorator">Decorator</param>
-		virtual void WriteDecorator(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, DecoratorKind decorator);
+		virtual void WriteDecorator(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, DecoratorKind decorator);
 		/// <summary>
 		/// Writes a register
 		/// </summary>
@@ -156,7 +156,7 @@ namespace Iced::Intel
 		/// <param name="instructionOperand">Instruction operand number, 0-based, or -1 if it's an operand created by the formatter.</param>
 		/// <param name="text">Register text</param>
 		/// <param name="register">Register</param>
-		virtual void WriteRegister(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, Register register_);
+		virtual void WriteRegister(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, const std::string& text, Register register_);
 		/// <summary>
 		/// Writes a symbol
 		/// </summary>
@@ -165,8 +165,8 @@ namespace Iced::Intel
 		/// <param name="instructionOperand">Instruction operand number, 0-based, or -1 if it's an operand created by the formatter.</param>
 		/// <param name="address">Address</param>
 		/// <param name="symbol">Symbol</param>
-		virtual void WriteSymbol(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, std::uint64_t address, SymbolResult const symbol);
-		void Write(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOptions* options, NumberFormatter const numberFormatter, NumberFormattingOptions const numberOptions, std::uint64_t address, SymbolResult const symbol, bool showSymbolAddress);
-		void Write(Instruction const instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOptions* options, NumberFormatter const numberFormatter, NumberFormattingOptions const numberOptions, std::uint64_t address, SymbolResult const symbol, bool showSymbolAddress, bool writeMinusIfSigned, bool spacesBetweenOp);
+		virtual void WriteSymbol(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, std::uint64_t address, SymbolResult const symbol);
+		void Write(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOptions* options, NumberFormatter const numberFormatter, NumberFormattingOptions const numberOptions, std::uint64_t address, SymbolResult const symbol, bool showSymbolAddress);
+		void Write(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOptions* options, NumberFormatter const numberFormatter, NumberFormattingOptions const numberOptions, std::uint64_t address, SymbolResult const symbol, bool showSymbolAddress, bool writeMinusIfSigned, bool spacesBetweenOp);
 	};
 }

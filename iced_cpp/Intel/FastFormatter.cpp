@@ -71,7 +71,7 @@ namespace Iced::Intel
 		mvexRegMemConsts64 = s_mvexRegMemConsts64;
 	}
 
-	void FastFormatter::Format(Instruction const instruction, FastStringOutput* output)
+	void FastFormatter::Format(const Instruction& instruction, FastStringOutput* output)
 	{
 		if (output == nullptr)
 		{
@@ -544,7 +544,7 @@ namespace Iced::Intel
 		}
 	}
 
-	bool FastFormatter::ShowSegmentPrefix(Instruction const instruction, std::int32_t opCount)
+	bool FastFormatter::ShowSegmentPrefix(const Instruction& instruction, std::int32_t opCount)
 	{
 		for (std::int32_t i = 0; i < opCount; i++)
 		{
@@ -685,7 +685,7 @@ namespace Iced::Intel
 		}
 	}
 
-	void FastFormatter::FormatMemory(FastStringOutput* output, Instruction const instruction, std::int32_t operand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize)
+	void FastFormatter::FormatMemory(FastStringOutput* output, const Instruction& instruction, std::int32_t operand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize)
 	{
 		assert(static_cast<std::uint32_t>(scale) < static_cast<std::uint32_t>(scaleNumbers.size()));
 		assert((InstructionUtils::GetAddressSizeInBytes(baseReg, indexReg, displSize, instruction.GetCodeSize()) == addrSize));

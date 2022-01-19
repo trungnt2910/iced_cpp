@@ -252,6 +252,6 @@ namespace Iced::Intel
 		bool Encode(std::string& errorMessage, std::vector<BlockEncoderResult> &result);
 	public:
 		Iced::Intel::BlockEncoderInternal::TargetInstr GetTarget(std::uint64_t address);
-		std::uint32_t GetInstructionSize(Instruction const instruction, std::uint64_t ip);
+		std::uint32_t GetInstructionSize(const Instruction& instruction, std::uint64_t ip);
 	};
 }

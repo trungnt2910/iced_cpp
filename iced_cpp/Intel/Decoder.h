@@ -354,6 +354,6 @@ namespace Iced::Intel
 		/// <param name="instruction">The latest instruction that was decoded by this decoder</param>
 		/// <returns></returns>
 	public:
-		ConstantOffsets GetConstantOffsets(Instruction const instruction);
+		ConstantOffsets GetConstantOffsets(const Instruction& instruction);
 	};
 }
