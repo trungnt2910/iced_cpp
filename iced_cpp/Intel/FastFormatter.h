@@ -46,7 +46,7 @@ namespace Iced::Intel
 	{
 		/* readonly */
 	private:
-		FastFormatterOptions* options;
+		FastFormatterOptions options;
 		/* readonly */
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: ISymbolResolver? symbolResolver;
@@ -79,7 +79,8 @@ namespace Iced::Intel
 		/// Gets the formatter options
 		/// </summary>
 	public:
-		FastFormatterOptions* GetOptions() const;
+		const FastFormatterOptions& GetOptions() const;
+		FastFormatterOptions& GetOptions();
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -108,8 +109,8 @@ namespace Iced::Intel
 		void FormatNumber(FastStringOutput* output, std::uint64_t value);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] void WriteSymbol(FastStringOutput output, ulong address, in SymbolResult symbol)
-		void WriteSymbol(FastStringOutput* output, std::uint64_t address, SymbolResult const symbol);
-		void WriteSymbol(FastStringOutput* output, std::uint64_t address, SymbolResult const symbol, bool writeMinusIfSigned);
+		void WriteSymbol(FastStringOutput* output, std::uint64_t address, const SymbolResult& symbol);
+		void WriteSymbol(FastStringOutput* output, std::uint64_t address, const SymbolResult& symbol, bool writeMinusIfSigned);
 		void FormatMemory(FastStringOutput* output, const Instruction& instruction, std::int32_t operand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize);
 	};
 }

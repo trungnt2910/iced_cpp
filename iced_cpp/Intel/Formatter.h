@@ -56,7 +56,11 @@ namespace Iced::Intel
 		/// Gets the formatter options
 		/// </summary>
 	public:
-		virtual FormatterOptions* GetOptions() const = 0;
+		virtual const FormatterOptions& GetOptions() const = 0;
+		/// <summary>
+		/// Gets the formatter options
+		/// </summary>
+		virtual FormatterOptions& GetOptions() = 0;
 		/// <summary>
 		/// Formats the mnemonic and any prefixes
 		/// </summary>
@@ -188,55 +192,55 @@ namespace Iced::Intel
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		virtual std::string FormatInt8(std::int8_t value, NumberFormattingOptions const numberOptions) = 0;
+		virtual std::string FormatInt8(std::int8_t value, const NumberFormattingOptions& numberOptions) = 0;
 		/// <summary>
 		/// Formats a <see cref="short"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		virtual std::string FormatInt16(std::int16_t value, NumberFormattingOptions const numberOptions) = 0;
+		virtual std::string FormatInt16(std::int16_t value, const NumberFormattingOptions& numberOptions) = 0;
 		/// <summary>
 		/// Formats a <see cref="int"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		virtual std::string FormatInt32(std::int32_t value, NumberFormattingOptions const numberOptions) = 0;
+		virtual std::string FormatInt32(std::int32_t value, const NumberFormattingOptions& numberOptions) = 0;
 		/// <summary>
 		/// Formats a <see cref="long"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		virtual std::string FormatInt64(std::int64_t value, NumberFormattingOptions const numberOptions) = 0;
+		virtual std::string FormatInt64(std::int64_t value, const NumberFormattingOptions& numberOptions) = 0;
 		/// <summary>
 		/// Formats a <see cref="byte"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		virtual std::string FormatUInt8(std::uint8_t value, NumberFormattingOptions const numberOptions) = 0;
+		virtual std::string FormatUInt8(std::uint8_t value, const NumberFormattingOptions& numberOptions) = 0;
 		/// <summary>
 		/// Formats a <see cref="ushort"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		virtual std::string FormatUInt16(std::uint16_t value, NumberFormattingOptions const numberOptions) = 0;
+		virtual std::string FormatUInt16(std::uint16_t value, const NumberFormattingOptions& numberOptions) = 0;
 		/// <summary>
 		/// Formats a <see cref="uint"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		virtual std::string FormatUInt32(std::uint32_t value, NumberFormattingOptions const numberOptions) = 0;
+		virtual std::string FormatUInt32(std::uint32_t value, const NumberFormattingOptions& numberOptions) = 0;
 		/// <summary>
 		/// Formats a <see cref="ulong"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		virtual std::string FormatUInt64(std::uint64_t value, NumberFormattingOptions const numberOptions) = 0;
+		virtual std::string FormatUInt64(std::uint64_t value, const NumberFormattingOptions& numberOptions) = 0;
 	};
 }

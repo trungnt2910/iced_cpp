@@ -235,7 +235,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->flags = flags;
 	}
 
-	void SimpleInstrInfo::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo(mnemonic, instruction, flags);
 	}
@@ -246,7 +246,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonics = FormatterString::Create(mnemonics);
 	}
 
-	void SimpleInstrInfo_cc::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_cc::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		constexpr InstrOpInfoFlags flags = InstrOpInfoFlags::None;
 		auto mnemonic = MnemonicCC::GetMnemonicCC(options, ccIndex, mnemonics);
@@ -259,7 +259,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_memsize::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_memsize::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		std::int32_t instrBitness = GetBitness(instruction.GetCodeSize());
 		auto flags = instrBitness == 0 || (instrBitness & bitness) != 0 ? InstrOpInfoFlags::MemSize_Nothing : InstrOpInfoFlags::ShowNoMemSize_ForceSize | InstrOpInfoFlags::ShowMinMemSize_ForceSize;
@@ -271,7 +271,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_StringIg1::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_StringIg1::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo();
 		info.Mnemonic = mnemonic;
@@ -284,7 +284,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_StringIg0::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_StringIg0::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo();
 		info.Mnemonic = mnemonic;
@@ -302,7 +302,7 @@ namespace Iced::Intel::IntelFormatterInternal
 
 	FormatterString SimpleInstrInfo_nop::str_xchg = FormatterString("xchg");
 
-	void SimpleInstrInfo_nop::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_nop::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		std::int32_t instrBitness = GetBitness(instruction.GetCodeSize());
 		if (instrBitness == 0 || (instrBitness & bitness) != 0)
@@ -336,7 +336,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		op0Access = isLoad ? OpAccess_Write : OpAccess_ReadWrite;
 	}
 
-	void SimpleInstrInfo_ST1::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_ST1::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo(mnemonic, instruction, flags);
 		assert(instruction.GetOpCount() == 1);
@@ -356,7 +356,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->flags = flags;
 	}
 
-	void SimpleInstrInfo_ST2::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_ST2::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo(mnemonic, instruction, flags);
 		assert(instruction.GetOpCount() == 1);
@@ -372,7 +372,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_maskmovq::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_maskmovq::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		assert(instruction.GetOpCount() == 3);
 		auto opKind = instruction.GetOp0Kind();
@@ -432,7 +432,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->flags = flags;
 	}
 
-	void SimpleInstrInfo_os::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_os::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		auto flags = this->flags;
 		std::int32_t instrBitness = GetBitness(instruction.GetCodeSize());
@@ -463,7 +463,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_os_bnd::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_os_bnd::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		auto flags = InstrOpInfoFlags::None;
 		if (instruction.GetHasRepnePrefix())
@@ -495,7 +495,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_as::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_as::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		auto flags = InstrOpInfoFlags::None;
 		std::int32_t instrBitness = GetBitness(instruction.GetCodeSize());
@@ -529,7 +529,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->flags = flags;
 	}
 
-	void SimpleInstrInfo_os_jcc::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_os_jcc::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		auto flags = this->flags;
 		std::int32_t instrBitness = GetBitness(instruction.GetCodeSize());
@@ -573,7 +573,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonics = FormatterString::Create(mnemonics);
 	}
 
-	void SimpleInstrInfo_os_loop::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_os_loop::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		auto flags = InstrOpInfoFlags::None;
 		std::int32_t instrBitness = GetBitness(instruction.GetCodeSize());
@@ -622,7 +622,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_movabs::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_movabs::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		auto flags = InstrOpInfoFlags::None;
 		std::int32_t instrBitness = GetBitness(instruction.GetCodeSize());
@@ -657,7 +657,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_opmask_op::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_opmask_op::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		assert(instruction.GetOpCount() <= 2);
 		info = InstrOpInfo(mnemonic, instruction, InstrOpInfoFlags::None);
@@ -682,7 +682,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->flags = flags;
 	}
 
-	void SimpleInstrInfo_bnd::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_bnd::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		auto flags = this->flags;
 		if (instruction.GetHasRepnePrefix())
@@ -698,10 +698,10 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->pseudoOp = pseudoOp;
 	}
 
-	void SimpleInstrInfo_ST_STi::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_ST_STi::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		constexpr InstrOpInfoFlags flags = (InstrOpInfoFlags)0;
-		if (pseudoOp && options->GetUsePseudoOps() && (instruction.GetOp0Register() == Register::ST1 || instruction.GetOp1Register() == Register::ST1))
+		if (pseudoOp && options.GetUsePseudoOps() && (instruction.GetOp0Register() == Register::ST1 || instruction.GetOp1Register() == Register::ST1))
 		{
 			info = InstrOpInfo();
 			info.Mnemonic = mnemonic;
@@ -721,10 +721,10 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->pseudoOp = pseudoOp;
 	}
 
-	void SimpleInstrInfo_STi_ST::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_STi_ST::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		constexpr InstrOpInfoFlags flags = (InstrOpInfoFlags)0;
-		if (pseudoOp && options->GetUsePseudoOps() && (instruction.GetOp0Register() == Register::ST1 || instruction.GetOp1Register() == Register::ST1))
+		if (pseudoOp && options.GetUsePseudoOps() && (instruction.GetOp0Register() == Register::ST1 || instruction.GetOp1Register() == Register::ST1))
 		{
 			info = InstrOpInfo();
 			info.Mnemonic = mnemonic;
@@ -744,11 +744,11 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->pseudo_ops = pseudo_ops;
 	}
 
-	void SimpleInstrInfo_pops::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_pops::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo(mnemonic, instruction, InstrOpInfoFlags::None);
 		std::int32_t imm = instruction.GetImmediate8();
-		if (options->GetUsePseudoOps() && static_cast<std::uint32_t>(imm) < static_cast<std::uint32_t>(pseudo_ops.size()))
+		if (options.GetUsePseudoOps() && static_cast<std::uint32_t>(imm) < static_cast<std::uint32_t>(pseudo_ops.size()))
 		{
 			info.Mnemonic = pseudo_ops[imm];
 			RemoveLastOp(info);
@@ -777,10 +777,10 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->pseudo_ops = pseudo_ops;
 	}
 
-	void SimpleInstrInfo_pclmulqdq::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_pclmulqdq::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo(mnemonic, instruction, InstrOpInfoFlags::None);
-		if (options->GetUsePseudoOps())
+		if (options.GetUsePseudoOps())
 		{
 			std::int32_t index;
 			std::int32_t imm = instruction.GetImmediate8();
@@ -817,11 +817,11 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_imul::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_imul::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo(mnemonic, instruction, InstrOpInfoFlags::None);
 		assert(info.OpCount == 3);
-		if (options->GetUsePseudoOps() && info.Op0Kind == InstrOpKind::Register && info.Op1Kind == InstrOpKind::Register && info.Op0Register == info.Op1Register)
+		if (options.GetUsePseudoOps() && info.Op0Kind == InstrOpKind::Register && info.Op1Kind == InstrOpKind::Register && info.Op0Register == info.Op1Register)
 		{
 			info.OpCount--;
 			info.Op0Index = OpAccess_ReadWrite;
@@ -836,7 +836,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_Reg16::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_Reg16::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		constexpr InstrOpInfoFlags flags = InstrOpInfoFlags::None;
 		info = InstrOpInfo(mnemonic, instruction, flags);
@@ -862,7 +862,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_Reg32::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_Reg32::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		constexpr InstrOpInfoFlags flags = InstrOpInfoFlags::None;
 		info = InstrOpInfo(mnemonic, instruction, flags);
@@ -889,7 +889,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->register_ = register_;
 	}
 
-	void SimpleInstrInfo_reg::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_reg::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo(mnemonic, instruction, InstrOpInfoFlags::None);
 		assert(instruction.GetOpCount() == 0);
@@ -913,7 +913,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->mnemonic = FormatterString(mnemonic);
 	}
 
-	void SimpleInstrInfo_invlpga::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_invlpga::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo();
 		info.Mnemonic = mnemonic;
@@ -954,7 +954,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		opKind = (switchTempVar_5 == Code::DeclareByte) ? InstrOpKind::DeclareByte : (switchTempVar_5 == Code::DeclareWord) ? InstrOpKind::DeclareWord : (switchTempVar_5 == Code::DeclareDword) ? InstrOpKind::DeclareDword : (switchTempVar_5 == Code::DeclareQword) ? InstrOpKind::DeclareQword : throw InvalidOperationException();
 	}
 
-	void SimpleInstrInfo_DeclareData::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_DeclareData::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		info = InstrOpInfo(mnemonic, instruction, InstrOpInfoFlags::MnemonicIsDirective);
 		info.OpCount = static_cast<std::uint8_t>(instruction.GetDeclareDataCount());
@@ -976,7 +976,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		this->flagsNoBroadcast = flagsNoBroadcast;
 	}
 
-	void SimpleInstrInfo_bcst::GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info)
+	void SimpleInstrInfo_bcst::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)
 	{
 		auto memInfo = MemorySizes::AllMemorySizes[static_cast<std::int32_t>(instruction.GetMemorySize())];
 		auto flags = memInfo.bcstTo.GetLength() != 0 ? InstrOpInfoFlags::None : flagsNoBroadcast;

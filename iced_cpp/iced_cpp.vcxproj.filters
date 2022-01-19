@@ -246,7 +246,7 @@
     <ClInclude Include="Intel\FormatterInternal\FormatterUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterStringsTable.h">
+    <ClInclude Include="Intel\FormatterInternal\FormatterStringsTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.h">
@@ -891,12 +891,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\FormatterInternal\FormatterString.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\FormatterInternal\FormatterUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterStringsTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.cpp">

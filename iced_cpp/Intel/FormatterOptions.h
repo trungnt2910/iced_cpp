@@ -16,6 +16,7 @@
 #pragma once
 
 #include "MemorySizeOptions.g.h"
+#include "ThrowHelper.h"
 #include <string>
 
 // Code generated from Iced. Do not edit.
@@ -310,7 +311,7 @@ namespace Iced::Intel
 		/// Constructor
 		/// </summary>
 	public:
-		FormatterOptions();
+		constexpr FormatterOptions();
 		/// <summary>
 		/// Prefixes are uppercased
 		/// <br/>
@@ -320,8 +321,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>rep stosd</c>
 		/// </summary>
-		bool GetUppercasePrefixes() const;
-		void SetUppercasePrefixes(bool value);
+		constexpr bool GetUppercasePrefixes() const;
+		constexpr void SetUppercasePrefixes(bool value);
 		/// <summary>
 		/// Mnemonics are uppercased
 		/// <br/>
@@ -331,8 +332,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov rcx,rax</c>
 		/// </summary>
-		bool GetUppercaseMnemonics() const;
-		void SetUppercaseMnemonics(bool value);
+		constexpr bool GetUppercaseMnemonics() const;
+		constexpr void SetUppercaseMnemonics(bool value);
 		/// <summary>
 		/// Registers are uppercased
 		/// <br/>
@@ -342,8 +343,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov rcx,[rax+rdx*8]</c>
 		/// </summary>
-		bool GetUppercaseRegisters() const;
-		void SetUppercaseRegisters(bool value);
+		constexpr bool GetUppercaseRegisters() const;
+		constexpr void SetUppercaseRegisters(bool value);
 		/// <summary>
 		/// Keywords are uppercased (eg. <c>BYTE PTR</c>, <c>SHORT</c>)
 		/// <br/>
@@ -353,8 +354,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov byte ptr [rcx],12h</c>
 		/// </summary>
-		bool GetUppercaseKeywords() const;
-		void SetUppercaseKeywords(bool value);
+		constexpr bool GetUppercaseKeywords() const;
+		constexpr void SetUppercaseKeywords(bool value);
 		/// <summary>
 		/// Uppercase decorators, eg. <c>{z}</c>, <c>{sae}</c>, <c>{rd-sae}</c> (but not opmask registers: <c>{k1}</c>)
 		/// <br/>
@@ -364,8 +365,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>vunpcklps xmm2{k5}{z},xmm6,dword bcst [rax+4]</c>
 		/// </summary>
-		bool GetUppercaseDecorators() const;
-		void SetUppercaseDecorators(bool value);
+		constexpr bool GetUppercaseDecorators() const;
+		constexpr void SetUppercaseDecorators(bool value);
 		/// <summary>
 		/// Everything is uppercased, except numbers and their prefixes/suffixes
 		/// <br/>
@@ -375,8 +376,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,gs:[rcx*4+0ffh]</c>
 		/// </summary>
-		bool GetUppercaseAll() const;
-		void SetUppercaseAll(bool value);
+		constexpr bool GetUppercaseAll() const;
+		constexpr void SetUppercaseAll(bool value);
 		/// <summary>
 		/// Character index (0-based) where the first operand is formatted. Can be set to 0 to format it immediately after the mnemonic.
 		/// At least one space or tab is always added between the mnemonic and the first operand.
@@ -388,15 +389,15 @@ namespace Iced::Intel
 		/// <c>8</c>: <c>mov•••••rcx,rbp</c>
 		/// <br/>
 		/// </summary>
-		std::int32_t GetFirstOperandCharIndex() const;
-		void SetFirstOperandCharIndex(std::int32_t value);
+		constexpr std::int32_t GetFirstOperandCharIndex() const;
+		constexpr void SetFirstOperandCharIndex(std::int32_t value);
 		/// <summary>
 		/// Size of a tab character or &lt;= 0 to use spaces
 		/// <br/>
 		/// Default: <c>0</c>
 		/// </summary>
-		std::int32_t GetTabSize() const;
-		void SetTabSize(std::int32_t value);
+		constexpr std::int32_t GetTabSize() const;
+		constexpr void SetTabSize(std::int32_t value);
 		/// <summary>
 		/// Add a space after the operand separator
 		/// <br/>
@@ -406,8 +407,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov rax,rcx</c>
 		/// </summary>
-		bool GetSpaceAfterOperandSeparator() const;
-		void SetSpaceAfterOperandSeparator(bool value);
+		constexpr bool GetSpaceAfterOperandSeparator() const;
+		constexpr void SetSpaceAfterOperandSeparator(bool value);
 		/// <summary>
 		/// Add a space between the memory expression and the brackets
 		/// <br/>
@@ -417,8 +418,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,[rcx+rdx]</c>
 		/// </summary>
-		bool GetSpaceAfterMemoryBracket() const;
-		void SetSpaceAfterMemoryBracket(bool value);
+		constexpr bool GetSpaceAfterMemoryBracket() const;
+		constexpr void SetSpaceAfterMemoryBracket(bool value);
 		/// <summary>
 		/// Add spaces between memory operand <c>+</c> and <c>-</c> operators
 		/// <br/>
@@ -428,8 +429,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,[rcx+rdx*8-80h]</c>
 		/// </summary>
-		bool GetSpaceBetweenMemoryAddOperators() const;
-		void SetSpaceBetweenMemoryAddOperators(bool value);
+		constexpr bool GetSpaceBetweenMemoryAddOperators() const;
+		constexpr void SetSpaceBetweenMemoryAddOperators(bool value);
 		/// <summary>
 		/// Add spaces between memory operand <c>*</c> operator
 		/// <br/>
@@ -439,8 +440,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,[rcx+rdx*8-80h]</c>
 		/// </summary>
-		bool GetSpaceBetweenMemoryMulOperators() const;
-		void SetSpaceBetweenMemoryMulOperators(bool value);
+		constexpr bool GetSpaceBetweenMemoryMulOperators() const;
+		constexpr void SetSpaceBetweenMemoryMulOperators(bool value);
 		/// <summary>
 		/// Show memory operand scale value before the index register
 		/// <br/>
@@ -450,8 +451,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,[rdx*8]</c>
 		/// </summary>
-		bool GetScaleBeforeIndex() const;
-		void SetScaleBeforeIndex(bool value);
+		constexpr bool GetScaleBeforeIndex() const;
+		constexpr void SetScaleBeforeIndex(bool value);
 		/// <summary>
 		/// Always show the scale value even if it's <c>*1</c>
 		/// <br/>
@@ -461,8 +462,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,[rbx+rcx]</c>
 		/// </summary>
-		bool GetAlwaysShowScale() const;
-		void SetAlwaysShowScale(bool value);
+		constexpr bool GetAlwaysShowScale() const;
+		constexpr void SetAlwaysShowScale(bool value);
 		/// <summary>
 		/// Always show the effective segment register. If the option is <see langword="false"/>, only show the segment register if
 		/// there's a segment override prefix.
@@ -473,8 +474,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,[ecx]</c>
 		/// </summary>
-		bool GetAlwaysShowSegmentRegister() const;
-		void SetAlwaysShowSegmentRegister(bool value);
+		constexpr bool GetAlwaysShowSegmentRegister() const;
+		constexpr void SetAlwaysShowSegmentRegister(bool value);
 		/// <summary>
 		/// Show zero displacements
 		/// <br/>
@@ -484,8 +485,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,[rcx*2]</c>
 		/// </summary>
-		bool GetShowZeroDisplacements() const;
-		void SetShowZeroDisplacements(bool value);
+		constexpr bool GetShowZeroDisplacements() const;
+		constexpr void SetShowZeroDisplacements(bool value);
 		/// <summary>
 		/// Hex number prefix or <see langword="null"/>/empty string, eg. "0x"
 		/// <br/>
@@ -493,8 +494,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public string? HexPrefix {get;set;}
-		std::string GetHexPrefix() const;
-		void SetHexPrefix(const std::string& value);
+		constexpr std::string GetHexPrefix() const;
+		constexpr void SetHexPrefix(const std::string& value);
 		/// <summary>
 		/// Hex number suffix or <see langword="null"/>/empty string, eg. "h"
 		/// <br/>
@@ -502,8 +503,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public string? HexSuffix {get;set;}
-		std::string GetHexSuffix() const;
-		void SetHexSuffix(const std::string& value);
+		constexpr std::string GetHexSuffix() const;
+		constexpr void SetHexSuffix(const std::string& value);
 		/// <summary>
 		/// Size of a digit group, see also <see cref="DigitSeparator"/>
 		/// <br/>
@@ -513,8 +514,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <c>4</c>: <c>0x1234_5678</c>
 		/// </summary>
-		std::int32_t GetHexDigitGroupSize() const;
-		void SetHexDigitGroupSize(std::int32_t value);
+		constexpr std::int32_t GetHexDigitGroupSize() const;
+		constexpr void SetHexDigitGroupSize(std::int32_t value);
 		/// <summary>
 		/// Decimal number prefix or <see langword="null"/>/empty string
 		/// <br/>
@@ -522,8 +523,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public string? DecimalPrefix {get;set;}
-		std::string GetDecimalPrefix() const;
-		void SetDecimalPrefix(const std::string& value);
+		constexpr std::string GetDecimalPrefix() const;
+		constexpr void SetDecimalPrefix(const std::string& value);
 		/// <summary>
 		/// Decimal number suffix or <see langword="null"/>/empty string
 		/// <br/>
@@ -531,8 +532,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public string? DecimalSuffix {get;set;}
-		std::string GetDecimalSuffix() const;
-		void SetDecimalSuffix(const std::string& value);
+		constexpr std::string GetDecimalSuffix() const;
+		constexpr void SetDecimalSuffix(const std::string& value);
 		/// <summary>
 		/// Size of a digit group, see also <see cref="DigitSeparator"/>
 		/// <br/>
@@ -542,8 +543,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <c>3</c>: <c>12_345_678</c>
 		/// </summary>
-		std::int32_t GetDecimalDigitGroupSize() const;
-		void SetDecimalDigitGroupSize(std::int32_t value);
+		constexpr std::int32_t GetDecimalDigitGroupSize() const;
+		constexpr void SetDecimalDigitGroupSize(std::int32_t value);
 		/// <summary>
 		/// Octal number prefix or <see langword="null"/>/empty string
 		/// <br/>
@@ -551,8 +552,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public string? OctalPrefix {get;set;}
-		std::string GetOctalPrefix() const;
-		void SetOctalPrefix(const std::string& value);
+		constexpr std::string GetOctalPrefix() const;
+		constexpr void SetOctalPrefix(const std::string& value);
 		/// <summary>
 		/// Octal number suffix or <see langword="null"/>/empty string
 		/// <br/>
@@ -560,8 +561,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public string? OctalSuffix {get;set;}
-		std::string GetOctalSuffix() const;
-		void SetOctalSuffix(const std::string& value);
+		constexpr std::string GetOctalSuffix() const;
+		constexpr void SetOctalSuffix(const std::string& value);
 		/// <summary>
 		/// Size of a digit group, see also <see cref="DigitSeparator"/>
 		/// <br/>
@@ -571,8 +572,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <c>4</c>: <c>1234_5670</c>
 		/// </summary>
-		std::int32_t GetOctalDigitGroupSize() const;
-		void SetOctalDigitGroupSize(std::int32_t value);
+		constexpr std::int32_t GetOctalDigitGroupSize() const;
+		constexpr void SetOctalDigitGroupSize(std::int32_t value);
 		/// <summary>
 		/// Binary number prefix or <see langword="null"/>/empty string
 		/// <br/>
@@ -580,8 +581,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public string? BinaryPrefix {get;set;}
-		std::string GetBinaryPrefix() const;
-		void SetBinaryPrefix(const std::string& value);
+		constexpr std::string GetBinaryPrefix() const;
+		constexpr void SetBinaryPrefix(const std::string& value);
 		/// <summary>
 		/// Binary number suffix or <see langword="null"/>/empty string
 		/// <br/>
@@ -589,8 +590,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public string? BinarySuffix {get;set;}
-		std::string GetBinarySuffix() const;
-		void SetBinarySuffix(const std::string& value);
+		constexpr std::string GetBinarySuffix() const;
+		constexpr void SetBinarySuffix(const std::string& value);
 		/// <summary>
 		/// Size of a digit group, see also <see cref="DigitSeparator"/>
 		/// <br/>
@@ -600,8 +601,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <c>4</c>: <c>1101_0111</c>
 		/// </summary>
-		std::int32_t GetBinaryDigitGroupSize() const;
-		void SetBinaryDigitGroupSize(std::int32_t value);
+		constexpr std::int32_t GetBinaryDigitGroupSize() const;
+		constexpr void SetBinaryDigitGroupSize(std::int32_t value);
 		/// <summary>
 		/// Digit separator or <see langword="null"/>/empty string. See also eg. <see cref="HexDigitGroupSize"/>.
 		/// <br/>
@@ -613,8 +614,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public string? DigitSeparator {get;set;}
-		std::string GetDigitSeparator() const;
-		void SetDigitSeparator(const std::string& value);
+		constexpr std::string GetDigitSeparator() const;
+		constexpr void SetDigitSeparator(const std::string& value);
 		/// <summary>
 		/// Add leading zeros to hexadecimal/octal/binary numbers.
 		/// This option has no effect on branch targets and displacements, use <see cref="BranchLeadingZeros"/>
@@ -626,8 +627,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>0xA</c>/<c>0Ah</c>
 		/// </summary>
-		bool GetLeadingZeros() const;
-		void SetLeadingZeros(bool value);
+		constexpr bool GetLeadingZeros() const;
+		constexpr void SetLeadingZeros(bool value);
 		/// <summary>
 		/// Add leading zeros to hexadecimal/octal/binary numbers.
 		/// This option has no effect on branch targets and displacements, use <see cref="BranchLeadingZeros"/>
@@ -641,8 +642,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] public bool LeadingZeroes
-		bool GetLeadingZeroes() const;
-		void SetLeadingZeroes(bool value);
+		constexpr bool GetLeadingZeroes() const;
+		constexpr void SetLeadingZeroes(bool value);
 		/// <summary>
 		/// Use uppercase hex digits
 		/// <br/>
@@ -652,8 +653,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>0xff</c>
 		/// </summary>
-		bool GetUppercaseHex() const;
-		void SetUppercaseHex(bool value);
+		constexpr bool GetUppercaseHex() const;
+		constexpr void SetUppercaseHex(bool value);
 		/// <summary>
 		/// Small hex numbers (-9 .. 9) are shown in decimal
 		/// <br/>
@@ -663,8 +664,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>0x9</c>
 		/// </summary>
-		bool GetSmallHexNumbersInDecimal() const;
-		void SetSmallHexNumbersInDecimal(bool value);
+		constexpr bool GetSmallHexNumbersInDecimal() const;
+		constexpr void SetSmallHexNumbersInDecimal(bool value);
 		/// <summary>
 		/// Add a leading zero to hex numbers if there's no prefix and the number starts with hex digits <c>A-F</c>
 		/// <br/>
@@ -674,15 +675,15 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>FFh</c>
 		/// </summary>
-		bool GetAddLeadingZeroToHexNumbers() const;
-		void SetAddLeadingZeroToHexNumbers(bool value);
+		constexpr bool GetAddLeadingZeroToHexNumbers() const;
+		constexpr void SetAddLeadingZeroToHexNumbers(bool value);
 		/// <summary>
 		/// Number base
 		/// <br/>
 		/// Default: <see cref="NumberBase.Hexadecimal"/>
 		/// </summary>
-		Iced::Intel::NumberBase GetNumberBase() const;
-		void SetNumberBase(Iced::Intel::NumberBase value);
+		constexpr Iced::Intel::NumberBase GetNumberBase() const;
+		constexpr void SetNumberBase(Iced::Intel::NumberBase value);
 	private:
 		Iced::Intel::NumberBase numberBase = NumberBase::Hexadecimal;
 		/// <summary>
@@ -695,8 +696,8 @@ namespace Iced::Intel
 		/// <see langword="false"/>: <c>je 123h</c>
 		/// </summary>
 	public:
-		bool GetBranchLeadingZeros() const;
-		void SetBranchLeadingZeros(bool value);
+		constexpr bool GetBranchLeadingZeros() const;
+		constexpr void SetBranchLeadingZeros(bool value);
 		/// <summary>
 		/// Add leading zeros to branch offsets. Used by <c>CALL NEAR</c>, <c>CALL FAR</c>, <c>JMP NEAR</c>, <c>JMP FAR</c>, <c>Jcc</c>, <c>LOOP</c>, <c>LOOPcc</c>, <c>XBEGIN</c>
 		/// <br/>
@@ -708,8 +709,8 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] public bool BranchLeadingZeroes
-		bool GetBranchLeadingZeroes() const;
-		void SetBranchLeadingZeroes(bool value);
+		constexpr bool GetBranchLeadingZeroes() const;
+		constexpr void SetBranchLeadingZeroes(bool value);
 		/// <summary>
 		/// Show immediate operands as signed numbers
 		/// <br/>
@@ -719,8 +720,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,FFFFFFFF</c>
 		/// </summary>
-		bool GetSignedImmediateOperands() const;
-		void SetSignedImmediateOperands(bool value);
+		constexpr bool GetSignedImmediateOperands() const;
+		constexpr void SetSignedImmediateOperands(bool value);
 		/// <summary>
 		/// Displacements are signed numbers
 		/// <br/>
@@ -730,8 +731,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov al,[eax+0FFFFE000h]</c>
 		/// </summary>
-		bool GetSignedMemoryDisplacements() const;
-		void SetSignedMemoryDisplacements(bool value);
+		constexpr bool GetSignedMemoryDisplacements() const;
+		constexpr void SetSignedMemoryDisplacements(bool value);
 		/// <summary>
 		/// Add leading zeros to displacements
 		/// <br/>
@@ -741,8 +742,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov al,[eax+12h]</c>
 		/// </summary>
-		bool GetDisplacementLeadingZeros() const;
-		void SetDisplacementLeadingZeros(bool value);
+		constexpr bool GetDisplacementLeadingZeros() const;
+		constexpr void SetDisplacementLeadingZeros(bool value);
 		/// <summary>
 		/// Add leading zeros to displacements
 		/// <br/>
@@ -754,16 +755,16 @@ namespace Iced::Intel
 		/// </summary>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] public bool DisplacementLeadingZeroes
-		bool GetDisplacementLeadingZeroes() const;
-		void SetDisplacementLeadingZeroes(bool value);
+		constexpr bool GetDisplacementLeadingZeroes() const;
+		constexpr void SetDisplacementLeadingZeroes(bool value);
 		/// <summary>
 		/// Options that control if the memory size (eg. <c>DWORD PTR</c>) is shown or not.
 		/// This is ignored by the gas (AT&amp;T) formatter.
 		/// <br/>
 		/// Default: <see cref="Intel.MemorySizeOptions.Default"/>
 		/// </summary>
-		Iced::Intel::MemorySizeOptions GetMemorySizeOptions() const;
-		void SetMemorySizeOptions(Iced::Intel::MemorySizeOptions value);
+		constexpr Iced::Intel::MemorySizeOptions GetMemorySizeOptions() const;
+		constexpr void SetMemorySizeOptions(Iced::Intel::MemorySizeOptions value);
 	private:
 		Iced::Intel::MemorySizeOptions memorySizeOptions = MemorySizeOptions::Default;
 		/// <summary>
@@ -776,8 +777,8 @@ namespace Iced::Intel
 		/// <see langword="false"/>: <c>mov eax,[1029384756AFBECDh]</c>
 		/// </summary>
 	public:
-		bool GetRipRelativeAddresses() const;
-		void SetRipRelativeAddresses(bool value);
+		constexpr bool GetRipRelativeAddresses() const;
+		constexpr void SetRipRelativeAddresses(bool value);
 		/// <summary>
 		/// Show <c>NEAR</c>, <c>SHORT</c>, etc if it's a branch instruction
 		/// <br/>
@@ -787,8 +788,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>je 1234h</c>
 		/// </summary>
-		bool GetShowBranchSize() const;
-		void SetShowBranchSize(bool value);
+		constexpr bool GetShowBranchSize() const;
+		constexpr void SetShowBranchSize(bool value);
 		/// <summary>
 		/// Use pseudo instructions
 		/// <br/>
@@ -798,8 +799,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>vcmpsd xmm2,xmm6,xmm3,5</c>
 		/// </summary>
-		bool GetUsePseudoOps() const;
-		void SetUsePseudoOps(bool value);
+		constexpr bool GetUsePseudoOps() const;
+		constexpr void SetUsePseudoOps(bool value);
 		/// <summary>
 		/// Show the original value after the symbol name
 		/// <br/>
@@ -809,8 +810,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,[myfield]</c>
 		/// </summary>
-		bool GetShowSymbolAddress() const;
-		void SetShowSymbolAddress(bool value);
+		constexpr bool GetShowSymbolAddress() const;
+		constexpr void SetShowSymbolAddress(bool value);
 		/// <summary>
 		/// (gas only): If <see langword="true"/>, the formatter doesn't add <c>%</c> to registers
 		/// <br/>
@@ -820,8 +821,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov %eax,%ecx</c>
 		/// </summary>
-		bool GetGasNakedRegisters() const;
-		void SetGasNakedRegisters(bool value);
+		constexpr bool GetGasNakedRegisters() const;
+		constexpr void SetGasNakedRegisters(bool value);
 		/// <summary>
 		/// (gas only): Shows the mnemonic size suffix even when not needed
 		/// <br/>
@@ -831,8 +832,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov %eax,%ecx</c>
 		/// </summary>
-		bool GetGasShowMnemonicSizeSuffix() const;
-		void SetGasShowMnemonicSizeSuffix(bool value);
+		constexpr bool GetGasShowMnemonicSizeSuffix() const;
+		constexpr void SetGasShowMnemonicSizeSuffix(bool value);
 		/// <summary>
 		/// (gas only): Add a space after the comma if it's a memory operand
 		/// <br/>
@@ -842,8 +843,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>(%eax,%ecx,2)</c>
 		/// </summary>
-		bool GetGasSpaceAfterMemoryOperandComma() const;
-		void SetGasSpaceAfterMemoryOperandComma(bool value);
+		constexpr bool GetGasSpaceAfterMemoryOperandComma() const;
+		constexpr void SetGasSpaceAfterMemoryOperandComma(bool value);
 		/// <summary>
 		/// (masm only): Add a <c>DS</c> segment override even if it's not present. Used if it's 16/32-bit code and mem op is a displ
 		/// <br/>
@@ -853,8 +854,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>mov eax,[12345678]</c>
 		/// </summary>
-		bool GetMasmAddDsPrefix32() const;
-		void SetMasmAddDsPrefix32(bool value);
+		constexpr bool GetMasmAddDsPrefix32() const;
+		constexpr void SetMasmAddDsPrefix32(bool value);
 		/// <summary>
 		/// (masm only): Show symbols in brackets
 		/// <br/>
@@ -864,8 +865,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>symbol[ecx]</c> / <c>symbol</c>
 		/// </summary>
-		bool GetMasmSymbolDisplInBrackets() const;
-		void SetMasmSymbolDisplInBrackets(bool value);
+		constexpr bool GetMasmSymbolDisplInBrackets() const;
+		constexpr void SetMasmSymbolDisplInBrackets(bool value);
 		/// <summary>
 		/// (masm only): Show displacements in brackets
 		/// <br/>
@@ -875,8 +876,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>1234h[ecx]</c>
 		/// </summary>
-		bool GetMasmDisplInBrackets() const;
-		void SetMasmDisplInBrackets(bool value);
+		constexpr bool GetMasmDisplInBrackets() const;
+		constexpr void SetMasmDisplInBrackets(bool value);
 		/// <summary>
 		/// (nasm only): Shows <c>BYTE</c>, <c>WORD</c>, <c>DWORD</c> or <c>QWORD</c> if it's a sign extended immediate operand value
 		/// <br/>
@@ -886,8 +887,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>or rcx,-1</c>
 		/// </summary>
-		bool GetNasmShowSignExtendedImmediateSize() const;
-		void SetNasmShowSignExtendedImmediateSize(bool value);
+		constexpr bool GetNasmShowSignExtendedImmediateSize() const;
+		constexpr void SetNasmShowSignExtendedImmediateSize(bool value);
 		/// <summary>
 		/// Use <c>st(0)</c> instead of <c>st</c> if <c>st</c> can be used. Ignored by the nasm formatter.
 		/// <br/>
@@ -897,8 +898,8 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>fadd st,st(3)</c>
 		/// </summary>
-		bool GetPreferST0() const;
-		void SetPreferST0(bool value);
+		constexpr bool GetPreferST0() const;
+		constexpr void SetPreferST0(bool value);
 		/// <summary>
 		/// Show useless prefixes. If it has useless prefixes, it could be data and not code.
 		/// <br/>
@@ -908,15 +909,15 @@ namespace Iced::Intel
 		/// <br/>
 		/// <see langword="false"/>: <c>add eax,ecx</c>
 		/// </summary>
-		bool GetShowUselessPrefixes() const;
-		void SetShowUselessPrefixes(bool value);
+		constexpr bool GetShowUselessPrefixes() const;
+		constexpr void SetShowUselessPrefixes(bool value);
 		/// <summary>
 		/// Mnemonic condition code selector (eg. <c>JB</c> / <c>JC</c> / <c>JNAE</c>)
 		/// <br/>
 		/// Default: <c>JB</c>, <c>CMOVB</c>, <c>SETB</c>
 		/// </summary>
-		Iced::Intel::CC_b GetCCB() const;
-		void SetCCB(Iced::Intel::CC_b value);
+		constexpr Iced::Intel::CC_b GetCCB() const;
+		constexpr void SetCCB(Iced::Intel::CC_b value);
 	private:
 		Iced::Intel::CC_b cc_b = CC_b::b;
 		/// <summary>
@@ -925,8 +926,8 @@ namespace Iced::Intel
 		/// Default: <c>JAE</c>, <c>CMOVAE</c>, <c>SETAE</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_ae GetCCAe() const;
-		void SetCCAe(Iced::Intel::CC_ae value);
+		constexpr Iced::Intel::CC_ae GetCCAe() const;
+		constexpr void SetCCAe(Iced::Intel::CC_ae value);
 	private:
 		Iced::Intel::CC_ae cc_ae = CC_ae::ae;
 		/// <summary>
@@ -935,8 +936,8 @@ namespace Iced::Intel
 		/// Default: <c>JE</c>, <c>CMOVE</c>, <c>SETE</c>, <c>LOOPE</c>, <c>REPE</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_e GetCCE() const;
-		void SetCCE(Iced::Intel::CC_e value);
+		constexpr Iced::Intel::CC_e GetCCE() const;
+		constexpr void SetCCE(Iced::Intel::CC_e value);
 	private:
 		Iced::Intel::CC_e cc_e = CC_e::e;
 		/// <summary>
@@ -945,8 +946,8 @@ namespace Iced::Intel
 		/// Default: <c>JNE</c>, <c>CMOVNE</c>, <c>SETNE</c>, <c>LOOPNE</c>, <c>REPNE</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_ne GetCCNe() const;
-		void SetCCNe(Iced::Intel::CC_ne value);
+		constexpr Iced::Intel::CC_ne GetCCNe() const;
+		constexpr void SetCCNe(Iced::Intel::CC_ne value);
 	private:
 		Iced::Intel::CC_ne cc_ne = CC_ne::ne;
 		/// <summary>
@@ -955,8 +956,8 @@ namespace Iced::Intel
 		/// Default: <c>JBE</c>, <c>CMOVBE</c>, <c>SETBE</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_be GetCCBe() const;
-		void SetCCBe(Iced::Intel::CC_be value);
+		constexpr Iced::Intel::CC_be GetCCBe() const;
+		constexpr void SetCCBe(Iced::Intel::CC_be value);
 	private:
 		Iced::Intel::CC_be cc_be = CC_be::be;
 		/// <summary>
@@ -965,8 +966,8 @@ namespace Iced::Intel
 		/// Default: <c>JA</c>, <c>CMOVA</c>, <c>SETA</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_a GetCCA() const;
-		void SetCCA(Iced::Intel::CC_a value);
+		constexpr Iced::Intel::CC_a GetCCA() const;
+		constexpr void SetCCA(Iced::Intel::CC_a value);
 	private:
 		Iced::Intel::CC_a cc_a = CC_a::a;
 		/// <summary>
@@ -975,8 +976,8 @@ namespace Iced::Intel
 		/// Default: <c>JP</c>, <c>CMOVP</c>, <c>SETP</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_p GetCCP() const;
-		void SetCCP(Iced::Intel::CC_p value);
+		constexpr Iced::Intel::CC_p GetCCP() const;
+		constexpr void SetCCP(Iced::Intel::CC_p value);
 	private:
 		Iced::Intel::CC_p cc_p = CC_p::p;
 		/// <summary>
@@ -985,8 +986,8 @@ namespace Iced::Intel
 		/// Default: <c>JNP</c>, <c>CMOVNP</c>, <c>SETNP</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_np GetCCNp() const;
-		void SetCCNp(Iced::Intel::CC_np value);
+		constexpr Iced::Intel::CC_np GetCCNp() const;
+		constexpr void SetCCNp(Iced::Intel::CC_np value);
 	private:
 		Iced::Intel::CC_np cc_np = CC_np::np;
 		/// <summary>
@@ -995,8 +996,8 @@ namespace Iced::Intel
 		/// Default: <c>JL</c>, <c>CMOVL</c>, <c>SETL</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_l GetCCL() const;
-		void SetCCL(Iced::Intel::CC_l value);
+		constexpr Iced::Intel::CC_l GetCCL() const;
+		constexpr void SetCCL(Iced::Intel::CC_l value);
 	private:
 		Iced::Intel::CC_l cc_l = CC_l::l;
 		/// <summary>
@@ -1005,8 +1006,8 @@ namespace Iced::Intel
 		/// Default: <c>JGE</c>, <c>CMOVGE</c>, <c>SETGE</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_ge GetCCGe() const;
-		void SetCCGe(Iced::Intel::CC_ge value);
+		constexpr Iced::Intel::CC_ge GetCCGe() const;
+		constexpr void SetCCGe(Iced::Intel::CC_ge value);
 	private:
 		Iced::Intel::CC_ge cc_ge = CC_ge::ge;
 		/// <summary>
@@ -1015,8 +1016,8 @@ namespace Iced::Intel
 		/// Default: <c>JLE</c>, <c>CMOVLE</c>, <c>SETLE</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_le GetCCLe() const;
-		void SetCCLe(Iced::Intel::CC_le value);
+		constexpr Iced::Intel::CC_le GetCCLe() const;
+		constexpr void SetCCLe(Iced::Intel::CC_le value);
 	private:
 		Iced::Intel::CC_le cc_le = CC_le::le;
 		/// <summary>
@@ -1025,8 +1026,8 @@ namespace Iced::Intel
 		/// Default: <c>JG</c>, <c>CMOVG</c>, <c>SETG</c>
 		/// </summary>
 	public:
-		Iced::Intel::CC_g GetCCG() const;
-		void SetCCG(Iced::Intel::CC_g value);
+		constexpr Iced::Intel::CC_g GetCCG() const;
+		constexpr void SetCCG(Iced::Intel::CC_g value);
 	private:
 		Iced::Intel::CC_g cc_g = CC_g::g;
 		/// <summary>
@@ -1034,21 +1035,1038 @@ namespace Iced::Intel
 		/// </summary>
 		/// <returns></returns>
 	public:
-		static FormatterOptions* CreateGas();
+		constexpr static FormatterOptions CreateGas();
 		/// <summary>
 		/// Creates Intel (XED) formatter options
 		/// </summary>
 		/// <returns></returns>
-		static FormatterOptions* CreateIntel();
+		constexpr static FormatterOptions CreateIntel();
 		/// <summary>
 		/// Creates masm formatter options
 		/// </summary>
 		/// <returns></returns>
-		static FormatterOptions* CreateMasm();
+		constexpr static FormatterOptions CreateMasm();
 		/// <summary>
 		/// Creates nasm formatter options
 		/// </summary>
 		/// <returns></returns>
-		static FormatterOptions* CreateNasm();
+		constexpr static FormatterOptions CreateNasm();
 	};
+}
+
+namespace Iced::Intel
+{
+
+	constexpr FormatterOptions::FormatterOptions()
+	{
+		flags1 = Flags1::UppercaseHex | Flags1::SmallHexNumbersInDecimal | Flags1::AddLeadingZeroToHexNumbers | Flags1::BranchLeadingZeros | Flags1::SignedMemoryDisplacements | Flags1::ShowBranchSize | Flags1::UsePseudoOps | Flags1::MasmAddDsPrefix32 | Flags1::MasmSymbolDisplInBrackets | Flags1::MasmDisplInBrackets;
+		flags2 = Flags2::None;
+	}
+
+	constexpr bool FormatterOptions::GetUppercasePrefixes() const
+	{
+		return (flags1 & Flags1::UppercasePrefixes) != 0;
+	}
+
+	constexpr void FormatterOptions::SetUppercasePrefixes(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::UppercasePrefixes;
+		}
+		else
+		{
+			flags1 &= ~Flags1::UppercasePrefixes;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetUppercaseMnemonics() const
+	{
+		return (flags1 & Flags1::UppercaseMnemonics) != 0;
+	}
+
+	constexpr void FormatterOptions::SetUppercaseMnemonics(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::UppercaseMnemonics;
+		}
+		else
+		{
+			flags1 &= ~Flags1::UppercaseMnemonics;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetUppercaseRegisters() const
+	{
+		return (flags1 & Flags1::UppercaseRegisters) != 0;
+	}
+
+	constexpr void FormatterOptions::SetUppercaseRegisters(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::UppercaseRegisters;
+		}
+		else
+		{
+			flags1 &= ~Flags1::UppercaseRegisters;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetUppercaseKeywords() const
+	{
+		return (flags1 & Flags1::UppercaseKeywords) != 0;
+	}
+
+	constexpr void FormatterOptions::SetUppercaseKeywords(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::UppercaseKeywords;
+		}
+		else
+		{
+			flags1 &= ~Flags1::UppercaseKeywords;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetUppercaseDecorators() const
+	{
+		return (flags1 & Flags1::UppercaseDecorators) != 0;
+	}
+
+	constexpr void FormatterOptions::SetUppercaseDecorators(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::UppercaseDecorators;
+		}
+		else
+		{
+			flags1 &= ~Flags1::UppercaseDecorators;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetUppercaseAll() const
+	{
+		return (flags1 & Flags1::UppercaseAll) != 0;
+	}
+
+	constexpr void FormatterOptions::SetUppercaseAll(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::UppercaseAll;
+		}
+		else
+		{
+			flags1 &= ~Flags1::UppercaseAll;
+		}
+	}
+
+	constexpr std::int32_t FormatterOptions::GetFirstOperandCharIndex() const
+	{
+		return FirstOperandCharIndex;
+	}
+
+	constexpr void FormatterOptions::SetFirstOperandCharIndex(std::int32_t value)
+	{
+		FirstOperandCharIndex = value;
+	}
+
+	constexpr std::int32_t FormatterOptions::GetTabSize() const
+	{
+		return TabSize;
+	}
+
+	constexpr void FormatterOptions::SetTabSize(std::int32_t value)
+	{
+		TabSize = value;
+	}
+
+	constexpr bool FormatterOptions::GetSpaceAfterOperandSeparator() const
+	{
+		return (flags1 & Flags1::SpaceAfterOperandSeparator) != 0;
+	}
+
+	constexpr void FormatterOptions::SetSpaceAfterOperandSeparator(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::SpaceAfterOperandSeparator;
+		}
+		else
+		{
+			flags1 &= ~Flags1::SpaceAfterOperandSeparator;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetSpaceAfterMemoryBracket() const
+	{
+		return (flags1 & Flags1::SpaceAfterMemoryBracket) != 0;
+	}
+
+	constexpr void FormatterOptions::SetSpaceAfterMemoryBracket(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::SpaceAfterMemoryBracket;
+		}
+		else
+		{
+			flags1 &= ~Flags1::SpaceAfterMemoryBracket;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetSpaceBetweenMemoryAddOperators() const
+	{
+		return (flags1 & Flags1::SpaceBetweenMemoryAddOperators) != 0;
+	}
+
+	constexpr void FormatterOptions::SetSpaceBetweenMemoryAddOperators(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::SpaceBetweenMemoryAddOperators;
+		}
+		else
+		{
+			flags1 &= ~Flags1::SpaceBetweenMemoryAddOperators;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetSpaceBetweenMemoryMulOperators() const
+	{
+		return (flags1 & Flags1::SpaceBetweenMemoryMulOperators) != 0;
+	}
+
+	constexpr void FormatterOptions::SetSpaceBetweenMemoryMulOperators(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::SpaceBetweenMemoryMulOperators;
+		}
+		else
+		{
+			flags1 &= ~Flags1::SpaceBetweenMemoryMulOperators;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetScaleBeforeIndex() const
+	{
+		return (flags1 & Flags1::ScaleBeforeIndex) != 0;
+	}
+
+	constexpr void FormatterOptions::SetScaleBeforeIndex(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::ScaleBeforeIndex;
+		}
+		else
+		{
+			flags1 &= ~Flags1::ScaleBeforeIndex;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetAlwaysShowScale() const
+	{
+		return (flags1 & Flags1::AlwaysShowScale) != 0;
+	}
+
+	constexpr void FormatterOptions::SetAlwaysShowScale(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::AlwaysShowScale;
+		}
+		else
+		{
+			flags1 &= ~Flags1::AlwaysShowScale;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetAlwaysShowSegmentRegister() const
+	{
+		return (flags1 & Flags1::AlwaysShowSegmentRegister) != 0;
+	}
+
+	constexpr void FormatterOptions::SetAlwaysShowSegmentRegister(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::AlwaysShowSegmentRegister;
+		}
+		else
+		{
+			flags1 &= ~Flags1::AlwaysShowSegmentRegister;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetShowZeroDisplacements() const
+	{
+		return (flags1 & Flags1::ShowZeroDisplacements) != 0;
+	}
+
+	constexpr void FormatterOptions::SetShowZeroDisplacements(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::ShowZeroDisplacements;
+		}
+		else
+		{
+			flags1 &= ~Flags1::ShowZeroDisplacements;
+		}
+	}
+
+	constexpr std::string FormatterOptions::GetHexPrefix() const
+	{
+		return HexPrefix;
+	}
+
+	constexpr void FormatterOptions::SetHexPrefix(const std::string& value)
+	{
+		HexPrefix = value;
+	}
+
+	constexpr std::string FormatterOptions::GetHexSuffix() const
+	{
+		return HexSuffix;
+	}
+
+	constexpr void FormatterOptions::SetHexSuffix(const std::string& value)
+	{
+		HexSuffix = value;
+	}
+
+	constexpr std::int32_t FormatterOptions::GetHexDigitGroupSize() const
+	{
+		return HexDigitGroupSize;
+	}
+
+	constexpr void FormatterOptions::SetHexDigitGroupSize(std::int32_t value)
+	{
+		HexDigitGroupSize = value;
+	}
+
+	constexpr std::string FormatterOptions::GetDecimalPrefix() const
+	{
+		return DecimalPrefix;
+	}
+
+	constexpr void FormatterOptions::SetDecimalPrefix(const std::string& value)
+	{
+		DecimalPrefix = value;
+	}
+
+	constexpr std::string FormatterOptions::GetDecimalSuffix() const
+	{
+		return DecimalSuffix;
+	}
+
+	constexpr void FormatterOptions::SetDecimalSuffix(const std::string& value)
+	{
+		DecimalSuffix = value;
+	}
+
+	constexpr std::int32_t FormatterOptions::GetDecimalDigitGroupSize() const
+	{
+		return DecimalDigitGroupSize;
+	}
+
+	constexpr void FormatterOptions::SetDecimalDigitGroupSize(std::int32_t value)
+	{
+		DecimalDigitGroupSize = value;
+	}
+
+	constexpr std::string FormatterOptions::GetOctalPrefix() const
+	{
+		return OctalPrefix;
+	}
+
+	constexpr void FormatterOptions::SetOctalPrefix(const std::string& value)
+	{
+		OctalPrefix = value;
+	}
+
+	constexpr std::string FormatterOptions::GetOctalSuffix() const
+	{
+		return OctalSuffix;
+	}
+
+	constexpr void FormatterOptions::SetOctalSuffix(const std::string& value)
+	{
+		OctalSuffix = value;
+	}
+
+	constexpr std::int32_t FormatterOptions::GetOctalDigitGroupSize() const
+	{
+		return OctalDigitGroupSize;
+	}
+
+	constexpr void FormatterOptions::SetOctalDigitGroupSize(std::int32_t value)
+	{
+		OctalDigitGroupSize = value;
+	}
+
+	constexpr std::string FormatterOptions::GetBinaryPrefix() const
+	{
+		return BinaryPrefix;
+	}
+
+	constexpr void FormatterOptions::SetBinaryPrefix(const std::string& value)
+	{
+		BinaryPrefix = value;
+	}
+
+	constexpr std::string FormatterOptions::GetBinarySuffix() const
+	{
+		return BinarySuffix;
+	}
+
+	constexpr void FormatterOptions::SetBinarySuffix(const std::string& value)
+	{
+		BinarySuffix = value;
+	}
+
+	constexpr std::int32_t FormatterOptions::GetBinaryDigitGroupSize() const
+	{
+		return BinaryDigitGroupSize;
+	}
+
+	constexpr void FormatterOptions::SetBinaryDigitGroupSize(std::int32_t value)
+	{
+		BinaryDigitGroupSize = value;
+	}
+
+	constexpr std::string FormatterOptions::GetDigitSeparator() const
+	{
+		return DigitSeparator;
+	}
+
+	constexpr void FormatterOptions::SetDigitSeparator(const std::string& value)
+	{
+		DigitSeparator = value;
+	}
+
+	constexpr bool FormatterOptions::GetLeadingZeros() const
+	{
+		return (flags1 & Flags1::LeadingZeros) != 0;
+	}
+
+	constexpr void FormatterOptions::SetLeadingZeros(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::LeadingZeros;
+		}
+		else
+		{
+			flags1 &= ~Flags1::LeadingZeros;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetLeadingZeroes() const
+	{
+		return GetLeadingZeros();
+	}
+
+	constexpr void FormatterOptions::SetLeadingZeroes(bool value)
+	{
+		SetLeadingZeros(value);
+	}
+
+	constexpr bool FormatterOptions::GetUppercaseHex() const
+	{
+		return (flags1 & Flags1::UppercaseHex) != 0;
+	}
+
+	constexpr void FormatterOptions::SetUppercaseHex(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::UppercaseHex;
+		}
+		else
+		{
+			flags1 &= ~Flags1::UppercaseHex;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetSmallHexNumbersInDecimal() const
+	{
+		return (flags1 & Flags1::SmallHexNumbersInDecimal) != 0;
+	}
+
+	constexpr void FormatterOptions::SetSmallHexNumbersInDecimal(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::SmallHexNumbersInDecimal;
+		}
+		else
+		{
+			flags1 &= ~Flags1::SmallHexNumbersInDecimal;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetAddLeadingZeroToHexNumbers() const
+	{
+		return (flags1 & Flags1::AddLeadingZeroToHexNumbers) != 0;
+	}
+
+	constexpr void FormatterOptions::SetAddLeadingZeroToHexNumbers(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::AddLeadingZeroToHexNumbers;
+		}
+		else
+		{
+			flags1 &= ~Flags1::AddLeadingZeroToHexNumbers;
+		}
+	}
+
+	constexpr Iced::Intel::NumberBase FormatterOptions::GetNumberBase() const
+	{
+		return numberBase;
+	}
+
+	constexpr void FormatterOptions::SetNumberBase(Iced::Intel::NumberBase value)
+	{
+		if (static_cast<std::uint32_t>(value) > static_cast<std::uint32_t>(NumberBase::Binary))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		numberBase = value;
+	}
+
+	constexpr bool FormatterOptions::GetBranchLeadingZeros() const
+	{
+		return (flags1 & Flags1::BranchLeadingZeros) != 0;
+	}
+
+	constexpr void FormatterOptions::SetBranchLeadingZeros(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::BranchLeadingZeros;
+		}
+		else
+		{
+			flags1 &= ~Flags1::BranchLeadingZeros;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetBranchLeadingZeroes() const
+	{
+		return GetBranchLeadingZeros();
+	}
+
+	constexpr void FormatterOptions::SetBranchLeadingZeroes(bool value)
+	{
+		SetBranchLeadingZeros(value);
+	}
+
+	constexpr bool FormatterOptions::GetSignedImmediateOperands() const
+	{
+		return (flags1 & Flags1::SignedImmediateOperands) != 0;
+	}
+
+	constexpr void FormatterOptions::SetSignedImmediateOperands(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::SignedImmediateOperands;
+		}
+		else
+		{
+			flags1 &= ~Flags1::SignedImmediateOperands;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetSignedMemoryDisplacements() const
+	{
+		return (flags1 & Flags1::SignedMemoryDisplacements) != 0;
+	}
+
+	constexpr void FormatterOptions::SetSignedMemoryDisplacements(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::SignedMemoryDisplacements;
+		}
+		else
+		{
+			flags1 &= ~Flags1::SignedMemoryDisplacements;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetDisplacementLeadingZeros() const
+	{
+		return (flags1 & Flags1::DisplacementLeadingZeros) != 0;
+	}
+
+	constexpr void FormatterOptions::SetDisplacementLeadingZeros(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::DisplacementLeadingZeros;
+		}
+		else
+		{
+			flags1 &= ~Flags1::DisplacementLeadingZeros;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetDisplacementLeadingZeroes() const
+	{
+		return GetDisplacementLeadingZeros();
+	}
+
+	constexpr void FormatterOptions::SetDisplacementLeadingZeroes(bool value)
+	{
+		SetDisplacementLeadingZeros(value);
+	}
+
+	constexpr Iced::Intel::MemorySizeOptions FormatterOptions::GetMemorySizeOptions() const
+	{
+		return memorySizeOptions;
+	}
+
+	constexpr void FormatterOptions::SetMemorySizeOptions(Iced::Intel::MemorySizeOptions value)
+	{
+		if (static_cast<std::uint32_t>(value) > static_cast<std::uint32_t>(MemorySizeOptions::Never))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		memorySizeOptions = value;
+	}
+
+	constexpr bool FormatterOptions::GetRipRelativeAddresses() const
+	{
+		return (flags1 & Flags1::RipRelativeAddresses) != 0;
+	}
+
+	constexpr void FormatterOptions::SetRipRelativeAddresses(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::RipRelativeAddresses;
+		}
+		else
+		{
+			flags1 &= ~Flags1::RipRelativeAddresses;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetShowBranchSize() const
+	{
+		return (flags1 & Flags1::ShowBranchSize) != 0;
+	}
+
+	constexpr void FormatterOptions::SetShowBranchSize(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::ShowBranchSize;
+		}
+		else
+		{
+			flags1 &= ~Flags1::ShowBranchSize;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetUsePseudoOps() const
+	{
+		return (flags1 & Flags1::UsePseudoOps) != 0;
+	}
+
+	constexpr void FormatterOptions::SetUsePseudoOps(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::UsePseudoOps;
+		}
+		else
+		{
+			flags1 &= ~Flags1::UsePseudoOps;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetShowSymbolAddress() const
+	{
+		return (flags1 & Flags1::ShowSymbolAddress) != 0;
+	}
+
+	constexpr void FormatterOptions::SetShowSymbolAddress(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::ShowSymbolAddress;
+		}
+		else
+		{
+			flags1 &= ~Flags1::ShowSymbolAddress;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetGasNakedRegisters() const
+	{
+		return (flags1 & Flags1::GasNakedRegisters) != 0;
+	}
+
+	constexpr void FormatterOptions::SetGasNakedRegisters(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::GasNakedRegisters;
+		}
+		else
+		{
+			flags1 &= ~Flags1::GasNakedRegisters;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetGasShowMnemonicSizeSuffix() const
+	{
+		return (flags1 & Flags1::GasShowMnemonicSizeSuffix) != 0;
+	}
+
+	constexpr void FormatterOptions::SetGasShowMnemonicSizeSuffix(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::GasShowMnemonicSizeSuffix;
+		}
+		else
+		{
+			flags1 &= ~Flags1::GasShowMnemonicSizeSuffix;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetGasSpaceAfterMemoryOperandComma() const
+	{
+		return (flags1 & Flags1::GasSpaceAfterMemoryOperandComma) != 0;
+	}
+
+	constexpr void FormatterOptions::SetGasSpaceAfterMemoryOperandComma(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::GasSpaceAfterMemoryOperandComma;
+		}
+		else
+		{
+			flags1 &= ~Flags1::GasSpaceAfterMemoryOperandComma;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetMasmAddDsPrefix32() const
+	{
+		return (flags1 & Flags1::MasmAddDsPrefix32) != 0;
+	}
+
+	constexpr void FormatterOptions::SetMasmAddDsPrefix32(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::MasmAddDsPrefix32;
+		}
+		else
+		{
+			flags1 &= ~Flags1::MasmAddDsPrefix32;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetMasmSymbolDisplInBrackets() const
+	{
+		return (flags1 & Flags1::MasmSymbolDisplInBrackets) != 0;
+	}
+
+	constexpr void FormatterOptions::SetMasmSymbolDisplInBrackets(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::MasmSymbolDisplInBrackets;
+		}
+		else
+		{
+			flags1 &= ~Flags1::MasmSymbolDisplInBrackets;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetMasmDisplInBrackets() const
+	{
+		return (flags1 & Flags1::MasmDisplInBrackets) != 0;
+	}
+
+	constexpr void FormatterOptions::SetMasmDisplInBrackets(bool value)
+	{
+		if (value)
+		{
+			flags1 |= Flags1::MasmDisplInBrackets;
+		}
+		else
+		{
+			flags1 &= ~Flags1::MasmDisplInBrackets;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetNasmShowSignExtendedImmediateSize() const
+	{
+		return (flags2 & Flags2::NasmShowSignExtendedImmediateSize) != 0;
+	}
+
+	constexpr void FormatterOptions::SetNasmShowSignExtendedImmediateSize(bool value)
+	{
+		if (value)
+		{
+			flags2 |= Flags2::NasmShowSignExtendedImmediateSize;
+		}
+		else
+		{
+			flags2 &= ~Flags2::NasmShowSignExtendedImmediateSize;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetPreferST0() const
+	{
+		return (flags2 & Flags2::PreferST0) != 0;
+	}
+
+	constexpr void FormatterOptions::SetPreferST0(bool value)
+	{
+		if (value)
+		{
+			flags2 |= Flags2::PreferST0;
+		}
+		else
+		{
+			flags2 &= ~Flags2::PreferST0;
+		}
+	}
+
+	constexpr bool FormatterOptions::GetShowUselessPrefixes() const
+	{
+		return (flags2 & Flags2::ShowUselessPrefixes) != 0;
+	}
+
+	constexpr void FormatterOptions::SetShowUselessPrefixes(bool value)
+	{
+		if (value)
+		{
+			flags2 |= Flags2::ShowUselessPrefixes;
+		}
+		else
+		{
+			flags2 &= ~Flags2::ShowUselessPrefixes;
+		}
+	}
+
+	constexpr Iced::Intel::CC_b FormatterOptions::GetCCB() const
+	{
+		return cc_b;
+	}
+
+	constexpr void FormatterOptions::SetCCB(Iced::Intel::CC_b value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_b>(3))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_b = value;
+	}
+
+	constexpr Iced::Intel::CC_ae FormatterOptions::GetCCAe() const
+	{
+		return cc_ae;
+	}
+
+	constexpr void FormatterOptions::SetCCAe(Iced::Intel::CC_ae value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_ae>(3))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_ae = value;
+	}
+
+	constexpr Iced::Intel::CC_e FormatterOptions::GetCCE() const
+	{
+		return cc_e;
+	}
+
+	constexpr void FormatterOptions::SetCCE(Iced::Intel::CC_e value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_e>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_e = value;
+	}
+
+	constexpr Iced::Intel::CC_ne FormatterOptions::GetCCNe() const
+	{
+		return cc_ne;
+	}
+
+	constexpr void FormatterOptions::SetCCNe(Iced::Intel::CC_ne value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_ne>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_ne = value;
+	}
+
+	constexpr Iced::Intel::CC_be FormatterOptions::GetCCBe() const
+	{
+		return cc_be;
+	}
+
+	constexpr void FormatterOptions::SetCCBe(Iced::Intel::CC_be value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_be>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_be = value;
+	}
+
+	constexpr Iced::Intel::CC_a FormatterOptions::GetCCA() const
+	{
+		return cc_a;
+	}
+
+	constexpr void FormatterOptions::SetCCA(Iced::Intel::CC_a value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_a>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_a = value;
+	}
+
+	constexpr Iced::Intel::CC_p FormatterOptions::GetCCP() const
+	{
+		return cc_p;
+	}
+
+	constexpr void FormatterOptions::SetCCP(Iced::Intel::CC_p value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_p>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_p = value;
+	}
+
+	constexpr Iced::Intel::CC_np FormatterOptions::GetCCNp() const
+	{
+		return cc_np;
+	}
+
+	constexpr void FormatterOptions::SetCCNp(Iced::Intel::CC_np value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_np>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_np = value;
+	}
+
+	constexpr Iced::Intel::CC_l FormatterOptions::GetCCL() const
+	{
+		return cc_l;
+	}
+
+	constexpr void FormatterOptions::SetCCL(Iced::Intel::CC_l value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_l>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_l = value;
+	}
+
+	constexpr Iced::Intel::CC_ge FormatterOptions::GetCCGe() const
+	{
+		return cc_ge;
+	}
+
+	constexpr void FormatterOptions::SetCCGe(Iced::Intel::CC_ge value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_ge>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_ge = value;
+	}
+
+	constexpr Iced::Intel::CC_le FormatterOptions::GetCCLe() const
+	{
+		return cc_le;
+	}
+
+	constexpr void FormatterOptions::SetCCLe(Iced::Intel::CC_le value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_le>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_le = value;
+	}
+
+	constexpr Iced::Intel::CC_g FormatterOptions::GetCCG() const
+	{
+		return cc_g;
+	}
+
+	constexpr void FormatterOptions::SetCCG(Iced::Intel::CC_g value)
+	{
+		if (value >= static_cast<Iced::Intel::CC_g>(2))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_value();
+		}
+		cc_g = value;
+	}
+
+	constexpr FormatterOptions FormatterOptions::CreateGas()
+	{
+		FormatterOptions tempVar = FormatterOptions();
+		tempVar.SetHexPrefix("0x");
+		tempVar.SetOctalPrefix("0");
+		tempVar.SetBinaryPrefix("0b");
+		return tempVar;
+	}
+
+	constexpr FormatterOptions FormatterOptions::CreateIntel()
+	{
+		FormatterOptions tempVar = FormatterOptions();
+		tempVar.SetHexSuffix("h");
+		tempVar.SetOctalSuffix("o");
+		tempVar.SetBinarySuffix("b");
+		return tempVar;
+	}
+
+	constexpr FormatterOptions FormatterOptions::CreateMasm()
+	{
+		FormatterOptions tempVar = FormatterOptions();
+		tempVar.SetHexSuffix("h");
+		tempVar.SetOctalSuffix("o");
+		tempVar.SetBinarySuffix("b");
+		return tempVar;
+	}
+
+	constexpr FormatterOptions FormatterOptions::CreateNasm()
+	{
+		FormatterOptions tempVar = FormatterOptions();
+		tempVar.SetHexSuffix("h");
+		tempVar.SetOctalSuffix("o");
+		tempVar.SetBinarySuffix("b");
+		return tempVar;
+	}
 }

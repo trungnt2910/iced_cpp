@@ -45,7 +45,12 @@ namespace Iced::Intel
 	std::vector<std::string> FastFormatter::s_mvexRegMemConsts32 = { "", "", "{cdab}", "{badc}", "{dacb}", "{aaaa}", "{bbbb}", "{cccc}", "{dddd}", "", "{1to16}", "{4to16}", "{float16}", "{uint8}", "{sint8}", "{uint16}", "{sint16}" };
 	std::vector<std::string> FastFormatter::s_mvexRegMemConsts64 = { "", "", "{cdab}", "{badc}", "{dacb}", "{aaaa}", "{bbbb}", "{cccc}", "{dddd}", "", "{1to8}", "{4to8}", "{float16}", "{uint8}", "{sint8}", "{uint16}", "{sint16}" };
 
-	FastFormatterOptions* FastFormatter::GetOptions() const
+	const FastFormatterOptions& FastFormatter::GetOptions() const
+	{
+		return options;
+	}
+
+	FastFormatterOptions& FastFormatter::GetOptions()
 	{
 		return options;
 	}
@@ -58,7 +63,7 @@ namespace Iced::Intel
 	//ORIGINAL LINE: public FastFormatter(ISymbolResolver? symbolResolver)
 	FastFormatter::FastFormatter(ISymbolResolver* symbolResolver)
 	{
-		options = new FastFormatterOptions();
+		options = FastFormatterOptions();
 		this->symbolResolver = symbolResolver;
 		allRegisters = Registers::AllRegisters;
 		codeMnemonics = FmtData::Mnemonics;
@@ -82,7 +87,7 @@ namespace Iced::Intel
 		auto flags = codeFlags[static_cast<std::int32_t>(code)];
 		auto opCount = instruction.GetOpCount();
 		auto pseudoOpsNum = static_cast<std::uint32_t>(flags) >> static_cast<std::int32_t>(FastFmtFlags::PseudoOpsKindShift);
-		if (pseudoOpsNum != 0 && options->GetUsePseudoOps() && instruction.GetOpKind(opCount - 1) == OpKind::Immediate8)
+		if (pseudoOpsNum != 0 && options.GetUsePseudoOps() && instruction.GetOpKind(opCount - 1) == OpKind::Immediate8)
 		{
 			std::int32_t index = instruction.GetImmediate8();
 			auto pseudoOpKind = static_cast<PseudoOpsKind>(pseudoOpsNum - 1);
@@ -224,7 +229,7 @@ namespace Iced::Intel
 			{
 				if (operand > 0)
 				{
-					if (options->GetSpaceAfterOperandSeparator())
+					if (options.GetSpaceAfterOperandSeparator())
 					{
 						output->AppendNotNull(", ");
 					}
@@ -591,7 +596,7 @@ namespace Iced::Intel
 
 	void FastFormatter::FormatNumber(FastStringOutput* output, std::uint64_t value)
 	{
-		bool useHexPrefix = options->GetUseHexPrefix();
+		bool useHexPrefix = options.GetUseHexPrefix();
 		if (useHexPrefix)
 		{
 			output->AppendNotNull("0x");
@@ -610,7 +615,7 @@ namespace Iced::Intel
 		{
 			output->Append('0');
 		}
-		auto hexDigits = options->GetUppercaseHex() ? "0123456789ABCDEF" : "0123456789abcdef";
+		auto hexDigits = options.GetUppercaseHex() ? "0123456789ABCDEF" : "0123456789abcdef";
 		for (; ;)
 		{
 			shift -= 4;
@@ -627,12 +632,12 @@ namespace Iced::Intel
 		}
 	}
 
-	void FastFormatter::WriteSymbol(FastStringOutput* output, std::uint64_t address, SymbolResult const symbol)
+	void FastFormatter::WriteSymbol(FastStringOutput* output, std::uint64_t address, const SymbolResult& symbol)
 	{
 		WriteSymbol(output, address, symbol, true);
 	}
 
-	void FastFormatter::WriteSymbol(FastStringOutput* output, std::uint64_t address, SymbolResult const symbol, bool writeMinusIfSigned)
+	void FastFormatter::WriteSymbol(FastStringOutput* output, std::uint64_t address, const SymbolResult& symbol, bool writeMinusIfSigned)
 	{
 		std::int64_t displ = static_cast<std::int64_t>(address - symbol.Address);
 		if ((symbol.Flags & SymbolFlags::Signed) != 0)
@@ -677,7 +682,7 @@ namespace Iced::Intel
 			}
 			FormatNumber(output, static_cast<std::uint64_t>(displ));
 		}
-		if (options->GetShowSymbolAddress())
+		if (options.GetShowSymbolAddress())
 		{
 			output->AppendNotNull(" (");
 			FormatNumber(output, address);
@@ -693,7 +698,7 @@ namespace Iced::Intel
 		if (baseReg == Register::RIP)
 		{
 			absAddr = static_cast<std::uint64_t>(displ);
-			if (options->GetRipRelativeAddresses())
+			if (options.GetRipRelativeAddresses())
 			{
 				displ -= static_cast<std::int64_t>(instruction.GetNextIP());
 			}
@@ -707,7 +712,7 @@ namespace Iced::Intel
 		else if (baseReg == Register::EIP)
 		{
 			absAddr = static_cast<std::uint32_t>(displ);
-			if (options->GetRipRelativeAddresses())
+			if (options.GetRipRelativeAddresses())
 			{
 				displ = static_cast<std::int32_t>(static_cast<std::uint32_t>(displ) - instruction.GetNextIP32());
 			}
@@ -748,7 +753,7 @@ namespace Iced::Intel
 			useScale = false;
 		}
 		auto flags = codeFlags[static_cast<std::int32_t>(instruction.GetCode())];
-		bool showMemSize = (flags & FastFmtFlags::ForceMemSize) != 0 || instruction.IsBroadcast() || options->GetAlwaysShowMemorySize();
+		bool showMemSize = (flags & FastFmtFlags::ForceMemSize) != 0 || instruction.IsBroadcast() || options.GetAlwaysShowMemorySize();
 		if (showMemSize)
 		{
 			assert(static_cast<std::uint32_t>(instruction.GetMemorySize()) < static_cast<std::uint32_t>(allMemorySizes.size()));
@@ -758,7 +763,7 @@ namespace Iced::Intel
 		auto codeSize = instruction.GetCodeSize();
 		auto segOverride = instruction.GetSegmentPrefix();
 		bool noTrackPrefix = segOverride == Register::DS && FormatterUtils::IsNotrackPrefixBranch(instruction.GetCode()) && !((codeSize == CodeSize::Code16 || codeSize == CodeSize::Code32) && (baseReg == Register::BP || baseReg == Register::EBP || baseReg == Register::ESP));
-		if (options->GetAlwaysShowSegmentRegister() || (segOverride != Register::None && !noTrackPrefix && (ShowUselessPrefixes || FormatterUtils::ShowSegmentPrefix(Register::None, instruction, ShowUselessPrefixes))))
+		if (options.GetAlwaysShowSegmentRegister() || (segOverride != Register::None && !noTrackPrefix && (ShowUselessPrefixes || FormatterUtils::ShowSegmentPrefix(Register::None, instruction, ShowUselessPrefixes))))
 		{
 			FormatRegister(output, segReg);
 			output->Append(':');

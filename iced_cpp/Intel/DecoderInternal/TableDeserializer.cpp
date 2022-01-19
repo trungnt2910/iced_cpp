@@ -35,10 +35,9 @@ namespace Iced::Intel::DecoderInternal
 		this->handlers = handlers;
 	}
 
-	TableDeserializer::TableDeserializer(OpCodeHandlerReader* handlerReader, std::int32_t maxIds, const std::vector<std::uint8_t>& data)
+	TableDeserializer::TableDeserializer(OpCodeHandlerReader* handlerReader, std::int32_t maxIds, const std::vector<std::uint8_t>& data) : reader(data)
 	{
 		this->handlerReader = handlerReader;
-		reader = DataReader(data);
 		idToHandler = std::vector<HandlerInfo>();
 		idToHandler.reserve(maxIds);
 		handlerArray = std::vector<std::shared_ptr<OpCodeHandler>>(1);

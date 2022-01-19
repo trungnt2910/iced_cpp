@@ -18,7 +18,7 @@
 namespace Iced::Intel::FormatterInternal
 {
 
-	FormatterString MnemonicCC::GetMnemonicCC(FormatterOptions* options, std::int32_t ccIndex, const std::vector<FormatterString>& mnemonics)
+	FormatterString MnemonicCC::GetMnemonicCC(const FormatterOptions& options, std::int32_t ccIndex, const std::vector<FormatterString>& mnemonics)
 	{
 		std::int32_t index;
 		switch (ccIndex)
@@ -33,27 +33,27 @@ namespace Iced::Intel::FormatterInternal
 			break;
 		case 2: // b, c, nae
 			assert(mnemonics.size() == 3);
-			index = static_cast<std::int32_t>(options->GetCCB());
+			index = static_cast<std::int32_t>(options.GetCCB());
 			break;
 		case 3: // ae, nb, nc
 			assert(mnemonics.size() == 3);
-			index = static_cast<std::int32_t>(options->GetCCAe());
+			index = static_cast<std::int32_t>(options.GetCCAe());
 			break;
 		case 4: // e, z
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCE());
+			index = static_cast<std::int32_t>(options.GetCCE());
 			break;
 		case 5: // ne, nz
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCNe());
+			index = static_cast<std::int32_t>(options.GetCCNe());
 			break;
 		case 6: // be, na
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCBe());
+			index = static_cast<std::int32_t>(options.GetCCBe());
 			break;
 		case 7: // a, nbe
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCA());
+			index = static_cast<std::int32_t>(options.GetCCA());
 			break;
 		case 8: // s
 			assert(mnemonics.size() == 1);
@@ -65,27 +65,27 @@ namespace Iced::Intel::FormatterInternal
 			break;
 		case 10: // p, pe
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCP());
+			index = static_cast<std::int32_t>(options.GetCCP());
 			break;
 		case 11: // np, po
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCNp());
+			index = static_cast<std::int32_t>(options.GetCCNp());
 			break;
 		case 12: // l, nge
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCL());
+			index = static_cast<std::int32_t>(options.GetCCL());
 			break;
 		case 13: // ge, nl
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCGe());
+			index = static_cast<std::int32_t>(options.GetCCGe());
 			break;
 		case 14: // le, ng
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCLe());
+			index = static_cast<std::int32_t>(options.GetCCLe());
 			break;
 		case 15: // g, nle
 			assert(mnemonics.size() == 2);
-			index = static_cast<std::int32_t>(options->GetCCG());
+			index = static_cast<std::int32_t>(options.GetCCG());
 			break;
 		default:
 			throw InvalidOperationException();

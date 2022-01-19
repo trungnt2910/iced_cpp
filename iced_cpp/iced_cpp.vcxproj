@@ -285,7 +285,7 @@
     <ClInclude Include="Intel\FormatterConstants.h" />
     <ClInclude Include="Intel\FormatterInternal\FormatterString.h" />
     <ClInclude Include="Intel\FormatterInternal\FormatterUtils.h" />
-    <ClInclude Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterStringsTable.h" />
+    <ClInclude Include="Intel\FormatterInternal\FormatterStringsTable.h" />
     <ClInclude Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.h" />
     <ClInclude Include="Intel\FormatterInternal\MnemonicCC.h" />
     <ClInclude Include="Intel\FormatterInternal\PseudoOpsKind.g.h" />
@@ -497,8 +497,6 @@
     <ClCompile Include="Intel\Formatter.cpp" />
     <ClCompile Include="Intel\FormatterConstants.cpp" />
     <ClCompile Include="Intel\FormatterInternal\FormatterString.cpp" />
-    <ClCompile Include="Intel\FormatterInternal\FormatterUtils.cpp" />
-    <ClCompile Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterStringsTable.cpp" />
     <ClCompile Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.cpp" />
     <ClCompile Include="Intel\FormatterInternal\MnemonicCC.cpp" />
     <ClCompile Include="Intel\FormatterInternal\PseudoOpsKind.g.cpp" />

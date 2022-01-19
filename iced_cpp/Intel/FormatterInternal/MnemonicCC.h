@@ -30,6 +30,6 @@ namespace Iced::Intel::FormatterInternal
 	class MnemonicCC final
 	{
 	public:
-		static FormatterString GetMnemonicCC(FormatterOptions* options, std::int32_t ccIndex, const std::vector<FormatterString>& mnemonics);
+		static FormatterString GetMnemonicCC(const FormatterOptions& options, std::int32_t ccIndex, const std::vector<FormatterString>& mnemonics);
 	};
 }

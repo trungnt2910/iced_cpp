@@ -38,26 +38,25 @@ using namespace Iced::Intel::NasmFormatterInternal;
 namespace Iced::Intel
 {
 
-	FormatterOptions* NasmFormatter::GetOptions() const
+	const FormatterOptions& NasmFormatter::GetOptions() const
 	{
 		return options;
 	}
 
-	NasmFormatter::NasmFormatter() : NasmFormatter(nullptr, nullptr, nullptr)
+	FormatterOptions& NasmFormatter::GetOptions()
+	{
+		return options;
+	}
+
+	NasmFormatter::NasmFormatter() : NasmFormatter(nullptr, nullptr)
 	{
 	}
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public NasmFormatter(ISymbolResolver? symbolResolver, System.Nullable<IFormatterOptionsProvider> optionsProvider = null) : this(null, symbolResolver, optionsProvider)
-	NasmFormatter::NasmFormatter(ISymbolResolver* symbolResolver, IFormatterOptionsProvider* optionsProvider) : NasmFormatter(nullptr, symbolResolver, optionsProvider)
+	NasmFormatter::NasmFormatter(ISymbolResolver* symbolResolver, IFormatterOptionsProvider* optionsProvider) : numberFormatter(true)
 	{
-	}
-
-	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-	//ORIGINAL LINE: public NasmFormatter(FormatterOptions? options, System.Nullable<ISymbolResolver> symbolResolver = null, System.Nullable<IFormatterOptionsProvider> optionsProvider = null)
-	NasmFormatter::NasmFormatter(FormatterOptions* options, ISymbolResolver* symbolResolver, IFormatterOptionsProvider* optionsProvider) : numberFormatter(true)
-	{
-		this->options = (options != nullptr) ? options : FormatterOptions::CreateNasm();
+		this->options = FormatterOptions::CreateNasm();
 		this->symbolResolver = symbolResolver;
 		this->optionsProvider = optionsProvider;
 		allRegisters = Registers::AllRegisters;
@@ -71,6 +70,13 @@ namespace Iced::Intel
 		mvexRegMemConsts64 = s_mvexRegMemConsts64;
 		memSizeInfos = s_memSizeInfos;
 		farMemSizeInfos = s_farMemSizeInfos;
+	}
+
+	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
+	//ORIGINAL LINE: public NasmFormatter(FormatterOptions? options, System.Nullable<ISymbolResolver> symbolResolver = null, System.Nullable<IFormatterOptionsProvider> optionsProvider = null)
+	NasmFormatter::NasmFormatter(const FormatterOptions& options, ISymbolResolver* symbolResolver, IFormatterOptionsProvider* optionsProvider) : NasmFormatter(symbolResolver, optionsProvider)
+	{
+		this->options = options;
 	}
 
 	FormatterString NasmFormatter::str_bnd = FormatterString("bnd");
@@ -186,7 +192,7 @@ namespace Iced::Intel
 			ThrowHelper::ThrowArgumentNullException_output();
 		}
 		output->Write(",", FormatterTextKind::Punctuation);
-		if (options->GetSpaceAfterOperandSeparator())
+		if (options.GetSpaceAfterOperandSeparator())
 		{
 			output->Write(" ", FormatterTextKind::Text);
 		}
@@ -211,7 +217,7 @@ namespace Iced::Intel
 		FormatMnemonic(instruction, output, opInfo, column, FormatMnemonicOptions::None);
 		if (opInfo.OpCount != 0)
 		{
-			FormatterUtils::AddTabs(output, column, options->GetFirstOperandCharIndex(), options->GetTabSize());
+			FormatterUtils::AddTabs(output, column, options.GetFirstOperandCharIndex(), options.GetTabSize());
 			FormatOperands(instruction, output, opInfo);
 		}
 	}
@@ -293,11 +299,11 @@ namespace Iced::Intel
 			auto mnemonic = opInfo.Mnemonic;
 			if ((opInfo.Flags & InstrOpInfoFlags::MnemonicIsDirective) != 0)
 			{
-				output->Write(mnemonic.Get(options->GetUppercaseKeywords() || options->GetUppercaseAll()), FormatterTextKind::Directive);
+				output->Write(mnemonic.Get(options.GetUppercaseKeywords() || options.GetUppercaseAll()), FormatterTextKind::Directive);
 			}
 			else
 			{
-				output->WriteMnemonic(instruction, mnemonic.Get(options->GetUppercaseMnemonics() || options->GetUppercaseAll()));
+				output->WriteMnemonic(instruction, mnemonic.Get(options.GetUppercaseMnemonics() || options.GetUppercaseAll()));
 			}
 			column += mnemonic.GetLength();
 		}
@@ -394,7 +400,7 @@ namespace Iced::Intel
 				throw InvalidOperationException();
 			}
 		}
-		return options->GetShowUselessPrefixes();
+		return options.GetShowUselessPrefixes();
 	}
 
 	void NasmFormatter::FormatPrefix(FormatterOutput* output, const Instruction& instruction, std::int32_t& column, FormatterString prefix, PrefixKind prefixKind, bool& needSpace)
@@ -404,7 +410,7 @@ namespace Iced::Intel
 			column++;
 			output->Write(" ", FormatterTextKind::Text);
 		}
-		output->WritePrefix(instruction, prefix.Get(options->GetUppercasePrefixes() || options->GetUppercaseAll()), prefixKind);
+		output->WritePrefix(instruction, prefix.Get(options.GetUppercasePrefixes() || options.GetUppercaseAll()), prefixKind);
 		column += prefix.GetLength();
 		needSpace = true;
 	}
@@ -420,7 +426,7 @@ namespace Iced::Intel
 			if (i > 0)
 			{
 				output->Write(",", FormatterTextKind::Punctuation);
-				if (options->GetSpaceAfterOperandSeparator())
+				if (options.GetSpaceAfterOperandSeparator())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
@@ -495,7 +501,7 @@ namespace Iced::Intel
 				numberKind = NumberKind::UInt16;
 			}
 			numberOptions = NumberFormattingOptions::CreateBranchInternal(options);
-			operandOptions = FormatterOperandOptions(options->GetShowBranchSize() ? FormatterOperandOptions::Flags::None : FormatterOperandOptions::Flags::NoBranchSize);
+			operandOptions = FormatterOperandOptions(options.GetShowBranchSize() ? FormatterOperandOptions::Flags::None : FormatterOperandOptions::Flags::NoBranchSize);
 			if (optionsProvider != nullptr)
 			{
 				optionsProvider->GetOperandOptions(instruction, operand, instructionOperand, operandOptions, numberOptions);
@@ -503,11 +509,11 @@ namespace Iced::Intel
 			if ((symbolResolver = this->symbolResolver) != nullptr && symbolResolver->TryGetSymbol(instruction, operand, instructionOperand, imm64, immSize, symbol))
 			{
 				FormatFlowControl(output, opInfo.Flags, operandOptions);
-				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm64, symbol, options->GetShowSymbolAddress());
+				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm64, symbol, options.GetShowSymbolAddress());
 			}
 			else
 			{
-				operandOptions = FormatterOperandOptions(options->GetShowBranchSize() ? FormatterOperandOptions::Flags::None : FormatterOperandOptions::Flags::NoBranchSize);
+				operandOptions = FormatterOperandOptions(options.GetShowBranchSize() ? FormatterOperandOptions::Flags::None : FormatterOperandOptions::Flags::NoBranchSize);
 				if (optionsProvider != nullptr)
 				{
 					optionsProvider->GetOperandOptions(instruction, operand, instructionOperand, operandOptions, numberOptions);
@@ -544,7 +550,7 @@ namespace Iced::Intel
 				numberKind = NumberKind::UInt16;
 			}
 			numberOptions = NumberFormattingOptions::CreateBranchInternal(options);
-			operandOptions = FormatterOperandOptions(options->GetShowBranchSize() ? FormatterOperandOptions::Flags::None : FormatterOperandOptions::Flags::NoBranchSize);
+			operandOptions = FormatterOperandOptions(options.GetShowBranchSize() ? FormatterOperandOptions::Flags::None : FormatterOperandOptions::Flags::NoBranchSize);
 			if (optionsProvider != nullptr)
 			{
 				optionsProvider->GetOperandOptions(instruction, operand, instructionOperand, operandOptions, numberOptions);
@@ -561,10 +567,10 @@ namespace Iced::Intel
 				}
 				else
 				{
-					output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, instruction.GetFarBranchSelector(), selectorSymbol, options->GetShowSymbolAddress());
+					output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, instruction.GetFarBranchSelector(), selectorSymbol, options.GetShowSymbolAddress());
 				}
 				output->Write(":", FormatterTextKind::Punctuation);
-				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm64, symbol, options->GetShowSymbolAddress());
+				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm64, symbol, options.GetShowSymbolAddress());
 			}
 			else
 			{
@@ -607,7 +613,7 @@ namespace Iced::Intel
 			}
 			if ((symbolResolver = this->symbolResolver) != nullptr && symbolResolver->TryGetSymbol(instruction, operand, instructionOperand, imm8, 1, symbol))
 			{
-				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm8, symbol, options->GetShowSymbolAddress());
+				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm8, symbol, options.GetShowSymbolAddress());
 			}
 			else
 			{
@@ -654,7 +660,7 @@ namespace Iced::Intel
 			}
 			if ((symbolResolver = this->symbolResolver) != nullptr && symbolResolver->TryGetSymbol(instruction, operand, instructionOperand, imm16, 2, symbol))
 			{
-				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm16, symbol, options->GetShowSymbolAddress());
+				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm16, symbol, options.GetShowSymbolAddress());
 			}
 			else
 			{
@@ -701,7 +707,7 @@ namespace Iced::Intel
 			}
 			if ((symbolResolver = this->symbolResolver) != nullptr && symbolResolver->TryGetSymbol(instruction, operand, instructionOperand, imm32, 4, symbol))
 			{
-				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm32, symbol, options->GetShowSymbolAddress());
+				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm32, symbol, options.GetShowSymbolAddress());
 			}
 			else
 			{
@@ -753,7 +759,7 @@ namespace Iced::Intel
 			}
 			if ((symbolResolver = this->symbolResolver) != nullptr && symbolResolver->TryGetSymbol(instruction, operand, instructionOperand, imm64, 8, symbol))
 			{
-				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm64, symbol, options->GetShowSymbolAddress());
+				output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, imm64, symbol, options.GetShowSymbolAddress());
 			}
 			else
 			{
@@ -884,7 +890,7 @@ namespace Iced::Intel
 
 	void NasmFormatter::ShowSignExtendInfo(FormatterOutput* output, InstrOpInfoFlags flags)
 	{
-		if (!options->GetNasmShowSignExtendedImmediateSize())
+		if (!options.GetNasmShowSignExtendedImmediateSize())
 		{
 			return;
 		}
@@ -935,7 +941,7 @@ namespace Iced::Intel
 	void NasmFormatter::FormatDecorator(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterString text, DecoratorKind decorator)
 	{
 		output->Write("{", FormatterTextKind::Punctuation);
-		output->WriteDecorator(instruction, operand, instructionOperand, text.Get(options->GetUppercaseDecorators() || options->GetUppercaseAll()), decorator);
+		output->WriteDecorator(instruction, operand, instructionOperand, text.Get(options.GetUppercaseDecorators() || options.GetUppercaseAll()), decorator);
 		output->Write("}", FormatterTextKind::Punctuation);
 	}
 
@@ -943,7 +949,7 @@ namespace Iced::Intel
 	{
 		assert(static_cast<std::uint32_t>(reg) < static_cast<std::uint32_t>(allRegisters.size()));
 		auto regStr = allRegisters[static_cast<std::int32_t>(reg)];
-		return regStr.Get(options->GetUppercaseRegisters() || options->GetUppercaseAll());
+		return regStr.Get(options.GetUppercaseRegisters() || options.GetUppercaseAll());
 	}
 
 	void NasmFormatter::FormatRegister(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, Register reg)
@@ -958,8 +964,8 @@ namespace Iced::Intel
 		auto numberOptions = NumberFormattingOptions::CreateDisplacementInternal(options);
 		SymbolResult symbol;
 		bool useSymbol;
-		auto operandOptions = FormatterOperandOptions(options->GetMemorySizeOptions());
-		operandOptions.SetRipRelativeAddresses(options->GetRipRelativeAddresses());
+		auto operandOptions = FormatterOperandOptions(options.GetMemorySizeOptions());
+		operandOptions.SetRipRelativeAddresses(options.GetRipRelativeAddresses());
 		if (optionsProvider != nullptr)
 		{
 			optionsProvider->GetOperandOptions(instruction, operand, instructionOperand, operandOptions, numberOptions);
@@ -969,7 +975,7 @@ namespace Iced::Intel
 		if (baseReg == Register::RIP)
 		{
 			absAddr = static_cast<std::uint64_t>(displ);
-			if (options->GetRipRelativeAddresses())
+			if (options.GetRipRelativeAddresses())
 			{
 				displ -= static_cast<std::int64_t>(instruction.GetNextIP());
 			}
@@ -985,7 +991,7 @@ namespace Iced::Intel
 		else if (baseReg == Register::EIP)
 		{
 			absAddr = static_cast<std::uint32_t>(displ);
-			if (options->GetRipRelativeAddresses())
+			if (options.GetRipRelativeAddresses())
 			{
 				displ = static_cast<std::int32_t>(static_cast<std::uint32_t>(displ) - instruction.GetNextIP32());
 			}
@@ -1012,7 +1018,7 @@ namespace Iced::Intel
 			useSymbol = false;
 			symbol = Iced::Intel::SymbolResult();
 		}
-		bool useScale = scale != 0 || options->GetAlwaysShowScale();
+		bool useScale = scale != 0 || options.GetAlwaysShowScale();
 		if (!useScale)
 		{
 			// [rsi] = base reg, [rsi*1] = index reg
@@ -1027,7 +1033,7 @@ namespace Iced::Intel
 		}
 		FormatMemorySize(output, memSize, flags, operandOptions);
 		output->Write("[", FormatterTextKind::Punctuation);
-		if (options->GetSpaceAfterMemoryBracket())
+		if (options.GetSpaceAfterMemoryBracket())
 		{
 			output->Write(" ", FormatterTextKind::Text);
 		}
@@ -1045,7 +1051,7 @@ namespace Iced::Intel
 		auto codeSize = instruction.GetCodeSize();
 		auto segOverride = instruction.GetSegmentPrefix();
 		bool noTrackPrefix = segOverride == Register::DS && FormatterUtils::IsNotrackPrefixBranch(instruction.GetCode()) && !((codeSize == CodeSize::Code16 || codeSize == CodeSize::Code32) && (baseReg == Register::BP || baseReg == Register::EBP || baseReg == Register::ESP));
-		if (options->GetAlwaysShowSegmentRegister() || (segOverride != Register::None && !noTrackPrefix && FormatterUtils::ShowSegmentPrefix(Register::None, instruction, options)))
+		if (options.GetAlwaysShowSegmentRegister() || (segOverride != Register::None && !noTrackPrefix && FormatterUtils::ShowSegmentPrefix(Register::None, instruction, options)))
 		{
 			FormatRegister(output, instruction, operand, instructionOperand, segReg);
 			output->Write(":", FormatterTextKind::Punctuation);
@@ -1060,12 +1066,12 @@ namespace Iced::Intel
 		{
 			if (needPlus)
 			{
-				if (options->GetSpaceBetweenMemoryAddOperators())
+				if (options.GetSpaceBetweenMemoryAddOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
 				output->Write("+", FormatterTextKind::Operator);
-				if (options->GetSpaceBetweenMemoryAddOperators())
+				if (options.GetSpaceBetweenMemoryAddOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
@@ -1075,15 +1081,15 @@ namespace Iced::Intel
 			{
 				FormatRegister(output, instruction, operand, instructionOperand, indexReg);
 			}
-			else if (options->GetScaleBeforeIndex())
+			else if (options.GetScaleBeforeIndex())
 			{
 				output->WriteNumber(instruction, operand, instructionOperand, scaleNumbers[scale], 1U << scale, NumberKind::Int32, FormatterTextKind::Number);
-				if (options->GetSpaceBetweenMemoryMulOperators())
+				if (options.GetSpaceBetweenMemoryMulOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
 				output->Write("*", FormatterTextKind::Operator);
-				if (options->GetSpaceBetweenMemoryMulOperators())
+				if (options.GetSpaceBetweenMemoryMulOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
@@ -1092,12 +1098,12 @@ namespace Iced::Intel
 			else
 			{
 				FormatRegister(output, instruction, operand, instructionOperand, indexReg);
-				if (options->GetSpaceBetweenMemoryMulOperators())
+				if (options.GetSpaceBetweenMemoryMulOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
 				output->Write("*", FormatterTextKind::Operator);
-				if (options->GetSpaceBetweenMemoryMulOperators())
+				if (options.GetSpaceBetweenMemoryMulOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
@@ -1108,7 +1114,7 @@ namespace Iced::Intel
 		{
 			if (needPlus)
 			{
-				if (options->GetSpaceBetweenMemoryAddOperators())
+				if (options.GetSpaceBetweenMemoryAddOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
@@ -1120,7 +1126,7 @@ namespace Iced::Intel
 				{
 					output->Write("+", FormatterTextKind::Operator);
 				}
-				if (options->GetSpaceBetweenMemoryAddOperators())
+				if (options.GetSpaceBetweenMemoryAddOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
@@ -1129,16 +1135,16 @@ namespace Iced::Intel
 			{
 				output->Write("-", FormatterTextKind::Operator);
 			}
-			output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, absAddr, symbol, options->GetShowSymbolAddress(), false, options->GetSpaceBetweenMemoryAddOperators());
+			output->Write(instruction, operand, instructionOperand, options, numberFormatter, numberOptions, absAddr, symbol, options.GetShowSymbolAddress(), false, options.GetSpaceBetweenMemoryAddOperators());
 		}
-		else if (!needPlus || (displSize != 0 && (options->GetShowZeroDisplacements() || displ != 0)))
+		else if (!needPlus || (displSize != 0 && (options.GetShowZeroDisplacements() || displ != 0)))
 		{
 			std::uint64_t origDispl = static_cast<std::uint64_t>(displ);
 			bool isSigned;
 			if (needPlus)
 			{
 				isSigned = numberOptions.SignedNumber;
-				if (options->GetSpaceBetweenMemoryAddOperators())
+				if (options.GetSpaceBetweenMemoryAddOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
@@ -1203,7 +1209,7 @@ namespace Iced::Intel
 						displSize = 2;
 					}
 				}
-				if (options->GetSpaceBetweenMemoryAddOperators())
+				if (options.GetSpaceBetweenMemoryAddOperators())
 				{
 					output->Write(" ", FormatterTextKind::Text);
 				}
@@ -1240,7 +1246,7 @@ namespace Iced::Intel
 			}
 			output->WriteNumber(instruction, operand, instructionOperand, s, origDispl, displKind, FormatterTextKind::Number);
 		}
-		if (options->GetSpaceAfterMemoryBracket())
+		if (options.GetSpaceAfterMemoryBracket())
 		{
 			output->Write(" ", FormatterTextKind::Text);
 		}
@@ -1305,7 +1311,7 @@ namespace Iced::Intel
 
 	void NasmFormatter::FormatKeyword(FormatterOutput* output, FormatterString keyword)
 	{
-		output->Write(keyword.Get(options->GetUppercaseKeywords() || options->GetUppercaseAll()), FormatterTextKind::Keyword);
+		output->Write(keyword.Get(options.GetUppercaseKeywords() || options.GetUppercaseAll()), FormatterTextKind::Keyword);
 	}
 
 	std::string NasmFormatter::Format(Register register_)
@@ -1313,42 +1319,42 @@ namespace Iced::Intel
 		return ToRegisterString(register_);
 	}
 
-	std::string NasmFormatter::FormatInt8(std::int8_t value, NumberFormattingOptions const numberOptions)
+	std::string NasmFormatter::FormatInt8(std::int8_t value, const NumberFormattingOptions& numberOptions)
 	{
 		return numberFormatter.FormatInt8(options, numberOptions, value);
 	}
 
-	std::string NasmFormatter::FormatInt16(std::int16_t value, NumberFormattingOptions const numberOptions)
+	std::string NasmFormatter::FormatInt16(std::int16_t value, const NumberFormattingOptions& numberOptions)
 	{
 		return numberFormatter.FormatInt16(options, numberOptions, value);
 	}
 
-	std::string NasmFormatter::FormatInt32(std::int32_t value, NumberFormattingOptions const numberOptions)
+	std::string NasmFormatter::FormatInt32(std::int32_t value, const NumberFormattingOptions& numberOptions)
 	{
 		return numberFormatter.FormatInt32(options, numberOptions, value);
 	}
 
-	std::string NasmFormatter::FormatInt64(std::int64_t value, NumberFormattingOptions const numberOptions)
+	std::string NasmFormatter::FormatInt64(std::int64_t value, const NumberFormattingOptions& numberOptions)
 	{
 		return numberFormatter.FormatInt64(options, numberOptions, value);
 	}
 
-	std::string NasmFormatter::FormatUInt8(std::uint8_t value, NumberFormattingOptions const numberOptions)
+	std::string NasmFormatter::FormatUInt8(std::uint8_t value, const NumberFormattingOptions& numberOptions)
 	{
 		return numberFormatter.FormatUInt8(options, numberOptions, value);
 	}
 
-	std::string NasmFormatter::FormatUInt16(std::uint16_t value, NumberFormattingOptions const numberOptions)
+	std::string NasmFormatter::FormatUInt16(std::uint16_t value, const NumberFormattingOptions& numberOptions)
 	{
 		return numberFormatter.FormatUInt16(options, numberOptions, value);
 	}
 
-	std::string NasmFormatter::FormatUInt32(std::uint32_t value, NumberFormattingOptions const numberOptions)
+	std::string NasmFormatter::FormatUInt32(std::uint32_t value, const NumberFormattingOptions& numberOptions)
 	{
 		return numberFormatter.FormatUInt32(options, numberOptions, value);
 	}
 
-	std::string NasmFormatter::FormatUInt64(std::uint64_t value, NumberFormattingOptions const numberOptions)
+	std::string NasmFormatter::FormatUInt64(std::uint64_t value, const NumberFormattingOptions& numberOptions)
 	{
 		return numberFormatter.FormatUInt64(options, numberOptions, value);
 	}

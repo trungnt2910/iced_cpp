@@ -30,6 +30,8 @@
 #include <vector>
 #include <csharp/exceptionhelper.h>
 
+#include <string_view>
+
 //C# TO C++ CONVERTER NOTE: Forward class declarations:
 namespace Iced::Intel::DecoderInternal { class TableDeserializer; }
 
@@ -66,7 +68,7 @@ namespace Iced::Intel::DecoderInternal
 	class TableDeserializer
 	{
 	private:
-		Iced::Intel::Internal::DataReader reader;
+		Iced::Intel::Internal::DataReader<std::basic_string_view<std::uint8_t>> reader;
 		/* readonly */
 		OpCodeHandlerReader* handlerReader;
 		/* readonly */

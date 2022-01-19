@@ -119,7 +119,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		static constexpr std::int32_t OpAccess_ReadWrite = -static_cast<std::int32_t>(OpAccess::ReadWrite + 2);
 		static constexpr std::int32_t OpAccess_ReadCondWrite = -static_cast<std::int32_t>(OpAccess::ReadCondWrite + 2);
 		static constexpr std::int32_t OpAccess_NoMemAccess = -static_cast<std::int32_t>(OpAccess::NoMemAccess + 2);
-		virtual void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) = 0;
+		virtual void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) = 0;
 	protected:
 		static std::int32_t GetBitness(CodeSize codeSize);
 	};
@@ -133,7 +133,7 @@ namespace Iced::Intel::IntelFormatterInternal
 	public:
 		SimpleInstrInfo(const std::string& mnemonic);
 		SimpleInstrInfo(const std::string& mnemonic, InstrOpInfoFlags flags);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_cc final : public InstrInfo
 	{
@@ -144,7 +144,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		std::vector<FormatterString> mnemonics;
 	public:
 		SimpleInstrInfo_cc(std::int32_t ccIndex, const std::vector<std::string>& mnemonics);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_memsize final : public InstrInfo
 	{
@@ -155,7 +155,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_memsize(std::int32_t bitness, const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_StringIg1 final : public InstrInfo
 	{
@@ -164,7 +164,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_StringIg1(const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_StringIg0 final : public InstrInfo
 	{
@@ -173,7 +173,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_StringIg0(const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_nop final : public InstrInfo
 	{
@@ -189,7 +189,7 @@ namespace Iced::Intel::IntelFormatterInternal
 	private:
 		static FormatterString str_xchg;
 	public:
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_ST1 final : public InstrInfo
 	{
@@ -203,7 +203,7 @@ namespace Iced::Intel::IntelFormatterInternal
 	public:
 		SimpleInstrInfo_ST1(const std::string& mnemonic, InstrOpInfoFlags flags);
 		SimpleInstrInfo_ST1(const std::string& mnemonic, InstrOpInfoFlags flags, bool isLoad);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_ST2 final : public InstrInfo
 	{
@@ -214,7 +214,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		InstrOpInfoFlags flags = static_cast<InstrOpInfoFlags>(0);
 	public:
 		SimpleInstrInfo_ST2(const std::string& mnemonic, InstrOpInfoFlags flags);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_maskmovq final : public InstrInfo
 	{
@@ -223,7 +223,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_maskmovq(const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_os final : public InstrInfo
 	{
@@ -237,7 +237,7 @@ namespace Iced::Intel::IntelFormatterInternal
 	public:
 		SimpleInstrInfo_os(std::int32_t bitness, const std::string& mnemonic);
 		SimpleInstrInfo_os(std::int32_t bitness, const std::string& mnemonic, InstrOpInfoFlags flags);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_os_bnd final : public InstrInfo
 	{
@@ -248,7 +248,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_os_bnd(std::int32_t bitness, const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_as final : public InstrInfo
 	{
@@ -259,7 +259,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_as(std::int32_t bitness, const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_os_jcc final : public InstrInfo
 	{
@@ -275,7 +275,7 @@ namespace Iced::Intel::IntelFormatterInternal
 	public:
 		SimpleInstrInfo_os_jcc(std::int32_t bitness, std::int32_t ccIndex, const std::vector<std::string>& mnemonics);
 		SimpleInstrInfo_os_jcc(std::int32_t bitness, std::int32_t ccIndex, const std::vector<std::string>& mnemonics, InstrOpInfoFlags flags);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_os_loop final : public InstrInfo
 	{
@@ -290,7 +290,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		std::vector<FormatterString> mnemonics;
 	public:
 		SimpleInstrInfo_os_loop(std::int32_t bitness, std::int32_t ccIndex, Register register_, const std::vector<std::string>& mnemonics);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_movabs final : public InstrInfo
 	{
@@ -299,7 +299,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_movabs(const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_opmask_op final : public InstrInfo
 	{
@@ -308,7 +308,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_opmask_op(const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_bnd final : public InstrInfo
 	{
@@ -319,7 +319,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		InstrOpInfoFlags flags = static_cast<InstrOpInfoFlags>(0);
 	public:
 		SimpleInstrInfo_bnd(const std::string& mnemonic, InstrOpInfoFlags flags);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_ST_STi final : public InstrInfo
 	{
@@ -330,7 +330,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		bool pseudoOp = false;
 	public:
 		SimpleInstrInfo_ST_STi(const std::string& mnemonic, bool pseudoOp);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_STi_ST final : public InstrInfo
 	{
@@ -341,7 +341,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		bool pseudoOp = false;
 	public:
 		SimpleInstrInfo_STi_ST(const std::string& mnemonic, bool pseudoOp);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_pops final : public InstrInfo
 	{
@@ -352,7 +352,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		std::vector<FormatterString> pseudo_ops;
 	public:
 		SimpleInstrInfo_pops(const std::string& mnemonic, const std::vector<FormatterString>& pseudo_ops);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 		static void RemoveLastOp(InstrOpInfo& info);
 	};
 	class SimpleInstrInfo_pclmulqdq final : public InstrInfo
@@ -364,7 +364,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		std::vector<FormatterString> pseudo_ops;
 	public:
 		SimpleInstrInfo_pclmulqdq(const std::string& mnemonic, const std::vector<FormatterString>& pseudo_ops);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_imul final : public InstrInfo
 	{
@@ -373,7 +373,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_imul(const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_Reg16 final : public InstrInfo
 	{
@@ -382,7 +382,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_Reg16(const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_Reg32 final : public InstrInfo
 	{
@@ -391,7 +391,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_Reg32(const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_reg final : public InstrInfo
 	{
@@ -402,7 +402,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		Register register_ = static_cast<Register>(0);
 	public:
 		SimpleInstrInfo_reg(const std::string& mnemonic, Register register_);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_invlpga final : public InstrInfo
 	{
@@ -413,7 +413,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		FormatterString mnemonic;
 	public:
 		SimpleInstrInfo_invlpga(std::int32_t bitness, const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_DeclareData final : public InstrInfo
 	{
@@ -424,7 +424,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		InstrOpKind opKind = static_cast<InstrOpKind>(0);
 	public:
 		SimpleInstrInfo_DeclareData(Code code, const std::string& mnemonic);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 	class SimpleInstrInfo_bcst final : public InstrInfo
 	{
@@ -435,6 +435,6 @@ namespace Iced::Intel::IntelFormatterInternal
 		InstrOpInfoFlags flagsNoBroadcast = static_cast<InstrOpInfoFlags>(0);
 	public:
 		SimpleInstrInfo_bcst(const std::string& mnemonic, InstrOpInfoFlags flagsNoBroadcast);
-		void GetOpInfo(FormatterOptions* options, const Instruction& instruction, InstrOpInfo& info) override;
+		void GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info) override;
 	};
 }

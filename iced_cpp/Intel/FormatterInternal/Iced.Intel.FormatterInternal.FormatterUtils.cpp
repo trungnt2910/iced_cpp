@@ -258,7 +258,7 @@ namespace Iced::Intel::FormatterInternal
 			std::int32_t n = count;
 			if (n >= strings.size())
 			{
-				n = strings.size();
+				n = (std::int32_t)strings.size();
 			}
 			output->Write(strings[n - 1], FormatterTextKind::Text);
 			count -= n;
@@ -434,14 +434,14 @@ namespace Iced::Intel::FormatterInternal
 		}
 	}
 
-	bool FormatterUtils::ShowRepOrRepePrefix(Code code, FormatterOptions* options)
+	bool FormatterUtils::ShowRepOrRepePrefix(Code code, const FormatterOptions& options)
 	{
-		return ShowRepOrRepePrefix(code, options->GetShowUselessPrefixes());
+		return ShowRepOrRepePrefix(code, options.GetShowUselessPrefixes());
 	}
 
-	bool FormatterUtils::ShowRepnePrefix(Code code, FormatterOptions* options)
+	bool FormatterUtils::ShowRepnePrefix(Code code, const FormatterOptions& options)
 	{
-		return ShowRepnePrefix(code, options->GetShowUselessPrefixes());
+		return ShowRepnePrefix(code, options.GetShowUselessPrefixes());
 	}
 
 	Iced::Intel::PrefixKind FormatterUtils::GetSegmentRegisterPrefixKind(Register register_)
@@ -455,17 +455,17 @@ namespace Iced::Intel::FormatterInternal
 		return (PrefixKind)((register_ - Register::ES) + PrefixKind::ES);
 	}
 
-	bool FormatterUtils::ShowIndexScale(const Instruction& instruction, FormatterOptions* options)
+	bool FormatterUtils::ShowIndexScale(const Instruction& instruction, const FormatterOptions& options)
 	{
-		return options->GetShowUselessPrefixes() || !Iced::Intel::CodeExtensions::IgnoresIndex(instruction.GetCode());
+		return options.GetShowUselessPrefixes() || !Iced::Intel::CodeExtensions::IgnoresIndex(instruction.GetCode());
 	}
 
-	bool FormatterUtils::ShowSegmentPrefix(Register defaultSegReg, const Instruction& instruction, FormatterOptions* options)
+	bool FormatterUtils::ShowSegmentPrefix(Register defaultSegReg, const Instruction& instruction, const FormatterOptions& options)
 	{
-		return ShowSegmentPrefix(defaultSegReg, instruction, options->GetShowUselessPrefixes());
+		return ShowSegmentPrefix(defaultSegReg, instruction, options.GetShowUselessPrefixes());
 	}
 
-	bool FormatterUtils::CanShowRoundingControl(const Instruction& instruction, FormatterOptions* options)
+	bool FormatterUtils::CanShowRoundingControl(const Instruction& instruction, const FormatterOptions& options)
 	{
 		switch (instruction.GetCode())
 		{
@@ -473,7 +473,7 @@ namespace Iced::Intel::FormatterInternal
 		case Code::EVEX_Vcvtusi2sd_xmm_xmm_rm32_er:
 		case Code::EVEX_Vcvtdq2pd_zmm_k1z_ymmm256b32_er:
 		case Code::EVEX_Vcvtudq2pd_zmm_k1z_ymmm256b32_er:
-			return options->GetShowUselessPrefixes();
+			return options.GetShowUselessPrefixes();
 		default:
 			return true;
 		}

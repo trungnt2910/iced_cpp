@@ -1,17 +1,7 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
 
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+#include <csharp/enum.h>
 
 #pragma once
 
@@ -22,14 +12,9 @@
 #include <limits>
 #include <csharp/exceptionhelper.h>
 
-//C# TO C++ CONVERTER NOTE: Forward class declarations:
 namespace Iced::Intel { class FormatterOperandOptions; }
 namespace Iced::Intel { class NumberFormattingOptions; }
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel
 {
 	/// <summary>
@@ -46,7 +31,7 @@ namespace Iced::Intel
 		/// <param name="options">Options. Only those options that will be used by the formatter are initialized.</param>
 		/// <param name="numberOptions">Number formatting options</param>
 	public:
-		virtual void GetOperandOptions(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOperandOptions& options, NumberFormattingOptions& numberOptions) = 0;
+		constexpr virtual void GetOperandOptions(const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterOperandOptions& options, NumberFormattingOptions& numberOptions) = 0;
 	};
 	/// <summary>
 	/// Operand options
@@ -65,33 +50,69 @@ namespace Iced::Intel
 			MemorySizeMask = 3U << static_cast<std::int32_t>(MemorySizeShift)
 		};
 		DEFINE_FLAGS_FRIEND(Flags)
-			DEFINE_COMP_FRIEND(Flags)
-			DEFINE_ARITH_FRIEND(Flags)
+		DEFINE_COMP_FRIEND(Flags)
+		DEFINE_ARITH_FRIEND(Flags)
 
-			/// <summary>
-			/// Show branch size (eg. <c>SHORT</c>, <c>NEAR PTR</c>)
-			/// </summary>
+		/// <summary>
+		/// Show branch size (eg. <c>SHORT</c>, <c>NEAR PTR</c>)
+		/// </summary>
 	public:
-		/* readonly */
-		bool GetBranchSize() const;
-		void SetBranchSize(bool value);
+		constexpr bool GetBranchSize() const
+		{
+			return (flags & static_cast<std::uint32_t>(Flags::NoBranchSize)) == 0;
+		}
+		constexpr void SetBranchSize(bool value)
+		{
+			if (value)
+			{
+				flags &= ~static_cast<std::uint32_t>(Flags::NoBranchSize);
+			}
+			else
+			{
+				flags |= static_cast<std::uint32_t>(Flags::NoBranchSize);
+			}
+		}
 		/// <summary>
 		/// If <see langword="true"/>, show <c>RIP</c> relative addresses as <c>[rip+12345678h]</c>, else show the linear address eg. <c>[1029384756AFBECDh]</c>
 		/// </summary>
-		 /* readonly */
-		bool GetRipRelativeAddresses() const;
-		void SetRipRelativeAddresses(bool value);
+		constexpr bool GetRipRelativeAddresses() const
+		{
+			return (flags & static_cast<std::uint32_t>(Flags::RipRelativeAddresses)) != 0;
+		}
+		constexpr void SetRipRelativeAddresses(bool value)
+		{
+			if (value)
+			{
+				flags |= static_cast<std::uint32_t>(Flags::RipRelativeAddresses);
+			}
+			else
+			{
+				flags &= ~static_cast<std::uint32_t>(Flags::RipRelativeAddresses);
+			}
+		}
 		/// <summary>
 		/// Memory size options
 		/// </summary>
-		 /* readonly */
-		Iced::Intel::MemorySizeOptions GetMemorySizeOptions() const;
-		void SetMemorySizeOptions(Iced::Intel::MemorySizeOptions value);
-		FormatterOperandOptions(Flags flags);
-		FormatterOperandOptions(Iced::Intel::MemorySizeOptions options);
+		constexpr Iced::Intel::MemorySizeOptions GetMemorySizeOptions()
+		{
+			return static_cast<Iced::Intel::MemorySizeOptions>(flags >> static_cast<std::int32_t>(Flags::MemorySizeShift));
+		}
+		constexpr void SetMemorySizeOptions(Iced::Intel::MemorySizeOptions value)
+		{
+			flags = (flags & ~static_cast<std::uint32_t>(Flags::MemorySizeMask)) | (static_cast<std::uint32_t>(value) << static_cast<std::int32_t>(Flags::MemorySizeShift));
+		}
+		constexpr FormatterOperandOptions(Flags flags)
+		{
+			this->flags = static_cast<std::uint32_t>(flags);
+		}
+		constexpr FormatterOperandOptions(Iced::Intel::MemorySizeOptions options)
+		{
+			flags = static_cast<std::uint32_t>(options) << static_cast<std::int32_t>(Flags::MemorySizeShift);
+		}
 
-		FormatterOperandOptions() = default;
+		constexpr FormatterOperandOptions() = default;
 	};
+
 	/// <summary>
 	/// Gets initialized with the default options and can be overridden by a <see cref="IFormatterOptionsProvider"/>
 	/// </summary>
@@ -101,31 +122,19 @@ namespace Iced::Intel
 		/// Digit separator or <see langword="null"/>/empty string to not use a digit separator
 		/// </summary>
 	public:
-		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-		//ORIGINAL LINE: public string? DigitSeparator;
 		std::string DigitSeparator;
 		/// <summary>
 		/// Number prefix or <see langword="null"/>/empty string
 		/// </summary>
-	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-	  //ORIGINAL LINE: public string? Prefix;
 		std::string Prefix;
 		/// <summary>
 		/// Number suffix or <see langword="null"/>/empty string
 		/// </summary>
-	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-	  //ORIGINAL LINE: public string? Suffix;
 		std::string Suffix;
 		/// <summary>
 		/// Size of a digit group or 0 to not use a digit separator
 		/// </summary>
 		std::uint8_t DigitGroupSize = 0;
-		/// <summary>
-		/// Number base
-		/// </summary>
-		 /* readonly */
-		Iced::Intel::NumberBase GetNumberBase() const;
-		void SetNumberBase(Iced::Intel::NumberBase value);
 	private:
 		std::uint8_t numberBaseByteValue = 0;
 		/// <summary>
@@ -154,38 +163,37 @@ namespace Iced::Intel
 		/// </summary>
 		bool DisplacementLeadingZeros = false;
 		/// <summary>
+		/// Number base
+		/// </summary>
+		constexpr NumberBase GetNumberBase() const
+		{
+			return static_cast<Iced::Intel::NumberBase>(numberBaseByteValue);
+		}
+		constexpr void SetNumberBase(NumberBase value)
+		{
+			numberBaseByteValue = static_cast<std::uint8_t>(value);
+		}
+		/// <summary>
 		/// Creates options used when formatting immediate values
 		/// </summary>
 		/// <param name="options">Formatter options to use</param>
 		/// <returns></returns>
-	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-	  //ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static NumberFormattingOptions CreateImmediate(FormatterOptions options)
-		static NumberFormattingOptions CreateImmediate(FormatterOptions* options);
-		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal static NumberFormattingOptions CreateImmediateInternal(FormatterOptions options)
-		static NumberFormattingOptions CreateImmediateInternal(FormatterOptions* options);
+		static constexpr NumberFormattingOptions CreateImmediate(const FormatterOptions& options);
+		static constexpr NumberFormattingOptions CreateImmediateInternal(const FormatterOptions& options);
 		/// <summary>
 		/// Creates options used when formatting displacements
 		/// </summary>
 		/// <param name="options">Formatter options to use</param>
 		/// <returns></returns>
-	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-	  //ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static NumberFormattingOptions CreateDisplacement(FormatterOptions options)
-		static NumberFormattingOptions CreateDisplacement(FormatterOptions* options);
-		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal static NumberFormattingOptions CreateDisplacementInternal(FormatterOptions options)
-		static NumberFormattingOptions CreateDisplacementInternal(FormatterOptions* options);
+		static constexpr NumberFormattingOptions CreateDisplacement(const FormatterOptions& options);
+		static constexpr NumberFormattingOptions CreateDisplacementInternal(const FormatterOptions& options);
 		/// <summary>
 		/// Creates options used when formatting branch operands
 		/// </summary>
 		/// <param name="options">Formatter options to use</param>
 		/// <returns></returns>
-	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-	  //ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static NumberFormattingOptions CreateBranch(FormatterOptions options)
-		static NumberFormattingOptions CreateBranch(FormatterOptions* options);
-		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal static NumberFormattingOptions CreateBranchInternal(FormatterOptions options)
-		static NumberFormattingOptions CreateBranchInternal(FormatterOptions* options);
+		static constexpr NumberFormattingOptions CreateBranch(const FormatterOptions& options);
+		static constexpr NumberFormattingOptions CreateBranchInternal(const FormatterOptions& options);
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -193,8 +201,89 @@ namespace Iced::Intel
 		/// <param name="leadingZeros">Add leading zeros to numbers, eg. <c>1h</c> vs <c>00000001h</c></param>
 		/// <param name="signedNumber">Signed numbers if <see langword="true"/>, and unsigned numbers if <see langword="false"/></param>
 		/// <param name="displacementLeadingZeros">Add leading zeros to displacements</param>
-		NumberFormattingOptions(FormatterOptions* options, bool leadingZeros, bool signedNumber, bool displacementLeadingZeros);
+		constexpr NumberFormattingOptions(const FormatterOptions& options, bool leadingZeros, bool signedNumber, bool displacementLeadingZeros);
 
-		NumberFormattingOptions() = default;
+		constexpr NumberFormattingOptions() = default;
 	};
+
+	constexpr NumberFormattingOptions NumberFormattingOptions::CreateImmediate(const FormatterOptions& options)
+	{
+		return CreateImmediateInternal(options);
+	}
+
+	constexpr NumberFormattingOptions NumberFormattingOptions::CreateImmediateInternal(const FormatterOptions& options)
+	{
+		return NumberFormattingOptions(options, options.GetLeadingZeros(), options.GetSignedImmediateOperands(), false);
+	}
+
+	constexpr NumberFormattingOptions NumberFormattingOptions::CreateDisplacement(const FormatterOptions& options)
+	{
+		return CreateDisplacementInternal(options);
+	}
+
+	constexpr NumberFormattingOptions NumberFormattingOptions::CreateDisplacementInternal(const FormatterOptions& options)
+	{
+		return NumberFormattingOptions(options, options.GetLeadingZeros(), options.GetSignedMemoryDisplacements(), options.GetDisplacementLeadingZeros());
+	}
+
+	constexpr NumberFormattingOptions NumberFormattingOptions::CreateBranch(const FormatterOptions& options)
+	{
+		return CreateBranchInternal(options);
+	}
+
+	constexpr NumberFormattingOptions NumberFormattingOptions::CreateBranchInternal(const FormatterOptions& options)
+	{
+		return NumberFormattingOptions(options, options.GetBranchLeadingZeros(), false, false);
+	}
+
+	constexpr NumberFormattingOptions::NumberFormattingOptions(const FormatterOptions& options, bool leadingZeros, bool signedNumber, bool displacementLeadingZeros)
+	{
+		LeadingZeros = leadingZeros;
+		SignedNumber = signedNumber;
+		DisplacementLeadingZeros = displacementLeadingZeros;
+		numberBaseByteValue = static_cast<std::uint8_t>(options.GetNumberBase());
+		DigitSeparator = options.GetDigitSeparator();
+		UppercaseHex = options.GetUppercaseHex();
+		SmallHexNumbersInDecimal = options.GetSmallHexNumbersInDecimal();
+		AddLeadingZeroToHexNumbers = options.GetAddLeadingZeroToHexNumbers();
+		std::int32_t digitGroupSize;
+		switch (options.GetNumberBase())
+		{
+		case NumberBase::Hexadecimal:
+			Prefix = options.GetHexPrefix();
+			Suffix = options.GetHexSuffix();
+			digitGroupSize = options.GetHexDigitGroupSize();
+			break;
+		case NumberBase::Decimal:
+			Prefix = options.GetDecimalPrefix();
+			Suffix = options.GetDecimalSuffix();
+			digitGroupSize = options.GetDecimalDigitGroupSize();
+			break;
+		case NumberBase::Octal:
+			Prefix = options.GetOctalPrefix();
+			Suffix = options.GetOctalSuffix();
+			digitGroupSize = options.GetOctalDigitGroupSize();
+			break;
+		case NumberBase::Binary:
+			Prefix = options.GetBinaryPrefix();
+			Suffix = options.GetBinarySuffix();
+			digitGroupSize = options.GetBinaryDigitGroupSize();
+			break;
+		default:
+			throw InvalidOperationException();
+		}
+		if (digitGroupSize < 0)
+		{
+			DigitGroupSize = 0;
+		}
+		else if (digitGroupSize > std::numeric_limits<std::uint8_t>::max())
+		{
+			DigitGroupSize = std::numeric_limits<std::uint8_t>::max();
+		}
+		else
+		{
+			DigitGroupSize = static_cast<std::uint8_t>(digitGroupSize);
+		}
+	}
+
 }

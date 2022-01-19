@@ -49,11 +49,15 @@ namespace Iced::Intel
 		/// Gets the formatter options
 		/// </summary>
 	public:
-		FormatterOptions* GetOptions() const override;
+		const FormatterOptions& GetOptions() const override;
+		/// <summary>
+		/// Gets the formatter options
+		/// </summary>
+		FormatterOptions& GetOptions() override;
 	private:
 		static const std::string ImmediateValuePrefix;
 		/* readonly */
-		FormatterOptions* options;
+		FormatterOptions options;
 		/* readonly */
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: ISymbolResolver? symbolResolver;
@@ -84,7 +88,7 @@ namespace Iced::Intel
 		std::vector<FormatterString> mvexRegMemConsts64;
 		const std::vector<FormatterString>& GetAllRegisters() const
 		{
-			options->GetGasNakedRegisters() ? allRegistersNaked : allRegisters;
+			options.GetGasNakedRegisters() ? allRegistersNaked : allRegisters;
 		};
 		/// <summary>
 		/// Constructor
@@ -107,7 +111,7 @@ namespace Iced::Intel
 		/// <param name="optionsProvider">Operand options provider or null</param>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public GasFormatter(FormatterOptions? options, System.Nullable<ISymbolResolver> symbolResolver = null, System.Nullable<IFormatterOptionsProvider> optionsProvider = null)
-		GasFormatter(FormatterOptions* options, ISymbolResolver* symbolResolver = nullptr, IFormatterOptionsProvider* optionsProvider = nullptr);
+		GasFormatter(const FormatterOptions& options, ISymbolResolver* symbolResolver = nullptr, IFormatterOptionsProvider* optionsProvider = nullptr);
 	private:
 		static FormatterString str_bnd;
 		static FormatterString str_dot_byte;
@@ -231,55 +235,55 @@ namespace Iced::Intel
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		std::string FormatInt8(std::int8_t value, NumberFormattingOptions const numberOptions) override;
+		std::string FormatInt8(std::int8_t value, const NumberFormattingOptions& numberOptions) override;
 		/// <summary>
 		/// Formats a <see cref="short"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		std::string FormatInt16(std::int16_t value, NumberFormattingOptions const numberOptions) override;
+		std::string FormatInt16(std::int16_t value, const NumberFormattingOptions& numberOptions) override;
 		/// <summary>
 		/// Formats a <see cref="int"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		std::string FormatInt32(std::int32_t value, NumberFormattingOptions const numberOptions) override;
+		std::string FormatInt32(std::int32_t value, const NumberFormattingOptions& numberOptions) override;
 		/// <summary>
 		/// Formats a <see cref="long"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		std::string FormatInt64(std::int64_t value, NumberFormattingOptions const numberOptions) override;
+		std::string FormatInt64(std::int64_t value, const NumberFormattingOptions& numberOptions) override;
 		/// <summary>
 		/// Formats a <see cref="byte"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		std::string FormatUInt8(std::uint8_t value, NumberFormattingOptions const numberOptions) override;
+		std::string FormatUInt8(std::uint8_t value, const NumberFormattingOptions& numberOptions) override;
 		/// <summary>
 		/// Formats a <see cref="ushort"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		std::string FormatUInt16(std::uint16_t value, NumberFormattingOptions const numberOptions) override;
+		std::string FormatUInt16(std::uint16_t value, const NumberFormattingOptions& numberOptions) override;
 		/// <summary>
 		/// Formats a <see cref="uint"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		std::string FormatUInt32(std::uint32_t value, NumberFormattingOptions const numberOptions) override;
+		std::string FormatUInt32(std::uint32_t value, const NumberFormattingOptions& numberOptions) override;
 		/// <summary>
 		/// Formats a <see cref="ulong"/>
 		/// </summary>
 		/// <param name="value">Value</param>
 		/// <param name="numberOptions">Options</param>
 		/// <returns></returns>
-		std::string FormatUInt64(std::uint64_t value, NumberFormattingOptions const numberOptions) override;
+		std::string FormatUInt64(std::uint64_t value, const NumberFormattingOptions& numberOptions) override;
 	};
 }

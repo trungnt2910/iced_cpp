@@ -65,13 +65,13 @@ namespace Iced::Intel::FormatterInternal
 	public:
 		static bool IsCall(FormatterFlowControl kind);
 		static FormatterFlowControl GetFlowControl(const Instruction& instruction);
-		static bool ShowRepOrRepePrefix(Code code, FormatterOptions* options);
-		static bool ShowRepnePrefix(Code code, FormatterOptions* options);
+		static bool ShowRepOrRepePrefix(Code code, const FormatterOptions& options);
+		static bool ShowRepnePrefix(Code code, const FormatterOptions& options);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static PrefixKind GetSegmentRegisterPrefixKind(Register register)
 		static PrefixKind GetSegmentRegisterPrefixKind(Register register_);
-		static bool ShowIndexScale(const Instruction& instruction, FormatterOptions* options);
-		static bool ShowSegmentPrefix(Register defaultSegReg, const Instruction& instruction, FormatterOptions* options);
-		static bool CanShowRoundingControl(const Instruction& instruction, FormatterOptions* options);
+		static bool ShowIndexScale(const Instruction& instruction, const FormatterOptions& options);
+		static bool ShowSegmentPrefix(Register defaultSegReg, const Instruction& instruction, const FormatterOptions& options);
+		static bool CanShowRoundingControl(const Instruction& instruction, const FormatterOptions& options);
 	};
 }
