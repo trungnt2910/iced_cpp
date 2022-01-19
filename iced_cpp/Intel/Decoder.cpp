@@ -74,7 +74,7 @@ namespace Iced::Intel
 		// Initialize cctors that are used by decoder related methods. It doesn't speed up
 		// decoding much, but getting instruction info is a little faster.
 		// Is this relevant in C++?
-		//_ = OpCodeHandler_Invalid::Instance;
+		//_ = OpCodeHandler_Invalid::GetInstance();
 		//_ = InstructionMemorySizes::SizesNormal;
 		//_ = OpCodeHandler_D3NOW::CodeValues;
 		//_ = InstructionOpCounts::OpCount;
@@ -547,6 +547,10 @@ namespace Iced::Intel
 		{
 			if ((p0 & 8) == 0)
 			{
+#if !defined(NDEBUG)
+				state.flags |= (StateFlags)((std::uint32_t)EncodingKind::EVEX << (std::int32_t)StateFlags::EncodingShift);
+#endif
+
 				Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::None) == 0 ? 0 : -1);
 				Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::P66) == 1 ? 0 : -1);
 				Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);

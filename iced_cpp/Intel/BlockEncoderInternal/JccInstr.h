@@ -60,7 +60,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		TargetInstr targetInstr;
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: BlockData? pointerData;
-		BlockData* pointerData;
+		BlockData* pointerData = nullptr;
 		InstrKind instrKind = static_cast<InstrKind>(0);
 		/* readonly */
 		std::uint32_t shortInstructionSize = 0;

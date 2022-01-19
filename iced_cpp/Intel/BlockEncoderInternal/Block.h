@@ -41,9 +41,10 @@ namespace Iced::Intel::BlockEncoderInternal
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public List<RelocInfo>? relocInfos;
 		std::vector<RelocInfo> relocInfos;
-		std::vector<Instr*> GetInstructions() const;
+		const std::vector<std::shared_ptr<Instr>>& GetInstructions() const;
+		std::vector<std::shared_ptr<Instr>>& GetInstructions();
 	private:
-		std::vector<Instr*> instructions;
+		std::vector<std::shared_ptr<Instr>> instructions;
 		/* readonly */
 		std::vector<BlockData*> dataList;
 		/* readonly */
@@ -56,7 +57,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public Block(BlockEncoder blockEncoder, CodeWriter codeWriter, ulong rip, List<RelocInfo>? relocInfos)
 		Block(::Iced::Intel::BlockEncoder* blockEncoder, Iced::Intel::CodeWriter* codeWriter, std::uint64_t rip, const std::vector<RelocInfo>& relocInfos);
-		void SetInstructions(std::vector<Instr*>& instructions);
+		void SetInstructions(std::vector<std::shared_ptr<Instr>>& instructions);
 		BlockData* AllocPointerLocation();
 		void InitializeData();
 		void WriteData();

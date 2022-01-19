@@ -522,9 +522,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_NIb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -574,9 +572,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_Iz::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.mod == 3)
 		{
@@ -641,9 +637,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.mod == 3)
 		{
@@ -708,9 +702,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_Ib2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -763,9 +755,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_1::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -816,9 +806,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_CL::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -877,9 +865,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -930,9 +916,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Rv::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -966,9 +950,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Rv_32_64::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register baseReg;
 		if (decoder->is64bMode)
@@ -994,9 +976,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Rq::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		assert(state.mod == 3);
@@ -1016,9 +996,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_REXW::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -1070,9 +1048,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Evj::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -1143,9 +1119,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ep::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size64 && (decoder->options & DecoderOptions::AMD) == 0)
 		{
@@ -1179,9 +1153,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Evw::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -1229,9 +1201,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ew::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -1279,9 +1249,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ms::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -1309,9 +1277,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ev::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -1366,9 +1332,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gd_Rd::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -1395,9 +1359,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_M_as::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -1440,9 +1402,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gdq_Ev::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -1499,9 +1459,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ev3::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -1558,9 +1516,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ev2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -1613,9 +1569,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_R_C::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -1680,9 +1634,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_C_R::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -1747,9 +1699,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Jb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		state.flags |= StateFlags::BranchImm8;
 		if (decoder->is64bMode)
@@ -1793,9 +1743,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Jx::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		state.flags |= StateFlags::Xbegin;
 		if (decoder->is64bMode)
@@ -1847,9 +1795,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Jz::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -1896,9 +1842,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Jb2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		state.flags |= StateFlags::BranchImm8;
 		if (decoder->is64bMode)
@@ -1969,9 +1913,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Jdisp::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		assert(!decoder->is64bMode);
 		if (state.operandSize != OpSize::Size16)
@@ -1998,9 +1940,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_PushOpSizeReg::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -2038,9 +1978,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_PushEv::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -2116,9 +2054,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_Gv::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.mod == 3)
 		{
@@ -2177,9 +2113,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_Gv_32_64::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register baseReg;
 		if (decoder->is64bMode)
@@ -2217,9 +2151,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_Gv_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.mod == 3)
 		{
@@ -2278,9 +2210,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_Gv_CL::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.mod == 3)
 		{
@@ -2340,9 +2270,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Mp::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size64 && (decoder->options & DecoderOptions::AMD) == 0)
 		{
@@ -2385,9 +2313,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Eb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -2437,9 +2363,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ew::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -2518,9 +2442,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Simple2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -2545,9 +2467,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Simple2Iw::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -2574,9 +2494,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Simple3::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -2611,9 +2529,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Simple5::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -2638,9 +2554,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Simple5_ModRM_as::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -2667,9 +2581,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Simple4::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -2692,9 +2604,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_PushSimpleReg::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -2741,9 +2651,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_SimpleReg::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(static_cast<std::int32_t>(OpSize::Size16) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(OpSize::Size32) == 1 ? 0 : -1);
@@ -2761,16 +2669,11 @@ namespace Iced::Intel::DecoderInternal
 	{
 		assert(0 <= index && index <= 7);
 		this->index = index;
-		codes = s_codes;
 	}
-
-	std::vector<Code> OpCodeHandler_Xchg_Reg_rAX::s_codes = { Code::Nopw, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Nopd, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Nopq, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX };
 
 	void OpCodeHandler_Xchg_Reg_rAX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (index == 0 && state.mandatoryPrefix == MandatoryPrefixByte::PF3 && (decoder->options & DecoderOptions::NoPause) == 0)
 		{
@@ -2809,9 +2712,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Reg_Iz::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -2853,9 +2754,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_RegIb3::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register register_;
 		if ((state.flags & StateFlags::HasRex) != 0)
@@ -2882,9 +2781,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_RegIz2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -2925,9 +2822,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_PushIb2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -2970,9 +2865,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_PushIz::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -3014,9 +2907,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ma::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize != OpSize::Size16)
 		{
@@ -3045,9 +2936,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_RvMw_Gw::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register baseReg;
 		if (state.operandSize != OpSize::Size16)
@@ -3086,9 +2975,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ev_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.mod == 3)
 		{
@@ -3150,9 +3037,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ev_Ib_REX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -3186,9 +3071,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ev_32_64::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register baseReg;
 		if (decoder->is64bMode)
@@ -3234,9 +3117,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ev_Iz::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.mod == 3)
 		{
@@ -3298,9 +3179,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Yb_Reg::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.addressSize == OpSize::Size64)
@@ -3329,9 +3208,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Yv_Reg::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -3376,9 +3253,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Yv_Reg2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -3416,9 +3291,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Reg_Xb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -3447,9 +3320,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Reg_Xv::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -3494,9 +3365,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Reg_Xv2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -3534,9 +3403,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Reg_Yb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -3565,9 +3432,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Reg_Yv::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -3611,9 +3476,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Yb_Xb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.addressSize == OpSize::Size64)
@@ -3642,9 +3505,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Yv_Xv::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -3682,9 +3543,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Xb_Yb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.addressSize == OpSize::Size64)
@@ -3713,9 +3572,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Xv_Yv::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.addressSize == OpSize::Size64)
 		{
@@ -3755,9 +3612,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_Sw::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -3806,9 +3661,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_M_Sw::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -3834,9 +3687,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_M::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -3879,9 +3730,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Sw_Ev::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -3935,9 +3784,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Sw_M::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -3962,9 +3809,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ap::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize != OpSize::Size16)
 		{
@@ -3995,9 +3840,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Reg_Ob::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -4042,9 +3885,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ob_Reg::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		decoder->displIndex = state.instructionLength;
@@ -4090,9 +3931,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Reg_Ov::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		decoder->displIndex = state.instructionLength;
 		if (state.addressSize == OpSize::Size64)
@@ -4155,9 +3994,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ov_Reg::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		decoder->displIndex = state.instructionLength;
 		if (state.addressSize == OpSize::Size64)
@@ -4220,9 +4057,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_BranchIw::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -4293,9 +4128,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Iw_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (decoder->is64bMode)
 		{
@@ -4333,9 +4166,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Reg_Ib2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
@@ -4361,9 +4192,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_IbReg2::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetOp0Kind(OpKind::Immediate8);
 		instruction.SetInternalImmediate8(decoder->ReadByte());
@@ -4389,9 +4218,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_eAX_DX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize != OpSize::Size16)
 		{
@@ -4420,9 +4247,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_DX_eAX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
@@ -4456,9 +4281,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Eb_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -4491,9 +4314,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Eb_1::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -4524,9 +4345,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Eb_CL::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -4563,9 +4382,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Eb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -4602,9 +4419,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Eb_Gb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		std::uint32_t index;
@@ -4644,9 +4459,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gb_Eb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		std::uint32_t index = state.reg + state.extraRegisterBase;
@@ -4689,9 +4502,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_M::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -4728,9 +4539,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_M_REXW::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -4766,9 +4575,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MemBx::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		//instruction.MemoryDisplacement64 = 0;
@@ -4804,9 +4611,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_VW::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
@@ -4833,9 +4638,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_WV::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -4861,9 +4664,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_rDI_VX_RX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.addressSize == OpSize::Size64)
@@ -4900,9 +4701,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_rDI_P_N::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.addressSize == OpSize::Size64)
@@ -4939,9 +4738,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_VM::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -4965,9 +4762,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MV::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -4991,9 +4786,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_VQ::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -5019,9 +4812,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_P_Q::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -5047,9 +4838,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Q_P::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -5075,9 +4864,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MP::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -5101,9 +4888,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_P_Q_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -5131,9 +4916,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_P_W::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -5159,9 +4942,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_P_R::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -5187,9 +4968,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_P_Ev::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
 		if ((state.flags & StateFlags::W) != 0)
@@ -5226,9 +5005,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_P_Ev_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
 		if ((state.flags & StateFlags::W) != 0)
@@ -5267,9 +5044,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_P::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
 		if ((state.flags & StateFlags::W) != 0)
@@ -5306,9 +5081,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_W::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -5345,9 +5118,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_V_Ev::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
 		if (state.operandSize != OpSize::Size64)
@@ -5390,9 +5161,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_VWIb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -5427,9 +5196,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_VRIbIb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -5458,9 +5225,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_RIbIb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -5486,9 +5251,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_RIb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		if (state.mod == 3)
@@ -5513,9 +5276,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ed_V_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
 		if ((state.flags & StateFlags::W) != 0)
@@ -5554,9 +5315,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_VX_Ev::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
 		if ((state.flags & StateFlags::W) != 0)
@@ -5593,9 +5352,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_VX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
 		if ((state.flags & StateFlags::W) != 0)
@@ -5632,9 +5389,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_VX_E_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
 		if ((state.flags & StateFlags::W) != 0)
@@ -5673,9 +5428,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_RX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -5714,9 +5467,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_B_MIB::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.reg > 3 || (state.extraRegisterBase & decoder->invalidCheckMask) != 0)
 		{
@@ -5743,9 +5494,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MIB_B::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.reg > 3 || (state.extraRegisterBase & decoder->invalidCheckMask) != 0)
 		{
@@ -5773,9 +5522,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_B_BM::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.reg > 3 || (state.extraRegisterBase & decoder->invalidCheckMask) != 0)
 		{
@@ -5817,9 +5564,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_BM_B::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.reg > 3 || ((state.extraRegisterBase & decoder->invalidCheckMask) != 0))
 		{
@@ -5862,9 +5607,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_B_Ev::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.reg > 3 || (state.extraRegisterBase & decoder->invalidCheckMask) != 0)
 		{
@@ -5910,9 +5653,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Mv_Gv_REXW::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.mod == 3)
 		{
@@ -5947,9 +5688,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_N_Ib_REX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -5991,9 +5730,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_N::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -6032,9 +5769,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_VN::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -6061,9 +5796,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Mv::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.operandSize == OpSize::Size32)
 		{
@@ -6106,9 +5839,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Mv_Gv::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if (state.mod == 3)
 		{
@@ -6150,9 +5881,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Eb_REX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -6194,9 +5923,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Gv_Ev_REX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		if ((state.flags & StateFlags::W) != 0)
 		{
@@ -6240,9 +5967,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Ev_Gv_REX::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		assert(state.mod != 3);
 		instruction.SetOp0Kind(OpKind::Memory);
@@ -6271,9 +5996,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_GvM_VX_Ib::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Register gpr;
 		if ((state.flags & StateFlags::W) != 0)

@@ -18,7 +18,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	TargetInstr::TargetInstr(Instr* instruction)
+	TargetInstr::TargetInstr(std::shared_ptr<Instr> instruction)
 	{
 		this->instruction = instruction;
 		address = 0;

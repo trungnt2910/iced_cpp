@@ -20,7 +20,12 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	std::vector<Instr*> Block::GetInstructions() const
+	const std::vector<std::shared_ptr<Instr>>& Block::GetInstructions() const
+	{
+		return instructions;
+	}
+
+	std::vector<std::shared_ptr<Instr>>& Block::GetInstructions()
 	{
 		return instructions;
 	}
@@ -31,13 +36,13 @@ namespace Iced::Intel::BlockEncoderInternal
 	{
 		RIP = rip;
 		this->relocInfos = relocInfos;
-		instructions = System::Array2::Empty<Instr*>();
+		instructions = System::Array2::Empty<std::shared_ptr<Instr>>();
 		dataList = std::vector<BlockData*>();
 		alignment = static_cast<std::uint32_t>(blockEncoder->GetBitness()) / 8;
 		validData = std::vector<BlockData*>();
 	}
 
-	void Block::SetInstructions(std::vector<Instr*>& instructions)
+	void Block::SetInstructions(std::vector<std::shared_ptr<Instr>>& instructions)
 	{
 		this->instructions = instructions;
 	}
@@ -52,9 +57,9 @@ namespace Iced::Intel::BlockEncoderInternal
 	void Block::InitializeData()
 	{
 		std::uint64_t baseAddr;
-		if (GetInstructions().size() > 0)
+		if (instructions.size() > 0)
 		{
-			auto instr = GetInstructions()[GetInstructions().size() - 1];
+			const auto& instr = instructions.back();
 			baseAddr = instr->IP + instr->Size;
 		}
 		else

@@ -39,7 +39,8 @@ namespace Iced::Intel::DecoderInternal
 	{
 		this->handlerReader = handlerReader;
 		reader = DataReader(data);
-		idToHandler = std::vector<HandlerInfo>(maxIds);
+		idToHandler = std::vector<HandlerInfo>();
+		idToHandler.reserve(maxIds);
 		handlerArray = std::vector<std::shared_ptr<OpCodeHandler>>(1);
 	}
 

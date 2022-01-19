@@ -54,9 +54,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_M::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
@@ -90,9 +88,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_MV::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
@@ -134,9 +130,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_VW::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
@@ -212,9 +206,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_HWIb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -288,9 +280,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_VWIb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		if ((state.vvvv_invalidCheck & decoder->invalidCheckMask) != 0)
 		{
@@ -368,9 +358,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_VHW::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -449,9 +437,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_VHWIb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -528,9 +514,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_VKW::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		if ((state.vvvv & decoder->invalidCheckMask) > 7)
 		{
@@ -609,9 +593,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_KHW::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -690,9 +672,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_KHWIb::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		instruction.SetCode(code);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -773,9 +753,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_VSIB::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		if (decoder->invalidCheckMask != 0 && ((state.vvvv_invalidCheck & 0xF) != 0 || state.aaa == 0))
 		{
@@ -814,9 +792,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_VSIB_V::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		if (decoder->invalidCheckMask != 0 && ((state.vvvv_invalidCheck & 0xF) != 0 || state.aaa == 0))
 		{
@@ -858,9 +834,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_MVEX_V_VSIB::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::MVEX);
 		if (decoder->invalidCheckMask != 0 && ((state.vvvv_invalidCheck & 0xF) != 0 || state.aaa == 0))
 		{

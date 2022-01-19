@@ -33,11 +33,11 @@ namespace Iced::Intel::BlockEncoderInternal
 	private:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: Instr? instruction;
-		Instr* instruction = nullptr;
+		std::shared_ptr<Instr> instruction = nullptr;
 		/* readonly */
 		std::uint64_t address = 0;
 	public:
-		TargetInstr(Instr* instruction);
+		TargetInstr(std::shared_ptr<Instr> instruction);
 		TargetInstr(std::uint64_t address);
 		bool IsInBlock(Block* block);
 		std::uint64_t GetAddress();

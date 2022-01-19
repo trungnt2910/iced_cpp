@@ -199,7 +199,7 @@ namespace Iced::Intel::FormatterInternal
 		auto strings = std::vector<std::string>(max);
 		for (std::int32_t i = 0; i < strings.size(); i++)
 		{
-			strings[i] = std::string(c, i + 1);
+			strings[i] = std::string(i + 1, c);
 		}
 		return strings;
 	}

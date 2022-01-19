@@ -34,7 +34,13 @@ namespace Iced::Intel::DecoderInternal
 	{
 	}
 
-	std::shared_ptr<OpCodeHandler_Invalid> OpCodeHandler_Invalid::Instance = std::shared_ptr<OpCodeHandler_Invalid>(new OpCodeHandler_Invalid);
+	std::shared_ptr<OpCodeHandler_Invalid> OpCodeHandler_Invalid::Instance = OpCodeHandler_Invalid::GetInstance();
+
+	std::shared_ptr<OpCodeHandler_Invalid> OpCodeHandler_Invalid::GetInstance()
+	{
+		static auto instance = std::shared_ptr<OpCodeHandler_Invalid>(new OpCodeHandler_Invalid);
+		return instance;
+	}
 
 	OpCodeHandler_Invalid::OpCodeHandler_Invalid()
 	{
@@ -45,7 +51,13 @@ namespace Iced::Intel::DecoderInternal
 		decoder->SetInvalidInstruction();
 	}
 
-	std::shared_ptr<OpCodeHandler_Invalid_NoModRM> OpCodeHandler_Invalid_NoModRM::Instance = std::shared_ptr<OpCodeHandler_Invalid_NoModRM>(new OpCodeHandler_Invalid_NoModRM);
+	std::shared_ptr<OpCodeHandler_Invalid_NoModRM> OpCodeHandler_Invalid_NoModRM::Instance = OpCodeHandler_Invalid_NoModRM::GetInstance();
+
+	std::shared_ptr<OpCodeHandler_Invalid_NoModRM> OpCodeHandler_Invalid_NoModRM::GetInstance()
+	{
+		static auto instance = std::shared_ptr<OpCodeHandler_Invalid_NoModRM>(new OpCodeHandler_Invalid_NoModRM);
+		return instance;
+	}
 
 	OpCodeHandler_Invalid_NoModRM::OpCodeHandler_Invalid_NoModRM()
 	{
@@ -92,9 +104,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Group8x8::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		std::shared_ptr<OpCodeHandler> handler;
 		if (state.mod == 3)
 		{
@@ -125,9 +135,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_Group8x64::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		std::shared_ptr<OpCodeHandler> handler;
 		if (state.mod == 3)
 		{
@@ -165,7 +173,7 @@ namespace Iced::Intel::DecoderInternal
 		decoder->DecodeTable(otherTable, instruction);
 	}
 
-	OpCodeHandler_MandatoryPrefix2::OpCodeHandler_MandatoryPrefix2(std::shared_ptr<OpCodeHandler> handler) : OpCodeHandler_MandatoryPrefix2(handler, OpCodeHandler_Invalid::Instance, OpCodeHandler_Invalid::Instance, OpCodeHandler_Invalid::Instance)
+	OpCodeHandler_MandatoryPrefix2::OpCodeHandler_MandatoryPrefix2(std::shared_ptr<OpCodeHandler> handler) : OpCodeHandler_MandatoryPrefix2(handler, OpCodeHandler_Invalid::GetInstance(), OpCodeHandler_Invalid::GetInstance(), OpCodeHandler_Invalid::GetInstance())
 	{
 	}
 

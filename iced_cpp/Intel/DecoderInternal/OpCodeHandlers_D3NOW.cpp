@@ -63,9 +63,7 @@ namespace Iced::Intel::DecoderInternal
 
 	void OpCodeHandler_D3NOW::Decode(Decoder* decoder, Instruction& instruction)
 	{
-		//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: ref var state = ref decoder.state;
-		auto state = decoder->state;
+		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::Legacy);
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;

@@ -49,8 +49,10 @@ namespace Iced::Intel::DecoderInternal
 	};
 	class OpCodeHandler_Invalid final : public OpCodeHandlerModRM
 	{
-	public:
+	private:
 		static std::shared_ptr<OpCodeHandler_Invalid> Instance;
+	public:
+		static std::shared_ptr<OpCodeHandler_Invalid> GetInstance();
 	private:
 		OpCodeHandler_Invalid();
 	public:
@@ -58,8 +60,10 @@ namespace Iced::Intel::DecoderInternal
 	};
 	class OpCodeHandler_Invalid_NoModRM final : public OpCodeHandler
 	{
-	public:
+	private:
 		static std::shared_ptr<OpCodeHandler_Invalid_NoModRM> Instance;
+	public:
+		static std::shared_ptr<OpCodeHandler_Invalid_NoModRM> GetInstance();
 	private:
 		OpCodeHandler_Invalid_NoModRM();
 	public:

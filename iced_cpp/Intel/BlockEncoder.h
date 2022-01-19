@@ -177,7 +177,7 @@ namespace Iced::Intel
 		/* readonly */
 		Encoder* nullEncoder;
 		/* readonly */
-		std::unordered_map<std::uint64_t, Iced::Intel::BlockEncoderInternal::Instr*> toInstr;
+		std::unordered_map<std::uint64_t, std::shared_ptr<Iced::Intel::BlockEncoderInternal::Instr>> toInstr;
 	public:
 		std::int32_t GetBitness() const;
 		bool GetFixBranches() const;

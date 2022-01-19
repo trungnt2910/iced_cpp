@@ -79,10 +79,6 @@ namespace Iced::Intel
 		{
 			throw ArgumentOutOfRangeException("bitness");
 		}
-		if (instrBlocks.empty())
-		{
-			throw std::invalid_argument("instrBlocks");
-		}
 		this->bitness = bitness;
 		nullEncoder = Encoder::Create(bitness, NullCodeWriter::Instance);
 		this->options = options;
@@ -91,15 +87,15 @@ namespace Iced::Intel
 		for (std::int32_t i = 0; i < instrBlocks.size(); i++)
 		{
 			auto instructions = instrBlocks[i].Instructions;
-			if (instructions.empty())
-			{
-				//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires an argument:
-				//ORIGINAL LINE: throw new ArgumentException();
-				throw std::invalid_argument("No instructions");
-			}
+			//if (instructions.empty())
+			//{
+			//	//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires an argument:
+			//	//ORIGINAL LINE: throw new ArgumentException();
+			//	throw std::invalid_argument("No instructions");
+			//}
 			auto block = new Block(this, instrBlocks[i].CodeWriter, instrBlocks[i].RIP, GetReturnRelocInfos() ? std::vector<RelocInfo>() : std::vector<RelocInfo>());
 			blocks[i] = block;
-			auto instrs = std::vector<Instr*>(instructions.size());
+			auto instrs = std::vector<std::shared_ptr<Instr>>(instructions.size());
 			std::uint64_t ip = instrBlocks[i].RIP;
 			for (std::int32_t j = 0; j < instrs.size(); j++)
 			{
@@ -120,15 +116,14 @@ namespace Iced::Intel
 			});
 
 		// There must not be any instructions with the same IP, except if IP = 0 (default value)
-		auto toInstr = std::unordered_map<std::uint64_t, Instr*>(instrCount);
-		this->toInstr = toInstr;
+		toInstr = std::unordered_map<std::uint64_t, std::shared_ptr<Instr>>(instrCount);
 		bool hasMultipleZeroIPInstrs = false;
 		for (auto block : blocks)
 		{
 			for (auto instr : block->GetInstructions())
 			{
 				std::uint64_t origIP = instr->OrigIP;
-				std::unordered_map<std::uint64_t, Instr*>::const_iterator toInstr_iterator = toInstr.find(origIP);
+				std::unordered_map<std::uint64_t, std::shared_ptr<Instr>>::const_iterator toInstr_iterator = toInstr.find(origIP);
 				if (toInstr_iterator != toInstr.end())
 				{
 					if (origIP != 0)
@@ -295,8 +290,8 @@ namespace Iced::Intel
 
 	TargetInstr BlockEncoder::GetTarget(std::uint64_t address)
 	{
-		Instr* instr;
-		std::unordered_map<std::uint64_t, Instr*>::const_iterator toInstr_iterator = toInstr.find(address);
+		std::shared_ptr<Instr> instr;
+		std::unordered_map<std::uint64_t, std::shared_ptr<Instr>>::const_iterator toInstr_iterator = toInstr.find(address);
 		if (toInstr_iterator != toInstr.end())
 		{
 			instr = toInstr_iterator->second;

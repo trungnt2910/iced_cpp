@@ -1806,9 +1806,7 @@ namespace Iced::Intel
 				assert(info.usedMemoryLocations.ValidLength == 1);
 				if (instruction.GetMemoryBase() == Register::RSP || instruction.GetMemoryBase() == Register::ESP)
 				{
-					//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-					//ORIGINAL LINE: ref var mem = ref info.usedMemoryLocations.Array[0];
-					auto mem = info.usedMemoryLocations.Array[0];
+					const auto& mem = info.usedMemoryLocations.Array[0];
 					auto displ = mem.GetDisplacement() + opSize;
 					if (instruction.GetMemoryBase() == Register::ESP)
 					{
@@ -2807,9 +2805,7 @@ namespace Iced::Intel
 		{
 			if (info.usedMemoryLocations.ValidLength == 1)
 			{
-				//C# TO C++ CONVERTER TODO TASK: 'ref locals' are not converted by C# to C++ Converter:
-				//ORIGINAL LINE: ref var mem = ref info.usedMemoryLocations.Array[0];
-				auto mem = info.usedMemoryLocations.Array[0];
+				const auto& mem = info.usedMemoryLocations.Array[0];
 				auto switchTempVar_2 = mem.GetAddressSize();
 
 

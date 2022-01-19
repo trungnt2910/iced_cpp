@@ -22,6 +22,7 @@
 #include "../Code.g.h"
 #include "LegacyHandlerFlags.g.h"
 #include "HandlerFlags.g.h"
+#include <array>
 #include <vector>
 #include <limits>
 #include <stdexcept>
@@ -891,15 +892,15 @@ namespace Iced::Intel::DecoderInternal
 	};
 	class OpCodeHandler_Xchg_Reg_rAX final : public OpCodeHandler
 	{
+	private:
+		inline constexpr static std::array s_codes = std::to_array<Code>({ Code::Nopw, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Xchg_r16_AX, Code::Nopd, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Xchg_r32_EAX, Code::Nopq, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX, Code::Xchg_r64_RAX });
 		/* readonly */
 	private:
 		std::int32_t index = 0;
 		/* readonly */
-		std::vector<Code> codes;
+		const decltype(s_codes)& codes = s_codes;
 	public:
 		OpCodeHandler_Xchg_Reg_rAX(std::int32_t index);
-	private:
-		static std::vector<Code> s_codes;
 	public:
 		void Decode(Decoder* decoder, Instruction& instruction) override;
 	};
