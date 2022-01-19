@@ -18,7 +18,7 @@
 namespace Iced::Intel
 {
 
-	void Formatter::FormatMnemonic(const Instruction& instruction, FormatterOutput* output)
+	void Formatter::FormatMnemonic(const Instruction& instruction, FormatterOutput& output)
 	{
 		FormatMnemonic(instruction, output, FormatMnemonicOptions::None);
 	}

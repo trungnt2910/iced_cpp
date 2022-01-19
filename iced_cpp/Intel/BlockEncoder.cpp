@@ -73,33 +73,28 @@ namespace Iced::Intel
 	{
 	}
 
-	BlockEncoder::BlockEncoder(std::int32_t bitness, const std::vector<InstructionBlock>& instrBlocks, BlockEncoderOptions options)
+	BlockEncoder::BlockEncoder(std::int32_t bitness, const std::vector<InstructionBlock>& instrBlocks, BlockEncoderOptions options) : nullEncoder(Encoder::Create(bitness, NullCodeWriter::Instance))
 	{
 		if (bitness != 16 && bitness != 32 && bitness != 64)
 		{
 			throw ArgumentOutOfRangeException("bitness");
 		}
 		this->bitness = bitness;
-		nullEncoder = Encoder::Create(bitness, NullCodeWriter::Instance);
 		this->options = options;
-		blocks = std::vector<Block*>(instrBlocks.size());
+		// Use pointers here, for std::sort performance. Also, blocks are thrown
+		// around in `Instr`s.
+		blocks = std::vector<std::shared_ptr<Block>>(instrBlocks.size());
 		std::int32_t instrCount = 0;
 		for (std::int32_t i = 0; i < instrBlocks.size(); i++)
 		{
-			auto instructions = instrBlocks[i].Instructions;
-			//if (instructions.empty())
-			//{
-			//	//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires an argument:
-			//	//ORIGINAL LINE: throw new ArgumentException();
-			//	throw std::invalid_argument("No instructions");
-			//}
-			auto block = new Block(this, instrBlocks[i].CodeWriter, instrBlocks[i].RIP, GetReturnRelocInfos() ? std::vector<RelocInfo>() : std::vector<RelocInfo>());
+			const auto& instructions = instrBlocks[i].Instructions;
+			auto block = std::make_shared<Block>(this, instrBlocks[i].CodeWriter, instrBlocks[i].RIP, GetReturnRelocInfos() ? std::vector<RelocInfo>() : std::vector<RelocInfo>());
 			blocks[i] = block;
 			auto instrs = std::vector<std::shared_ptr<Instr>>(instructions.size());
 			std::uint64_t ip = instrBlocks[i].RIP;
 			for (std::int32_t j = 0; j < instrs.size(); j++)
 			{
-				auto instruction = instructions[j];
+				const auto& instruction = instructions[j];
 				auto instr = Instr::Create(this, block, instruction);
 				instr->IP = ip;
 				instrs[j] = instr;
@@ -110,7 +105,7 @@ namespace Iced::Intel
 			block->SetInstructions(instrs);
 		}
 		// Optimize from low to high addresses
-		std::sort(blocks.begin(), blocks.end(), [](Block* a, Block* b)
+		std::sort(blocks.begin(), blocks.end(), [](const std::shared_ptr<Block>& a, const std::shared_ptr<Block>& b)
 			{
 				return a->RIP < b->RIP;
 			});
@@ -118,9 +113,9 @@ namespace Iced::Intel
 		// There must not be any instructions with the same IP, except if IP = 0 (default value)
 		toInstr = std::unordered_map<std::uint64_t, std::shared_ptr<Instr>>(instrCount);
 		bool hasMultipleZeroIPInstrs = false;
-		for (auto block : blocks)
+		for (auto& block : blocks)
 		{
-			for (auto instr : block->GetInstructions())
+			for (auto& instr : block->GetInstructions())
 			{
 				std::uint64_t origIP = instr->OrigIP;
 				std::unordered_map<std::uint64_t, std::shared_ptr<Instr>>::const_iterator toInstr_iterator = toInstr.find(origIP);
@@ -142,10 +137,10 @@ namespace Iced::Intel
 		{
 			toInstr.erase(0);
 		}
-		for (auto block : blocks)
+		for (auto& block : blocks)
 		{
 			std::uint64_t ip = block->RIP;
-			for (auto instr : block->GetInstructions())
+			for (auto& instr : block->GetInstructions())
 			{
 				instr->IP = ip;
 				auto oldSize = instr->Size;
@@ -196,11 +191,11 @@ namespace Iced::Intel
 		for (std::int32_t iter = 0; iter < MAX_ITERS; iter++)
 		{
 			bool updated = false;
-			for (auto block : blocks)
+			for (auto& block : blocks)
 			{
 				std::uint64_t ip = block->RIP;
 				std::uint64_t gained = 0;
-				for (auto instr : block->GetInstructions())
+				for (auto& instr : block->GetInstructions())
 				{
 					instr->IP = ip;
 					auto oldSize = instr->Size;
@@ -230,7 +225,7 @@ namespace Iced::Intel
 				break;
 			}
 		}
-		for (auto block : blocks)
+		for (auto& block : blocks)
 		{
 			block->InitializeData();
 		}
@@ -307,7 +302,7 @@ namespace Iced::Intel
 	{
 		std::uint32_t size;
 		std::string _;
-		if (!nullEncoder->TryEncode(instruction, ip, size, _))
+		if (!nullEncoder.TryEncode(instruction, ip, size, _))
 		{
 			size = IcedConstants::MaxInstructionLength;
 		}

@@ -20,7 +20,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	SimpleBranchInstr::SimpleBranchInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction) : Instr(block, instruction.GetIP())
+	SimpleBranchInstr::SimpleBranchInstr(BlockEncoder* blockEncoder, std::shared_ptr<class Block> block, const Instruction& instruction) : Instr(block, instruction.GetIP())
 	{
 		bitness = blockEncoder->GetBitness();
 		this->instruction = instruction;
@@ -173,6 +173,11 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	bool SimpleBranchInstr::TryOptimize(std::uint64_t gained)
 	{
+		auto Block = this->Block.lock();
+		if (!Block)
+		{
+			throw std::runtime_error("block has been destroyed.");
+		}
 		if (instrKind == InstrKind::Unchanged || instrKind == InstrKind::Short)
 		{
 			return false;
@@ -221,7 +226,7 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public override string? TryEncode(Encoder encoder, out ConstantOffsets constantOffsets, out bool isOriginalInstruction)
-	std::string SimpleBranchInstr::TryEncode(Encoder* encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction)
+	std::string SimpleBranchInstr::TryEncode(Encoder& encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction)
 	{
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: string? errorMessage;
@@ -236,12 +241,12 @@ namespace Iced::Intel::BlockEncoderInternal
 			isOriginalInstruction = true;
 			instruction.SetNearBranch64(targetInstr.GetAddress());
 			std::uint32_t _;
-			if (!encoder->TryEncode(instruction, IP, _, errorMessage))
+			if (!encoder.TryEncode(instruction, IP, _, errorMessage))
 			{
 				constantOffsets = Iced::Intel::ConstantOffsets();
 				return CreateErrorMessage(errorMessage, instruction);
 			}
-			constantOffsets = encoder->GetConstantOffsets();
+			constantOffsets = encoder.GetConstantOffsets();
 			return "";
 		case InstrKind::Near:
 		{
@@ -256,14 +261,14 @@ namespace Iced::Intel::BlockEncoderInternal
 			instr = instruction;
 			instr.InternalSetCodeNoCheck(nativeCode);
 			instr.SetNearBranch64(IP + nativeInstructionSize + 2);
-			if (!encoder->TryEncode(instr, IP, size, errorMessage))
+			if (!encoder.TryEncode(instr, IP, size, errorMessage))
 			{
 				return CreateErrorMessage(errorMessage, instruction);
 			}
 			instr = Instruction();
 			instr.SetNearBranch64(IP + nearInstructionSize);
 			Code codeNear;
-			switch (encoder->GetBitness())
+			switch (encoder.GetBitness())
 			{
 			case 16:
 				instr.InternalSetCodeNoCheck(Code::Jmp_rel8_16);
@@ -283,14 +288,14 @@ namespace Iced::Intel::BlockEncoderInternal
 			default:
 				throw InvalidOperationException();
 			}
-			if (!encoder->TryEncode(instr, IP + size, instrLen, errorMessage))
+			if (!encoder.TryEncode(instr, IP + size, instrLen, errorMessage))
 			{
 				return CreateErrorMessage(errorMessage, instruction);
 			}
 			size += instrLen;
 			instr.InternalSetCodeNoCheck(codeNear);
 			instr.SetNearBranch64(targetInstr.GetAddress());
-			encoder->TryEncode(instr, IP + size, instrLen, errorMessage);
+			encoder.TryEncode(instr, IP + size, instrLen, errorMessage);
 			if (errorMessage != "")
 			{
 				return CreateErrorMessage(errorMessage, instruction);
@@ -298,7 +303,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			return "";
 		}
 		case InstrKind::Long:
-			assert(encoder->GetBitness() == 64);
+			assert(encoder.GetBitness() == 64);
 			System::Diagnostics::Debug2::Assert(pointerData != nullptr);
 			isOriginalInstruction = false;
 			constantOffsets = Iced::Intel::ConstantOffsets();
@@ -312,14 +317,14 @@ namespace Iced::Intel::BlockEncoderInternal
 			instr = instruction;
 			instr.InternalSetCodeNoCheck(nativeCode);
 			instr.SetNearBranch64(IP + nativeInstructionSize + 2);
-			if (!encoder->TryEncode(instr, IP, instrLen, errorMessage))
+			if (!encoder.TryEncode(instr, IP, instrLen, errorMessage))
 			{
 				return CreateErrorMessage(errorMessage, instruction);
 			}
 			size = instrLen;
 			instr = Instruction();
 			instr.SetNearBranch64(IP + longInstructionSize);
-			switch (encoder->GetBitness())
+			switch (encoder.GetBitness())
 			{
 			case 16:
 				instr.InternalSetCodeNoCheck(Code::Jmp_rel8_16);
@@ -336,7 +341,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			default:
 				throw InvalidOperationException();
 			}
-			if (!encoder->TryEncode(instr, IP + size, instrLen, errorMessage))
+			if (!encoder.TryEncode(instr, IP + size, instrLen, errorMessage))
 			{
 				return CreateErrorMessage(errorMessage, instruction);
 			}

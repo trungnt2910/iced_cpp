@@ -19,7 +19,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	IpRelMemOpInstr::IpRelMemOpInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction) : Instr(block, instruction.GetIP())
+	IpRelMemOpInstr::IpRelMemOpInstr(BlockEncoder* blockEncoder, std::shared_ptr<class Block> block, const Instruction& instruction) : Instr(block, instruction.GetIP())
 	{
 		assert(instruction.IsIPRelativeMemoryOperand());
 		this->instruction = instruction;
@@ -47,6 +47,11 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	bool IpRelMemOpInstr::TryOptimize(std::uint64_t gained)
 	{
+		auto Block = this->Block.lock();
+		if (!Block)
+		{
+			throw std::runtime_error("block has been destroyed.");
+		}
 		if (instrKind == InstrKind::Unchanged || instrKind == InstrKind::Rip || instrKind == InstrKind::Eip)
 		{
 			return false;
@@ -80,7 +85,7 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public override string? TryEncode(Encoder encoder, out ConstantOffsets constantOffsets, out bool isOriginalInstruction)
-	std::string IpRelMemOpInstr::TryEncode(Encoder* encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction)
+	std::string IpRelMemOpInstr::TryEncode(Encoder& encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction)
 	{
 		switch (instrKind)
 		{
@@ -105,7 +110,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			instruction.SetMemoryDisplacement64(targetAddress);
 			std::string errorMessage;
 			uint32_t _;
-			encoder->TryEncode(instruction, IP, _, errorMessage);
+			encoder.TryEncode(instruction, IP, _, errorMessage);
 			bool b = instruction.GetIPRelativeMemoryAddress() == (instruction.GetMemoryBase() == Register::EIP ? static_cast<std::uint32_t>(targetAddress) : targetAddress);
 			assert(b);
 			if (!b)
@@ -117,7 +122,7 @@ namespace Iced::Intel::BlockEncoderInternal
 				constantOffsets = Iced::Intel::ConstantOffsets();
 				return CreateErrorMessage(errorMessage, instruction);
 			}
-			constantOffsets = encoder->GetConstantOffsets();
+			constantOffsets = encoder.GetConstantOffsets();
 			return "";
 		}
 		case InstrKind::Long:

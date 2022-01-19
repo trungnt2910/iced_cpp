@@ -3850,11 +3850,11 @@ namespace Iced::Intel
 	std::string Instruction::ToString() const
 	{
 		// If the order of #if/elif checks gets updated, also update the `Instruction_ToString()` test method
-		auto output = new StringOutput();
+		StringOutput output;
 		MasmFormatter tempVar;
 		tempVar.Format(*this, output);
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		return output->ToString();
+		return output.ToString();
 	}
 
 	std::int32_t Instruction::GetStackPointerIncrement() const

@@ -46,11 +46,9 @@ namespace Iced::Intel
 		this->bufferLen = bufferLen + 1;
 	}
 
-	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-	//ORIGINAL LINE: public void Append(string? value)
-	void FastStringOutput::Append(const std::string& value)
+	void FastStringOutput::Append(const char* value)
 	{
-		if (value != "")
+		if (value != nullptr)
 		{
 			AppendNotNull(value);
 		}
@@ -58,14 +56,28 @@ namespace Iced::Intel
 
 	void FastStringOutput::AppendNotNull(const std::string& value)
 	{
+		AppendNotNull(value.c_str(), (std::int32_t)value.size());
+	}
+
+	void FastStringOutput::AppendNotNull(const std::string_view& value)
+	{
+		AppendNotNull(value.data(), (std::int32_t)value.size());
+	}
+
+	void FastStringOutput::AppendNotNull(const char* value, std::int32_t length)
+	{
+		if (length < 0)
+		{
+			length = strlen(value);
+		}
 		auto buffer = this->buffer;
 		auto bufferLen = this->bufferLen;
-		if (static_cast<std::uint32_t>(bufferLen) + value.length() > static_cast<std::uint32_t>(buffer.size()))
+		if (static_cast<std::uint32_t>(bufferLen) + length > static_cast<std::uint32_t>(buffer.size()))
 		{
-			Resize((std::int32_t)value.length());
+			Resize(length);
 			buffer = this->buffer;
 		}
-		for (std::int32_t i = 0; i < value.length(); i++)
+		for (std::int32_t i = 0; i < length; i++)
 		{
 			buffer[bufferLen] = value[i];
 			bufferLen++;

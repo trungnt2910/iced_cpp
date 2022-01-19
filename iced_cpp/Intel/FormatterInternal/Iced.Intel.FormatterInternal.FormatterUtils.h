@@ -59,9 +59,9 @@ namespace Iced::Intel::FormatterInternal
 		static std::vector<std::string> tabStrings;
 		static std::vector<std::string> CreateStrings(char c, std::int32_t max);
 	public:
-		static void AddTabs(FormatterOutput* output, std::int32_t column, std::int32_t firstOperandCharIndex, std::int32_t tabSize);
+		static void AddTabs(FormatterOutput& output, std::int32_t column, std::int32_t firstOperandCharIndex, std::int32_t tabSize);
 	private:
-		static void AddStrings(FormatterOutput* output, std::vector<std::string>& strings, std::int32_t count);
+		static void AddStrings(FormatterOutput& output, std::vector<std::string>& strings, std::int32_t count);
 	public:
 		static bool IsCall(FormatterFlowControl kind);
 		static FormatterFlowControl GetFlowControl(const Instruction& instruction);

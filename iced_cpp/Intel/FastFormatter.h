@@ -26,6 +26,7 @@
 #include <vector>
 #include <csharp/exceptionhelper.h>
 #include <cassert>
+#include "FastFormatterInternal/MemorySizes.h"
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
@@ -58,7 +59,7 @@ namespace Iced::Intel
 		/* readonly */
 		std::vector<FastFmtFlags> codeFlags;
 		/* readonly */
-		std::vector<std::string> allMemorySizes;
+		const decltype(MemorySizes::AllMemorySizes)& allMemorySizes;
 		/* readonly */
 		std::vector<std::string> rcStrings;
 		/* readonly */
@@ -97,7 +98,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
-		void Format(const Instruction& instruction, FastStringOutput* output);
+		void Format(const Instruction& instruction, FastStringOutput& output);
 		// Only one caller
 	private:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
@@ -105,12 +106,12 @@ namespace Iced::Intel
 		static bool ShowSegmentPrefix(const Instruction& instruction, std::int32_t opCount);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] void FormatRegister(FastStringOutput output, Register register)
-		void FormatRegister(FastStringOutput* output, Register register_);
-		void FormatNumber(FastStringOutput* output, std::uint64_t value);
+		void FormatRegister(FastStringOutput& output, Register register_);
+		void FormatNumber(FastStringOutput& output, std::uint64_t value);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] void WriteSymbol(FastStringOutput output, ulong address, in SymbolResult symbol)
-		void WriteSymbol(FastStringOutput* output, std::uint64_t address, const SymbolResult& symbol);
-		void WriteSymbol(FastStringOutput* output, std::uint64_t address, const SymbolResult& symbol, bool writeMinusIfSigned);
-		void FormatMemory(FastStringOutput* output, const Instruction& instruction, std::int32_t operand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize);
+		void WriteSymbol(FastStringOutput& output, std::uint64_t address, const SymbolResult& symbol);
+		void WriteSymbol(FastStringOutput& output, std::uint64_t address, const SymbolResult& symbol, bool writeMinusIfSigned);
+		void FormatMemory(FastStringOutput& output, const Instruction& instruction, std::int32_t operand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize);
 	};
 }

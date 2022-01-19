@@ -73,7 +73,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		Code nativeCode = static_cast<Code>(0);
 
 	public:
-		SimpleBranchInstr(BlockEncoder* blockEncoder,class  Block* block, const Instruction& instruction);
+		SimpleBranchInstr(BlockEncoder* blockEncoder, std::shared_ptr<class Block> block, const Instruction& instruction);
 	private:
 		static Code ToNativeBranchCode(Code code, std::int32_t bitness);
 	public:
@@ -84,6 +84,6 @@ namespace Iced::Intel::BlockEncoderInternal
 	public:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public override string? TryEncode(Encoder encoder, out ConstantOffsets constantOffsets, out bool isOriginalInstruction)
-		std::string TryEncode(Encoder* encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction) override;
+		std::string TryEncode(Encoder& encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction) override;
 	};
 }

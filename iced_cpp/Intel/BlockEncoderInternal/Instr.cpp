@@ -28,7 +28,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	Instr::Instr(class Block* block, std::uint64_t origIp)
+	Instr::Instr(std::shared_ptr<class Block> block, std::uint64_t origIp)
 	{
 		OrigIP = origIp;
 		Block = block;
@@ -40,7 +40,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		return std::format("{0:s} : 0x{1:0>X} {2:s}", errorMessage, instruction.GetIP(), to_string(instruction));
 	}
 
-	std::shared_ptr<Instr> Instr::Create(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction)
+	std::shared_ptr<Instr> Instr::Create(BlockEncoder* blockEncoder, std::shared_ptr<class Block> block, const Instruction& instruction)
 	{
 		switch (instruction.GetCode())
 		{
@@ -226,17 +226,22 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: protected string? EncodeBranchToPointerData(Encoder encoder, bool isCall, ulong ip, BlockData pointerData, out uint size, uint minSize)
-	std::string Instr::EncodeBranchToPointerData(Encoder* encoder, bool isCall, std::uint64_t ip, BlockData* pointerData, std::uint32_t& size, std::uint32_t minSize)
+	std::string Instr::EncodeBranchToPointerData(Encoder& encoder, bool isCall, std::uint64_t ip, BlockData* pointerData, std::uint32_t& size, std::uint32_t minSize)
 	{
-		if (minSize > std::numeric_limits<std::int32_t>::max())
+		auto Block = this->Block.lock();
+		if (!Block)
+		{
+			throw std::runtime_error("block has been destroyed.");
+		}
+		if (minSize > (std::uint32_t)std::numeric_limits<std::int32_t>::max())
 		{
 			throw ArgumentOutOfRangeException("minSize");
 		}
 		auto instr = Instruction();
 		instr.SetOp0Kind(OpKind::Memory);
-		instr.SetMemoryDisplSize(encoder->GetBitness() / 8);
+		instr.SetMemoryDisplSize(encoder.GetBitness() / 8);
 		RelocKind relocKind;
-		switch (encoder->GetBitness())
+		switch (encoder.GetBitness())
 		{
 		case 64:
 		{
@@ -257,13 +262,13 @@ namespace Iced::Intel::BlockEncoderInternal
 			throw InvalidOperationException();
 		}
 		std::string errorMessage;
-		if (!encoder->TryEncode(instr, ip, size, errorMessage))
+		if (!encoder.TryEncode(instr, ip, size, errorMessage))
 		{
 			return errorMessage;
 		}
 		if (Block->GetCanAddRelocInfos() && relocKind != RelocKind::Offset64)
 		{
-			auto constantOffsets = encoder->GetConstantOffsets();
+			auto constantOffsets = encoder.GetConstantOffsets();
 			if (!constantOffsets.GetHasDisplacement())
 			{
 				return "Internal error: no displ";

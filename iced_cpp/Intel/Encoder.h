@@ -148,7 +148,7 @@ namespace Iced::Intel
 		/// <param name="writer">Destination</param>
 		/// <returns></returns>
 	public:
-		static Encoder* Create(std::int32_t bitness, CodeWriter* writer);
+		static Encoder Create(std::int32_t bitness, CodeWriter* writer);
 		/// <summary>
 		/// Encodes an instruction and returns the size of the encoded instruction.
 		/// A <see cref="EncoderException"/> is thrown if it failed to encode the instruction.

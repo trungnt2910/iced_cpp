@@ -42,13 +42,13 @@ namespace Iced::Intel::EncoderInternal
 		this->mustUseSib = mustUseSib;
 	}
 
-	void OpModRM_rm_mem_only::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpModRM_rm_mem_only::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
 		if (mustUseSib)
 		{
-			encoder->EncoderFlags |= EncoderFlags::MustUseSib;
+			encoder.EncoderFlags |= EncoderFlags::MustUseSib;
 		}
-		encoder->AddRegOrMem(instruction, operand, Register::None, Register::None, true, false);
+		encoder.AddRegOrMem(instruction, operand, Register::None, Register::None, true, false);
 	}
 
 	OpModRM_rm::OpModRM_rm(Register regLo, Register regHi)
@@ -57,9 +57,9 @@ namespace Iced::Intel::EncoderInternal
 		this->regHi = regHi;
 	}
 
-	void OpModRM_rm::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpModRM_rm::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddRegOrMem(instruction, operand, regLo, regHi, true, true);
+		encoder.AddRegOrMem(instruction, operand, regLo, regHi, true, true);
 	}
 
 	OpRegEmbed8::OpRegEmbed8(Register regLo, Register regHi)
@@ -68,9 +68,9 @@ namespace Iced::Intel::EncoderInternal
 		this->regHi = regHi;
 	}
 
-	void OpRegEmbed8::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpRegEmbed8::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddReg(instruction, operand, regLo, regHi);
+		encoder.AddReg(instruction, operand, regLo, regHi);
 	}
 
 	OpModRM_rm_reg_only::OpModRM_rm_reg_only(Register regLo, Register regHi)
@@ -79,9 +79,9 @@ namespace Iced::Intel::EncoderInternal
 		this->regHi = regHi;
 	}
 
-	void OpModRM_rm_reg_only::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpModRM_rm_reg_only::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddRegOrMem(instruction, operand, regLo, regHi, false, true);
+		encoder.AddRegOrMem(instruction, operand, regLo, regHi, false, true);
 	}
 
 	OpModRM_reg::OpModRM_reg(Register regLo, Register regHi)
@@ -90,9 +90,9 @@ namespace Iced::Intel::EncoderInternal
 		this->regHi = regHi;
 	}
 
-	void OpModRM_reg::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpModRM_reg::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddModRMRegister(instruction, operand, regLo, regHi);
+		encoder.AddModRMRegister(instruction, operand, regLo, regHi);
 	}
 
 	OpModRM_reg_mem::OpModRM_reg_mem(Register regLo, Register regHi)
@@ -101,10 +101,10 @@ namespace Iced::Intel::EncoderInternal
 		this->regHi = regHi;
 	}
 
-	void OpModRM_reg_mem::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpModRM_reg_mem::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddModRMRegister(instruction, operand, regLo, regHi);
-		encoder->EncoderFlags |= EncoderFlags::RegIsMemory;
+		encoder.AddModRMRegister(instruction, operand, regLo, regHi);
+		encoder.EncoderFlags |= EncoderFlags::RegIsMemory;
 	}
 
 	OpModRM_regF0::OpModRM_regF0(Register regLo, Register regHi)
@@ -113,16 +113,16 @@ namespace Iced::Intel::EncoderInternal
 		this->regHi = regHi;
 	}
 
-	void OpModRM_regF0::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpModRM_regF0::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		if (encoder->GetBitness() != 64 && instruction.GetOpKind(operand) == OpKind::Register && (int)instruction.GetOpRegister(operand) >= regLo + 8 && (int)instruction.GetOpRegister(operand) <= regLo + 15)
+		if (encoder.GetBitness() != 64 && instruction.GetOpKind(operand) == OpKind::Register && (int)instruction.GetOpRegister(operand) >= regLo + 8 && (int)instruction.GetOpRegister(operand) <= regLo + 15)
 		{
-			encoder->EncoderFlags |= EncoderFlags::PF0;
-			encoder->AddModRMRegister(instruction, operand, (Register)(regLo + 8), Register(regLo + 15));
+			encoder.EncoderFlags |= EncoderFlags::PF0;
+			encoder.AddModRMRegister(instruction, operand, (Register)(regLo + 8), Register(regLo + 15));
 		}
 		else
 		{
-			encoder->AddModRMRegister(instruction, operand, regLo, regHi);
+			encoder.AddModRMRegister(instruction, operand, regLo, regHi);
 		}
 	}
 
@@ -131,25 +131,25 @@ namespace Iced::Intel::EncoderInternal
 		this->register_ = register_;
 	}
 
-	void OpReg::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpReg::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->Verify(operand, OpKind::Register, instruction.GetOpKind(operand));
-		encoder->Verify(operand, register_, instruction.GetOpRegister(operand));
+		encoder.Verify(operand, OpKind::Register, instruction.GetOpKind(operand));
+		encoder.Verify(operand, register_, instruction.GetOpRegister(operand));
 	}
 
-	void OpRegSTi::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpRegSTi::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		if (!encoder->Verify(operand, OpKind::Register, instruction.GetOpKind(operand)))
+		if (!encoder.Verify(operand, OpKind::Register, instruction.GetOpKind(operand)))
 		{
 			return;
 		}
 		auto reg = instruction.GetOpRegister(operand);
-		if (!encoder->Verify(operand, (Register)reg, Register::ST0, Register::ST7))
+		if (!encoder.Verify(operand, (Register)reg, Register::ST0, Register::ST7))
 		{
 			return;
 		}
-		assert((encoder->OpCode & 7) == 0);
-		encoder->OpCode |= static_cast<std::uint32_t>(reg - Register::ST0);
+		assert((encoder.OpCode & 7) == 0);
+		encoder.OpCode |= static_cast<std::uint32_t>(reg - Register::ST0);
 	}
 
 	std::int32_t OprDI::GetRegSize(OpKind opKind)
@@ -169,15 +169,15 @@ namespace Iced::Intel::EncoderInternal
 		return 0;
 	}
 
-	void OprDI::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OprDI::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
 		auto regSize = GetRegSize(instruction.GetOpKind(operand));
 		if (regSize == 0)
 		{
-			encoder->SetErrorMessage(std::format("Operand {0:s}: expected OpKind = {1:s}, {2:s} or {3:s}", operand, "MemorySegDI", "MemorySegEDI", "MemorySegRDI"));
+			encoder.SetErrorMessage(std::format("Operand {0:s}: expected OpKind = {1:s}, {2:s} or {3:s}", operand, "MemorySegDI", "MemorySegEDI", "MemorySegRDI"));
 			return;
 		}
-		encoder->SetAddrSize(regSize);
+		encoder.SetAddrSize(regSize);
 	}
 
 	OpIb::OpIb(OpKind opKind)
@@ -185,34 +185,34 @@ namespace Iced::Intel::EncoderInternal
 		this->opKind = opKind;
 	}
 
-	void OpIb::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpIb::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		switch (encoder->ImmSize)
+		switch (encoder.ImmSize)
 		{
 		case ImmSize::Size1:
-			if (!encoder->Verify(operand, OpKind::Immediate8_2nd, instruction.GetOpKind(operand)))
+			if (!encoder.Verify(operand, OpKind::Immediate8_2nd, instruction.GetOpKind(operand)))
 			{
 				return;
 			}
-			encoder->ImmSize = ImmSize::Size1_1;
-			encoder->ImmediateHi = instruction.GetImmediate8_2nd();
+			encoder.ImmSize = ImmSize::Size1_1;
+			encoder.ImmediateHi = instruction.GetImmediate8_2nd();
 			break;
 		case ImmSize::Size2:
-			if (!encoder->Verify(operand, OpKind::Immediate8_2nd, instruction.GetOpKind(operand)))
+			if (!encoder.Verify(operand, OpKind::Immediate8_2nd, instruction.GetOpKind(operand)))
 			{
 				return;
 			}
-			encoder->ImmSize = ImmSize::Size2_1;
-			encoder->ImmediateHi = instruction.GetImmediate8_2nd();
+			encoder.ImmSize = ImmSize::Size2_1;
+			encoder.ImmediateHi = instruction.GetImmediate8_2nd();
 			break;
 		default:
 			auto opImmKind = instruction.GetOpKind(operand);
-			if (!encoder->Verify(operand, opKind, opImmKind))
+			if (!encoder.Verify(operand, opKind, opImmKind))
 			{
 				return;
 			}
-			encoder->ImmSize = ImmSize::Size1;
-			encoder->Immediate = instruction.GetImmediate8();
+			encoder.ImmSize = ImmSize::Size1;
+			encoder.Immediate = instruction.GetImmediate8();
 			break;
 		}
 	}
@@ -222,14 +222,14 @@ namespace Iced::Intel::EncoderInternal
 		return opKind;
 	}
 
-	void OpIw::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpIw::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		if (!encoder->Verify(operand, OpKind::Immediate16, instruction.GetOpKind(operand)))
+		if (!encoder.Verify(operand, OpKind::Immediate16, instruction.GetOpKind(operand)))
 		{
 			return;
 		}
-		encoder->ImmSize = ImmSize::Size2;
-		encoder->Immediate = instruction.GetImmediate16();
+		encoder.ImmSize = ImmSize::Size2;
+		encoder.Immediate = instruction.GetImmediate16();
 	}
 
 	Iced::Intel::OpKind OpIw::GetImmediateOpKind()
@@ -242,15 +242,15 @@ namespace Iced::Intel::EncoderInternal
 		this->opKind = opKind;
 	}
 
-	void OpId::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpId::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
 		auto opImmKind = instruction.GetOpKind(operand);
-		if (!encoder->Verify(operand, opKind, opImmKind))
+		if (!encoder.Verify(operand, opKind, opImmKind))
 		{
 			return;
 		}
-		encoder->ImmSize = ImmSize::Size4;
-		encoder->Immediate = instruction.GetImmediate32();
+		encoder.ImmSize = ImmSize::Size4;
+		encoder.Immediate = instruction.GetImmediate32();
 	}
 
 	Iced::Intel::OpKind OpId::GetImmediateOpKind()
@@ -258,16 +258,16 @@ namespace Iced::Intel::EncoderInternal
 		return opKind;
 	}
 
-	void OpIq::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpIq::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		if (!encoder->Verify(operand, OpKind::Immediate64, instruction.GetOpKind(operand)))
+		if (!encoder.Verify(operand, OpKind::Immediate64, instruction.GetOpKind(operand)))
 		{
 			return;
 		}
-		encoder->ImmSize = ImmSize::Size8;
+		encoder.ImmSize = ImmSize::Size8;
 		std::uint64_t imm = instruction.GetImmediate64();
-		encoder->Immediate = static_cast<std::uint32_t>(imm);
-		encoder->ImmediateHi = static_cast<std::uint32_t>(imm >> 32);
+		encoder.Immediate = static_cast<std::uint32_t>(imm);
+		encoder.ImmediateHi = static_cast<std::uint32_t>(imm >> 32);
 	}
 
 	Iced::Intel::OpKind OpIq::GetImmediateOpKind()
@@ -275,22 +275,22 @@ namespace Iced::Intel::EncoderInternal
 		return OpKind::Immediate64;
 	}
 
-	void OpI4::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpI4::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
 		auto opImmKind = instruction.GetOpKind(operand);
-		if (!encoder->Verify(operand, OpKind::Immediate8, opImmKind))
+		if (!encoder.Verify(operand, OpKind::Immediate8, opImmKind))
 		{
 			return;
 		}
-		assert(encoder->ImmSize == ImmSize::SizeIbReg);
-		assert((encoder->Immediate & 0xF) == 0);
+		assert(encoder.ImmSize == ImmSize::SizeIbReg);
+		assert((encoder.Immediate & 0xF) == 0);
 		if (instruction.GetImmediate8() > 0xF)
 		{
-			encoder->SetErrorMessage(std::format("Operand {0:s}: Immediate value must be 0-15, but value is 0x{1:0>.2X}", operand, instruction.GetImmediate8()));
+			encoder.SetErrorMessage(std::format("Operand {0:s}: Immediate value must be 0-15, but value is 0x{1:0>.2X}", operand, instruction.GetImmediate8()));
 			return;
 		}
-		encoder->ImmSize = ImmSize::Size1;
-		encoder->Immediate |= instruction.GetImmediate8();
+		encoder.ImmSize = ImmSize::Size1;
+		encoder.Immediate |= instruction.GetImmediate8();
 	}
 
 	Iced::Intel::OpKind OpI4::GetImmediateOpKind()
@@ -332,12 +332,12 @@ namespace Iced::Intel::EncoderInternal
 		return 0;
 	}
 
-	void OpX::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpX::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
 		auto regXSize = GetXRegSize(instruction.GetOpKind(operand));
 		if (regXSize == 0)
 		{
-			encoder->SetErrorMessage(std::format("Operand {0:s}: expected OpKind = {1:s}, {2:s} or {3:s}", operand, "MemorySegSI", "MemorySegESI", "MemorySegRSI"));
+			encoder.SetErrorMessage(std::format("Operand {0:s}: expected OpKind = {1:s}, {2:s} or {3:s}", operand, "MemorySegSI", "MemorySegESI", "MemorySegRSI"));
 			return;
 		}
 		switch (instruction.GetCode())
@@ -350,21 +350,21 @@ namespace Iced::Intel::EncoderInternal
 			auto regYSize = GetYRegSize(instruction.GetOp0Kind());
 			if (regXSize != regYSize)
 			{
-				encoder->SetErrorMessage(std::format("Same sized register must be used: reg #1 size = {0:s}, reg #2 size = {1:s}", regYSize * 8, regXSize * 8));
+				encoder.SetErrorMessage(std::format("Same sized register must be used: reg #1 size = {0:s}, reg #2 size = {1:s}", regYSize * 8, regXSize * 8));
 				return;
 			}
 			break;
 		}
 		}
-		encoder->SetAddrSize(regXSize);
+		encoder.SetAddrSize(regXSize);
 	}
 
-	void OpY::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpY::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
 		auto regYSize = OpX::GetYRegSize(instruction.GetOpKind(operand));
 		if (regYSize == 0)
 		{
-			encoder->SetErrorMessage(std::format("Operand {0:s}: expected OpKind = {1:s}, {2:s} or {3:s}", operand, "MemoryESDI", "MemoryESEDI", "MemoryESRDI"));
+			encoder.SetErrorMessage(std::format("Operand {0:s}: expected OpKind = {1:s}, {2:s} or {3:s}", operand, "MemoryESDI", "MemoryESEDI", "MemoryESRDI"));
 			return;
 		}
 		switch (instruction.GetCode())
@@ -377,25 +377,25 @@ namespace Iced::Intel::EncoderInternal
 			auto regXSize = OpX::GetXRegSize(instruction.GetOp0Kind());
 			if (regXSize != regYSize)
 			{
-				encoder->SetErrorMessage(std::format("Same sized register must be used: reg #1 size = {0:s}, reg #2 size = {1:s}", regXSize * 8, regYSize * 8));
+				encoder.SetErrorMessage(std::format("Same sized register must be used: reg #1 size = {0:s}, reg #2 size = {1:s}", regXSize * 8, regYSize * 8));
 				return;
 			}
 			break;
 		}
 		}
-		encoder->SetAddrSize(regYSize);
+		encoder.SetAddrSize(regYSize);
 	}
 
-	void OpMRBX::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpMRBX::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		if (!encoder->Verify(operand, OpKind::Memory, instruction.GetOpKind(operand)))
+		if (!encoder.Verify(operand, OpKind::Memory, instruction.GetOpKind(operand)))
 		{
 			return;
 		}
 		auto baseReg = instruction.GetMemoryBase();
 		if (instruction.GetMemoryDisplSize() != 0 || instruction.GetMemoryDisplacement64() != 0 || instruction.GetMemoryIndexScale() != 1 || instruction.GetMemoryIndex() != Register::AL || (baseReg != Register::BX && baseReg != Register::EBX && baseReg != Register::RBX))
 		{
-			encoder->SetErrorMessage(std::format("Operand {0:s}: Operand must be [bx+al], [ebx+al], or [rbx+al]", operand));
+			encoder.SetErrorMessage(std::format("Operand {0:s}: Operand must be [bx+al], [ebx+al], or [rbx+al]", operand));
 			return;
 		}
 		std::int32_t regSize;
@@ -412,7 +412,7 @@ namespace Iced::Intel::EncoderInternal
 			assert(baseReg == Register::BX);
 			regSize = 2;
 		}
-		encoder->SetAddrSize(regSize);
+		encoder.SetAddrSize(regSize);
 	}
 
 	OpJ::OpJ(OpKind opKind, std::int32_t immSize)
@@ -421,9 +421,9 @@ namespace Iced::Intel::EncoderInternal
 		this->immSize = immSize;
 	}
 
-	void OpJ::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpJ::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddBranch(opKind, immSize, instruction, operand);
+		encoder.AddBranch(opKind, immSize, instruction, operand);
 	}
 
 	Iced::Intel::OpKind OpJ::GetNearBranchOpKind()
@@ -436,9 +436,9 @@ namespace Iced::Intel::EncoderInternal
 		this->immSize = immSize;
 	}
 
-	void OpJx::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpJx::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddBranchX(immSize, instruction, operand);
+		encoder.AddBranchX(immSize, instruction, operand);
 	}
 
 	Iced::Intel::OpKind OpJx::GetNearBranchOpKind()
@@ -454,9 +454,9 @@ namespace Iced::Intel::EncoderInternal
 		this->displSize = displSize;
 	}
 
-	void OpJdisp::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpJdisp::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddBranchDisp(displSize, instruction, operand);
+		encoder.AddBranchDisp(displSize, instruction, operand);
 	}
 
 	Iced::Intel::OpKind OpJdisp::GetNearBranchOpKind()
@@ -470,9 +470,9 @@ namespace Iced::Intel::EncoderInternal
 		this->size = size;
 	}
 
-	void OpA::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpA::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddFarBranch(instruction, operand, size);
+		encoder.AddFarBranch(instruction, operand, size);
 	}
 
 	Iced::Intel::OpKind OpA::GetFarBranchOpKind()
@@ -481,9 +481,9 @@ namespace Iced::Intel::EncoderInternal
 		return size == 2 ? OpKind::FarBranch16 : OpKind::FarBranch32;
 	}
 
-	void OpO::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpO::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->AddAbsMem(instruction, operand);
+		encoder.AddAbsMem(instruction, operand);
 	}
 
 	OpImm::OpImm(std::uint8_t value)
@@ -491,15 +491,15 @@ namespace Iced::Intel::EncoderInternal
 		this->value = value;
 	}
 
-	void OpImm::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpImm::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		if (!encoder->Verify(operand, OpKind::Immediate8, instruction.GetOpKind(operand)))
+		if (!encoder.Verify(operand, OpKind::Immediate8, instruction.GetOpKind(operand)))
 		{
 			return;
 		}
 		if (instruction.GetImmediate8() != value)
 		{
-			encoder->SetErrorMessage(std::format("Operand {0:s}: Expected 0x{1:0>.2X}, actual: 0x{2:0>.2X}", operand, value, instruction.GetImmediate8()));
+			encoder.SetErrorMessage(std::format("Operand {0:s}: Expected 0x{1:0>.2X}, actual: 0x{2:0>.2X}", operand, value, instruction.GetImmediate8()));
 			return;
 		}
 	}
@@ -515,18 +515,18 @@ namespace Iced::Intel::EncoderInternal
 		this->regHi = regHi;
 	}
 
-	void OpHx::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpHx::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		if (!encoder->Verify(operand, OpKind::Register, instruction.GetOpKind(operand)))
+		if (!encoder.Verify(operand, OpKind::Register, instruction.GetOpKind(operand)))
 		{
 			return;
 		}
 		auto reg = instruction.GetOpRegister(operand);
-		if (!encoder->Verify(operand, (Register)reg, regLo, regHi))
+		if (!encoder.Verify(operand, (Register)reg, regLo, regHi))
 		{
 			return;
 		}
-		encoder->EncoderFlags |= static_cast<EncoderFlags>(static_cast<std::uint32_t>(reg - regLo) << static_cast<std::int32_t>(EncoderFlags::VvvvvShift));
+		encoder.EncoderFlags |= static_cast<EncoderFlags>(static_cast<std::uint32_t>(reg - regLo) << static_cast<std::int32_t>(EncoderFlags::VvvvvShift));
 	}
 
 	OpVsib::OpVsib(Register regLo, Register regHi)
@@ -535,10 +535,10 @@ namespace Iced::Intel::EncoderInternal
 		vsibIndexRegHi = regHi;
 	}
 
-	void OpVsib::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpVsib::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		encoder->EncoderFlags |= EncoderFlags::MustUseSib;
-		encoder->AddRegOrMem(instruction, operand, Register::None, Register::None, vsibIndexRegLo, vsibIndexRegHi, true, false);
+		encoder.EncoderFlags |= EncoderFlags::MustUseSib;
+		encoder.AddRegOrMem(instruction, operand, Register::None, Register::None, vsibIndexRegLo, vsibIndexRegHi, true, false);
 	}
 
 	OpIsX::OpIsX(Register regLo, Register regHi)
@@ -547,18 +547,18 @@ namespace Iced::Intel::EncoderInternal
 		this->regHi = regHi;
 	}
 
-	void OpIsX::Encode(Encoder* encoder, const Instruction& instruction, std::int32_t operand)
+	void OpIsX::Encode(Encoder& encoder, const Instruction& instruction, std::int32_t operand)
 	{
-		if (!encoder->Verify(operand, OpKind::Register, instruction.GetOpKind(operand)))
+		if (!encoder.Verify(operand, OpKind::Register, instruction.GetOpKind(operand)))
 		{
 			return;
 		}
 		auto reg = instruction.GetOpRegister(operand);
-		if (!encoder->Verify(operand, (Register)reg, regLo, regHi))
+		if (!encoder.Verify(operand, (Register)reg, regLo, regHi))
 		{
 			return;
 		}
-		encoder->ImmSize = ImmSize::SizeIbReg;
-		encoder->Immediate = static_cast<std::uint32_t>(reg - regLo) << 4;
+		encoder.ImmSize = ImmSize::SizeIbReg;
+		encoder.Immediate = static_cast<std::uint32_t>(reg - regLo) << 4;
 	}
 }

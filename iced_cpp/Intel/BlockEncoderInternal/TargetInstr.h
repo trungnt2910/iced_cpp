@@ -39,7 +39,7 @@ namespace Iced::Intel::BlockEncoderInternal
 	public:
 		TargetInstr(std::shared_ptr<Instr> instruction);
 		TargetInstr(std::uint64_t address);
-		bool IsInBlock(Block* block);
+		bool IsInBlock(std::shared_ptr<Block> block);
 		std::uint64_t GetAddress();
 
 		TargetInstr() = default;

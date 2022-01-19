@@ -40,7 +40,7 @@ namespace Iced::Intel { class Encoder; }
 // Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel::EncoderInternal
 {
-	using TryConvertToDisp8N = std::function<bool(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)>;
+	using TryConvertToDisp8N = std::function<bool(Encoder& encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)>;
 	class OpCodeHandler
 	{
 	public:
@@ -60,14 +60,14 @@ namespace Iced::Intel::EncoderInternal
 		OpCodeHandler(EncFlags2 encFlags2, enum EncFlags3 encFlags3, bool isDeclareData, const std::optional<TryConvertToDisp8N_>& tryConvertToDisp8N, const std::vector<std::shared_ptr<Op>>& operands);
 		static std::uint32_t GetOpCode(EncFlags2 encFlags2);
 	public:
-		virtual void Encode(Encoder* encoder, const Instruction& instruction) = 0;
+		virtual void Encode(Encoder& encoder, const Instruction& instruction) = 0;
 	};
 	class InvalidHandler final : public OpCodeHandler
 	{
 	public:
 		static const std::string ERROR_MESSAGE;
 		InvalidHandler();
-		void Encode(Encoder* encoder, const Instruction& instruction) override;
+		void Encode(Encoder& encoder, const Instruction& instruction) override;
 	};
 	class DeclareDataHandler final : public OpCodeHandler
 	{
@@ -78,7 +78,7 @@ namespace Iced::Intel::EncoderInternal
 		std::int32_t maxLength = 0;
 	public:
 		DeclareDataHandler(Code code);
-		void Encode(Encoder* encoder, const Instruction& instruction) override;
+		void Encode(Encoder& encoder, const Instruction& instruction) override;
 	};
 	class LegacyHandler final : public OpCodeHandler
 	{
@@ -90,7 +90,7 @@ namespace Iced::Intel::EncoderInternal
 		static std::vector<std::shared_ptr<Op>> CreateOps(EncFlags1 encFlags1);
 	public:
 		LegacyHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3);
-		void Encode(Encoder* encoder, const Instruction& instruction) override;
+		void Encode(Encoder& encoder, const Instruction& instruction) override;
 	};
 	class VexHandler final : public OpCodeHandler
 	{
@@ -108,7 +108,7 @@ namespace Iced::Intel::EncoderInternal
 		static std::vector<std::shared_ptr<Op>> CreateOps(EncFlags1 encFlags1);
 	public:
 		VexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3);
-		void Encode(Encoder* encoder, const Instruction& instruction) override;
+		void Encode(Encoder& encoder, const Instruction& instruction) override;
 	};
 	class XopHandler final : public OpCodeHandler
 	{
@@ -121,7 +121,7 @@ namespace Iced::Intel::EncoderInternal
 		static std::vector<std::shared_ptr<Op>> CreateOps(EncFlags1 encFlags1);
 	public:
 		XopHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3);
-		void Encode(Encoder* encoder, const Instruction& instruction) override;
+		void Encode(Encoder& encoder, const Instruction& instruction) override;
 	};
 	class EvexHandler final : public OpCodeHandler
 	{
@@ -150,10 +150,10 @@ namespace Iced::Intel::EncoderInternal
 		class TryConvertToDisp8NImpl final
 		{
 		public:
-			static bool TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue);
+			static bool TryConvertToDisp8N(Encoder& encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue);
 		};
 	public:
-		void Encode(Encoder* encoder, const Instruction& instruction) override;
+		void Encode(Encoder& encoder, const Instruction& instruction) override;
 	};
 	class MvexHandler final : public OpCodeHandler
 	{
@@ -176,10 +176,10 @@ namespace Iced::Intel::EncoderInternal
 		class TryConvertToDisp8NImpl final
 		{
 		public:
-			static bool TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue);
+			static bool TryConvertToDisp8N(Encoder& encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue);
 		};
 	public:
-		void Encode(Encoder* encoder, const Instruction& instruction) override;
+		void Encode(Encoder& encoder, const Instruction& instruction) override;
 	};
 	class D3nowHandler final : public OpCodeHandler
 	{
@@ -192,6 +192,6 @@ namespace Iced::Intel::EncoderInternal
 		std::uint32_t immediate = 0;
 	public:
 		D3nowHandler(EncFlags2 encFlags2, EncFlags3 encFlags3);
-		void Encode(Encoder* encoder, const Instruction& instruction) override;
+		void Encode(Encoder& encoder, const Instruction& instruction) override;
 	};
 }

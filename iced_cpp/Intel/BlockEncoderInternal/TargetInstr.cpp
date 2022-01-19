@@ -30,9 +30,9 @@ namespace Iced::Intel::BlockEncoderInternal
 		this->address = address;
 	}
 
-	bool TargetInstr::IsInBlock(Block* block)
+	bool TargetInstr::IsInBlock(std::shared_ptr<Block> block)
 	{
-		return instruction == nullptr ? false : instruction->Block == block;
+		return instruction == nullptr ? false : instruction->Block.lock() == block;
 	}
 
 	std::uint64_t TargetInstr::GetAddress()

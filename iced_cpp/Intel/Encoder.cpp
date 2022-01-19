@@ -122,13 +122,14 @@ namespace Iced::Intel
 		adrSize32Flags = bitness != 32 ? EncoderFlags::P67 : EncoderFlags::None;
 	}
 
-	Encoder* Encoder::Create(std::int32_t bitness, CodeWriter* writer)
+	Encoder Encoder::Create(std::int32_t bitness, CodeWriter* writer)
 	{
-		auto switchTempVar_0 = bitness;
+		if (bitness == 16 || bitness == 32 || bitness == 64)
+		{
+			return Encoder(writer, bitness);
+		}
 
-		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: return (switchTempVar_0 == 16 || switchTempVar_0 == 32 || switchTempVar_0 == 64) ? new Encoder(writer, bitness) : throw new ArgumentOutOfRangeException(nameof(bitness));
-		return (switchTempVar_0 == 16 || switchTempVar_0 == 32 || switchTempVar_0 == 64) ? new Encoder(writer, bitness) : throw ArgumentOutOfRangeException("bitness");
+		throw new std::invalid_argument("invalid bitness");
 	}
 
 	std::uint32_t Encoder::Encode(const Instruction& instruction, std::uint64_t rip)
@@ -232,13 +233,13 @@ namespace Iced::Intel
 			auto ops = handler->Operands;
 			for (std::int32_t i = 0; i < ops.size(); i++)
 			{
-				ops[i]->Encode(this, instruction, i);
+				ops[i]->Encode(*this, instruction, i);
 			}
 			if ((handler->EncFlags3 & EncFlags3::Fwait) != 0)
 			{
 				WriteByteInternal(0x9B);
 			}
-			handler->Encode(this, instruction);
+			handler->Encode(*this, instruction);
 			auto opCode = OpCode;
 			if (!handler->Is2ByteOpCode)
 			{
@@ -261,7 +262,7 @@ namespace Iced::Intel
 		else
 		{
 			assert(std::dynamic_pointer_cast<DeclareDataHandler>(handler) != nullptr);
-			handler->Encode(this, instruction);
+			handler->Encode(*this, instruction);
 		}
 		std::uint32_t instrLen = static_cast<std::uint32_t>(currentRip) - static_cast<std::uint32_t>(rip);
 		if (instrLen > IcedConstants::MaxInstructionLength && !handler->IsDeclareData)
@@ -801,7 +802,7 @@ namespace Iced::Intel
 		auto tryConvertToDisp8N = handler->TryConvertToDisp8N;
 		if (tryConvertToDisp8N != std::nullopt)
 		{
-			return tryConvertToDisp8N.value()(this, handler, instruction, displ, compressedValue);
+			return tryConvertToDisp8N.value()(*this, handler, instruction, displ, compressedValue);
 		}
 		if (std::numeric_limits<std::int8_t>::min() <= displ && displ <= std::numeric_limits<std::int8_t>::max())
 		{

@@ -58,9 +58,9 @@ namespace Iced::Intel::EncoderInternal
 	{
 	}
 
-	void InvalidHandler::Encode(Encoder* encoder, const Instruction& instruction)
+	void InvalidHandler::Encode(Encoder& encoder, const Instruction& instruction)
 	{
-		encoder->SetErrorMessage(ERROR_MESSAGE);
+		encoder.SetErrorMessage(ERROR_MESSAGE);
 	}
 
 	DeclareDataHandler::DeclareDataHandler(Code code) : OpCodeHandler(EncFlags2::None, EncFlags3::Bit16or32 | EncFlags3::Bit64, true, std::nullopt, Array2::Empty<std::shared_ptr<Op>>())
@@ -74,18 +74,18 @@ namespace Iced::Intel::EncoderInternal
 		maxLength = 16 / elemLength;
 	}
 
-	void DeclareDataHandler::Encode(Encoder* encoder, const Instruction& instruction)
+	void DeclareDataHandler::Encode(Encoder& encoder, const Instruction& instruction)
 	{
 		auto declDataCount = instruction.GetDeclareDataCount();
 		if (declDataCount < 1 || declDataCount > maxLength)
 		{
-			encoder->SetErrorMessage(std::format("Invalid db/dw/dd/dq data count. Count = {0:s}, max count = {1:s}", declDataCount, maxLength));
+			encoder.SetErrorMessage(std::format("Invalid db/dw/dd/dq data count. Count = {0:s}, max count = {1:s}", declDataCount, maxLength));
 			return;
 		}
 		std::int32_t length = declDataCount * elemLength;
 		for (std::int32_t i = 0; i < length; i++)
 		{
-			encoder->WriteByteInternal(instruction.GetDeclareByteValue(i));
+			encoder.WriteByteInternal(instruction.GetDeclareByteValue(i));
 		}
 	}
 
@@ -148,36 +148,36 @@ namespace Iced::Intel::EncoderInternal
 		mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte::None) ? static_cast<std::uint8_t>(0x0) : (switchTempVar_1 == MandatoryPrefixByte::P66) ? static_cast<std::uint8_t>(0x66) : (switchTempVar_1 == MandatoryPrefixByte::PF3) ? static_cast<std::uint8_t>(0xF3) : (switchTempVar_1 == MandatoryPrefixByte::PF2) ? static_cast<std::uint8_t>(0xF2) : throw InvalidOperationException();
 	}
 
-	void LegacyHandler::Encode(Encoder* encoder, const Instruction& instruction)
+	void LegacyHandler::Encode(Encoder& encoder, const Instruction& instruction)
 	{
 		std::uint32_t b = mandatoryPrefix;
-		encoder->WritePrefixes(instruction, b != 0xF3);
+		encoder.WritePrefixes(instruction, b != 0xF3);
 		if (b != 0)
 		{
-			encoder->WriteByteInternal(b);
+			encoder.WriteByteInternal(b);
 		}
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::B) == 0x01 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::X) == 0x02 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::R) == 0x04 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::W) == 0x08 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::REX) == 0x40 ? 0 : -1);
-		b = static_cast<std::uint32_t>(encoder->EncoderFlags);
+		b = static_cast<std::uint32_t>(encoder.EncoderFlags);
 		b &= 0x4F;
 		if (b != 0)
 		{
-			if ((encoder->EncoderFlags & EncoderFlags::HighLegacy8BitRegs) != 0)
+			if ((encoder.EncoderFlags & EncoderFlags::HighLegacy8BitRegs) != 0)
 			{
-				encoder->SetErrorMessage("Registers AH, CH, DH, BH can't be used if there's a REX prefix. Use AL, CL, DL, BL, SPL, BPL, SIL, DIL, R8L-R15L instead.");
+				encoder.SetErrorMessage("Registers AH, CH, DH, BH can't be used if there's a REX prefix. Use AL, CL, DL, BL, SPL, BPL, SIL, DIL, R8L-R15L instead.");
 			}
 			b |= 0x40;
-			encoder->WriteByteInternal(b);
+			encoder.WriteByteInternal(b);
 		}
 		if ((b = tableByte1) != 0)
 		{
-			encoder->WriteByteInternal(b);
+			encoder.WriteByteInternal(b);
 			if ((b = tableByte2) != 0)
 			{
-				encoder->WriteByteInternal(b);
+				encoder.WriteByteInternal(b);
 			}
 		}
 	}
@@ -245,19 +245,19 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	void VexHandler::Encode(Encoder* encoder, const Instruction& instruction)
+	void VexHandler::Encode(Encoder& encoder, const Instruction& instruction)
 	{
-		encoder->WritePrefixes(instruction);
-		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder->EncoderFlags);
+		encoder.WritePrefixes(instruction);
+		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder.EncoderFlags);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::None) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::P66) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF2) == 3 ? 0 : -1);
 		std::uint32_t b = lastByte;
 		b |= (~encoderFlags >> (static_cast<std::int32_t>(EncoderFlags::VvvvvShift) - 3)) & 0x78;
-		if ((encoder->Internal_PreventVEX2 | W1 | (table - static_cast<std::uint32_t>(VexOpCodeTable::MAP0F)) | (encoderFlags & static_cast<std::uint32_t>(EncoderFlags::X | EncoderFlags::B | EncoderFlags::W))) != 0)
+		if ((encoder.Internal_PreventVEX2 | W1 | (table - static_cast<std::uint32_t>(VexOpCodeTable::MAP0F)) | (encoderFlags & static_cast<std::uint32_t>(EncoderFlags::X | EncoderFlags::B | EncoderFlags::W))) != 0)
 		{
-			encoder->WriteByteInternal(0xC4);
+			encoder.WriteByteInternal(0xC4);
 			Static::Assert(static_cast<std::int32_t>(VexOpCodeTable::MAP0F) == 1 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(VexOpCodeTable::MAP0F38) == 2 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(VexOpCodeTable::MAP0F3A) == 3 ? 0 : -1);
@@ -266,17 +266,17 @@ namespace Iced::Intel::EncoderInternal
 			Static::Assert(static_cast<std::int32_t>(EncoderFlags::X) == 2 ? 0 : -1);
 			Static::Assert(static_cast<std::int32_t>(EncoderFlags::R) == 4 ? 0 : -1);
 			b2 |= (~encoderFlags & 7) << 5;
-			encoder->WriteByteInternal(b2);
-			b |= mask_W_L & encoder->Internal_VEX_WIG_LIG;
-			encoder->WriteByteInternal(b);
+			encoder.WriteByteInternal(b2);
+			b |= mask_W_L & encoder.Internal_VEX_WIG_LIG;
+			encoder.WriteByteInternal(b);
 		}
 		else
 		{
-			encoder->WriteByteInternal(0xC5);
+			encoder.WriteByteInternal(0xC5);
 			Static::Assert(static_cast<std::int32_t>(EncoderFlags::R) == 4 ? 0 : -1);
 			b |= (~encoderFlags & 4) << 5;
-			b |= mask_L & encoder->Internal_VEX_LIG;
-			encoder->WriteByteInternal(b);
+			b |= mask_L & encoder.Internal_VEX_LIG;
+			encoder.WriteByteInternal(b);
 		}
 	}
 
@@ -330,11 +330,11 @@ namespace Iced::Intel::EncoderInternal
 		lastByte |= (static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncFlags2::MandatoryPrefixShift)) & static_cast<std::uint32_t>(EncFlags2::MandatoryPrefixMask);
 	}
 
-	void XopHandler::Encode(Encoder* encoder, const Instruction& instruction)
+	void XopHandler::Encode(Encoder& encoder, const Instruction& instruction)
 	{
-		encoder->WritePrefixes(instruction);
-		encoder->WriteByteInternal(0x8F);
-		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder->EncoderFlags);
+		encoder.WritePrefixes(instruction);
+		encoder.WriteByteInternal(0x8F);
+		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder.EncoderFlags);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::None) == 0 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::P66) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);
@@ -344,10 +344,10 @@ namespace Iced::Intel::EncoderInternal
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::X) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::R) == 4 ? 0 : -1);
 		b |= (~encoderFlags & 7) << 5;
-		encoder->WriteByteInternal(b);
+		encoder.WriteByteInternal(b);
 		b = lastByte;
 		b |= (~encoderFlags >> (static_cast<std::int32_t>(EncoderFlags::VvvvvShift) - 3)) & 0x78;
-		encoder->WriteByteInternal(b);
+		encoder.WriteByteInternal(b);
 	}
 
 	std::vector<std::shared_ptr<Op>> EvexHandler::CreateOps(EncFlags1 encFlags1)
@@ -421,10 +421,10 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	bool EvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)
+	bool EvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder& encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)
 	{
 		auto evexHandler = std::dynamic_pointer_cast<EvexHandler>(handler);
-		std::int32_t n = static_cast<std::int32_t>(TupleTypeTable::GetDisp8N(evexHandler->tupleType, (encoder->EncoderFlags & EncoderFlags::Broadcast) != 0));
+		std::int32_t n = static_cast<std::int32_t>(TupleTypeTable::GetDisp8N(evexHandler->tupleType, (encoder.EncoderFlags & EncoderFlags::Broadcast) != 0));
 		std::int32_t res = displ / n;
 		if (res * n == displ && std::numeric_limits<std::int8_t>::min() <= res && res <= std::numeric_limits<std::int8_t>::max())
 		{
@@ -435,11 +435,11 @@ namespace Iced::Intel::EncoderInternal
 		return false;
 	}
 
-	void EvexHandler::Encode(Encoder* encoder, const Instruction& instruction)
+	void EvexHandler::Encode(Encoder& encoder, const Instruction& instruction)
 	{
-		encoder->WritePrefixes(instruction);
-		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder->EncoderFlags);
-		encoder->WriteByteInternal(0x62);
+		encoder.WritePrefixes(instruction);
+		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder.EncoderFlags);
+		encoder.WriteByteInternal(0x62);
 		Static::Assert(static_cast<std::int32_t>(EvexOpCodeTable::MAP0F) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(EvexOpCodeTable::MAP0F38) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(EvexOpCodeTable::MAP0F3A) == 3 ? 0 : -1);
@@ -453,24 +453,24 @@ namespace Iced::Intel::EncoderInternal
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::R2) == 0x00000200 ? 0 : -1);
 		b |= (encoderFlags >> (9 - 4)) & 0x10;
 		b ^= ~0xFU;
-		encoder->WriteByteInternal(b);
+		encoder.WriteByteInternal(b);
 		b = p1Bits;
 		b |= (~encoderFlags >> (static_cast<std::int32_t>(EncoderFlags::VvvvvShift) - 3)) & 0x78;
-		b |= mask_W & encoder->Internal_EVEX_WIG;
-		encoder->WriteByteInternal(b);
+		b |= mask_W & encoder.Internal_EVEX_WIG;
+		encoder.WriteByteInternal(b);
 		b = instruction.GetInternalOpMask();
 		if (b != 0)
 		{
 			if ((EncFlags3 & EncFlags3::OpMaskRegister) == 0)
 			{
-				encoder->SetErrorMessage("The instruction doesn't support opmask registers");
+				encoder.SetErrorMessage("The instruction doesn't support opmask registers");
 			}
 		}
 		else
 		{
 			if ((EncFlags3 & EncFlags3::RequireOpMaskRegister) != 0)
 			{
-				encoder->SetErrorMessage("The instruction must use an opmask register");
+				encoder.SetErrorMessage("The instruction must use an opmask register");
 			}
 		}
 		b |= (encoderFlags >> (static_cast<std::int32_t>(EncoderFlags::VvvvvShift) + 4 - 3)) & 8;
@@ -478,7 +478,7 @@ namespace Iced::Intel::EncoderInternal
 		{
 			if ((EncFlags3 & EncFlags3::SuppressAllExceptions) == 0)
 			{
-				encoder->SetErrorMessage("The instruction doesn't support suppress-all-exceptions");
+				encoder.SetErrorMessage("The instruction doesn't support suppress-all-exceptions");
 			}
 			b |= 0x10;
 		}
@@ -487,7 +487,7 @@ namespace Iced::Intel::EncoderInternal
 		{
 			if ((EncFlags3 & EncFlags3::RoundingControl) == 0)
 			{
-				encoder->SetErrorMessage("The instruction doesn't support rounding control");
+				encoder.SetErrorMessage("The instruction doesn't support rounding control");
 			}
 			b |= 0x10;
 			Static::Assert(static_cast<std::int32_t>(RoundingControl::RoundToNearest) == 1 ? 0 : -1);
@@ -506,19 +506,19 @@ namespace Iced::Intel::EncoderInternal
 		}
 		else if (instruction.IsBroadcast())
 		{
-			encoder->SetErrorMessage("The instruction doesn't support broadcasting");
+			encoder.SetErrorMessage("The instruction doesn't support broadcasting");
 		}
 		if (instruction.GetZeroingMasking())
 		{
 			if ((EncFlags3 & EncFlags3::ZeroingMasking) == 0)
 			{
-				encoder->SetErrorMessage("The instruction doesn't support zeroing masking");
+				encoder.SetErrorMessage("The instruction doesn't support zeroing masking");
 			}
 			b |= 0x80;
 		}
 		b ^= 8;
-		b |= mask_LL & encoder->Internal_EVEX_LIG;
-		encoder->WriteByteInternal(b);
+		b |= mask_LL & encoder.Internal_EVEX_LIG;
+		encoder.WriteByteInternal(b);
 	}
 
 	std::vector<std::shared_ptr<Op>> MvexHandler::CreateOps(EncFlags1 encFlags1)
@@ -570,7 +570,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 	}
 
-	bool MvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder* encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)
+	bool MvexHandler::TryConvertToDisp8NImpl::TryConvertToDisp8N(Encoder& encoder, std::shared_ptr<OpCodeHandler> handler, const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)
 	{
 		auto mvex = MvexInfo(instruction.GetCode());
 		std::int32_t sss = (static_cast<std::int32_t>(instruction.GetMvexRegMemConv()) - static_cast<std::int32_t>(MvexRegMemConv::MemConvNone)) & 7;
@@ -586,11 +586,11 @@ namespace Iced::Intel::EncoderInternal
 		return false;
 	}
 
-	void MvexHandler::Encode(Encoder* encoder, const Instruction& instruction)
+	void MvexHandler::Encode(Encoder& encoder, const Instruction& instruction)
 	{
-		encoder->WritePrefixes(instruction);
-		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder->EncoderFlags);
-		encoder->WriteByteInternal(0x62);
+		encoder.WritePrefixes(instruction);
+		std::uint32_t encoderFlags = static_cast<std::uint32_t>(encoder.EncoderFlags);
+		encoder.WriteByteInternal(0x62);
 		Static::Assert(static_cast<std::int32_t>(MvexOpCodeTable::MAP0F) == 1 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MvexOpCodeTable::MAP0F38) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MvexOpCodeTable::MAP0F3A) == 3 ? 0 : -1);
@@ -602,24 +602,24 @@ namespace Iced::Intel::EncoderInternal
 		Static::Assert(static_cast<std::int32_t>(EncoderFlags::R2) == 0x00000200 ? 0 : -1);
 		b |= (encoderFlags >> (9 - 4)) & 0x10;
 		b ^= ~0xFU;
-		encoder->WriteByteInternal(b);
+		encoder.WriteByteInternal(b);
 		b = p1Bits;
 		b |= (~encoderFlags >> (static_cast<std::int32_t>(EncoderFlags::VvvvvShift) - 3)) & 0x78;
-		b |= mask_W & encoder->Internal_MVEX_WIG;
-		encoder->WriteByteInternal(b);
+		b |= mask_W & encoder.Internal_MVEX_WIG;
+		encoder.WriteByteInternal(b);
 		b = instruction.GetInternalOpMask();
 		if (b != 0)
 		{
 			if ((EncFlags3 & EncFlags3::OpMaskRegister) == 0)
 			{
-				encoder->SetErrorMessage("The instruction doesn't support opmask registers");
+				encoder.SetErrorMessage("The instruction doesn't support opmask registers");
 			}
 		}
 		else
 		{
 			if ((EncFlags3 & EncFlags3::RequireOpMaskRegister) != 0)
 			{
-				encoder->SetErrorMessage("The instruction must use an opmask register");
+				encoder.SetErrorMessage("The instruction must use an opmask register");
 			}
 		}
 		b |= (encoderFlags >> (static_cast<std::int32_t>(EncoderFlags::VvvvvShift) + 4 - 3)) & 8;
@@ -638,7 +638,7 @@ namespace Iced::Intel::EncoderInternal
 			}
 			else
 			{
-				encoder->SetErrorMessage("Memory operands must use a valid MvexRegMemConv variant, eg. MvexRegMemConv.MemConvNone");
+				encoder.SetErrorMessage("Memory operands must use a valid MvexRegMemConv variant, eg. MvexRegMemConv.MemConvNone");
 			}
 			if (instruction.IsMvexEvictionHint())
 			{
@@ -648,7 +648,7 @@ namespace Iced::Intel::EncoderInternal
 				}
 				else
 				{
-					encoder->SetErrorMessage("This instruction doesn't support eviction hint (`{eh}`)");
+					encoder.SetErrorMessage("This instruction doesn't support eviction hint (`{eh}`)");
 				}
 			}
 		}
@@ -656,7 +656,7 @@ namespace Iced::Intel::EncoderInternal
 		{
 			if (instruction.IsMvexEvictionHint())
 			{
-				encoder->SetErrorMessage("Only memory operands can enable eviction hint (`{eh}`)");
+				encoder.SetErrorMessage("Only memory operands can enable eviction hint (`{eh}`)");
 			}
 			if (conv == MvexRegMemConv::None)
 			{
@@ -666,7 +666,7 @@ namespace Iced::Intel::EncoderInternal
 					b |= 0x40;
 					if ((EncFlags3 & EncFlags3::SuppressAllExceptions) == 0)
 					{
-						encoder->SetErrorMessage("The instruction doesn't support suppress-all-exceptions");
+						encoder.SetErrorMessage("The instruction doesn't support suppress-all-exceptions");
 					}
 				}
 				auto rc = instruction.GetRoundingControl();
@@ -678,7 +678,7 @@ namespace Iced::Intel::EncoderInternal
 				{
 					if ((EncFlags3 & EncFlags3::RoundingControl) == 0)
 					{
-						encoder->SetErrorMessage("The instruction doesn't support rounding control");
+						encoder.SetErrorMessage("The instruction doesn't support rounding control");
 					}
 					else
 					{
@@ -694,17 +694,17 @@ namespace Iced::Intel::EncoderInternal
 			{
 				if (instruction.GetSuppressAllExceptions())
 				{
-					encoder->SetErrorMessage("Can't use {sae} with register swizzles");
+					encoder.SetErrorMessage("Can't use {sae} with register swizzles");
 				}
 				else if (instruction.GetRoundingControl() != RoundingControl::None)
 				{
-					encoder->SetErrorMessage("Can't use rounding control with register swizzles");
+					encoder.SetErrorMessage("Can't use rounding control with register swizzles");
 				}
 				b |= ((static_cast<std::uint32_t>(conv) - static_cast<std::uint32_t>(MvexRegMemConv::RegSwizzleNone)) & 7) << 4;
 			}
 			else
 			{
-				encoder->SetErrorMessage("Register operands can't use memory up/down conversions");
+				encoder.SetErrorMessage("Register operands can't use memory up/down conversions");
 			}
 		}
 		if (mvex.GetEHBit() == MvexEHBit::EH1)
@@ -712,7 +712,7 @@ namespace Iced::Intel::EncoderInternal
 			b |= 0x80;
 		}
 		b ^= 8;
-		encoder->WriteByteInternal(b);
+		encoder.WriteByteInternal(b);
 	}
 
 	std::vector<std::shared_ptr<Op>> D3nowHandler::operands =
@@ -727,11 +727,11 @@ namespace Iced::Intel::EncoderInternal
 		assert(immediate <= std::numeric_limits<std::uint8_t>::max());
 	}
 
-	void D3nowHandler::Encode(Encoder* encoder, const Instruction& instruction)
+	void D3nowHandler::Encode(Encoder& encoder, const Instruction& instruction)
 	{
-		encoder->WritePrefixes(instruction);
-		encoder->WriteByteInternal(0x0F);
-		encoder->ImmSize = ImmSize::Size1OpCode;
-		encoder->Immediate = immediate;
+		encoder.WritePrefixes(instruction);
+		encoder.WriteByteInternal(0x0F);
+		encoder.ImmSize = ImmSize::Size1OpCode;
+		encoder.Immediate = immediate;
 	}
 }

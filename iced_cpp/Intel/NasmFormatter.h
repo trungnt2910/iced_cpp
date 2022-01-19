@@ -156,7 +156,7 @@ namespace Iced::Intel
 		/// <param name="output">Output</param>
 		/// <param name="options">Options</param>
 	public:
-		void FormatMnemonic(const Instruction& instruction, FormatterOutput* output, FormatMnemonicOptions options) override;
+		void FormatMnemonic(const Instruction& instruction, FormatterOutput& output, FormatMnemonicOptions options) override;
 		/// <summary>
 		/// Gets the number of operands that will be formatted. A formatter can add and remove operands
 		/// </summary>
@@ -196,43 +196,43 @@ namespace Iced::Intel
 		/// <param name="output">Output</param>
 		/// <param name="operand">Operand number, 0-based. This is a formatter operand and isn't necessarily the same as an instruction operand.
 		/// See <see cref="GetOperandCount(in Instruction)"/></param>
-		void FormatOperand(const Instruction& instruction, FormatterOutput* output, std::int32_t operand) override;
+		void FormatOperand(const Instruction& instruction, FormatterOutput& output, std::int32_t operand) override;
 		/// <summary>
 		/// Formats an operand separator
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
-		void FormatOperandSeparator(const Instruction& instruction, FormatterOutput* output) override;
+		void FormatOperandSeparator(const Instruction& instruction, FormatterOutput& output) override;
 		/// <summary>
 		/// Formats all operands
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
-		void FormatAllOperands(const Instruction& instruction, FormatterOutput* output) override;
+		void FormatAllOperands(const Instruction& instruction, FormatterOutput& output) override;
 		/// <summary>
 		/// Formats the whole instruction: prefixes, mnemonic, operands
 		/// </summary>
 		/// <param name="instruction">Instruction</param>
 		/// <param name="output">Output</param>
-		void Format(const Instruction& instruction, FormatterOutput* output) override;
+		void Format(const Instruction& instruction, FormatterOutput& output) override;
 	private:
-		void FormatMnemonic(const Instruction& instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions);
+		void FormatMnemonic(const Instruction& instruction, FormatterOutput& output, InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions);
 		bool ShowSegmentPrefix(const Instruction& instruction, InstrOpInfo const opInfo);
-		void FormatPrefix(FormatterOutput* output, const Instruction& instruction, std::int32_t& column, FormatterString prefix, PrefixKind prefixKind, bool& needSpace);
-		void FormatOperands(const Instruction& instruction, FormatterOutput* output, InstrOpInfo const opInfo);
-		void FormatOperand(const Instruction& instruction, FormatterOutput* output, InstrOpInfo const opInfo, std::int32_t operand);
-		void ShowSignExtendInfo(FormatterOutput* output, InstrOpInfoFlags flags);
-		void FormatFlowControl(FormatterOutput* output, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions);
-		void FormatDecorator(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterString text, DecoratorKind decorator);
+		void FormatPrefix(FormatterOutput& output, const Instruction& instruction, std::int32_t& column, FormatterString prefix, PrefixKind prefixKind, bool& needSpace);
+		void FormatOperands(const Instruction& instruction, FormatterOutput& output, InstrOpInfo const opInfo);
+		void FormatOperand(const Instruction& instruction, FormatterOutput& output, InstrOpInfo const opInfo, std::int32_t operand);
+		void ShowSignExtendInfo(FormatterOutput& output, InstrOpInfoFlags flags);
+		void FormatFlowControl(FormatterOutput& output, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions);
+		void FormatDecorator(FormatterOutput& output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterString text, DecoratorKind decorator);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] string ToRegisterString(Register reg)
 		std::string ToRegisterString(Register reg);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.NoInlining)] void FormatRegister(FormatterOutput output, in Instruction instruction, int operand, int instructionOperand, Register reg)
-		void FormatRegister(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, Register reg);
-		void FormatMemory(FormatterOutput* output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, MemorySize memSize, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, InstrOpInfoFlags flags);
-		void FormatMemorySize(FormatterOutput* output, MemorySize memSize, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions);
-		void FormatKeyword(FormatterOutput* output, FormatterString keyword);
+		void FormatRegister(FormatterOutput& output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, Register reg);
+		void FormatMemory(FormatterOutput& output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, MemorySize memSize, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, InstrOpInfoFlags flags);
+		void FormatMemorySize(FormatterOutput& output, MemorySize memSize, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions);
+		void FormatKeyword(FormatterOutput& output, FormatterString keyword);
 		/// <summary>
 		/// Formats a register
 		/// </summary>

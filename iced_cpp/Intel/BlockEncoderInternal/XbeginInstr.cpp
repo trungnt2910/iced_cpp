@@ -19,7 +19,7 @@
 namespace Iced::Intel::BlockEncoderInternal
 {
 
-	XbeginInstr::XbeginInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction) : Instr(block, instruction.GetIP())
+	XbeginInstr::XbeginInstr(BlockEncoder* blockEncoder, std::shared_ptr<class Block> block, const Instruction& instruction) : Instr(block, instruction.GetIP())
 	{
 		this->instruction = instruction;
 		instrKind = InstrKind::Uninitialized;
@@ -58,6 +58,11 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	bool XbeginInstr::TryOptimize(std::uint64_t gained)
 	{
+		auto Block = this->Block.lock();
+		if (!Block)
+		{
+			throw std::runtime_error("block has been destroyed.");
+		}
 		if (instrKind == InstrKind::Unchanged || instrKind == InstrKind::Rel16)
 		{
 			return false;
@@ -79,7 +84,7 @@ namespace Iced::Intel::BlockEncoderInternal
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public override string? TryEncode(Encoder encoder, out ConstantOffsets constantOffsets, out bool isOriginalInstruction)
-	std::string XbeginInstr::TryEncode(Encoder* encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction)
+	std::string XbeginInstr::TryEncode(Encoder& encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction)
 	{
 		switch (instrKind)
 		{
@@ -104,12 +109,12 @@ namespace Iced::Intel::BlockEncoderInternal
 			instruction.SetNearBranch64(targetInstr.GetAddress());
 			std::string errorMessage;
 			std::uint32_t _;
-			if (!encoder->TryEncode(instruction, IP, _, errorMessage))
+			if (!encoder.TryEncode(instruction, IP, _, errorMessage))
 			{
 				constantOffsets = Iced::Intel::ConstantOffsets();
 				return CreateErrorMessage(errorMessage, instruction);
 			}
-			constantOffsets = encoder->GetConstantOffsets();
+			constantOffsets = encoder.GetConstantOffsets();
 			return "";
 		}
 		case InstrKind::Uninitialized:

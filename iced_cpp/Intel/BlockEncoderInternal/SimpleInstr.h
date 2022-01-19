@@ -38,11 +38,11 @@ namespace Iced::Intel::BlockEncoderInternal
 	private:
 		Instruction instruction;
 	public:
-		SimpleInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction);
+		SimpleInstr(BlockEncoder* blockEncoder, std::shared_ptr<class Block> block, const Instruction& instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public override string? TryEncode(Encoder encoder, out ConstantOffsets constantOffsets, out bool isOriginalInstruction)
-		std::string TryEncode(Encoder* encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction) override;
+		std::string TryEncode(Encoder& encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction) override;
 	};
 }

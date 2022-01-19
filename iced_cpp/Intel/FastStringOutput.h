@@ -58,8 +58,10 @@ namespace Iced::Intel
 		/// <param name="value">String to append</param>
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public void Append(string? value)
-		void Append(const std::string& value);
+		void Append(const char* value);
+		void AppendNotNull(const std::string_view& value);
 		void AppendNotNull(const std::string& value);
+		void AppendNotNull(const char* value, std::int32_t length = -1);
 	private:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.NoInlining)] void Resize(int extraCount)

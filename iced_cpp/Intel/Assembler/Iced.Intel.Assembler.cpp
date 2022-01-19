@@ -39,7 +39,7 @@ namespace Iced::Intel
 			throw ArgumentOutOfRangeException("bitness");
 		}
 		Bitness = bitness;
-		instructions = new InstructionList();
+		instructions = InstructionList();
 		currentLabelId = (std::uint8_t)0;
 		currentLabel = Iced::Intel::Label();
 		currentAnonLabel = Iced::Intel::Label();
@@ -84,19 +84,19 @@ namespace Iced::Intel
 		return GetPreferVex();
 	}
 
-	InstructionList* Assembler::GetInstructions()
+	InstructionList& Assembler::GetInstructions()
 	{
 		return instructions;
 	}
 
-	const InstructionList* Assembler::GetInstructions() const
+	const InstructionList& Assembler::GetInstructions() const
 	{
 		return instructions;
 	}
 
 	void Assembler::Reset()
 	{
-		instructions->Clear();
+		instructions.Clear();
 		currentLabelId = (std::uint8_t)0;
 		currentLabel = Iced::Intel::Label();
 		currentAnonLabel = Iced::Intel::Label();
@@ -137,7 +137,7 @@ namespace Iced::Intel
 		{
 			throw std::invalid_argument("At most one label per instruction is allowed");
 		}
-		label.SetInstructionIndex(instructions->GetCount());
+		label.SetInstructionIndex(instructions.GetCount());
 		currentLabel = label;
 	}
 
@@ -211,7 +211,7 @@ namespace Iced::Intel
 				instruction.SetSegmentPrefix(Register::DS);
 			}
 		}
-		instructions->Add(instruction);
+		instructions.Add(instruction);
 		currentLabel = Iced::Intel::Label();
 		definedAnonLabel = false;
 		prefixFlags = PrefixFlags::None;
@@ -489,7 +489,7 @@ namespace Iced::Intel
 			errorMessage = "Found an @F anonymous label reference but there was no call to " "AnonymousLabel";
 			return false;
 		}
-		auto blocks = std::vector<InstructionBlock>{ InstructionBlock(&writer, instructions->ToArray(), rip)};
+		auto blocks = std::vector<InstructionBlock>{ InstructionBlock(&writer, instructions.ToArray(), rip)};
 		std::vector<BlockEncoderResult> blockResults;
 		if (BlockEncoder::TryEncode(GetBitness(), blocks, errorMessage, blockResults, options))
 		{

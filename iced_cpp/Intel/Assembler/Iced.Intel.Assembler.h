@@ -82,7 +82,7 @@ namespace Iced::Intel
 		bool PreferShortBranch = false;
 
 		/* readonly */
-		InstructionList* instructions;
+		InstructionList instructions;
 		std::uint64_t currentLabelId = 0;
 		Iced::Intel::Label currentLabel;
 		Iced::Intel::Label currentAnonLabel;
@@ -113,11 +113,11 @@ namespace Iced::Intel
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		InstructionList* GetInstructions();
+		InstructionList& GetInstructions();
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		const InstructionList* GetInstructions() const;
+		const InstructionList& GetInstructions() const;
 		/// <summary>
 		/// Reset the current set of instructions and labels added to this instance.
 		/// </summary>

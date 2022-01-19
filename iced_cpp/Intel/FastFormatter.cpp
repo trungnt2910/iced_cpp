@@ -61,14 +61,13 @@ namespace Iced::Intel
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	//ORIGINAL LINE: public FastFormatter(ISymbolResolver? symbolResolver)
-	FastFormatter::FastFormatter(ISymbolResolver* symbolResolver)
+	FastFormatter::FastFormatter(ISymbolResolver* symbolResolver) : allMemorySizes(MemorySizes::AllMemorySizes)
 	{
 		options = FastFormatterOptions();
 		this->symbolResolver = symbolResolver;
 		allRegisters = Registers::AllRegisters;
 		codeMnemonics = FmtData::Mnemonics;
 		codeFlags = FmtData::Flags;
-		allMemorySizes = MemorySizes::AllMemorySizes;
 		rcStrings = s_rcStrings;
 		rcSaeStrings = s_rcSaeStrings;
 		scaleNumbers = s_scaleNumbers;
@@ -76,12 +75,8 @@ namespace Iced::Intel
 		mvexRegMemConsts64 = s_mvexRegMemConsts64;
 	}
 
-	void FastFormatter::Format(const Instruction& instruction, FastStringOutput* output)
+	void FastFormatter::Format(const Instruction& instruction, FastStringOutput& output)
 	{
-		if (output == nullptr)
-		{
-			ThrowHelper::ThrowArgumentNullException_output();
-		}
 		auto code = instruction.GetCode();
 		auto mnemonic = codeMnemonics[static_cast<std::int32_t>(code)];
 		auto flags = codeFlags[static_cast<std::int32_t>(code)];
@@ -136,26 +131,26 @@ namespace Iced::Intel
 			if (!hasNoTrackPrefix && prefixSeg != Register::None && ShowSegmentPrefix(instruction, opCount))
 			{
 				FormatRegister(output, prefixSeg);
-				output->Append(' ');
+				output.Append(' ');
 			}
 			bool hasXacquirePrefix = false;
 			if (instruction.GetHasXacquirePrefix())
 			{
-				output->AppendNotNull("xacquire ");
+				output.AppendNotNull("xacquire ");
 				hasXacquirePrefix = true;
 			}
 			if (instruction.GetHasXreleasePrefix())
 			{
-				output->AppendNotNull("xrelease ");
+				output.AppendNotNull("xrelease ");
 				hasXacquirePrefix = true;
 			}
 			if (instruction.GetHasLockPrefix())
 			{
-				output->AppendNotNull("lock ");
+				output.AppendNotNull("lock ");
 			}
 			if (hasNoTrackPrefix)
 			{
-				output->AppendNotNull("notrack ");
+				output.AppendNotNull("notrack ");
 			}
 			if (!hasXacquirePrefix)
 			{
@@ -163,27 +158,27 @@ namespace Iced::Intel
 				{
 					if (FormatterUtils::IsRepeOrRepneInstruction(code))
 					{
-						output->AppendNotNull("repe ");
+						output.AppendNotNull("repe ");
 					}
 					else
 					{
-						output->AppendNotNull("rep ");
+						output.AppendNotNull("rep ");
 					}
 				}
 				if (instruction.GetHasRepnePrefix())
 				{
 					if ((Code::Retnw_imm16 <= code && code <= Code::Retnq) || (Code::Call_rel16 <= code && code <= Code::Jmp_rel32_64) || (Code::Call_rm16 <= code && code <= Code::Call_rm64) || (Code::Jmp_rm16 <= code && code <= Code::Jmp_rm64) || Iced::Intel::InstructionInfoExtensions::IsJccShortOrNear(code))
 					{
-						output->AppendNotNull("bnd ");
+						output.AppendNotNull("bnd ");
 					}
 					else if (ShowUselessPrefixes || FormatterUtils::ShowRepnePrefix(code, ShowUselessPrefixes))
 					{
-						output->AppendNotNull("repne ");
+						output.AppendNotNull("repne ");
 					}
 				}
 			}
 		}
-		output->AppendNotNull(mnemonic);
+		output.AppendNotNull(mnemonic);
 		bool isDeclareData;
 		OpKind declareDataOpKind;
 		if (static_cast<std::uint32_t>(code) - static_cast<std::uint32_t>(Code::DeclareByte) <= static_cast<std::uint32_t>(Code::DeclareQword) - static_cast<std::uint32_t>(Code::DeclareByte))
@@ -214,7 +209,7 @@ namespace Iced::Intel
 		}
 		if (opCount > 0)
 		{
-			output->Append(' ');
+			output.Append(' ');
 			std::int32_t mvexRmOperand;
 			if (IcedConstants::IsMvex(instruction.GetCode()))
 			{
@@ -231,11 +226,11 @@ namespace Iced::Intel
 				{
 					if (options.GetSpaceAfterOperandSeparator())
 					{
-						output->AppendNotNull(", ");
+						output.AppendNotNull(", ");
 					}
 					else
 					{
-						output->Append(',');
+						output.Append(',');
 					}
 				}
 				std::uint8_t imm8;
@@ -304,13 +299,13 @@ namespace Iced::Intel
 						{
 							WriteSymbol(output, instruction.GetFarBranchSelector(), selectorSymbol);
 						}
-						output->Append(':');
+						output.Append(':');
 						WriteSymbol(output, imm64, symbol);
 					}
 					else
 					{
 						FormatNumber(output, instruction.GetFarBranchSelector());
-						output->Append(':');
+						output.Append(':');
 						if (opKind == OpKind::FarBranch32)
 						{
 							FormatNumber(output, instruction.GetFarBranch32());
@@ -340,7 +335,7 @@ namespace Iced::Intel
 					{
 						if ((symbol.Flags & SymbolFlags::Relative) == 0)
 						{
-							output->AppendNotNull("offset ");
+							output.AppendNotNull("offset ");
 						}
 						WriteSymbol(output, imm8, symbol);
 					}
@@ -368,7 +363,7 @@ namespace Iced::Intel
 					{
 						if ((symbol.Flags & SymbolFlags::Relative) == 0)
 						{
-							output->AppendNotNull("offset ");
+							output.AppendNotNull("offset ");
 						}
 						WriteSymbol(output, imm16, symbol);
 					}
@@ -396,7 +391,7 @@ namespace Iced::Intel
 					{
 						if ((symbol.Flags & SymbolFlags::Relative) == 0)
 						{
-							output->AppendNotNull("offset ");
+							output.AppendNotNull("offset ");
 						}
 						WriteSymbol(output, imm32, symbol);
 					}
@@ -429,7 +424,7 @@ namespace Iced::Intel
 					{
 						if ((symbol.Flags & SymbolFlags::Relative) == 0)
 						{
-							output->AppendNotNull("offset ");
+							output.AppendNotNull("offset ");
 						}
 						WriteSymbol(output, imm64, symbol);
 					}
@@ -494,13 +489,13 @@ namespace Iced::Intel
 				{
 					if (instruction.GetHasOpMask())
 					{
-						output->Append('{');
+						output.Append('{');
 						FormatRegister(output, instruction.GetOpMask());
-						output->Append('}');
+						output.Append('}');
 					}
 					if (instruction.GetZeroingMasking())
 					{
-						output->AppendNotNull("{z}");
+						output.AppendNotNull("{z}");
 					}
 				}
 				if (mvexRmOperand == operand)
@@ -515,7 +510,7 @@ namespace Iced::Intel
 							auto s = tbl[static_cast<std::int32_t>(conv)];
 							if (s.length() != 0)
 							{
-								output->AppendNotNull(s);
+								output.AppendNotNull(s);
 							}
 						}
 					}
@@ -533,17 +528,17 @@ namespace Iced::Intel
 					Static::Assert(static_cast<std::int32_t>(RoundingControl::RoundTowardZero) == 4 ? 0 : -1);
 					if (IcedConstants::IsMvex(instruction.GetCode()) && !instruction.GetSuppressAllExceptions())
 					{
-						output->AppendNotNull(rcStrings[static_cast<std::int32_t>(rc) - 1]);
+						output.AppendNotNull(rcStrings[static_cast<std::int32_t>(rc) - 1]);
 					}
 					else
 					{
-						output->AppendNotNull(rcSaeStrings[static_cast<std::int32_t>(rc) - 1]);
+						output.AppendNotNull(rcSaeStrings[static_cast<std::int32_t>(rc) - 1]);
 					}
 				}
 				else
 				{
 					assert(instruction.GetSuppressAllExceptions());
-					output->AppendNotNull("{sae}");
+					output.AppendNotNull("{sae}");
 				}
 			}
 		}
@@ -589,17 +584,17 @@ namespace Iced::Intel
 		return ShowUselessPrefixes;
 	}
 
-	void FastFormatter::FormatRegister(FastStringOutput* output, Register register_)
+	void FastFormatter::FormatRegister(FastStringOutput& output, Register register_)
 	{
-		output->AppendNotNull(allRegisters[static_cast<std::int32_t>(register_)].GetLower());
+		output.AppendNotNull(allRegisters[static_cast<std::int32_t>(register_)].GetLower());
 	}
 
-	void FastFormatter::FormatNumber(FastStringOutput* output, std::uint64_t value)
+	void FastFormatter::FormatNumber(FastStringOutput& output, std::uint64_t value)
 	{
 		bool useHexPrefix = options.GetUseHexPrefix();
 		if (useHexPrefix)
 		{
-			output->AppendNotNull("0x");
+			output.AppendNotNull("0x");
 		}
 		std::int32_t shift = 0;
 		for (std::uint64_t tmp = value; ;)
@@ -613,14 +608,14 @@ namespace Iced::Intel
 		}
 		if (!useHexPrefix && static_cast<std::int32_t>((value >> (shift - 4)) & 0xF) > 9)
 		{
-			output->Append('0');
+			output.Append('0');
 		}
 		auto hexDigits = options.GetUppercaseHex() ? "0123456789ABCDEF" : "0123456789abcdef";
 		for (; ;)
 		{
 			shift -= 4;
 			std::int32_t digit = static_cast<std::int32_t>(value >> shift) & 0xF;
-			output->Append(hexDigits[digit]);
+			output.Append(hexDigits[digit]);
 			if (shift == 0)
 			{
 				break;
@@ -628,23 +623,23 @@ namespace Iced::Intel
 		}
 		if (!useHexPrefix)
 		{
-			output->Append('h');
+			output.Append('h');
 		}
 	}
 
-	void FastFormatter::WriteSymbol(FastStringOutput* output, std::uint64_t address, const SymbolResult& symbol)
+	void FastFormatter::WriteSymbol(FastStringOutput& output, std::uint64_t address, const SymbolResult& symbol)
 	{
 		WriteSymbol(output, address, symbol, true);
 	}
 
-	void FastFormatter::WriteSymbol(FastStringOutput* output, std::uint64_t address, const SymbolResult& symbol, bool writeMinusIfSigned)
+	void FastFormatter::WriteSymbol(FastStringOutput& output, std::uint64_t address, const SymbolResult& symbol, bool writeMinusIfSigned)
 	{
 		std::int64_t displ = static_cast<std::int64_t>(address - symbol.Address);
 		if ((symbol.Flags & SymbolFlags::Signed) != 0)
 		{
 			if (writeMinusIfSigned)
 			{
-				output->Append('-');
+				output.Append('-');
 			}
 			displ = -displ;
 		}
@@ -657,7 +652,7 @@ namespace Iced::Intel
 				std::string s = part.Text;
 				if (s != "")
 				{
-					output->AppendNotNull(s);
+					output.AppendNotNull(s);
 				}
 			}
 		}
@@ -666,31 +661,31 @@ namespace Iced::Intel
 			std::string s = text.Text.Text;
 			if (s != "")
 			{
-				output->AppendNotNull(s);
+				output.AppendNotNull(s);
 			}
 		}
 		if (displ != 0)
 		{
 			if (displ < 0)
 			{
-				output->Append('-');
+				output.Append('-');
 				displ = -displ;
 			}
 			else
 			{
-				output->Append('+');
+				output.Append('+');
 			}
 			FormatNumber(output, static_cast<std::uint64_t>(displ));
 		}
 		if (options.GetShowSymbolAddress())
 		{
-			output->AppendNotNull(" (");
+			output.AppendNotNull(" (");
 			FormatNumber(output, address);
-			output->Append(')');
+			output.Append(')');
 		}
 	}
 
-	void FastFormatter::FormatMemory(FastStringOutput* output, const Instruction& instruction, std::int32_t operand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize)
+	void FastFormatter::FormatMemory(FastStringOutput& output, const Instruction& instruction, std::int32_t operand, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize)
 	{
 		assert(static_cast<std::uint32_t>(scale) < static_cast<std::uint32_t>(scaleNumbers.size()));
 		assert((InstructionUtils::GetAddressSizeInBytes(baseReg, indexReg, displSize, instruction.GetCodeSize()) == addrSize));
@@ -758,7 +753,7 @@ namespace Iced::Intel
 		{
 			assert(static_cast<std::uint32_t>(instruction.GetMemorySize()) < static_cast<std::uint32_t>(allMemorySizes.size()));
 			auto keywords = allMemorySizes[static_cast<std::int32_t>(instruction.GetMemorySize())];
-			output->AppendNotNull(keywords);
+			output.AppendNotNull(keywords);
 		}
 		auto codeSize = instruction.GetCodeSize();
 		auto segOverride = instruction.GetSegmentPrefix();
@@ -766,9 +761,9 @@ namespace Iced::Intel
 		if (options.GetAlwaysShowSegmentRegister() || (segOverride != Register::None && !noTrackPrefix && (ShowUselessPrefixes || FormatterUtils::ShowSegmentPrefix(Register::None, instruction, ShowUselessPrefixes))))
 		{
 			FormatRegister(output, segReg);
-			output->Append(':');
+			output.Append(':');
 		}
-		output->Append('[');
+		output.Append('[');
 		bool needPlus = false;
 		if (baseReg != Register::None)
 		{
@@ -779,13 +774,13 @@ namespace Iced::Intel
 		{
 			if (needPlus)
 			{
-				output->Append('+');
+				output.Append('+');
 			}
 			needPlus = true;
 			FormatRegister(output, indexReg);
 			if (useScale)
 			{
-				output->AppendNotNull(scaleNumbers[scale]);
+				output.AppendNotNull(scaleNumbers[scale]);
 			}
 		}
 		if (useSymbol)
@@ -794,16 +789,16 @@ namespace Iced::Intel
 			{
 				if ((symbol.Flags & SymbolFlags::Signed) != 0)
 				{
-					output->Append('-');
+					output.Append('-');
 				}
 				else
 				{
-					output->Append('+');
+					output.Append('+');
 				}
 			}
 			else if ((symbol.Flags & SymbolFlags::Signed) != 0)
 			{
-				output->Append('-');
+				output.Append('-');
 			}
 			WriteSymbol(output, absAddr, symbol, false);
 		}
@@ -816,11 +811,11 @@ namespace Iced::Intel
 					if (displ < 0)
 					{
 						displ = -displ;
-						output->Append('-');
+						output.Append('-');
 					}
 					else
 					{
-						output->Append('+');
+						output.Append('+');
 					}
 				}
 				else if (addrSize == 4)
@@ -828,11 +823,11 @@ namespace Iced::Intel
 					if (static_cast<std::int32_t>(displ) < 0)
 					{
 						displ = static_cast<std::uint32_t>(-static_cast<std::int32_t>(displ));
-						output->Append('-');
+						output.Append('-');
 					}
 					else
 					{
-						output->Append('+');
+						output.Append('+');
 					}
 				}
 				else
@@ -841,20 +836,20 @@ namespace Iced::Intel
 					if (static_cast<std::int16_t>(displ) < 0)
 					{
 						displ = static_cast<std::uint16_t>(-static_cast<std::int16_t>(displ));
-						output->Append('-');
+						output.Append('-');
 					}
 					else
 					{
-						output->Append('+');
+						output.Append('+');
 					}
 				}
 			}
 			FormatNumber(output, static_cast<std::uint64_t>(displ));
 		}
-		output->Append(']');
+		output.Append(']');
 		if (instruction.IsMvexEvictionHint())
 		{
-			output->AppendNotNull("{eh}");
+			output.AppendNotNull("{eh}");
 		}
 	}
 }

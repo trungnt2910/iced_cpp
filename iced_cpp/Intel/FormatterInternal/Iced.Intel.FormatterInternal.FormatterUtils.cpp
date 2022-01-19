@@ -204,7 +204,7 @@ namespace Iced::Intel::FormatterInternal
 		return strings;
 	}
 
-	void FormatterUtils::AddTabs(FormatterOutput* output, std::int32_t column, std::int32_t firstOperandCharIndex, std::int32_t tabSize)
+	void FormatterUtils::AddTabs(FormatterOutput& output, std::int32_t column, std::int32_t firstOperandCharIndex, std::int32_t tabSize)
 	{
 		constexpr std::int32_t max_firstOperandCharIndex = 256;
 		if (firstOperandCharIndex < 0)
@@ -251,7 +251,7 @@ namespace Iced::Intel::FormatterInternal
 		}
 	}
 
-	void FormatterUtils::AddStrings(FormatterOutput* output, std::vector<std::string>& strings, std::int32_t count)
+	void FormatterUtils::AddStrings(FormatterOutput& output, std::vector<std::string>& strings, std::int32_t count)
 	{
 		while (count > 0)
 		{
@@ -260,7 +260,7 @@ namespace Iced::Intel::FormatterInternal
 			{
 				n = (std::int32_t)strings.size();
 			}
-			output->Write(strings[n - 1], FormatterTextKind::Text);
+			output.Write(strings[n - 1], FormatterTextKind::Text);
 			count -= n;
 		}
 	}

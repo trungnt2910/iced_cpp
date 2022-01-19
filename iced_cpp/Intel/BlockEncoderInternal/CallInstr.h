@@ -49,7 +49,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		bool useOrigInstruction = false;
 		bool done = false;
 	public:
-		CallInstr(BlockEncoder* blockEncoder, class Block* block, const Instruction& instruction);
+		CallInstr(BlockEncoder* blockEncoder, std::shared_ptr<class Block> block, const Instruction& instruction);
 		void Initialize(BlockEncoder* blockEncoder) override;
 		bool Optimize(std::uint64_t gained) override;
 	private:
@@ -57,6 +57,6 @@ namespace Iced::Intel::BlockEncoderInternal
 	public:
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: public override string? TryEncode(Encoder encoder, out ConstantOffsets constantOffsets, out bool isOriginalInstruction)
-		std::string TryEncode(Encoder* encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction) override;
+		std::string TryEncode(Encoder& encoder, ConstantOffsets& constantOffsets, bool& isOriginalInstruction) override;
 	};
 }

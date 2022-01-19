@@ -173,9 +173,9 @@ namespace Iced::Intel
 		/* readonly */
 		BlockEncoderOptions options = static_cast<BlockEncoderOptions>(0);
 		/* readonly */
-		std::vector<Iced::Intel::BlockEncoderInternal::Block*> blocks;
+		std::vector<std::shared_ptr<Iced::Intel::BlockEncoderInternal::Block>> blocks;
 		/* readonly */
-		Encoder* nullEncoder;
+		Encoder nullEncoder;
 		/* readonly */
 		std::unordered_map<std::uint64_t, std::shared_ptr<Iced::Intel::BlockEncoderInternal::Instr>> toInstr;
 	public:
