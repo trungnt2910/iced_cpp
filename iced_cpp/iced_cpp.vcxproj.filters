@@ -201,10 +201,10 @@
     <ClInclude Include="Intel\EncoderInternal\Enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\EncoderInternal\InstructionFormatter.h">
+    <ClInclude Include="Intel\EncoderInternal\InstructionFormatter.defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\EncoderInternal\OpCodeFormatter.h">
+    <ClInclude Include="Intel\EncoderInternal\OpCodeFormatter.defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\EncoderInternal\OpCodeHandlers.h">
@@ -669,6 +669,15 @@
     <ClInclude Include="csharp\classes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Intel\EncoderInternal\InstructionFormatter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\EncoderInternal\OpCodeFormatter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\CharHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Intel\Assembler\AssemblerMemoryOperand.cpp">
@@ -849,12 +858,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\EncoderInternal\Enums.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\EncoderInternal\InstructionFormatter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\EncoderInternal\OpCodeFormatter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\EncoderInternal\OpCodeHandlers.cpp">

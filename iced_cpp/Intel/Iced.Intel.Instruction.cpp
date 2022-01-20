@@ -3842,7 +3842,7 @@ namespace Iced::Intel
 		return GetMemoryBase() == Register::EIP ? GetMemoryDisplacement32() : GetMemoryDisplacement64();
 	}
 
-	OpCodeInfo* Instruction::GetOpCode() const
+	const OpCodeInfo& Instruction::GetOpCode() const
 	{
 		return Iced::Intel::EncoderCodeExtensions::ToOpCode(GetCode());
 	}
@@ -4066,7 +4066,7 @@ namespace Iced::Intel
 		return Iced::Intel::InstructionInfoExtensions::Encoding(GetCode());
 	}
 
-	std::vector<CpuidFeature> Instruction::GetCpuidFeatures() const
+	const std::vector<CpuidFeature>& Instruction::GetCpuidFeatures() const
 	{
 		auto code = GetCode();
 		std::uint32_t flags2 = InstructionInfoInternal::InstrInfoTable::Data[static_cast<std::int32_t>(code) * 2 + 1];

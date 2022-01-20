@@ -2071,7 +2071,7 @@ namespace Iced::Intel
 		/// <returns></returns>
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] get
-		OpCodeInfo* GetOpCode() const;
+		const OpCodeInfo& GetOpCode() const;
 		/// <summary>
 		/// Formats the instruction using the default formatter with default formatter options
 		/// </summary>
@@ -2100,7 +2100,7 @@ namespace Iced::Intel
 		/// <summary>
 		/// Gets the CPU or CPUID feature flags
 		/// </summary>
-		std::vector<CpuidFeature> GetCpuidFeatures() const;
+		const std::vector<CpuidFeature>& GetCpuidFeatures() const;
 		/// <summary>
 		/// Control flow info
 		/// </summary>

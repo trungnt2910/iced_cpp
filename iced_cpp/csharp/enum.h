@@ -740,7 +740,7 @@ namespace magic_enum {
 	// Returns name from enum-flags value.
 	// If enum-flags value does not have name or value out of range, returns empty string.
 	template <typename E>
-	[[nodiscard]] auto enum_flags_name(E value) -> detail::enable_if_enum_t<E, string> {
+	[[nodiscard]] constexpr auto enum_flags_name(E value) -> detail::enable_if_enum_t<E, string> {
 		using D = std::decay_t<E>;
 		using U = underlying_type_t<D>;
 

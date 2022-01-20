@@ -68,7 +68,7 @@ namespace Iced::Intel
 	{
 		if (length < 0)
 		{
-			length = strlen(value);
+			length = (std::int32_t)strlen(value);
 		}
 		auto buffer = this->buffer;
 		auto bufferLen = this->bufferLen;

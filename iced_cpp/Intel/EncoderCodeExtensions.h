@@ -1,27 +1,14 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
 
 #pragma once
 
 #include "Code.g.h"
 #include "OpCodeInfo.h"
+#include "EncoderInternal/OpCodeInfos.h"
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
+#include <stdexcept>
+
 namespace Iced::Intel
 {
 	/// <summary>
@@ -37,6 +24,16 @@ namespace Iced::Intel
 	public:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static OpCodeInfo ToOpCode(this Code code)
-		static OpCodeInfo* ToOpCode(Code code);
+		inline static const OpCodeInfo& ToOpCode(Code code);
 	};
+
+	inline const OpCodeInfo& EncoderCodeExtensions::ToOpCode(Code code)
+	{
+		const auto& infos = EncoderInternal::OpCodeInfos::Infos;
+		if (static_cast<std::uint32_t>(code) >= static_cast<std::uint32_t>(infos.size()))
+		{
+			throw std::invalid_argument("invalid code");
+		}
+		return infos[static_cast<std::int32_t>(code)];
+	}
 }

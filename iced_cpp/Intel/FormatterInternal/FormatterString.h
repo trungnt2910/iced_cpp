@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
+
 #pragma once
 
 #include <algorithm>
@@ -6,10 +9,8 @@
 #include <string>
 #include <vector>
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
+#include "../CharHelpers.h"
+
 namespace Iced::Intel::FormatterInternal
 {
 	/* readonly */
@@ -19,19 +20,11 @@ namespace Iced::Intel::FormatterInternal
 		std::string lower;
 		std::string upper;
 		// std::toupper is not constexpr
-		static constexpr char ToUpper(char ch)
-		{
-			return (('a' <= ch) && (ch <= 'z')) ? 'A' + (ch - 'a') : ch;
-		}
-		static constexpr char ToLower(char ch)
-		{
-			return (('A' <= ch) && (ch <= 'Z')) ? 'a' + (ch - 'A') : ch;
-		}
 		static constexpr std::string ToUpper(const std::string& s)
 		{
 			std::string ss;
 			ss.reserve(s.size());
-			std::transform(s.begin(), s.end(), std::back_insert_iterator(ss), (char(*)(char))ToUpper);
+			std::transform(s.begin(), s.end(), std::back_insert_iterator(ss), (char(*)(char))CharHelpers::ToUpper);
 			return ss;
 		}
 	public:
@@ -44,7 +37,7 @@ namespace Iced::Intel::FormatterInternal
 #if !defined(NDEBUG)
 			for (auto ch : lower)
 			{
-				if (ch != ToLower(ch))
+				if (ch != CharHelpers::ToLower(ch))
 				{
 					throw std::invalid_argument("Not a lowercase string: " + lower);
 				}

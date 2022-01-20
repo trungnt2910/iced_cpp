@@ -17,6 +17,7 @@
 
 #include "Code.g.h"
 #include "Mnemonic.g.h"
+#include "MnemonicUtilsData.g.h"
 #include <cassert>
 
 // Code generated from Iced. Do not edit.
@@ -38,6 +39,9 @@ namespace Iced::Intel
 	public:
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] public static Mnemonic Mnemonic(this Code code)
-		static Iced::Intel::Mnemonic Mnemonic(Code code);
+		static constexpr Iced::Intel::Mnemonic Mnemonic(Code code)
+		{
+			return static_cast<Iced::Intel::Mnemonic>(MnemonicUtilsData::toMnemonic[static_cast<std::int32_t>(code)]);
+		}
 	};
 }

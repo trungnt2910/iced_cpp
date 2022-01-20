@@ -105,7 +105,8 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <AdditionalOptions>/constexpr:steps10000000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/constexpr:steps100000000 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -126,7 +127,8 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <AdditionalOptions>/constexpr:steps10000000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/constexpr:steps100000000 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -147,7 +149,8 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <AdditionalOptions>/constexpr:steps10000000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/constexpr:steps100000000 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -168,7 +171,8 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <AdditionalOptions>/constexpr:steps10000000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/constexpr:steps100000000 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -222,6 +226,7 @@
     <ClInclude Include="Intel\BlockEncoderInternal\TargetInstr.h" />
     <ClInclude Include="Intel\BlockEncoderInternal\XbeginInstr.h" />
     <ClInclude Include="Intel\ByteArrayCodeReader.h" />
+    <ClInclude Include="Intel\CharHelpers.h" />
     <ClInclude Include="Intel\Code.g.h" />
     <ClInclude Include="Intel\CodeExtensions.h" />
     <ClInclude Include="Intel\CodeReader.h" />
@@ -263,7 +268,9 @@
     <ClInclude Include="Intel\EncoderInternal\EncoderData.g.h" />
     <ClInclude Include="Intel\EncoderInternal\EncoderOpCodeHandler.h" />
     <ClInclude Include="Intel\EncoderInternal\Enums.h" />
+    <ClInclude Include="Intel\EncoderInternal\InstructionFormatter.defs.h" />
     <ClInclude Include="Intel\EncoderInternal\InstructionFormatter.h" />
+    <ClInclude Include="Intel\EncoderInternal\OpCodeFormatter.defs.h" />
     <ClInclude Include="Intel\EncoderInternal\OpCodeFormatter.h" />
     <ClInclude Include="Intel\EncoderInternal\OpCodeHandlers.h" />
     <ClInclude Include="Intel\EncoderInternal\OpCodeInfoData.g.h" />
@@ -476,8 +483,6 @@
     <ClCompile Include="Intel\EncoderInternal\EncoderData.g.cpp" />
     <ClCompile Include="Intel\EncoderInternal\EncoderOpCodeHandler.cpp" />
     <ClCompile Include="Intel\EncoderInternal\Enums.cpp" />
-    <ClCompile Include="Intel\EncoderInternal\InstructionFormatter.cpp" />
-    <ClCompile Include="Intel\EncoderInternal\OpCodeFormatter.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeHandlers.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfoData.g.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfos.cpp" />

@@ -65,7 +65,7 @@ namespace Iced::Intel
 		/// <param name="memorySize">Memory size</param>
 		/// <returns></returns>
 	public:
-		static bool IsBroadcast(MemorySize memorySize);
+		constexpr static bool IsBroadcast(MemorySize memorySize);
 
 		static constexpr std::array<MemorySizeInfo, IcedConstants::MemorySizeEnumCount> MemorySizeInfos = MemorySizeExtensionsPrivate_::GetMemorySizeInfos();
 		/// <summary>
@@ -74,48 +74,99 @@ namespace Iced::Intel
 		/// <param name="memorySize">Memory size</param>
 		/// <returns></returns>
 	public:
-		static MemorySizeInfo GetInfo(MemorySize memorySize);
+		constexpr static MemorySizeInfo GetInfo(MemorySize memorySize);
 		/// <summary>
 		/// Gets the size in bytes of the memory location or 0 if it's not accessed by the instruction or unknown or variable sized
 		/// </summary>
 		/// <param name="memorySize">Memory size</param>
 		/// <returns></returns>
-		static std::int32_t GetSize(MemorySize memorySize);
+		constexpr static std::int32_t GetSize(MemorySize memorySize);
 		/// <summary>
 		/// Gets the size in bytes of the packed element. If it's not a packed data type, it's equal to <see cref="GetSize(MemorySize)"/>.
 		/// </summary>
 		/// <param name="memorySize">Memory size</param>
 		/// <returns></returns>
-		static std::int32_t GetElementSize(MemorySize memorySize);
+		constexpr static std::int32_t GetElementSize(MemorySize memorySize);
 		/// <summary>
 		/// Gets the element type if it's packed data or <paramref name="memorySize"/> if it's not packed data
 		/// </summary>
 		/// <param name="memorySize">Memory size</param>
 		/// <returns></returns>
-		static MemorySize GetElementType(MemorySize memorySize);
+		constexpr static MemorySize GetElementType(MemorySize memorySize);
 		/// <summary>
 		/// Gets the element type info if it's packed data or <paramref name="memorySize"/> if it's not packed data
 		/// </summary>
 		/// <param name="memorySize">Memory size</param>
 		/// <returns></returns>
-		static MemorySizeInfo GetElementTypeInfo(MemorySize memorySize);
+		constexpr static MemorySizeInfo GetElementTypeInfo(MemorySize memorySize);
 		/// <summary>
 		/// <see langword="true"/> if it's signed data (signed integer or a floating point value)
 		/// </summary>
 		/// <param name="memorySize">Memory size</param>
 		/// <returns></returns>
-		static bool IsSigned(MemorySize memorySize);
+		constexpr static bool IsSigned(MemorySize memorySize);
 		/// <summary>
 		/// <see langword="true"/> if this is a packed data type, eg. <see cref="MemorySize.Packed128_Float32"/>
 		/// </summary>
 		/// <param name="memorySize">Memory size</param>
 		/// <returns></returns>
-		static bool IsPacked(MemorySize memorySize);
+		constexpr static bool IsPacked(MemorySize memorySize);
 		/// <summary>
 		/// Gets the number of elements in the packed data type or 1 if it's not packed data (<see cref="IsPacked"/>)
 		/// </summary>
 		/// <param name="memorySize">Memory size</param>
 		/// <returns></returns>
-		static std::int32_t GetElementCount(MemorySize memorySize);
+		constexpr static std::int32_t GetElementCount(MemorySize memorySize);
 	};
+
+
+	constexpr bool MemorySizeExtensions::IsBroadcast(MemorySize memorySize)
+	{
+		return memorySize >= IcedConstants::FirstBroadcastMemorySize;
+	}
+
+	constexpr MemorySizeInfo MemorySizeExtensions::GetInfo(MemorySize memorySize)
+	{
+		const auto& infos = MemorySizeInfos;
+		if (static_cast<std::uint32_t>(memorySize) >= static_cast<std::uint32_t>(infos.size()))
+		{
+			ThrowHelper::ThrowArgumentOutOfRangeException_memorySize();
+		}
+		return infos[static_cast<std::int32_t>(memorySize)];
+	}
+
+	constexpr std::int32_t MemorySizeExtensions::GetSize(MemorySize memorySize)
+	{
+		return Iced::Intel::MemorySizeExtensions::GetInfo(memorySize).GetSize();
+	}
+
+	constexpr std::int32_t MemorySizeExtensions::GetElementSize(MemorySize memorySize)
+	{
+		return Iced::Intel::MemorySizeExtensions::GetInfo(memorySize).GetElementSize();
+	}
+
+	constexpr MemorySize MemorySizeExtensions::GetElementType(MemorySize memorySize)
+	{
+		return Iced::Intel::MemorySizeExtensions::GetInfo(memorySize).GetElementType();
+	}
+
+	constexpr MemorySizeInfo MemorySizeExtensions::GetElementTypeInfo(MemorySize memorySize)
+	{
+		return Iced::Intel::MemorySizeExtensions::GetInfo(Iced::Intel::MemorySizeExtensions::GetInfo(memorySize).GetElementType());
+	}
+
+	constexpr bool MemorySizeExtensions::IsSigned(MemorySize memorySize)
+	{
+		return Iced::Intel::MemorySizeExtensions::GetInfo(memorySize).IsSigned();
+	}
+
+	constexpr bool MemorySizeExtensions::IsPacked(MemorySize memorySize)
+	{
+		return Iced::Intel::MemorySizeExtensions::GetInfo(memorySize).IsPacked();
+	}
+
+	constexpr std::int32_t MemorySizeExtensions::GetElementCount(MemorySize memorySize)
+	{
+		return Iced::Intel::MemorySizeExtensions::GetInfo(memorySize).GetElementCount();
+	}
 }

@@ -65,10 +65,10 @@ template <HasToString T>
 inline std::string to_string(const T& t) { return t.ToString(); }
 
 template <HasStdto_string T>
-inline std::string to_string(const T& t) { return std::to_string(t); }
+inline constexpr std::string to_string(const T& t) { return std::to_string(t); }
 
 template <HasCharIter T>
-inline std::string to_string(const T& t) 
+inline constexpr std::string to_string(const T& t) 
 {
 	std::string s;
 	std::copy(t.begin(), t.end(), std::back_inserter(s));
@@ -76,7 +76,7 @@ inline std::string to_string(const T& t)
 }
 
 template <Enum T>
-inline std::string to_string(const T& t)
+inline constexpr std::string to_string(const T& t)
 {
 	return std::string(magic_enum::enum_flags_name(t));
 }
