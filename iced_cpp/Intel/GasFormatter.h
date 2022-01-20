@@ -36,8 +36,6 @@
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
-using namespace Iced::Intel::FormatterInternal;
-using namespace Iced::Intel::GasFormatterInternal;
 namespace Iced::Intel
 {
 	/// <summary>
@@ -71,7 +69,7 @@ namespace Iced::Intel
 		/* readonly */
 		std::vector<FormatterString> allRegistersNaked;
 		/* readonly */
-		std::vector<InstrInfo*> instrInfos;
+		std::vector<GasFormatterInternal::InstrInfo*> instrInfos;
 		/* readonly */
 		std::vector<FormatterString> allMemorySizes;
 		/* readonly */
@@ -208,12 +206,12 @@ namespace Iced::Intel
 		/// <param name="output">Output</param>
 		void Format(const Instruction& instruction, FormatterOutput& output) override;
 	private:
-		void FormatMnemonic(const Instruction& instruction, FormatterOutput& output, InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions);
+		void FormatMnemonic(const Instruction& instruction, FormatterOutput& output, GasFormatterInternal::InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions);
 		void FormatBranchHint(FormatterOutput& output, std::int32_t& column, FormatterString brHint);
-		bool ShowSegmentPrefix(const Instruction& instruction, InstrOpInfo const opInfo);
+		bool ShowSegmentPrefix(const Instruction& instruction, GasFormatterInternal::InstrOpInfo const opInfo);
 		void FormatPrefix(FormatterOutput& output, const Instruction& instruction, std::int32_t& column, FormatterString prefix, PrefixKind prefixKind, bool& needSpace);
-		void FormatOperands(const Instruction& instruction, FormatterOutput& output, InstrOpInfo const opInfo);
-		void FormatOperand(const Instruction& instruction, FormatterOutput& output, InstrOpInfo const opInfo, std::int32_t operand);
+		void FormatOperands(const Instruction& instruction, FormatterOutput& output, GasFormatterInternal::InstrOpInfo const opInfo);
+		void FormatOperand(const Instruction& instruction, FormatterOutput& output, GasFormatterInternal::InstrOpInfo const opInfo, std::int32_t operand);
 		void FormatDecorator(FormatterOutput& output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterString text, DecoratorKind decorator);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] string ToRegisterString(Register reg)

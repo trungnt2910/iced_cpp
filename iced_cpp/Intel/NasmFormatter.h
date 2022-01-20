@@ -41,8 +41,6 @@
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
-using namespace Iced::Intel::FormatterInternal;
-using namespace Iced::Intel::NasmFormatterInternal;
 namespace Iced::Intel
 {
 	/// <summary>
@@ -72,9 +70,9 @@ namespace Iced::Intel
 		/* readonly */
 		std::vector<FormatterString> allRegisters;
 		/* readonly */
-		std::vector<InstrInfo*> instrInfos;
+		std::vector<NasmFormatterInternal::InstrInfo*> instrInfos;
 		/* readonly */
-		std::vector<MemorySizes::Info> allMemorySizes;
+		std::vector<NasmFormatterInternal::MemorySizes::Info> allMemorySizes;
 		/* readonly */
 		NumberFormatter numberFormatter;
 		/* readonly */
@@ -216,13 +214,13 @@ namespace Iced::Intel
 		/// <param name="output">Output</param>
 		void Format(const Instruction& instruction, FormatterOutput& output) override;
 	private:
-		void FormatMnemonic(const Instruction& instruction, FormatterOutput& output, InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions);
-		bool ShowSegmentPrefix(const Instruction& instruction, InstrOpInfo const opInfo);
+		void FormatMnemonic(const Instruction& instruction, FormatterOutput& output, NasmFormatterInternal::InstrOpInfo const opInfo, std::int32_t& column, FormatMnemonicOptions mnemonicOptions);
+		bool ShowSegmentPrefix(const Instruction& instruction, NasmFormatterInternal::InstrOpInfo const opInfo);
 		void FormatPrefix(FormatterOutput& output, const Instruction& instruction, std::int32_t& column, FormatterString prefix, PrefixKind prefixKind, bool& needSpace);
-		void FormatOperands(const Instruction& instruction, FormatterOutput& output, InstrOpInfo const opInfo);
-		void FormatOperand(const Instruction& instruction, FormatterOutput& output, InstrOpInfo const opInfo, std::int32_t operand);
-		void ShowSignExtendInfo(FormatterOutput& output, InstrOpInfoFlags flags);
-		void FormatFlowControl(FormatterOutput& output, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions);
+		void FormatOperands(const Instruction& instruction, FormatterOutput& output, NasmFormatterInternal::InstrOpInfo const opInfo);
+		void FormatOperand(const Instruction& instruction, FormatterOutput& output, NasmFormatterInternal::InstrOpInfo const opInfo, std::int32_t operand);
+		void ShowSignExtendInfo(FormatterOutput& output, NasmFormatterInternal::InstrOpInfoFlags flags);
+		void FormatFlowControl(FormatterOutput& output, NasmFormatterInternal::InstrOpInfoFlags flags, FormatterOperandOptions operandOptions);
 		void FormatDecorator(FormatterOutput& output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, FormatterString text, DecoratorKind decorator);
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] string ToRegisterString(Register reg)
@@ -230,8 +228,8 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.NoInlining)] void FormatRegister(FormatterOutput output, in Instruction instruction, int operand, int instructionOperand, Register reg)
 		void FormatRegister(FormatterOutput& output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, Register reg);
-		void FormatMemory(FormatterOutput& output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, MemorySize memSize, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, InstrOpInfoFlags flags);
-		void FormatMemorySize(FormatterOutput& output, MemorySize memSize, InstrOpInfoFlags flags, FormatterOperandOptions operandOptions);
+		void FormatMemory(FormatterOutput& output, const Instruction& instruction, std::int32_t operand, std::int32_t instructionOperand, MemorySize memSize, Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int32_t displSize, std::int64_t displ, std::int32_t addrSize, NasmFormatterInternal::InstrOpInfoFlags flags);
+		void FormatMemorySize(FormatterOutput& output, MemorySize memSize, NasmFormatterInternal::InstrOpInfoFlags flags, FormatterOperandOptions operandOptions);
 		void FormatKeyword(FormatterOutput& output, FormatterString keyword);
 		/// <summary>
 		/// Formats a register
