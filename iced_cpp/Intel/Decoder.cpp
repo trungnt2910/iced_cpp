@@ -152,27 +152,28 @@ namespace Iced::Intel
 		handlers_MVEX_0F3A = OpCodeHandlersTables_MVEX::Handlers_0F3A;
 	}
 
-	Decoder* Decoder::Create(std::int32_t bitness, CodeReader* reader, std::uint64_t ip, DecoderOptions options)
+	Decoder Decoder::Create(std::int32_t bitness, CodeReader* reader, std::uint64_t ip, DecoderOptions options)
 	{
-		auto switchTempVar_0 = bitness;
+		if (bitness == 16 || bitness == 32 || bitness == 64)
+		{
+			return Decoder(reader, ip, options, bitness);
+		}
 
-		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: return (switchTempVar_0 == 16 || switchTempVar_0 == 32 || switchTempVar_0 == 64) ? new Decoder(reader, ip, options, bitness) : throw new ArgumentOutOfRangeException(nameof(bitness));
-		return (switchTempVar_0 == 16 || switchTempVar_0 == 32 || switchTempVar_0 == 64) ? new Decoder(reader, ip, options, bitness) : throw ArgumentOutOfRangeException("bitness");
+		throw std::invalid_argument("invalid bitness");
 	}
 
-	Decoder* Decoder::Create(std::int32_t bitness, std::vector<std::uint8_t>& data, std::uint64_t ip, DecoderOptions options)
+	Decoder Decoder::Create(std::int32_t bitness, std::vector<std::uint8_t>& data, std::uint64_t ip, DecoderOptions options)
 	{
 		ByteArrayCodeReader tempVar(data);
 		return Create(bitness, &tempVar, ip, options);
 	}
 
-	Decoder* Decoder::Create(std::int32_t bitness, CodeReader* reader, DecoderOptions options)
+	Decoder Decoder::Create(std::int32_t bitness, CodeReader* reader, DecoderOptions options)
 	{
 		return Create(bitness, reader, 0, options);
 	}
 
-	Decoder* Decoder::Create(std::int32_t bitness, std::vector<std::uint8_t>& data, DecoderOptions options)
+	Decoder Decoder::Create(std::int32_t bitness, std::vector<std::uint8_t>& data, DecoderOptions options)
 	{
 		ByteArrayCodeReader tempVar(data);
 		return Create(bitness, &tempVar, 0, options);

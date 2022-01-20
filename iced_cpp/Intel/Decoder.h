@@ -210,7 +210,7 @@ namespace Iced::Intel
 		/// <param name="options">Decoder options</param>
 		/// <returns></returns>
 	public:
-		static Decoder* Create(std::int32_t bitness, CodeReader* reader, std::uint64_t ip, DecoderOptions options = DecoderOptions::None);
+		static Decoder Create(std::int32_t bitness, CodeReader* reader, std::uint64_t ip, DecoderOptions options = DecoderOptions::None);
 		/// <summary>
 		/// Creates a decoder
 		/// </summary>
@@ -219,7 +219,7 @@ namespace Iced::Intel
 		/// <param name="ip"><c>RIP</c> value</param>
 		/// <param name="options">Decoder options</param>
 		/// <returns></returns>
-		static Decoder* Create(std::int32_t bitness, std::vector<std::uint8_t>& data, std::uint64_t ip, DecoderOptions options = DecoderOptions::None);
+		static Decoder Create(std::int32_t bitness, std::vector<std::uint8_t>& data, std::uint64_t ip, DecoderOptions options = DecoderOptions::None);
 		/// <summary>
 		/// Creates a decoder
 		/// </summary>
@@ -227,7 +227,7 @@ namespace Iced::Intel
 		/// <param name="reader">Code reader</param>
 		/// <param name="options">Decoder options</param>
 		/// <returns></returns>
-		static Decoder* Create(std::int32_t bitness, CodeReader* reader, DecoderOptions options = DecoderOptions::None);
+		static Decoder Create(std::int32_t bitness, CodeReader* reader, DecoderOptions options = DecoderOptions::None);
 		/// <summary>
 		/// Creates a decoder
 		/// </summary>
@@ -235,7 +235,7 @@ namespace Iced::Intel
 		/// <param name="data">Data to decode</param>
 		/// <param name="options">Decoder options</param>
 		/// <returns></returns>
-		static Decoder* Create(std::int32_t bitness, std::vector<std::uint8_t>& data, DecoderOptions options = DecoderOptions::None);
+		static Decoder Create(std::int32_t bitness, std::vector<std::uint8_t>& data, DecoderOptions options = DecoderOptions::None);
 		std::uint32_t ReadByte();
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal uint ReadUInt16()
