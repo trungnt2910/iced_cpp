@@ -1,39 +1,16 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
 
 #pragma once
 
 #include "UsedRegister.h"
-#include "InstructionInfoInternal/SimpleList.h"
 #include "UsedMemory.h"
 #include "OpAccess.g.h"
 #include <vector>
-#include <any>
-#include <csharp/exceptionhelper.h>
 
 #include "Iced.Intel.IcedConstants.h"
+#include "InstructionInfoInternal/InfoHandlerFlags.h"
 
-//C# TO C++ CONVERTER NOTE: Forward class declarations:
-namespace Iced::Intel { class UsedRegisterIterator; }
-namespace Iced::Intel { class UsedMemoryIterator; }
-
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
-using namespace Iced::Intel::InstructionInfoInternal;
 namespace Iced::Intel
 {
 	/// <summary>
@@ -41,56 +18,13 @@ namespace Iced::Intel
 	/// </summary>
 	class InstructionInfo
 	{
+	private:
+		std::vector<UsedRegister> usedRegisters;
+		std::vector<UsedMemory> usedMemoryLocations;
+		std::uint8_t opAccesses[IcedConstants::MaxOpCount];
+		constexpr InstructionInfo(bool dummy);
+		friend class InstructionInfoFactory;
 	public:
-		SimpleList<UsedRegister> usedRegisters;
-		SimpleList<UsedMemory> usedMemoryLocations;
-		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-		byte opAccesses[IcedConstants::MaxOpCount];
-		InstructionInfo(bool dummy);
-	public:
-		class UsedRegisterIterator : public std::vector<UsedRegister>, public IEnumerator<UsedRegister>
-		{
-			/* readonly */
-		private:
-			std::vector<UsedRegister> usedRegisters;
-			/* readonly */
-			std::uint32_t length = 0;
-			std::int32_t index = 0;
-		public:
-			UsedRegisterIterator(std::vector<UsedRegister>& usedRegisters, std::uint32_t length);
-			UsedRegisterIterator GetEnumerator();
-			UsedRegister GetCurrent() const override;
-			bool MoveNext() override;
-		private:
-			UsedRegister IEnumerator;
-		public:
-			void Reset() override;
-			~UsedRegisterIterator();
-
-			UsedRegisterIterator() = default;
-		};
-	public:
-		class UsedMemoryIterator : public std::vector<UsedMemory>, public IEnumerator<UsedMemory>
-		{
-			/* readonly */
-		private:
-			std::vector<UsedMemory> usedMemoryLocations;
-			/* readonly */
-			std::uint32_t length = 0;
-			std::int32_t index = 0;
-		public:
-			UsedMemoryIterator(std::vector<UsedMemory>& usedMemoryLocations, std::uint32_t length);
-			UsedMemoryIterator GetEnumerator();
-			UsedMemory GetCurrent() const override;
-			bool MoveNext() override;
-		private:
-			UsedMemory IEnumerator;
-		public:
-			void Reset() override;
-			~UsedMemoryIterator();
-
-			UsedMemoryIterator() = default;
-		};
 		/// <summary>
 		/// Gets a struct iterator that returns all accessed registers. This method doesn't return all accessed registers if <see cref="Instruction.IsSaveRestoreInstruction"/> is <see langword="true"/>.
 		/// <br/>
@@ -101,40 +35,109 @@ namespace Iced::Intel
 		/// register. Example instructions that do this: <c>PINSRB</c>, <c>ARPL</c>
 		/// </summary>
 		/// <returns></returns>
-		UsedRegisterIterator GetUsedRegisters();
+		constexpr const std::vector<UsedRegister>& GetUsedRegisters() const;
 		/// <summary>
 		/// Gets a struct iterator that returns all accessed memory locations
 		/// </summary>
 		/// <returns></returns>
-		UsedMemoryIterator GetUsedMemory();
+		constexpr const std::vector<UsedMemory>& GetUsedMemory() const;
 		/// <summary>
 		/// Operand #0 access
 		/// </summary>
 	public:
-		OpAccess GetOp0Access() const;
+		constexpr OpAccess GetOp0Access() const;
 		/// <summary>
 		/// Operand #1 access
 		/// </summary>
-		OpAccess GetOp1Access() const;
+		constexpr OpAccess GetOp1Access() const;
 		/// <summary>
 		/// Operand #2 access
 		/// </summary>
-		OpAccess GetOp2Access() const;
+		constexpr OpAccess GetOp2Access() const;
 		/// <summary>
 		/// Operand #3 access
 		/// </summary>
-		OpAccess GetOp3Access() const;
+		constexpr OpAccess GetOp3Access() const;
 		/// <summary>
 		/// Operand #4 access
 		/// </summary>
-		OpAccess GetOp4Access() const;
+		constexpr OpAccess GetOp4Access() const;
 		/// <summary>
 		/// Gets operand access
 		/// </summary>
 		/// <param name="operand">Operand number, 0-4</param>
 		/// <returns></returns>
-		OpAccess GetOpAccess(std::int32_t operand);
+		constexpr OpAccess GetOpAccess(std::int32_t operand) const;
 
-		InstructionInfo() = default;
+		constexpr InstructionInfo() = default;
 	};
+
+
+	constexpr InstructionInfo::InstructionInfo(bool dummy)
+	{
+		usedRegisters = std::vector<UsedRegister>();
+		usedRegisters.reserve(InstructionInfoInternal::InstrInfoConstants::DefaultUsedRegisterCollCapacity);
+		usedMemoryLocations = std::vector<UsedMemory>();
+		usedMemoryLocations.reserve(InstructionInfoInternal::InstrInfoConstants::DefaultUsedMemoryCollCapacity);
+		opAccesses[0] = 0;
+		opAccesses[1] = 0;
+		opAccesses[2] = 0;
+		opAccesses[3] = 0;
+		opAccesses[4] = 0;
+		static_assert(IcedConstants::MaxOpCount == 5);
+	}
+
+	constexpr const std::vector<UsedRegister>& InstructionInfo::GetUsedRegisters() const
+	{
+		return usedRegisters;
+	}
+
+	constexpr const std::vector<UsedMemory>& InstructionInfo::GetUsedMemory() const
+	{
+		return usedMemoryLocations;
+	}
+
+	constexpr OpAccess InstructionInfo::GetOp0Access() const
+	{
+		return (OpAccess)opAccesses[0];
+	}
+
+	constexpr OpAccess InstructionInfo::GetOp1Access() const
+	{
+		return (OpAccess)opAccesses[1];
+	}
+
+	constexpr OpAccess InstructionInfo::GetOp2Access() const
+	{
+		return (OpAccess)opAccesses[2];
+	}
+
+	constexpr OpAccess InstructionInfo::GetOp3Access() const
+	{
+		return (OpAccess)opAccesses[3];
+	}
+
+	constexpr OpAccess InstructionInfo::GetOp4Access() const
+	{
+		return (OpAccess)opAccesses[4];
+	}
+
+	constexpr OpAccess InstructionInfo::GetOpAccess(std::int32_t operand) const
+	{
+		switch (operand)
+		{
+		case 0:
+			return GetOp0Access();
+		case 1:
+			return GetOp1Access();
+		case 2:
+			return GetOp2Access();
+		case 3:
+			return GetOp3Access();
+		case 4:
+			return GetOp4Access();
+		default:
+			throw std::invalid_argument("operand out of range.");
+		}
+	}
 }

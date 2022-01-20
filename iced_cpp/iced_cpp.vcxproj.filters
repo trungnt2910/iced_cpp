@@ -675,7 +675,7 @@
     <ClInclude Include="Intel\EncoderInternal\OpCodeFormatter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\CharHelpers.h">
+    <ClInclude Include="Intel\Internal\StringHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

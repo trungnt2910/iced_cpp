@@ -1805,16 +1805,16 @@ namespace Iced::Intel
 			}
 			if (instruction.GetOp0Kind() == OpKind::Memory)
 			{
-				assert(info.usedMemoryLocations.ValidLength == 1);
+				assert(info.usedMemoryLocations.size() == 1);
 				if (instruction.GetMemoryBase() == Register::RSP || instruction.GetMemoryBase() == Register::ESP)
 				{
-					const auto& mem = info.usedMemoryLocations.Array[0];
+					const auto& mem = info.usedMemoryLocations[0];
 					auto displ = mem.GetDisplacement() + opSize;
 					if (instruction.GetMemoryBase() == Register::ESP)
 					{
 						displ = static_cast<std::uint32_t>(displ);
 					}
-					info.usedMemoryLocations.Array[0] = UsedMemory(mem.GetSegment(), mem.GetBase(), mem.GetIndex(), mem.GetScale(), displ, mem.GetMemorySize(), mem.GetAccess(), mem.GetAddressSize(), mem.GetVsibSize());
+					info.usedMemoryLocations[0] = UsedMemory(mem.GetSegment(), mem.GetBase(), mem.GetIndex(), mem.GetScale(), displ, mem.GetMemorySize(), mem.GetAccess(), mem.GetAddressSize(), mem.GetVsibSize());
 				}
 			}
 			AddMemory(Register::SS, xsp, Register::None, 1, 0, memSize, OpAccess::Read, addressSize, 0);
@@ -1933,12 +1933,12 @@ namespace Iced::Intel
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[0] = (byte)OpAccess::CondWrite;
+						info.opAccesses[0] = (std::uint8_t)OpAccess::CondWrite;
 					}
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[1] = (byte)OpAccess::CondRead;
+						info.opAccesses[1] = (std::uint8_t)OpAccess::CondRead;
 					}
 			if ((flags & Flags::NoMemoryUsage) == 0)
 			{
@@ -1946,8 +1946,8 @@ namespace Iced::Intel
 			}
 			if ((flags & Flags::NoRegisterUsage) == 0)
 			{
-				assert(info.usedRegisters.ValidLength == 1);
-				info.usedRegisters.Array[0] = UsedRegister(Register::DX, OpAccess::CondRead);
+				assert(info.usedRegisters.size() == 1);
+				info.usedRegisters[0] = UsedRegister(Register::DX, OpAccess::CondRead);
 				AddRegister(flags, rCX, OpAccess::ReadCondWrite);
 				if ((flags & Flags::Is64Bit) == 0)
 				{
@@ -2001,12 +2001,12 @@ namespace Iced::Intel
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[0] = (byte)OpAccess::CondRead;
+						info.opAccesses[0] = (std::uint8_t)OpAccess::CondRead;
 					}
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[1] = (byte)OpAccess::CondRead;
+						info.opAccesses[1] = (std::uint8_t)OpAccess::CondRead;
 					}
 			if ((flags & Flags::NoMemoryUsage) == 0)
 			{
@@ -2014,8 +2014,8 @@ namespace Iced::Intel
 			}
 			if ((flags & Flags::NoRegisterUsage) == 0)
 			{
-				assert(info.usedRegisters.ValidLength == 1);
-				info.usedRegisters.Array[0] = UsedRegister(Register::DX, OpAccess::CondRead);
+				assert(info.usedRegisters.size() == 1);
+				info.usedRegisters[0] = UsedRegister(Register::DX, OpAccess::CondRead);
 				AddRegister(flags, rCX, OpAccess::ReadCondWrite);
 				AddMemorySegmentRegister(flags, instruction.GetMemorySegment(), OpAccess::CondRead);
 				AddRegister(flags, rSI, OpAccess::CondRead);
@@ -2066,12 +2066,12 @@ namespace Iced::Intel
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[0] = (byte)OpAccess::CondWrite;
+						info.opAccesses[0] = (std::uint8_t)OpAccess::CondWrite;
 					}
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[1] = (byte)OpAccess::CondRead;
+						info.opAccesses[1] = (std::uint8_t)OpAccess::CondRead;
 					}
 			if ((flags & Flags::NoMemoryUsage) == 0)
 			{
@@ -2142,12 +2142,12 @@ namespace Iced::Intel
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[0] = (byte)OpAccess::CondRead;
+						info.opAccesses[0] = (std::uint8_t)OpAccess::CondRead;
 					}
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[1] = (byte)OpAccess::CondRead;
+						info.opAccesses[1] = (std::uint8_t)OpAccess::CondRead;
 					}
 			if ((flags & Flags::NoMemoryUsage) == 0)
 			{
@@ -2215,12 +2215,12 @@ namespace Iced::Intel
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[0] = (byte)OpAccess::CondWrite;
+						info.opAccesses[0] = (std::uint8_t)OpAccess::CondWrite;
 					}
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[1] = (byte)OpAccess::CondRead;
+						info.opAccesses[1] = (std::uint8_t)OpAccess::CondRead;
 					}
 			if ((flags & Flags::NoMemoryUsage) == 0)
 			{
@@ -2228,8 +2228,8 @@ namespace Iced::Intel
 			}
 			if ((flags & Flags::NoRegisterUsage) == 0)
 			{
-				assert(info.usedRegisters.ValidLength == 1);
-				info.usedRegisters.Array[0] = UsedRegister(info.usedRegisters.Array[0].GetRegister(), OpAccess::CondRead);
+				assert(info.usedRegisters.size() == 1);
+				info.usedRegisters[0] = UsedRegister(info.usedRegisters[0].GetRegister(), OpAccess::CondRead);
 				AddRegister(flags, rCX, OpAccess::ReadCondWrite);
 				if ((flags & Flags::Is64Bit) == 0)
 				{
@@ -2283,12 +2283,12 @@ namespace Iced::Intel
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[0] = (byte)OpAccess::CondWrite;
+						info.opAccesses[0] = (std::uint8_t)OpAccess::CondWrite;
 					}
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[1] = (byte)OpAccess::CondRead;
+						info.opAccesses[1] = (std::uint8_t)OpAccess::CondRead;
 					}
 			if ((flags & Flags::NoMemoryUsage) == 0)
 			{
@@ -2296,8 +2296,8 @@ namespace Iced::Intel
 			}
 			if ((flags & Flags::NoRegisterUsage) == 0)
 			{
-				assert(info.usedRegisters.ValidLength == 1);
-				info.usedRegisters.Array[0] = UsedRegister(info.usedRegisters.Array[0].GetRegister(), OpAccess::CondWrite);
+				assert(info.usedRegisters.size() == 1);
+				info.usedRegisters[0] = UsedRegister(info.usedRegisters[0].GetRegister(), OpAccess::CondWrite);
 				AddRegister(flags, rCX, OpAccess::ReadCondWrite);
 				AddMemorySegmentRegister(flags, instruction.GetMemorySegment(), OpAccess::CondRead);
 				AddRegister(flags, rSI, OpAccess::CondRead);
@@ -2345,12 +2345,12 @@ namespace Iced::Intel
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[0] = (byte)OpAccess::CondRead;
+						info.opAccesses[0] = (std::uint8_t)OpAccess::CondRead;
 					}
 			//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 			//	  unsafe
 					{
-						info.opAccesses[1] = (byte)OpAccess::CondRead;
+						info.opAccesses[1] = (std::uint8_t)OpAccess::CondRead;
 					}
 			if ((flags & Flags::NoMemoryUsage) == 0)
 			{
@@ -2358,8 +2358,8 @@ namespace Iced::Intel
 			}
 			if ((flags & Flags::NoRegisterUsage) == 0)
 			{
-				assert(info.usedRegisters.ValidLength == 1);
-				info.usedRegisters.Array[0] = UsedRegister(info.usedRegisters.Array[0].GetRegister(), OpAccess::CondRead);
+				assert(info.usedRegisters.size() == 1);
+				info.usedRegisters[0] = UsedRegister(info.usedRegisters[0].GetRegister(), OpAccess::CondRead);
 				AddRegister(flags, rCX, OpAccess::ReadCondWrite);
 				if ((flags & Flags::Is64Bit) == 0)
 				{
@@ -2416,7 +2416,7 @@ namespace Iced::Intel
 			}
 			if ((flags & Flags::NoRegisterUsage) == 0)
 			{
-				assert(info.usedRegisters.ValidLength == 0);
+				assert(info.usedRegisters.size() == 0);
 				AddRegister(flags, rCX, OpAccess::ReadCondWrite);
 				if ((flags & Flags::Is64Bit) == 0)
 				{
@@ -2601,20 +2601,12 @@ namespace Iced::Intel
 		{
 			return;
 		}
-		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-		//	 unsafe
-			   {
-				   info.opAccesses[0] = (byte)OpAccess::Write;
-			   }
-		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-		//	 unsafe
-			   {
-				   info.opAccesses[1] = (byte)OpAccess::None;
-			   }
+				   info.opAccesses[0] = (std::uint8_t)OpAccess::Write;
+				   info.opAccesses[1] = (std::uint8_t)OpAccess::None;
 		if ((flags & Flags::NoRegisterUsage) == 0)
 		{
-			assert(info.usedRegisters.ValidLength == 2 || info.usedRegisters.ValidLength == 3);
-			info.usedRegisters.ValidLength = 0;
+			assert(info.usedRegisters.size() == 2 || info.usedRegisters.size() == 3);
+			info.usedRegisters.resize(0);
 			AddRegister(flags, instruction.GetOp0Register(), OpAccess::Write);
 		}
 	}
@@ -2645,21 +2637,13 @@ namespace Iced::Intel
 		{
 			return;
 		}
-		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-		//	 unsafe
-			   {
-				   info.opAccesses[0] = (byte)OpAccess::Write;
-			   }
-		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-		//	 unsafe
-			   {
-				   info.opAccesses[1] = (byte)OpAccess::None;
-			   }
+		info.opAccesses[0] = (std::uint8_t)OpAccess::Write;
+		info.opAccesses[1] = (std::uint8_t)OpAccess::None;
 		if ((flags & Flags::NoRegisterUsage) == 0)
 		{
-			assert(info.usedRegisters.ValidLength == 2 || info.usedRegisters.ValidLength == 3);
-			info.usedRegisters.Array[0] = UsedRegister(instruction.GetOp0Register(), OpAccess::Write);
-			info.usedRegisters.ValidLength = 1;
+			assert(info.usedRegisters.size() == 2 || info.usedRegisters.size() == 3);
+			info.usedRegisters[0] = UsedRegister(instruction.GetOp0Register(), OpAccess::Write);
+			info.usedRegisters.resize(1);
 		}
 	}
 
@@ -2677,22 +2661,14 @@ namespace Iced::Intel
 		{
 			return;
 		}
-		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-		//	 unsafe
-			   {
-				   info.opAccesses[1] = (byte)OpAccess::None;
-			   }
-		//C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
-		//	 unsafe
-			   {
-				   info.opAccesses[2] = (byte)OpAccess::None;
-			   }
+				   info.opAccesses[1] = (std::uint8_t)OpAccess::None;
+				   info.opAccesses[2] = (std::uint8_t)OpAccess::None;
 		if ((flags & Flags::NoRegisterUsage) == 0)
 		{
-			assert(info.usedRegisters.ValidLength == 3 || info.usedRegisters.ValidLength == 4);
-			assert(info.usedRegisters.Array[info.usedRegisters.ValidLength - 2].GetRegister() == instruction.GetOp1Register());
-			assert(info.usedRegisters.Array[info.usedRegisters.ValidLength - 1].GetRegister() == instruction.GetOp2Register());
-			info.usedRegisters.ValidLength -= 2;
+			assert(info.usedRegisters.size() == 3 || info.usedRegisters.size() == 4);
+			assert(info.usedRegisters[info.usedRegisters.size() - 2].GetRegister() == instruction.GetOp1Register());
+			assert(info.usedRegisters[info.usedRegisters.size() - 1].GetRegister() == instruction.GetOp2Register());
+			info.usedRegisters.resize(info.usedRegisters.size() - 2);
 		}
 	}
 
@@ -2700,16 +2676,16 @@ namespace Iced::Intel
 	{
 		if ((flags & Flags::NoRegisterUsage) == 0)
 		{
-			assert(info.usedRegisters.ValidLength != 0);
+			assert(info.usedRegisters.size() != 0);
 			// Skip memory operand, if any
-			std::int32_t startIndex = instruction.GetOp0Kind() == OpKind::Register ? 0 : info.usedRegisters.ValidLength - 1;
-			for (std::int32_t i = 0; i < info.usedRegisters.ValidLength; i++)
+			std::int32_t startIndex = instruction.GetOp0Kind() == OpKind::Register ? 0 : (std::int32_t)info.usedRegisters.size() - 1;
+			for (std::int32_t i = 0; i < (std::int32_t)info.usedRegisters.size(); i++)
 			{
 				if (i < startIndex)
 				{
 					continue;
 				}
-				auto regInfo = info.usedRegisters.Array[i];
+				auto regInfo = info.usedRegisters[i];
 				std::int32_t index = TryGetGpr163264Index(regInfo.GetRegister());
 				if (index >= 4)
 				{
@@ -2717,7 +2693,7 @@ namespace Iced::Intel
 				}
 				if (index >= 0)
 				{
-					info.usedRegisters.Array[i] = UsedRegister((Register)(Register::AL + index), regInfo.GetAccess());
+					info.usedRegisters[i] = UsedRegister((Register)(Register::AL + index), regInfo.GetAccess());
 				}
 			}
 		}
@@ -2733,9 +2709,9 @@ namespace Iced::Intel
 			std::int32_t opIndex = opCount - N - immCount;
 			if (instruction.GetOpKind(opIndex) == OpKind::Register)
 			{
-				assert(info.usedRegisters.ValidLength >= N);
-				assert(info.usedRegisters.Array[info.usedRegisters.ValidLength - N].GetRegister() == instruction.GetOpRegister(opIndex));
-				assert(info.usedRegisters.Array[info.usedRegisters.ValidLength - N].GetAccess() == OpAccess::Read);
+				assert(info.usedRegisters.size() >= N);
+				assert(info.usedRegisters[info.usedRegisters.size() - N].GetRegister() == instruction.GetOpRegister(opIndex));
+				assert(info.usedRegisters[info.usedRegisters.size() - N].GetAccess() == OpAccess::Read);
 				std::int32_t index = TryGetGpr163264Index(instruction.GetOpRegister(opIndex));
 				if (index >= 4 && baseReg == Register::AL)
 				{
@@ -2743,7 +2719,7 @@ namespace Iced::Intel
 				}
 				if (index >= 0)
 				{
-					info.usedRegisters.Array[info.usedRegisters.ValidLength - N] = UsedRegister((Register)(baseReg + index), OpAccess::Read);
+					info.usedRegisters[info.usedRegisters.size() - N] = UsedRegister((Register)(baseReg + index), OpAccess::Read);
 				}
 			}
 		}
@@ -2753,19 +2729,19 @@ namespace Iced::Intel
 	{
 		if ((flags & Flags::NoRegisterUsage) == 0)
 		{
-			assert(info.usedRegisters.ValidLength >= 1);
+			assert(info.usedRegisters.size() >= 1);
 			assert(instruction.GetOp0Kind() == OpKind::Register);
 			auto reg = instruction.GetOp0Register();
 			// The memory operand's regs start at index 1
-			for (std::int32_t i = 1; i < info.usedRegisters.ValidLength; i++)
+			for (std::int32_t i = 1; i < info.usedRegisters.size(); i++)
 			{
-				auto regInfo = info.usedRegisters.Array[i];
+				auto regInfo = info.usedRegisters[i];
 				if (reg >= Register::EAX && reg <= Register::R15D)
 				{
 					if (regInfo.GetRegister() >= Register::RAX && regInfo.GetRegister() <= Register::R15)
 					{
 						auto memReg = regInfo.GetRegister() - Register::RAX + Register::EAX;
-						info.usedRegisters.Array[i] = UsedRegister((Register)memReg, regInfo.GetAccess());
+						info.usedRegisters[i] = UsedRegister((Register)memReg, regInfo.GetAccess());
 					}
 				}
 				else if (reg >= Register::AX && reg <= Register::R15W)
@@ -2773,7 +2749,7 @@ namespace Iced::Intel
 					if (regInfo.GetRegister() >= Register::EAX && regInfo.GetRegister() <= Register::R15)
 					{
 						auto memReg = ((regInfo.GetRegister() - Register::EAX) & 0xF) + Register::AX;
-						info.usedRegisters.Array[i] = UsedRegister((Register)memReg, regInfo.GetAccess());
+						info.usedRegisters[i] = UsedRegister((Register)memReg, regInfo.GetAccess());
 					}
 				}
 				else
@@ -2805,15 +2781,14 @@ namespace Iced::Intel
 	{
 		if ((flags & Flags::NoMemoryUsage) == 0)
 		{
-			if (info.usedMemoryLocations.ValidLength == 1)
+			if (info.usedMemoryLocations.size() == 1)
 			{
-				const auto& mem = info.usedMemoryLocations.Array[0];
+				const auto& mem = info.usedMemoryLocations[0];
 				auto switchTempVar_2 = mem.GetAddressSize();
-
 
 				std::uint64_t mask = (switchTempVar_2 == CodeSize::Code16) ? std::numeric_limits<std::uint16_t>::max() : (switchTempVar_2 == CodeSize::Code32) ? std::numeric_limits<std::uint32_t>::max() : std::numeric_limits<std::uint64_t>::max();
 				auto displ = (mem.GetDisplacement() + static_cast<std::uint64_t>(extraDispl)) & mask;
-				info.usedMemoryLocations.Array[0] = UsedMemory(mem.GetSegment(), mem.GetBase(), mem.GetIndex(), mem.GetScale(), displ, mem.GetMemorySize(), mem.GetAccess(), mem.GetAddressSize(), mem.GetVsibSize());
+				info.usedMemoryLocations[0] = UsedMemory(mem.GetSegment(), mem.GetBase(), mem.GetIndex(), mem.GetScale(), displ, mem.GetMemorySize(), mem.GetAccess(), mem.GetAddressSize(), mem.GetVsibSize());
 			}
 			else
 			{
@@ -2863,21 +2838,7 @@ namespace Iced::Intel
 		}
 		if (access != OpAccess::NoMemAccess)
 		{
-			std::int32_t arrayLength = (std::int32_t)info.usedMemoryLocations.Array.size();
-			std::int32_t validLen = info.usedMemoryLocations.ValidLength;
-			if (arrayLength == validLen)
-			{
-				if (arrayLength == 0)
-				{
-					info.usedMemoryLocations.Array = std::vector<UsedMemory>(defaultMemoryArrayCount);
-				}
-				else
-				{
-					info.usedMemoryLocations.Array.resize(arrayLength * 2);
-				}
-			}
-			info.usedMemoryLocations.Array[validLen] = UsedMemory(segReg, baseReg, indexReg, scale, displ, memorySize, access, addressSize, vsibSize);
-			info.usedMemoryLocations.ValidLength = validLen + 1;
+			info.usedMemoryLocations.emplace_back(segReg, baseReg, indexReg, scale, displ, memorySize, access, addressSize, vsibSize);
 		}
 	}
 
@@ -2904,11 +2865,11 @@ namespace Iced::Intel
 			{
 				std::int32_t index;
 				Static::Assert(IcedConstants::VMM_first == Register::ZMM0 ? 0 : -1);
-				if ((flags & Flags::Is64Bit) != 0 && static_cast<std::uint32_t>(index = reg - Register::EAX) <= (Register::R15D - Register::EAX))
+				if ((flags & Flags::Is64Bit) != 0 && static_cast<std::uint32_t>(index = reg - Register::EAX) <= static_cast<std::uint32_t>(Register::R15D - Register::EAX))
 				{
 					writeReg = (Register)(Register::RAX + index);
 				}
-				else if ((flags & Flags::ZeroExtVecRegs) != 0 && static_cast<std::uint32_t>(index = reg - Register::XMM0) <= IcedConstants::VMM_last - Register::XMM0)
+				else if ((flags & Flags::ZeroExtVecRegs) != 0 && static_cast<std::uint32_t>(index = reg - Register::XMM0) <= static_cast<std::uint32_t>(IcedConstants::VMM_last - Register::XMM0))
 				{
 					writeReg = (Register)(Register::ZMM0 + (index % IcedConstants::VMM_count));
 				}
@@ -2918,38 +2879,16 @@ namespace Iced::Intel
 				}
 			}
 		}
-		auto array = info.usedRegisters.Array;
-		std::int32_t validLen = info.usedRegisters.ValidLength;
-		std::int32_t arrayLength = (std::int32_t)array.size();
-		std::int32_t numRegs = writeReg == reg ? 1 : 2;
-		if (validLen + numRegs > arrayLength)
-		{
-			if (arrayLength == 0)
-			{
-				// The code below that resizes the array assumes there's at least 2 new free elements, so the minimum array length is 2.
-				assert(defaultRegisterArrayCount >= 2);
-				info.usedRegisters.Array = array = std::vector<UsedRegister>(defaultRegisterArrayCount);
-			}
-			else
-			{
-				assert(arrayLength * 2 >= arrayLength + numRegs);
-				info.usedRegisters.Array.resize(arrayLength * 2);
-				array = info.usedRegisters.Array;
-			}
-		}
 		if (writeReg == reg)
 		{
-			array[validLen] = UsedRegister(reg, access);
-			info.usedRegisters.ValidLength = validLen + 1;
+			info.usedRegisters.emplace_back(reg, access);
 		}
 		else
 		{
 			assert(access == OpAccess::ReadWrite || access == OpAccess::ReadCondWrite);
-			array[validLen] = UsedRegister(reg, OpAccess::Read);
-			validLen++;
+			info.usedRegisters.emplace_back(reg, OpAccess::Read);
 			auto lastAccess = access == OpAccess::ReadWrite ? OpAccess::Write : OpAccess::CondWrite;
-			array[validLen] = UsedRegister(writeReg, lastAccess);
-			info.usedRegisters.ValidLength = validLen + 1;
+			info.usedRegisters.emplace_back(writeReg, lastAccess);
 		}
 	}
 
@@ -2965,8 +2904,8 @@ namespace Iced::Intel
 
 	const InstructionInfo& InstructionInfoFactory::Create(const Instruction& instruction, InstructionInfoOptions options)
 	{
-		info.usedRegisters.ValidLength = 0;
-		info.usedMemoryLocations.ValidLength = 0;
+		info.usedRegisters.clear();
+		info.usedMemoryLocations.clear();
 		auto data = InstrInfoTable::Data;
 		auto index = (std::uint32_t)instruction.GetCode() << 1;
 		auto flags1 = data[(int)index];
@@ -3066,27 +3005,27 @@ namespace Iced::Intel
 			break;
 		}
 		assert(instruction.GetOpCount() <= IcedConstants::MaxOpCount);
-		info.opAccesses[0] = (byte)op0Access;
+		info.opAccesses[0] = (std::uint8_t)op0Access;
 		auto op1Info = (OpInfo1)((flags1 >> (int)InfoFlags1::OpInfo1Shift) & (std::uint32_t)InfoFlags1::OpInfo1Mask);
-		info.opAccesses[1] = (byte)OpAccesses::Op1[(int)op1Info];
-		info.opAccesses[2] = (byte)OpAccesses::Op2[(int)((flags1 >> (int)InfoFlags1::OpInfo2Shift) & (std::uint32_t)InfoFlags1::OpInfo2Mask)];
+		info.opAccesses[1] = (std::uint8_t)OpAccesses::Op1[(int)op1Info];
+		info.opAccesses[2] = (std::uint8_t)OpAccesses::Op2[(int)((flags1 >> (int)InfoFlags1::OpInfo2Shift) & (std::uint32_t)InfoFlags1::OpInfo2Mask)];
 		if ((flags1 & (((std::uint32_t)InfoFlags1::OpInfo3Mask) << (int)InfoFlags1::OpInfo3Shift)) != 0)
 		{
 			Static::Assert((int)InstrInfoConstants::OpInfo3_Count == 2 ? 0 : -1);
-			info.opAccesses[3] = (byte)OpAccess::Read;
+			info.opAccesses[3] = (std::uint8_t)OpAccess::Read;
 		}
 		else
 		{
-			info.opAccesses[3] = (byte)OpAccess::None;
+			info.opAccesses[3] = (std::uint8_t)OpAccess::None;
 		}
 		if ((flags1 & (((std::uint32_t)InfoFlags1::OpInfo4Mask) << (int)InfoFlags1::OpInfo4Shift)) != 0)
 		{
 			Static::Assert((int)InstrInfoConstants::OpInfo4_Count == 2 ? 0 : -1);
-			info.opAccesses[4] = (byte)OpAccess::Read;
+			info.opAccesses[4] = (std::uint8_t)OpAccess::Read;
 		}
 		else
 		{
-			info.opAccesses[4] = (byte)OpAccess::None;
+			info.opAccesses[4] = (std::uint8_t)OpAccess::None;
 		}
 		Static::Assert(IcedConstants::MaxOpCount == 5 ? 0 : -1);
 		int opCount = instruction.GetOpCount();
@@ -3102,7 +3041,7 @@ namespace Iced::Intel
 				if (access == OpAccess::NoMemAccess)
 				{
 					access = OpAccess::Read;
-					info.opAccesses[i] = (byte)OpAccess::Read;
+					info.opAccesses[i] = (std::uint8_t)OpAccess::Read;
 				}
 				if ((flags & Flags::NoRegisterUsage) == 0)
 				{

@@ -799,7 +799,7 @@ namespace Iced::Intel
 			std::string toOpCodeStringValue = "";
 			std::string toInstructionStringValue = "";
 
-			this->toOpCodeStringValue = toOpCodeStringValue;
+			this->toOpCodeStringValue = (toOpCodeStringValue != "") ? toOpCodeStringValue : (OpCodeFormatter(*this, lkind, (opcFlags1 & OpCodeInfoFlags1::ModRegRmString) != 0)).Format();
 			auto fmtOption = static_cast<InstrStrFmtOption>((static_cast<std::uint32_t>(opcFlags2) >> static_cast<std::int32_t>(OpCodeInfoFlags2::InstrStrFmtOptionShift)) & static_cast<std::uint32_t>(OpCodeInfoFlags2::InstrStrFmtOptionMask));
 			this->toInstructionStringValue = (toInstructionStringValue != "") ? toInstructionStringValue : (InstructionFormatter(*this, fmtOption)).Format();
 		}

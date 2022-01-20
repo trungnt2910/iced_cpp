@@ -16,7 +16,7 @@ namespace Iced::Intel::EncoderInternal
 {
 	namespace Internal
 	{
-		constexpr std::array<OpCodeInfo, IcedConstants::CodeEnumCount> CreateInfos()
+		consteval std::array<OpCodeInfo, IcedConstants::CodeEnumCount> CreateInfos()
 		{
 			auto infos = std::array<OpCodeInfo, IcedConstants::CodeEnumCount>();
 			const auto& encFlags1 = EncoderData::EncFlags1;

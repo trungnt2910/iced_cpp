@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "../CharHelpers.h"
+#include "../Internal/StringHelpers.h"
 
 namespace Iced::Intel::FormatterInternal
 {
@@ -19,25 +19,17 @@ namespace Iced::Intel::FormatterInternal
 	private:
 		std::string lower;
 		std::string upper;
-		// std::toupper is not constexpr
-		static constexpr std::string ToUpper(const std::string& s)
-		{
-			std::string ss;
-			ss.reserve(s.size());
-			std::transform(s.begin(), s.end(), std::back_insert_iterator(ss), (char(*)(char))CharHelpers::ToUpper);
-			return ss;
-		}
 	public:
 		constexpr std::int32_t GetLength() const
 		{
 			return (std::int32_t)lower.length();
 		}
-		constexpr FormatterString(const std::string& lower) : lower(lower), upper(ToUpper(lower))
+		constexpr FormatterString(const std::string& lower) : lower(lower), upper(Internal::StringHelpers::ToUpper(lower))
 		{
 #if !defined(NDEBUG)
 			for (auto ch : lower)
 			{
-				if (ch != CharHelpers::ToLower(ch))
+				if (ch != Internal::StringHelpers::ToLower(ch))
 				{
 					throw std::invalid_argument("Not a lowercase string: " + lower);
 				}

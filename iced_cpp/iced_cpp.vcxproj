@@ -226,7 +226,7 @@
     <ClInclude Include="Intel\BlockEncoderInternal\TargetInstr.h" />
     <ClInclude Include="Intel\BlockEncoderInternal\XbeginInstr.h" />
     <ClInclude Include="Intel\ByteArrayCodeReader.h" />
-    <ClInclude Include="Intel\CharHelpers.h" />
+    <ClInclude Include="Intel\Internal\StringHelpers.h" />
     <ClInclude Include="Intel\Code.g.h" />
     <ClInclude Include="Intel\CodeExtensions.h" />
     <ClInclude Include="Intel\CodeReader.h" />

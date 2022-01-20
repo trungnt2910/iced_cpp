@@ -18,132 +18,7 @@
 namespace Iced::Intel
 {
 
-	Register UsedMemory::GetSegment() const
-	{
-		return static_cast<Register>(segReg);
-	}
-
-	Register UsedMemory::GetBase() const
-	{
-		return static_cast<Register>(baseReg);
-	}
-
-	Register UsedMemory::GetIndex() const
-	{
-		return static_cast<Register>(indexReg);
-	}
-
-	std::int32_t UsedMemory::GetScale() const
-	{
-		return scale;
-	}
-
-	std::uint64_t UsedMemory::GetDisplacement() const
-	{
-		return displ;
-	}
-
-	Iced::Intel::MemorySize UsedMemory::GetMemorySize() const
-	{
-		return static_cast<Iced::Intel::MemorySize>(memorySize);
-	}
-
-	OpAccess UsedMemory::GetAccess() const
-	{
-		return static_cast<OpAccess>(access);
-	}
-
-	CodeSize UsedMemory::GetAddressSize() const
-	{
-		return static_cast<CodeSize>(addressSize);
-	}
-
-	std::int32_t UsedMemory::GetVsibSize() const
-	{
-		return vsibSize;
-	}
-
-	UsedMemory::UsedMemory(Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int64_t displ, Iced::Intel::MemorySize memorySize, OpAccess access)
-	{
-		this->displ = static_cast<std::uint64_t>(displ);
-		assert(static_cast<std::uint32_t>(segReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->segReg = static_cast<std::uint8_t>(segReg);
-		assert(static_cast<std::uint32_t>(baseReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->baseReg = static_cast<std::uint8_t>(baseReg);
-		assert(static_cast<std::uint32_t>(indexReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->indexReg = static_cast<std::uint8_t>(indexReg);
-		assert(static_cast<std::uint32_t>(memorySize) <= std::numeric_limits<std::uint8_t>::max());
-		this->memorySize = static_cast<std::uint8_t>(memorySize);
-		assert(scale == 1 || scale == 2 || scale == 4 || scale == 8);
-		this->scale = static_cast<std::uint8_t>(scale);
-		assert(static_cast<std::uint32_t>(access) <= std::numeric_limits<std::uint8_t>::max());
-		this->access = static_cast<std::uint8_t>(access);
-		addressSize = static_cast<std::uint8_t>(CodeSize::Unknown);
-		vsibSize = 0;
-	}
-
-	UsedMemory::UsedMemory(Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::uint64_t displ, Iced::Intel::MemorySize memorySize, OpAccess access)
-	{
-		this->displ = displ;
-		assert(static_cast<std::uint32_t>(segReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->segReg = static_cast<std::uint8_t>(segReg);
-		assert(static_cast<std::uint32_t>(baseReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->baseReg = static_cast<std::uint8_t>(baseReg);
-		assert(static_cast<std::uint32_t>(indexReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->indexReg = static_cast<std::uint8_t>(indexReg);
-		assert(static_cast<std::uint32_t>(memorySize) <= std::numeric_limits<std::uint8_t>::max());
-		this->memorySize = static_cast<std::uint8_t>(memorySize);
-		assert(scale == 1 || scale == 2 || scale == 4 || scale == 8);
-		this->scale = static_cast<std::uint8_t>(scale);
-		assert(static_cast<std::uint32_t>(access) <= std::numeric_limits<std::uint8_t>::max());
-		this->access = static_cast<std::uint8_t>(access);
-		addressSize = static_cast<std::uint8_t>(CodeSize::Unknown);
-		vsibSize = 0;
-	}
-
-	UsedMemory::UsedMemory(Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::int64_t displ, Iced::Intel::MemorySize memorySize, OpAccess access, CodeSize addressSize, std::int32_t vsibSize)
-	{
-		this->displ = static_cast<std::uint64_t>(displ);
-		assert(static_cast<std::uint32_t>(segReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->segReg = static_cast<std::uint8_t>(segReg);
-		assert(static_cast<std::uint32_t>(baseReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->baseReg = static_cast<std::uint8_t>(baseReg);
-		assert(static_cast<std::uint32_t>(indexReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->indexReg = static_cast<std::uint8_t>(indexReg);
-		assert(static_cast<std::uint32_t>(memorySize) <= std::numeric_limits<std::uint8_t>::max());
-		this->memorySize = static_cast<std::uint8_t>(memorySize);
-		assert(scale == 1 || scale == 2 || scale == 4 || scale == 8);
-		this->scale = static_cast<std::uint8_t>(scale);
-		assert(static_cast<std::uint32_t>(access) <= std::numeric_limits<std::uint8_t>::max());
-		this->access = static_cast<std::uint8_t>(access);
-		assert(static_cast<std::uint32_t>(addressSize) <= std::numeric_limits<std::uint8_t>::max());
-		this->addressSize = static_cast<std::uint8_t>(addressSize);
-		assert(vsibSize == 0 || vsibSize == 4 || vsibSize == 8);
-		this->vsibSize = static_cast<std::uint8_t>(vsibSize);
-	}
-
-	UsedMemory::UsedMemory(Register segReg, Register baseReg, Register indexReg, std::int32_t scale, std::uint64_t displ, Iced::Intel::MemorySize memorySize, OpAccess access, CodeSize addressSize, std::int32_t vsibSize)
-	{
-		this->displ = displ;
-		assert(static_cast<std::uint32_t>(segReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->segReg = static_cast<std::uint8_t>(segReg);
-		assert(static_cast<std::uint32_t>(baseReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->baseReg = static_cast<std::uint8_t>(baseReg);
-		assert(static_cast<std::uint32_t>(indexReg) <= std::numeric_limits<std::uint8_t>::max());
-		this->indexReg = static_cast<std::uint8_t>(indexReg);
-		assert(static_cast<std::uint32_t>(memorySize) <= std::numeric_limits<std::uint8_t>::max());
-		this->memorySize = static_cast<std::uint8_t>(memorySize);
-		assert(scale == 1 || scale == 2 || scale == 4 || scale == 8);
-		this->scale = static_cast<std::uint8_t>(scale);
-		assert(static_cast<std::uint32_t>(access) <= std::numeric_limits<std::uint8_t>::max());
-		this->access = static_cast<std::uint8_t>(access);
-		assert(static_cast<std::uint32_t>(addressSize) <= std::numeric_limits<std::uint8_t>::max());
-		this->addressSize = static_cast<std::uint8_t>(addressSize);
-		assert(vsibSize == 0 || vsibSize == 4 || vsibSize == 8);
-		this->vsibSize = static_cast<std::uint8_t>(vsibSize);
-	}
-
-	std::uint64_t UsedMemory::GetVirtualAddress(std::int32_t elementIndex, VAGetRegisterValue getRegisterValue)
+	std::uint64_t UsedMemory::GetVirtualAddress(std::int32_t elementIndex, VAGetRegisterValue getRegisterValue) const
 	{
 		if (getRegisterValue == nullptr)
 		{
@@ -158,7 +33,7 @@ namespace Iced::Intel
 		return 0;
 	}
 
-	std::uint64_t UsedMemory::GetVirtualAddress(std::int32_t elementIndex, IVARegisterValueProvider* registerValueProvider)
+	std::uint64_t UsedMemory::GetVirtualAddress(std::int32_t elementIndex, IVARegisterValueProvider* registerValueProvider) const
 	{
 		if (registerValueProvider == nullptr)
 		{
@@ -173,7 +48,7 @@ namespace Iced::Intel
 		return 0;
 	}
 
-	bool UsedMemory::TryGetVirtualAddress(std::int32_t elementIndex, std::uint64_t& result, VATryGetRegisterValue getRegisterValue)
+	bool UsedMemory::TryGetVirtualAddress(std::int32_t elementIndex, std::uint64_t& result, VATryGetRegisterValue getRegisterValue) const
 	{
 		if (getRegisterValue == nullptr)
 		{
@@ -183,7 +58,7 @@ namespace Iced::Intel
 		return TryGetVirtualAddress(elementIndex, provider, result);
 	}
 
-	bool UsedMemory::TryGetVirtualAddress(std::int32_t elementIndex, IVATryGetRegisterValueProvider* registerValueProvider, std::uint64_t& result)
+	bool UsedMemory::TryGetVirtualAddress(std::int32_t elementIndex, IVATryGetRegisterValueProvider* registerValueProvider, std::uint64_t& result) const
 	{
 		if (registerValueProvider == nullptr)
 		{
@@ -234,61 +109,5 @@ namespace Iced::Intel
 		}
 		result = tmpAddr;
 		return true;
-	}
-
-	std::string UsedMemory::ToString()
-	{
-		auto sb = new StringBuilder();
-		sb->append('[');
-		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		sb->append(to_string(GetSegment()));
-		sb->append(':');
-		bool needPlus = false;
-		if (GetBase() != Register::None)
-		{
-			//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-			sb->append(to_string(GetBase()));
-			needPlus = true;
-		}
-		if (GetIndex() != Register::None)
-		{
-			if (needPlus)
-			{
-				sb->append('+');
-			}
-			needPlus = true;
-			//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-			sb->append(to_string(GetIndex()));
-			if (GetScale() != 1)
-			{
-				sb->append('*');
-				sb->append(static_cast<char>('0' + GetScale()));
-			}
-		}
-		if (GetDisplacement() != 0 || !needPlus)
-		{
-			if (needPlus)
-			{
-				sb->append('+');
-			}
-			if (GetDisplacement() <= 9)
-			{
-				sb->append(GetDisplacement());
-			}
-			else
-			{
-				sb->append("0x");
-				//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-				sb->append(std::format("{:X}", GetDisplacement()));
-			}
-		}
-		sb->append(';');
-		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		sb->append(to_string(GetMemorySize()));
-		sb->append(';');
-		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		sb->append(to_string(GetAccess()));
-		sb->append(']');
-		return sb->toString();
 	}
 }

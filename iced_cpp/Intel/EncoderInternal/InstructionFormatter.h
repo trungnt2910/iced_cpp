@@ -9,7 +9,7 @@
 #include "../Iced.Intel.MemorySizeExtensions.h"
 #include "../MvexEHBit.g.h"
 #include "../OpCodeInfo.h"
-#include "../CharHelpers.h"
+#include "../Internal/StringHelpers.h"
 
 namespace Iced::Intel::EncoderInternal
 {
@@ -856,7 +856,7 @@ namespace Iced::Intel::EncoderInternal
 		for (std::int32_t i = 0; i < s.length(); i++)
 		{
 			auto c = s[i];
-			c = upper ? CharHelpers::ToUpper(c) : CharHelpers::ToLower(c);
+			c = upper ? Internal::StringHelpers::ToUpper(c) : Internal::StringHelpers::ToLower(c);
 			sb->push_back(c);
 		}
 	}

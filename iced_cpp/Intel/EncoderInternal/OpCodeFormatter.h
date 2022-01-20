@@ -9,6 +9,7 @@
 #include "../MvexEHBit.g.h"
 #include "../OpCodeInfo.h"
 #include "../OpCodeOperandKind.g.h"
+#include "../Internal/StringHelpers.h"
 
 #include <cstdint>
 #include <string>
@@ -45,6 +46,19 @@ namespace Iced::Intel::EncoderInternal
 		this->hasModrmInfo = hasModrmInfo;
 	}
 
+	constexpr OpCodeFormatter::~OpCodeFormatter()
+	{
+		if (isConstexprEval)
+		{
+			delete sb;
+			delete opCode;
+		}
+		else if (ownsSb)
+		{
+			delete sb;
+		}
+	}
+
 	constexpr std::string OpCodeFormatter::Format()
 	{
 		if (!opCode->IsInstruction())
@@ -64,8 +78,7 @@ namespace Iced::Intel::EncoderInternal
 
 	constexpr void OpCodeFormatter::AppendHexByte(std::uint8_t value)
 	{
-		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		sb->append(std::format("{:X}", value));
+		sb->append(Iced::Intel::Internal::StringHelpers::ToHex(value));
 	}
 
 	constexpr void OpCodeFormatter::AppendOpCode(std::uint32_t value, std::int32_t valueLen, bool sep)
