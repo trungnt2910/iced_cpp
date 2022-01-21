@@ -8,8 +8,7 @@
 #include <climits>
 
 #define MAGIC_ENUM_RANGE_MIN 0
-// Iced::Intel::Code
-#define MAGIC_ENUM_RANGE_MAX 5000
+#define MAGIC_ENUM_RANGE_MAX 255
 
 //  __  __             _        ______                          _____
 // |  \/  |           (_)      |  ____|                        / ____|_     _

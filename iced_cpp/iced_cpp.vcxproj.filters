@@ -681,6 +681,9 @@
     <ClInclude Include="Intel\EncoderInternal\OpCodeInfoStrings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Intel\ToString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Intel\Assembler\AssemblerMemoryOperand.cpp">

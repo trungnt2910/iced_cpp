@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 
+#define INSTR_INFO
 #include "../iced_cpp/Intel/Assembler/Iced.Intel.Assembler.h"
 #include "../iced_cpp/Intel/Assembler/Iced.Intel.AssemblerRegisters.cpp"
 #include "../iced_cpp/Intel/Decoder.h"
@@ -480,8 +481,8 @@ void HowTo_InstructionInfo()
         std::cout << "    OpCode: " << opCode.ToOpCodeString() << std::endl;
         std::cout << "    Instruction: " << opCode.ToInstructionString() << std::endl;
         std::cout << "    Encoding: " << to_string(instr.GetEncoding()) << std::endl;
-        std::cout << "    Mnemonic: " << to_string(instr.GetMnemonic()) << std::endl;
-        std::cout << "    Code: " << to_string(instr.GetCode()) << std::endl;
+        std::cout << "    Mnemonic: " << ToString(instr.GetMnemonic()) << std::endl;
+        std::cout << "    Code: " << ToString(instr.GetCode()) << std::endl;
         std::cout << "    CpuidFeature: ";
         {
             const auto& features = instr.GetCpuidFeatures();
@@ -516,17 +517,17 @@ void HowTo_InstructionInfo()
         if (instr.GetConditionCode() != ConditionCode::None)
             std::cout << "    Condition code: " << to_string(instr.GetConditionCode()) << std::endl;
         if (instr.GetRflagsRead() != RflagsBits::None)
-            std::cout << "    RFLAGS Read: " << to_string(instr.GetRflagsRead()) << std::endl;
+            std::cout << "    RFLAGS Read: " << ToString(instr.GetRflagsRead()) << std::endl;
         if (instr.GetRflagsWritten() != RflagsBits::None)
-            std::cout << "    RFLAGS Written: " << to_string(instr.GetRflagsWritten()) << std::endl;
+            std::cout << "    RFLAGS Written: " << ToString(instr.GetRflagsWritten()) << std::endl;
         if (instr.GetRflagsCleared() != RflagsBits::None)
-            std::cout << "    RFLAGS Cleared: " << to_string(instr.GetRflagsCleared()) << std::endl;
+            std::cout << "    RFLAGS Cleared: " << ToString(instr.GetRflagsCleared()) << std::endl;
         if (instr.GetRflagsSet() != RflagsBits::None)
-            std::cout << "    RFLAGS Set: " << to_string(instr.GetRflagsSet()) << std::endl;
+            std::cout << "    RFLAGS Set: " << ToString(instr.GetRflagsSet()) << std::endl;
         if (instr.GetRflagsUndefined() != RflagsBits::None)
-            std::cout << "    RFLAGS Undefined: " << to_string(instr.GetRflagsUndefined()) << std::endl;
+            std::cout << "    RFLAGS Undefined: " << ToString(instr.GetRflagsUndefined()) << std::endl;
         if (instr.GetRflagsModified() != RflagsBits::None)
-            std::cout << "    RFLAGS Modified: " << to_string(instr.GetRflagsModified()) << std::endl;
+            std::cout << "    RFLAGS Modified: " << ToString(instr.GetRflagsModified()) << std::endl;
         for (int i = 0; i < instr.GetOpCount(); i++)
         {
             auto opKind = instr.GetOpKind(i);

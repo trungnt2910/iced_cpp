@@ -125,7 +125,9 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)/iced_cpp</AdditionalIncludeDirectories>
-      <AdditionalOptions>/constexpr:steps10000000 </AdditionalOptions>
+      <AdditionalOptions>/constexpr:steps10000000 /w34996
+
+</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

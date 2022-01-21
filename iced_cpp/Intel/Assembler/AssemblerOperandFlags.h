@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include "../ToString.h"
 #include "../RoundingControl.g.h"
 
 // Code generated from Iced. Do not edit.
@@ -101,4 +102,9 @@ namespace Iced::Intel
 		DEFINE_COMP(AssemblerOperandFlags)
 		DEFINE_ARITH(AssemblerOperandFlags)
 
+	template <>
+	constexpr std::string ToString<AssemblerOperandFlags>(const AssemblerOperandFlags& f)
+	{
+		return "AssemblerOperandFlags::NotImplemented";
+	}
 }

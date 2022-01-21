@@ -311,7 +311,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 		sb->clear();
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		Write(to_string(opCode->GetMnemonic()), true);
+		Write(ToString(opCode->GetMnemonic()), true);
 		if (startOpIndex < opCount)
 		{
 			sb->push_back(' ');

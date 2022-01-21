@@ -193,7 +193,7 @@ namespace Iced::Intel
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", to_string(code), to_string(operand + 1)));
+			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), to_string(operand + 1)));
 		}
 		auto opKind = operands[operand]->GetImmediateOpKind();
 		OpKind opKindPrev = operands[operand - 1]->GetImmediateOpKind();
@@ -203,7 +203,7 @@ namespace Iced::Intel
 		}
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't an immediate operand", to_string(code), to_string(operand)));
+			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't an immediate operand", ::Iced::Intel::ToString(code), to_string(operand)));
 		}
 		return opKind;
 	}
@@ -218,12 +218,12 @@ namespace Iced::Intel
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", to_string(code), to_string(operand + 1)));
+			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), to_string(operand + 1)));
 		}
 		auto opKind = operands[operand]->GetNearBranchOpKind();
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a near branch operand", to_string(code), to_string(operand)));
+			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a near branch operand", ::Iced::Intel::ToString(code), to_string(operand)));
 		}
 		return opKind;
 	}
@@ -238,12 +238,12 @@ namespace Iced::Intel
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", to_string(code), to_string(operand + 1)));
+			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), to_string(operand + 1)));
 		}
 		auto opKind = operands[operand]->GetFarBranchOpKind();
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a far branch operand", to_string(code), to_string(operand)));
+			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a far branch operand", ::Iced::Intel::ToString(code), to_string(operand)));
 		}
 		return opKind;
 	}
