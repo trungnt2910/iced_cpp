@@ -191,7 +191,7 @@ namespace Iced::Intel::BlockEncoderInternal
 				instr.SetOp1Kind(OpKind::NearBranch64);
 			}
 			assert(encoder.GetBitness() == 64);
-			assert(longInstructionSize64 <= std::numeric_limits<std::int8_t>::max());
+			assert(longInstructionSize64 <= (std::uint32_t)std::numeric_limits<std::int8_t>::max());
 			instr.SetNearBranch64(IP + longInstructionSize64);
 			uint instrLen;
 			if (!encoder.TryEncode(instr, IP, instrLen, errorMessage))
