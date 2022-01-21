@@ -470,7 +470,7 @@ void HowTo_InstructionInfo()
         // instruction Decode() returned.
         auto offsets = decoder.GetConstantOffsets(instr);
 
-        std::cout << std::setw(16) << std::setfill('0') << std::hex << std::uppercase << instr.GetIP() << " " << instr.ToString() << std::endl;
+        std::cout << std::setw(16) << std::setfill('0') << std::hex << std::uppercase << instr.GetIP() << std::dec << " " << instr.ToString() << std::endl;
 
         const auto& opCode = instr.GetOpCode();
 
@@ -539,7 +539,7 @@ void HowTo_InstructionInfo()
             }
         }
         for (int i = 0; i < instr.GetOpCount(); i++)
-            std::cout << "    Op" << i << " Access: " << to_string(info.GetOpAccess(i)) << std::endl;
+            std::cout << "    Op" << i << "Access: " << to_string(info.GetOpAccess(i)) << std::endl;
         for (int i = 0; i < opCode.GetOpCount(); i++)
             std::cout << "    Op" << i << ": " << to_string(opCode.GetOpKind(i)) << std::endl;
         // The returned iterator is a struct, nothing is allocated unless you box it
@@ -554,7 +554,7 @@ int main()
 {
     std::array demos = std::to_array<void(*)(void)>({ HowTo_Disassemble, HowTo_Assemble, HowTo_SymbolResolver, HowTo_InstructionInfo });
 
-    for (int i = 0; i < (int)demos.size(); ++i)
+    for (int i = 0; i < (int)demos.size(); ++i) 
     {
         std::cout << "Demo " << std::dec << i << ":\n";
         demos[i]();
