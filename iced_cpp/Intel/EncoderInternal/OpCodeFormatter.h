@@ -343,7 +343,7 @@ namespace Iced::Intel::EncoderInternal
 			if (opCode->IsGroup())
 			{
 				sb->append(" /");
-				sb->push_back(opCode->GetGroupIndex());
+				sb->append(Internal::StringHelpers::ToDec((std::uint32_t)(opCode->GetGroupIndex())));
 			}
 			else if (!isVsib && HasModRM())
 			{
@@ -552,11 +552,11 @@ namespace Iced::Intel::EncoderInternal
 			switch (lkind)
 			{
 			case LKind::L128:
-				sb->push_back(128U << static_cast<std::int32_t>(opCode->GetL()));
+				sb->append(Internal::StringHelpers::ToDec(128U << (opCode->GetL())));
 				break;
 			case LKind::L0:
 				sb->push_back('L');
-				sb->push_back(opCode->GetL());
+				sb->append(Internal::StringHelpers::ToDec(opCode->GetL()));
 				break;
 			case LKind::LZ:
 				if (opCode->GetL() != 0)
@@ -602,7 +602,7 @@ namespace Iced::Intel::EncoderInternal
 		else
 		{
 			sb->append(".W");
-			sb->push_back(opCode->GetW());
+			sb->append(Internal::StringHelpers::ToDec(opCode->GetW()));
 		}
 		if (opCode->GetEncoding() == EncodingKind::MVEX)
 		{

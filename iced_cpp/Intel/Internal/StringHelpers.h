@@ -40,5 +40,16 @@ namespace Iced::Intel::Internal
 
 			return result;
 		}
+		static constexpr std::string ToDec(std::uint32_t i)
+		{
+			std::string result;
+			while (i)
+			{
+				result.push_back(i % 10 + '0');
+				i /= 10;
+			}
+			std::reverse(result.begin(), result.end());
+			return result;
+		}
 	};
 }

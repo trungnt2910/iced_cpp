@@ -678,6 +678,9 @@
     <ClInclude Include="Intel\Internal\StringHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Intel\EncoderInternal\OpCodeInfoStrings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Intel\Assembler\AssemblerMemoryOperand.cpp">
@@ -1284,6 +1287,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NRT_Helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intel\EncoderInternal\OpCodeInfoStrings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

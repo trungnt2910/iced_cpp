@@ -770,7 +770,7 @@ namespace Iced::Intel::EncoderInternal
 			std::int32_t memSize = ::Iced::Intel::MemorySizeExtensions::GetSize(memorySize);
 			if (memSize != 0)
 			{
-				sb->push_back(memSize * 8);
+				sb->append(Internal::StringHelpers::ToDec((std::uint32_t)(memSize * 8)));
 			}
 			break;
 		}
@@ -817,7 +817,7 @@ namespace Iced::Intel::EncoderInternal
 		WriteRegOp(register_);
 		if (index > 0)
 		{
-			sb->push_back(index);
+			sb->append(Internal::StringHelpers::ToDec((std::uint32_t)index));
 		}
 	}
 
@@ -832,7 +832,7 @@ namespace Iced::Intel::EncoderInternal
 	{
 		sb->push_back('{');
 		Write(register_, false);
-		sb->push_back(index);
+		sb->append(Internal::StringHelpers::ToDec((std::uint32_t)index));
 		sb->push_back('}');
 	}
 
@@ -868,7 +868,7 @@ namespace Iced::Intel::EncoderInternal
 		std::int32_t memSize = ::Iced::Intel::MemorySizeExtensions::GetSize(GetMemorySize(false)) * 8;
 		if (memSize != regSize)
 		{
-			sb->push_back(regSize);
+			sb->append(Internal::StringHelpers::ToDec((std::uint32_t)regSize));
 		}
 		sb->push_back('/');
 		WriteMemory();
