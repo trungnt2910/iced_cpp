@@ -14,7 +14,6 @@
 #include <vector>
 
 #include "Block.h"
-#include "../../Array2.h"
 #include "../ThrowHelper.h"
 
 namespace Iced::Intel::BlockEncoderInternal
@@ -36,7 +35,7 @@ namespace Iced::Intel::BlockEncoderInternal
 	{
 		RIP = rip;
 		this->relocInfos = relocInfos;
-		instructions = System::Array2::Empty<std::shared_ptr<Instr>>();
+		instructions = std::vector<std::shared_ptr<Instr>>();
 		dataList = std::vector<BlockData*>();
 		alignment = static_cast<std::uint32_t>(blockEncoder->GetBitness()) / 8;
 		validData = std::vector<BlockData*>();

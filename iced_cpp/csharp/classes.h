@@ -11,30 +11,6 @@
 #include <string>
 #include <type_traits>
 
-class Stream
-{
-private:
-	std::ios_base* _stream;
-	bool _canRead;
-	bool _canWrite;
-	bool _owns;
-
-public:
-	Stream(std::istream* is, bool owns = false) : _stream(is), _canRead(true), _canWrite(false), _owns(owns) {}
-	Stream(std::ostream* os, bool owns = false) : _stream(os), _canRead(false), _canWrite(true), _owns(owns) {}
-	Stream(std::iostream* ios, bool owns = false) : _stream(ios), _canRead(true), _canWrite(true), _owns(owns) {}
-
-	inline void WriteByte(byte value) { if (!_canWrite) throw NotSupportedException(); reinterpret_cast<std::ostream*>(_stream)->put(value); }
-	inline byte ReadByte() { if (!_canRead) throw NotSupportedException(); return reinterpret_cast<std::istream*>(_stream)->get(); }
-
-	~Stream() { if (_owns) delete _stream; }
-};
-
-class Attribute {};
-
-class SerializationInfo {};
-class StreamingContext {};
-
 template<typename T>
 concept HasToString = requires(const T& t) { t.ToString(); };
 
@@ -92,20 +68,6 @@ inline int GetHashCode(const T& t) { return (int)std::hash<T>()(t); }
 
 template <HasGetHashCode T>
 inline int GetHashCode(T t) { return t.GetHashCode(); }
-
-inline std::string tolower(const std::string& original)
-{
-	std::string result; result.reserve(original.size());
-	for (auto ch : original) result.push_back(tolower(ch));
-	return result;
-}
-
-inline std::string toupper(const std::string& original)
-{
-	std::string result; result.reserve(original.size());
-	for (auto ch : original) result.push_back(toupper(ch));
-	return result;
-}
 
 class Math
 {

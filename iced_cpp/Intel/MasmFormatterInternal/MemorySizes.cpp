@@ -15,7 +15,6 @@
 
 #include "MemorySizes.h"
 #include "../Iced.Intel.IcedConstants.h"
-#include "../../Array2.h"
 
 using namespace Iced::Intel::FormatterInternal;
 
@@ -99,7 +98,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 	 //C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 	 //ORIGINAL LINE: var keywords = (switchTempVar_0 == 0x00) ? Array2.Empty<FormatterString>() : (switchTempVar_0 == 0x01) ? byte_ptr : (switchTempVar_0 == 0x02) ? dword_bcst : (switchTempVar_0 == 0x03) ? dword_ptr : (switchTempVar_0 == 0x04) ? fpuenv14_ptr : (switchTempVar_0 == 0x05) ? fpuenv28_ptr : (switchTempVar_0 == 0x06) ? fpustate108_ptr : (switchTempVar_0 == 0x07) ? fpustate94_ptr : (switchTempVar_0 == 0x08) ? fword_ptr : (switchTempVar_0 == 0x09) ? oword_ptr : (switchTempVar_0 == 0x0A) ? qword_bcst : (switchTempVar_0 == 0x0B) ? qword_ptr : (switchTempVar_0 == 0x0C) ? tbyte_ptr : (switchTempVar_0 == 0x0D) ? word_ptr : (switchTempVar_0 == 0x0E) ? xmmword_ptr : (switchTempVar_0 == 0x0F) ? ymmword_ptr : (switchTempVar_0 == 0x10) ? zmmword_ptr : (switchTempVar_0 == 0x11) ? mem384_ptr : (switchTempVar_0 == 0x12) ? word_bcst : throw new InvalidOperationException();
-			auto keywords = (switchTempVar_0 == 0x00) ? System::Array2::Empty<FormatterString>() : (switchTempVar_0 == 0x01) ? byte_ptr : (switchTempVar_0 == 0x02) ? dword_bcst : (switchTempVar_0 == 0x03) ? dword_ptr : (switchTempVar_0 == 0x04) ? fpuenv14_ptr : (switchTempVar_0 == 0x05) ? fpuenv28_ptr : (switchTempVar_0 == 0x06) ? fpustate108_ptr : (switchTempVar_0 == 0x07) ? fpustate94_ptr : (switchTempVar_0 == 0x08) ? fword_ptr : (switchTempVar_0 == 0x09) ? oword_ptr : (switchTempVar_0 == 0x0A) ? qword_bcst : (switchTempVar_0 == 0x0B) ? qword_ptr : (switchTempVar_0 == 0x0C) ? tbyte_ptr : (switchTempVar_0 == 0x0D) ? word_ptr : (switchTempVar_0 == 0x0E) ? xmmword_ptr : (switchTempVar_0 == 0x0F) ? ymmword_ptr : (switchTempVar_0 == 0x10) ? zmmword_ptr : (switchTempVar_0 == 0x11) ? mem384_ptr : (switchTempVar_0 == 0x12) ? word_bcst : throw InvalidOperationException();
+			auto keywords = (switchTempVar_0 == 0x00) ? std::vector<FormatterString>() : (switchTempVar_0 == 0x01) ? byte_ptr : (switchTempVar_0 == 0x02) ? dword_bcst : (switchTempVar_0 == 0x03) ? dword_ptr : (switchTempVar_0 == 0x04) ? fpuenv14_ptr : (switchTempVar_0 == 0x05) ? fpuenv28_ptr : (switchTempVar_0 == 0x06) ? fpustate108_ptr : (switchTempVar_0 == 0x07) ? fpustate94_ptr : (switchTempVar_0 == 0x08) ? fword_ptr : (switchTempVar_0 == 0x09) ? oword_ptr : (switchTempVar_0 == 0x0A) ? qword_bcst : (switchTempVar_0 == 0x0B) ? qword_ptr : (switchTempVar_0 == 0x0C) ? tbyte_ptr : (switchTempVar_0 == 0x0D) ? word_ptr : (switchTempVar_0 == 0x0E) ? xmmword_ptr : (switchTempVar_0 == 0x0F) ? ymmword_ptr : (switchTempVar_0 == 0x10) ? zmmword_ptr : (switchTempVar_0 == 0x11) ? mem384_ptr : (switchTempVar_0 == 0x12) ? word_bcst : throw InvalidOperationException();
 			infos[i] = Info(i >= static_cast<std::int32_t>(IcedConstants::FirstBroadcastMemorySize), sizes[d >> SizeKindShift], keywords);
 		}
 		return infos;

@@ -18,7 +18,6 @@
 #include "../ThrowHelper.h"
 #include "../Code.g.h"
 #include "../MemoryOperand.h"
-#include "../../Array2.h"
 #include "MemoryOperandSize.g.h"
 #include "../RegisterExtensions.h"
 
@@ -498,7 +497,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			assemblerResult = AssemblerResult(System::Array2::Empty<BlockEncoderResult>());
+			assemblerResult = AssemblerResult(std::vector<BlockEncoderResult>());
 			return false;
 		}
 	}

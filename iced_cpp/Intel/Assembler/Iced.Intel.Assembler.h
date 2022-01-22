@@ -326,7 +326,7 @@ namespace Iced::Intel
 			auto builder = StringBuilder();
 			//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
 			//C# TO C++ CONVERTER TODO TASK: There is no direct C++ equivalent to this .NET String method:
-			builder.append(std::format("Unable to calculate an OpCode for `{0:s}", tolower(ToString(mnemonic))));
+			builder.append(std::format("Unable to calculate an OpCode for `{0:s}", Internal::StringHelpers::ToLower(ToString(mnemonic))));
 			//for (std::int32_t i = 0; i < argNames.size(); i++)
 			//{
 			//	builder.append(i == 0 ? " " : ", ");

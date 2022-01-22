@@ -183,7 +183,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Array2.h" />
     <ClInclude Include="csharp\classes.h" />
     <ClInclude Include="csharp\enum.h" />
     <ClInclude Include="csharp\interfaces.h" />
@@ -329,7 +328,6 @@
     <ClInclude Include="Intel\InstructionInfoInternal\RflagsInfoConstants.g.h" />
     <ClInclude Include="Intel\InstructionInfoInternal\SimpleList.h" />
     <ClInclude Include="Intel\InstructionList.h" />
-    <ClInclude Include="Intel\InstructionListDebugView.h" />
     <ClInclude Include="Intel\InstructionMemorySizes.g.h" />
     <ClInclude Include="Intel\InstructionOpCounts.g.h" />
     <ClInclude Include="Intel\InstructionUtils.h" />
@@ -401,15 +399,11 @@
     <ClInclude Include="Intel\UsedMemory.h" />
     <ClInclude Include="Intel\UsedRegister.h" />
     <ClInclude Include="Intel\VectorLength.g.h" />
-    <ClInclude Include="InternalsVisibleTo.h" />
-    <ClInclude Include="NRT.h" />
     <ClInclude Include="NRT_Helpers.h" />
     <ClInclude Include="csharp\stringbuilder.h" />
     <ClInclude Include="csharp\vectorhelper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Array2.cpp" />
-    <ClCompile Include="Intel\Assembler\AssemblerMemoryOperand.cpp" />
     <ClCompile Include="Intel\Assembler\AssemblerOperandFlags.cpp" />
     <ClCompile Include="Intel\Assembler\AssemblerResult.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.Assembler.cpp" />
@@ -428,7 +422,6 @@
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterST.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTMM.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTR.cpp" />
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterZMM.cpp" />
     <ClCompile Include="Intel\Assembler\Label.cpp" />
     <ClCompile Include="Intel\Assembler\MemoryOperandSize.g.cpp" />
     <ClCompile Include="Intel\BlockEncoder.cpp" />
@@ -480,14 +473,10 @@
     <ClCompile Include="Intel\DecoderInternal\VexOpCodeHandlerReader.cpp" />
     <ClCompile Include="Intel\DecoderOptions.g.cpp" />
     <ClCompile Include="Intel\Encoder.cpp" />
-    <ClCompile Include="Intel\EncoderCodeExtensions.cpp" />
-    <ClCompile Include="Intel\EncoderException.cpp" />
     <ClCompile Include="Intel\EncoderInternal\EncoderData.g.cpp" />
     <ClCompile Include="Intel\EncoderInternal\EncoderOpCodeHandler.cpp" />
     <ClCompile Include="Intel\EncoderInternal\Enums.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeHandlers.cpp" />
-    <ClCompile Include="Intel\EncoderInternal\OpCodeInfoData.g.cpp" />
-    <ClCompile Include="Intel\EncoderInternal\OpCodeInfos.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfosEnums.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfoStrings.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeOperandKinds.g.cpp" />
@@ -497,20 +486,15 @@
     <ClCompile Include="Intel\FastFormatter.cpp" />
     <ClCompile Include="Intel\FastFormatterInternal\FastFmtFlags.g.cpp" />
     <ClCompile Include="Intel\FastFormatterInternal\Iced.Intel.FastFormatterInternal.FmtData.cpp" />
-    <ClCompile Include="Intel\FastFormatterInternal\MemorySizes.cpp" />
     <ClCompile Include="Intel\FastFormatterInternal\Registers.cpp" />
     <ClCompile Include="Intel\FastFormatterOptions.cpp" />
     <ClCompile Include="Intel\FastStringOutput.cpp" />
     <ClCompile Include="Intel\FlowControl.g.cpp" />
     <ClCompile Include="Intel\Formatter.cpp" />
     <ClCompile Include="Intel\FormatterConstants.cpp" />
-    <ClCompile Include="Intel\FormatterInternal\FormatterString.cpp" />
     <ClCompile Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.cpp" />
     <ClCompile Include="Intel\FormatterInternal\MnemonicCC.cpp" />
     <ClCompile Include="Intel\FormatterInternal\PseudoOpsKind.g.cpp" />
-    <ClCompile Include="Intel\FormatterInternal\RegistersTable.cpp" />
-    <ClCompile Include="Intel\FormatterOptions.cpp" />
-    <ClCompile Include="Intel\FormatterOutput.cpp" />
     <ClCompile Include="Intel\FormatterTextKind.g.cpp" />
     <ClCompile Include="Intel\GasFormatter.cpp" />
     <ClCompile Include="Intel\GasFormatterInternal\CtorKind.g.cpp" />
@@ -520,7 +504,6 @@
     <ClCompile Include="Intel\GasFormatterInternal\MemorySizes.cpp" />
     <ClCompile Include="Intel\GasFormatterInternal\Registers.cpp" />
     <ClCompile Include="Intel\GasFormatterInternal\SizeOverride.g.cpp" />
-    <ClCompile Include="Intel\HexUtils.cpp" />
     <ClCompile Include="Intel\Iced.Intel.IcedConstants.cpp" />
     <ClCompile Include="Intel\Iced.Intel.Instruction.cpp" />
     <ClCompile Include="Intel\Iced.Intel.InstructionInfoExtensions.cpp" />
@@ -531,19 +514,12 @@
     <ClCompile Include="Intel\Instruction.Create.cpp" />
     <ClCompile Include="Intel\Instruction.Info.cpp" />
     <ClCompile Include="Intel\Instruction.VA.cpp" />
-    <ClCompile Include="Intel\InstructionInfo.cpp" />
     <ClCompile Include="Intel\InstructionInfoFactory.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\CpuidFeatureInternal.g.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\Iced.Intel.InstructionInfoInternal.CpuidFeatureInternalData.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\InfoHandlerFlags.cpp" />
-    <ClCompile Include="Intel\InstructionInfoInternal\InstrInfoTable.g.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\RflagsInfoConstants.g.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\SimpleList.cpp" />
-    <ClCompile Include="Intel\InstructionList.cpp" />
-    <ClCompile Include="Intel\InstructionListDebugView.cpp" />
-    <ClCompile Include="Intel\InstructionMemorySizes.g.cpp" />
-    <ClCompile Include="Intel\InstructionOpCounts.g.cpp" />
-    <ClCompile Include="Intel\InstructionUtils.cpp" />
     <ClCompile Include="Intel\IntelFormatter.cpp" />
     <ClCompile Include="Intel\IntelFormatterInternal\BranchSizeInfo.g.cpp" />
     <ClCompile Include="Intel\IntelFormatterInternal\CtorKind.g.cpp" />
@@ -564,22 +540,18 @@
     <ClCompile Include="Intel\MasmFormatterInternal\InstrOpInfoFlags.g.cpp" />
     <ClCompile Include="Intel\MasmFormatterInternal\MemorySizes.cpp" />
     <ClCompile Include="Intel\MasmFormatterInternal\Registers.cpp" />
-    <ClCompile Include="Intel\MemoryOperand.cpp" />
     <ClCompile Include="Intel\MemorySize.g.cpp" />
     <ClCompile Include="Intel\MemorySizeExtensions.cpp" />
     <ClCompile Include="Intel\MemorySizeOptions.g.cpp" />
     <ClCompile Include="Intel\Mnemonic.g.cpp" />
-    <ClCompile Include="Intel\MnemonicUtils.cpp" />
     <ClCompile Include="Intel\MnemonicUtilsData.g.cpp" />
     <ClCompile Include="Intel\MvexConvFn.g.cpp" />
     <ClCompile Include="Intel\MvexEHBit.g.cpp" />
-    <ClCompile Include="Intel\MvexInfo.cpp" />
     <ClCompile Include="Intel\MvexInfoData.g.cpp" />
     <ClCompile Include="Intel\MvexInfoFlags1.g.cpp" />
     <ClCompile Include="Intel\MvexInfoFlags2.g.cpp" />
     <ClCompile Include="Intel\MvexMemorySizeLut.g.cpp" />
     <ClCompile Include="Intel\MvexRegMemConv.g.cpp" />
-    <ClCompile Include="Intel\MvexTupleTypeLut.g.cpp" />
     <ClCompile Include="Intel\MvexTupleTypeLutKind.g.cpp" />
     <ClCompile Include="Intel\NasmFormatter.cpp" />
     <ClCompile Include="Intel\NasmFormatterInternal\BranchSizeInfo.g.cpp" />
@@ -594,22 +566,17 @@
     <ClCompile Include="Intel\NumberFormatter.cpp" />
     <ClCompile Include="Intel\OpAccess.g.cpp" />
     <ClCompile Include="Intel\OpCodeInfo.cpp" />
-    <ClCompile Include="Intel\OpCodeOperandKind.g.cpp" />
     <ClCompile Include="Intel\OpCodeTableKind.g.cpp" />
     <ClCompile Include="Intel\OpKind.g.cpp" />
     <ClCompile Include="Intel\Register.g.cpp" />
     <ClCompile Include="Intel\RflagsBits.g.cpp" />
     <ClCompile Include="Intel\RoundingControl.g.cpp" />
     <ClCompile Include="Intel\Static.cpp" />
-    <ClCompile Include="Intel\StringOutput.cpp" />
     <ClCompile Include="Intel\ThrowHelper.cpp" />
     <ClCompile Include="Intel\TupleType.g.cpp" />
     <ClCompile Include="Intel\TupleTypeTable.cpp" />
     <ClCompile Include="Intel\UsedMemory.cpp" />
-    <ClCompile Include="Intel\UsedRegister.cpp" />
     <ClCompile Include="Intel\VectorLength.g.cpp" />
-    <ClCompile Include="InternalsVisibleTo.cpp" />
-    <ClCompile Include="NRT.cpp" />
     <ClCompile Include="NRT_Helpers.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -495,9 +495,6 @@
     <ClInclude Include="Intel\InstructionList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\InstructionListDebugView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Intel\InstructionMemorySizes.g.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -636,16 +633,7 @@
     <ClInclude Include="Intel\VectorLength.g.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Array2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="csharp\exceptionhelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InternalsVisibleTo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NRT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NRT_Helpers.h">
@@ -686,9 +674,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Intel\Assembler\AssemblerMemoryOperand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\Assembler\AssemblerOperandFlags.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -741,9 +726,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTR.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterZMM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Assembler\Label.cpp">
@@ -869,12 +851,6 @@
     <ClCompile Include="Intel\EncoderInternal\OpCodeHandlers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\EncoderInternal\OpCodeInfoData.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\EncoderInternal\OpCodeInfos.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfosEnums.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -893,13 +869,7 @@
     <ClCompile Include="Intel\FastFormatterInternal\Iced.Intel.FastFormatterInternal.FmtData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\FastFormatterInternal\MemorySizes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\FastFormatterInternal\Registers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\FormatterInternal\FormatterString.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.cpp">
@@ -909,9 +879,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\FormatterInternal\PseudoOpsKind.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\FormatterInternal\RegistersTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\GasFormatterInternal\CtorKind.g.cpp">
@@ -942,9 +909,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\InstructionInfoInternal\InfoHandlerFlags.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\InstructionInfoInternal\InstrInfoTable.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\InstructionInfoInternal\RflagsInfoConstants.g.cpp">
@@ -1067,12 +1031,6 @@
     <ClCompile Include="Intel\Encoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\EncoderCodeExtensions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\EncoderException.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\EncodingKind.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1094,19 +1052,10 @@
     <ClCompile Include="Intel\FormatterConstants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\FormatterOptions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\FormatterOutput.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\FormatterTextKind.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\GasFormatter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\HexUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Iced.Intel.IcedConstants.cpp">
@@ -1139,25 +1088,7 @@
     <ClCompile Include="Intel\Instruction.VA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\InstructionInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\InstructionInfoFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\InstructionList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\InstructionListDebugView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\InstructionMemorySizes.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\InstructionOpCounts.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\InstructionUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\IntelFormatter.cpp">
@@ -1175,9 +1106,6 @@
     <ClCompile Include="Intel\MasmFormatter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\MemoryOperand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\MemorySize.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1190,9 +1118,6 @@
     <ClCompile Include="Intel\Mnemonic.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\MnemonicUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\MnemonicUtilsData.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1200,9 +1125,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\MvexEHBit.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\MvexInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\MvexInfoData.g.cpp">
@@ -1220,9 +1142,6 @@
     <ClCompile Include="Intel\MvexRegMemConv.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\MvexTupleTypeLut.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\MvexTupleTypeLutKind.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1236,9 +1155,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\OpCodeInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\OpCodeOperandKind.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\OpCodeTableKind.g.cpp">
@@ -1259,9 +1175,6 @@
     <ClCompile Include="Intel\Static.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\StringOutput.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\ThrowHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1274,19 +1187,7 @@
     <ClCompile Include="Intel\UsedMemory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\UsedRegister.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\VectorLength.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Array2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InternalsVisibleTo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NRT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NRT_Helpers.cpp">

@@ -15,7 +15,6 @@
 
 #include "EncoderOpCodeHandler.h"
 #include "OpTables.g.h"
-#include "../../Array2.h"
 #include "../MandatoryPrefixByte.g.h"
 #include "../Static.h"
 #include "../TupleTypeTable.h"
@@ -30,8 +29,6 @@
 
 namespace Iced::Intel::EncoderInternal
 {
-	using System::Array2;
-
 	OpCodeHandler::OpCodeHandler(EncFlags2 encFlags2, enum EncFlags3 encFlags3, bool isDeclareData, const std::optional<TryConvertToDisp8N_>& tryConvertToDisp8N, const std::vector<std::shared_ptr<Op>>& operands)
 	{
 		EncFlags3 = encFlags3;
@@ -54,7 +51,7 @@ namespace Iced::Intel::EncoderInternal
 
 	const std::string InvalidHandler::ERROR_MESSAGE = "Can't encode an invalid instruction";
 
-	InvalidHandler::InvalidHandler() : OpCodeHandler(EncFlags2::None, EncFlags3::Bit16or32 | EncFlags3::Bit64, false, std::nullopt, Array2::Empty<std::shared_ptr<Op>>())
+	InvalidHandler::InvalidHandler() : OpCodeHandler(EncFlags2::None, EncFlags3::Bit16or32 | EncFlags3::Bit64, false, std::nullopt, std::vector<std::shared_ptr<Op>>())
 	{
 	}
 
@@ -63,7 +60,7 @@ namespace Iced::Intel::EncoderInternal
 		encoder.SetErrorMessage(ERROR_MESSAGE);
 	}
 
-	DeclareDataHandler::DeclareDataHandler(Code code) : OpCodeHandler(EncFlags2::None, EncFlags3::Bit16or32 | EncFlags3::Bit64, true, std::nullopt, Array2::Empty<std::shared_ptr<Op>>())
+	DeclareDataHandler::DeclareDataHandler(Code code) : OpCodeHandler(EncFlags2::None, EncFlags3::Bit16or32 | EncFlags3::Bit64, true, std::nullopt, std::vector<std::shared_ptr<Op>>())
 	{
 		auto switchTempVar_0 = code;
 
@@ -114,7 +111,7 @@ namespace Iced::Intel::EncoderInternal
 		{
 			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetLegacyOps()[op0 - 1]};
 		}
-		return Array2::Empty<std::shared_ptr<Op>>();
+		return std::vector<std::shared_ptr<Op>>();
 	}
 
 	LegacyHandler::LegacyHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, nullptr, CreateOps(encFlags1))
@@ -213,7 +210,7 @@ namespace Iced::Intel::EncoderInternal
 		{
 			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetVexOps()[op0 - 1]};
 		}
-		return Array2::Empty<std::shared_ptr<Op>>();
+		return std::vector<std::shared_ptr<Op>>();
 	}
 
 	VexHandler::VexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, nullptr, CreateOps(encFlags1))
@@ -305,7 +302,7 @@ namespace Iced::Intel::EncoderInternal
 		{
 			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetXopOps()[op0 - 1]};
 		}
-		return Array2::Empty<std::shared_ptr<Op>>();
+		return std::vector<std::shared_ptr<Op>>();
 	}
 
 	XopHandler::XopHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3) : OpCodeHandler(encFlags2, encFlags3, false, nullptr, CreateOps(encFlags1))
@@ -375,7 +372,7 @@ namespace Iced::Intel::EncoderInternal
 		{
 			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetEvexOps()[op0 - 1]};
 		}
-		return Array2::Empty<std::shared_ptr<Op>>();
+		return std::vector<std::shared_ptr<Op>>();
 	}
 
 	TryConvertToDisp8N EvexHandler::tryConvertToDisp8N = TryConvertToDisp8NImpl::TryConvertToDisp8N;
@@ -546,7 +543,7 @@ namespace Iced::Intel::EncoderInternal
 		{
 			return std::vector<std::shared_ptr<Op>> {OpHandlerData::GetMvexOps()[op0 - 1]};
 		}
-		return Array2::Empty<std::shared_ptr<Op>>();
+		return std::vector<std::shared_ptr<Op>>();
 	}
 
 	TryConvertToDisp8N MvexHandler::tryConvertToDisp8N = TryConvertToDisp8NImpl::TryConvertToDisp8N;

@@ -23,6 +23,13 @@ namespace Iced::Intel::Internal
 			std::transform(s.begin(), s.end(), std::back_insert_iterator(ss), (char(*)(char))ToUpper);
 			return ss;
 		}
+		static constexpr std::string ToLower(const std::string& s)
+		{
+			std::string ss;
+			ss.reserve(s.size());
+			std::transform(s.begin(), s.end(), std::back_insert_iterator(ss), (char(*)(char))ToLower);
+			return ss;
+		}
 		// FASTEST ToHex I can loot from the internet
 		// that DOESN'T use static memory.
 		static constexpr std::string ToHex(std::uint8_t byte)

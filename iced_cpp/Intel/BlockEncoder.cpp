@@ -14,7 +14,6 @@
 #include <vector>
 
 #include "BlockEncoder.h"
-#include "../Array2.h"
 #include "Iced.Intel.IcedConstants.h"
 
 #include "Iced.Intel.Instruction.h"
