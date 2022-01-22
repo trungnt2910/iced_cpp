@@ -4,6 +4,7 @@
 #include <numeric>
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 #define INSTR_INFO
 #include "../iced_cpp/Intel/Assembler/Iced.Intel.Assembler.h"
@@ -55,7 +56,7 @@ void HowTo_Disassemble()
     auto codeReader = ByteArrayCodeReader(codeBytes);
     auto decoder = Decoder::Create(exampleCodeBitness, &codeReader);
     decoder.SetIP(exampleCodeRIP);
-    ulong endRip = decoder.GetIP() + (uint)codeBytes.size();
+    std::uint64_t endRip = decoder.GetIP() + (std::uint32_t)codeBytes.size();
 
     auto instructions = std::vector<Instruction>();
     while (decoder.GetIP() < endRip)
@@ -162,7 +163,7 @@ void HowTo_Assemble()
     c.Label(data1);
     c.db((uint8_t)0xF3, (uint8_t)0x90); // pause
 
-    const ulong RIP = 0x1234567810000000;
+    const std::uint64_t RIP = 0x1234567810000000;
 
     auto ss = std::stringstream();
     auto streamCodeWriter = StreamCodeWriter(&ss);

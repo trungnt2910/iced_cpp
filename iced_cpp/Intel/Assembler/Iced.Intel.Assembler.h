@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -48,7 +48,6 @@
 #include <any>
 #include <format>
 #include <csharp/exceptionhelper.h>
-#include <csharp/stringbuilder.h>
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
@@ -307,13 +306,13 @@ namespace Iced::Intel
 		/// <returns></returns>
 	private:
 		template <typename T>
-		void NoOpCodeFoundForBuildInternal(StringBuilder& builder, const T& arg)
+		void NoOpCodeFoundForBuildInternal(std::string& builder, const T& arg)
 		{
 			builder.append(to_string(arg));
 		}
 
 		template <typename T, typename... Args>
-		void NoOpCodeFoundForBuildInternal(StringBuilder& builder, const T& arg, const Args&... argNames)
+		void NoOpCodeFoundForBuildInternal(std::string& builder, const T& arg, const Args&... argNames)
 		{
 			builder.append(to_string(arg));
 			builder.append(", ");
@@ -321,9 +320,9 @@ namespace Iced::Intel
 		}
 
 		template <typename... Args>
-		InvalidOperationException NoOpCodeFoundFor(Mnemonic mnemonic, const Args&... argNames)
+		std::invalid_argument NoOpCodeFoundFor(Mnemonic mnemonic, const Args&... argNames)
 		{
-			auto builder = StringBuilder();
+			auto builder = std::string();
 			//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
 			//C# TO C++ CONVERTER TODO TASK: There is no direct C++ equivalent to this .NET String method:
 			builder.append(std::format("Unable to calculate an OpCode for `{0:s}", Internal::StringHelpers::ToLower(ToString(mnemonic))));
@@ -335,7 +334,7 @@ namespace Iced::Intel
 			NoOpCodeFoundForBuildInternal(builder, argNames...);
 			builder.append(" ");
 			builder.append(std::format("`. Combination of arguments and/or current bitness {0:s} is not compatible with any existing OpCode encoding.", std::to_string(GetBitness())));
-			return InvalidOperationException(builder.toString());
+			return std::invalid_argument(builder);
 		}
 
 
@@ -105783,25 +105782,25 @@ namespace Iced::Intel
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 	    void dd(float imm0)
 	    {
-	     AddInstruction(Instruction::CreateDeclareDword( * (uint * ) & imm0));
+	     AddInstruction(Instruction::CreateDeclareDword(std::bit_cast<std::uint32_t>(imm0)));
 	    }
 		/// <summary>Creates a dd asm directive with the type float.</summary>
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 	    void dd(float imm0, float imm1)
 	    {
-	     AddInstruction(Instruction::CreateDeclareDword( * (uint * ) & imm0, * (uint * ) & imm1));
+	     AddInstruction(Instruction::CreateDeclareDword(std::bit_cast<std::uint32_t>(imm0), std::bit_cast<std::uint32_t>(imm1)));
 	    }
 		/// <summary>Creates a dd asm directive with the type float.</summary>
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 	    void dd(float imm0, float imm1, float imm2)
 	    {
-	     AddInstruction(Instruction::CreateDeclareDword( * (uint * ) & imm0, * (uint * ) & imm1, * (uint * ) & imm2));
+	     AddInstruction(Instruction::CreateDeclareDword(std::bit_cast<std::uint32_t>(imm0), std::bit_cast<std::uint32_t>(imm1), std::bit_cast<std::uint32_t>(imm2)));
 	    }
 		/// <summary>Creates a dd asm directive with the type float.</summary>
 	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 	    void dd(float imm0, float imm1, float imm2, float imm3)
 	    {
-	     AddInstruction(Instruction::CreateDeclareDword( * (uint * ) & imm0, * (uint * ) & imm1, * (uint * ) & imm2, * (uint * ) & imm3));
+	     AddInstruction(Instruction::CreateDeclareDword(std::bit_cast<std::uint32_t>(imm0), std::bit_cast<std::uint32_t>(imm1), std::bit_cast<std::uint32_t>(imm2), std::bit_cast<std::uint32_t>(imm3)));
 	    }
 		/// <summary>Creates a dq asm directive with the type ulong.</summary>
 		void dq(std::uint64_t imm0);
@@ -105812,16 +105811,14 @@ namespace Iced::Intel
 		/// <summary>Creates a dq asm directive with the type long.</summary>
 		void dq(std::int64_t imm0, std::int64_t imm1);
 		/// <summary>Creates a dq asm directive with the type double.</summary>
-	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 	    void dq(double imm0)
 	    {
-	     AddInstruction(Instruction::CreateDeclareQword( * (ulong * ) & imm0));
+	     AddInstruction(Instruction::CreateDeclareQword(std::bit_cast<std::uint64_t>(imm0)));
 	    }
 		/// <summary>Creates a dq asm directive with the type double.</summary>
-	  //C# TO C++ CONVERTER TODO TASK: C# 'unsafe' code is not converted by C# to C++ Converter:
 	    void dq(double imm0, double imm1)
 	    {
-	     AddInstruction(Instruction::CreateDeclareQword( * (ulong * ) & imm0, * (ulong * ) & imm1));
+	     AddInstruction(Instruction::CreateDeclareQword(std::bit_cast<std::uint64_t>(imm0), std::bit_cast<std::uint64_t>(imm1)));
 	    }
 	};
 }

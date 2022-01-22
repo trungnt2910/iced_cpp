@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -28,7 +28,7 @@ namespace Iced::Intel
 	/// <summary>
 	/// A label that can be created by <see cref="Assembler.CreateLabel"/>.
 	/// </summary>
-	class Label : public IEquatable<Label*>
+	class Label
 	{
 	private:
 		std::int32_t InstructionIndex = 0;
@@ -57,7 +57,7 @@ namespace Iced::Intel
 		/// <inheritdoc />
 		std::string ToString() const;
 		/// <inheritdoc />
-		bool Equals(Label* other) override;
+		bool Equals(const Label& other);
 		/// <inheritdoc />
 	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 	  //ORIGINAL LINE: public override bool Equals(Object? obj)

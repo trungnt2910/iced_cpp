@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -19,7 +19,6 @@
 #include <string>
 #include <csharp/exceptionhelper.h>
 #include <cassert>
-#include <csharp/stringbuilder.h>
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.

@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -379,46 +379,46 @@ namespace Iced::Intel
 			switch (amount)
 			{
 			case 1:
-				db((byte)0x90); // NOP
+				db((std::uint8_t)0x90); // NOP
 				break;
 			case 2:
-				db((byte)0x66, (byte)0x90); // 66 NOP
+				db((std::uint8_t)0x66, (std::uint8_t)0x90); // 66 NOP
 				break;
 			case 3:
-				db((byte)0x0F, (byte)0x1F, (byte)0x00); // NOP dword ptr [eax] or NOP word ptr [bx+si]
+				db((std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x00); // NOP dword ptr [eax] or NOP word ptr [bx+si]
 				break;
 			case 4:
-				db((byte)0x0F, (byte)0x1F, (byte)0x40, (byte)0x00); // NOP dword ptr [eax + 00] or NOP word ptr [bx+si]
+				db((std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x40, (std::uint8_t)0x00); // NOP dword ptr [eax + 00] or NOP word ptr [bx+si]
 				break;
 			case 5:
 				if (Bitness != 16)
-					db((byte)0x0F, (byte)0x1F, (byte)0x44, (byte)0x00, (byte)0x00); // NOP dword ptr [eax + eax*(std::uint8_t)1 + 00]
+					db((std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x44, (std::uint8_t)0x00, (std::uint8_t)0x00); // NOP dword ptr [eax + eax*(std::uint8_t)1 + 00]
 				else
-					db((byte)0x0F, (byte)0x1F, (byte)0x80, (byte)0x00, (byte)0x00); // NOP word ptr[bx + si]
+					db((std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x80, (std::uint8_t)0x00, (std::uint8_t)0x00); // NOP word ptr[bx + si]
 				break;
 			case 6:
 				if (Bitness != 16)
-					db((byte)0x66, (byte)0x0F, (byte)0x1F, (byte)0x44, (byte)0x00, (byte)0x00); // 66 NOP dword ptr [eax + eax*(std::uint8_t)1 + 00]
+					db((std::uint8_t)0x66, (std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x44, (std::uint8_t)0x00, (std::uint8_t)0x00); // 66 NOP dword ptr [eax + eax*(std::uint8_t)1 + 00]
 				else
-					db((byte)0x66, (byte)0x0F, (byte)0x1F, (byte)0x80, (byte)0x00, (byte)0x00); // NOP dword ptr [bx+si]
+					db((std::uint8_t)0x66, (std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x80, (std::uint8_t)0x00, (std::uint8_t)0x00); // NOP dword ptr [bx+si]
 				break;
 			case 7:
 				if (Bitness != 16)
-					db((byte)0x0F, (byte)0x1F, (byte)0x80, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // NOP dword ptr [eax + 00000000]
+					db((std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x80, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00); // NOP dword ptr [eax + 00000000]
 				else
-					db((byte)0x67, (byte)0x66, (byte)0x0F, (byte)0x1F, (byte)0x44, (byte)0x00, (byte)0x00); // NOP dword ptr [eax+eax]
+					db((std::uint8_t)0x67, (std::uint8_t)0x66, (std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x44, (std::uint8_t)0x00, (std::uint8_t)0x00); // NOP dword ptr [eax+eax]
 				break;
 			case 8:
 				if (Bitness != 16)
-					db((byte)0x0F, (byte)0x1F, (byte)0x84, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // NOP dword ptr [eax + eax*(std::uint8_t)1 + 00000000]
+					db((std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x84, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00); // NOP dword ptr [eax + eax*(std::uint8_t)1 + 00000000]
 				else
-					db((byte)0x67, (byte)0x0F, (byte)0x1F, (byte)0x80, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // NOP word ptr [eax]
+					db((std::uint8_t)0x67, (std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x80, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00); // NOP word ptr [eax]
 				break;
 			case 9:
 				if (Bitness != 16)
-					db((byte)0x66, (byte)0x0F, (byte)0x1F, (byte)0x84, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // 66 NOP dword ptr [eax + eax*(std::uint8_t)1 + 00000000]
+					db((std::uint8_t)0x66, (std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x84, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00); // 66 NOP dword ptr [eax + eax*(std::uint8_t)1 + 00000000]
 				else
-					db((byte)0x67, (byte)0x0F, (byte)0x1F, (byte)0x84, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00); // NOP word ptr [eax+eax]
+					db((std::uint8_t)0x67, (std::uint8_t)0x0F, (std::uint8_t)0x1F, (std::uint8_t)0x84, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00, (std::uint8_t)0x00); // NOP word ptr [eax+eax]
 				break;
 			}
 		};

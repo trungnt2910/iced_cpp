@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -227,7 +227,7 @@ namespace Iced::Intel
 		{
 			auto prefixSeg = instruction.GetSegmentPrefix();
 			constexpr std::uint32_t PrefixFlags = (static_cast<std::uint32_t>(InstrOpInfoFlags::SizeOverrideMask) << static_cast<std::int32_t>(InstrOpInfoFlags::OpSizeShift)) | (static_cast<std::uint32_t>(InstrOpInfoFlags::SizeOverrideMask) << static_cast<std::int32_t>(InstrOpInfoFlags::AddrSizeShift)) | static_cast<std::uint32_t>(InstrOpInfoFlags::BndPrefix);
-			if ((static_cast<std::uint32_t>(prefixSeg) | instruction.GetHasAnyOfLockRepRepnePrefix() | (static_cast<std::uint32_t>((uint)opInfo.Flags & PrefixFlags))) != 0)
+			if ((static_cast<std::uint32_t>(prefixSeg) | instruction.GetHasAnyOfLockRepRepnePrefix() | (static_cast<std::uint32_t>((std::uint32_t)opInfo.Flags & PrefixFlags))) != 0)
 			{
 				FormatterString prefix;
 				prefix = opSizeStrings[(static_cast<std::int32_t>(opInfo.Flags) >> static_cast<std::int32_t>(InstrOpInfoFlags::OpSizeShift)) & static_cast<std::int32_t>(InstrOpInfoFlags::SizeOverrideMask)];

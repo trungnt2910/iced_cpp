@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -3113,7 +3113,7 @@ namespace Iced::Intel
 						bool vsib64;
 						if (RegisterExtensions::IsVectorRegister(indexReg) && instruction.TryGetVsib64(vsib64))
 							vsibSize = vsib64 ? 8 : 4;
-						ulong displ;
+						std::uint64_t displ;
 						if (addrSizeBytes == 8)
 							displ = instruction.GetMemoryDisplacement64();
 						else

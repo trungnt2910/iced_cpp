@@ -41,7 +41,7 @@ namespace Iced::Intel
 	private:
 		std::uint32_t flags = 0;
 	public:
-		enum class Flags : uint
+		enum class Flags : std::uint32_t
 		{
 			None = 0,
 			NoBranchSize = 0x00000001,

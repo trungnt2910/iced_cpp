@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -31,7 +31,7 @@ namespace Iced::Intel
 	/// </summary>
    //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
    //ORIGINAL LINE: [DebuggerDisplay("{" + nameof(Value) + "}")][EditorBrowsable(EditorBrowsableState.Never)] public partial struct AssemblerRegisterBND: IEquatable<AssemblerRegisterBND>
-	class AssemblerRegisterBND : public IEquatable<AssemblerRegisterBND>
+	class AssemblerRegisterBND 
 	{
 		/// <summary>
 		/// Creates a new instance.
@@ -50,7 +50,7 @@ namespace Iced::Intel
 		/// <returns></returns>
 		operator Register() const ;
 		/// <inheritdoc />
-		bool Equals(AssemblerRegisterBND other) override;
+		bool Equals(AssemblerRegisterBND other);
 		/// <inheritdoc />
 		std::int32_t GetHashCode();
 		/// <inheritdoc />

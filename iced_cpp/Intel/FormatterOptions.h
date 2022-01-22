@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -252,7 +252,7 @@ namespace Iced::Intel
 		std::string DigitSeparator;
 
 	private:
-		enum class Flags1 : uint
+		enum class Flags1 : std::uint32_t
 		{
 			None = 0,
 			UppercasePrefixes = 0x00000001,

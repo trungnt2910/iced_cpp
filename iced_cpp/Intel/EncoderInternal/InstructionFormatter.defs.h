@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -23,7 +23,6 @@
 #include <vector>
 #include <csharp/exceptionhelper.h>
 #include <cassert>
-#include <csharp/stringbuilder.h>
 
 namespace Iced::Intel
 {

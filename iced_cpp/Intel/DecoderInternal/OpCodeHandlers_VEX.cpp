@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -89,7 +89,7 @@ namespace Iced::Intel::DecoderInternal
 		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 			gpr = Register::RAX;
@@ -130,7 +130,7 @@ namespace Iced::Intel::DecoderInternal
 		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 			gpr = Register::RAX;
@@ -215,7 +215,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -256,7 +256,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -411,7 +411,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			decoder->SetInvalidInstruction();
 		}
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -497,7 +497,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			decoder->SetInvalidInstruction();
 		}
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 		}
@@ -573,7 +573,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1195,7 +1195,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			decoder->SetInvalidInstruction();
 		}
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -1238,7 +1238,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1279,7 +1279,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1356,7 +1356,7 @@ namespace Iced::Intel::DecoderInternal
 		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1396,7 +1396,7 @@ namespace Iced::Intel::DecoderInternal
 		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1436,7 +1436,7 @@ namespace Iced::Intel::DecoderInternal
 		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1472,7 +1472,7 @@ namespace Iced::Intel::DecoderInternal
 	{
 		auto& state = decoder->state;
 		assert(state.GetEncoding() == EncodingKind::VEX || state.GetEncoding() == EncodingKind::XOP);
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -1517,7 +1517,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1560,7 +1560,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1603,7 +1603,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1872,7 +1872,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1913,7 +1913,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags & decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags & decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;

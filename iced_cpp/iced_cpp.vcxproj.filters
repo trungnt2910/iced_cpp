@@ -639,19 +639,7 @@
     <ClInclude Include="NRT_Helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="csharp\vectorhelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="csharp\stringbuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="csharp\enum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="csharp\primitives.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="csharp\interfaces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="csharp\classes.h">
@@ -674,9 +662,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Intel\Assembler\AssemblerOperandFlags.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\Assembler\AssemblerResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

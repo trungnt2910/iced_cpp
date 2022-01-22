@@ -185,8 +185,6 @@
   <ItemGroup>
     <ClInclude Include="csharp\classes.h" />
     <ClInclude Include="csharp\enum.h" />
-    <ClInclude Include="csharp\interfaces.h" />
-    <ClInclude Include="csharp\primitives.h" />
     <ClInclude Include="csharp\exceptionhelper.h" />
     <ClInclude Include="Intel\Assembler\AssemblerMemoryOperand.h" />
     <ClInclude Include="Intel\Assembler\AssemblerOperandFlags.h" />
@@ -400,11 +398,8 @@
     <ClInclude Include="Intel\UsedRegister.h" />
     <ClInclude Include="Intel\VectorLength.g.h" />
     <ClInclude Include="NRT_Helpers.h" />
-    <ClInclude Include="csharp\stringbuilder.h" />
-    <ClInclude Include="csharp\vectorhelper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Intel\Assembler\AssemblerOperandFlags.cpp" />
     <ClCompile Include="Intel\Assembler\AssemblerResult.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.Assembler.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerMemoryOperandFactory.cpp" />

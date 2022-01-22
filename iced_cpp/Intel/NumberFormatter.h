@@ -11,7 +11,6 @@
 #include <string_view>
 #include <vector>
 #include <csharp/exceptionhelper.h>
-#include <csharp/stringbuilder.h>
 
 #include <csharp/enum.h>
 

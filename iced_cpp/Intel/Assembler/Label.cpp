@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -47,17 +47,9 @@ namespace Iced::Intel
 		return std::format("{0:s}@{1:s}", to_string(Name), to_string(Id));
 	}
 
-	bool Label::Equals(Label* other)
+	bool Label::Equals(const Label& other)
 	{
-		return Name == other->Name && Id == other->Id;
-	}
-
-	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-	//ORIGINAL LINE: public override bool Equals(Object? obj)
-	bool Label::Equals(std::any obj)
-	{
-		Label* other = std::any_cast<Label*>(obj);
-		return other != nullptr && Equals(other);
+		return Name == other.Name && Id == other.Id;
 	}
 
 	std::int32_t Label::GetHashCode()

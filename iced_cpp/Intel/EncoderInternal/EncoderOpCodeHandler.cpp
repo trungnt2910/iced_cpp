@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -66,7 +66,7 @@ namespace Iced::Intel::EncoderInternal
 
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: elemLength = (switchTempVar_0 == Code.DeclareByte) ? (byte)1 : (switchTempVar_0 == Code.DeclareWord) ? (byte)2 : (switchTempVar_0 == Code.DeclareDword) ? (byte)4 : (switchTempVar_0 == Code.DeclareQword) ? (byte)8 : throw new InvalidOperationException();
+		//ORIGINAL LINE: elemLength = (switchTempVar_0 == Code.DeclareByte) ? (std::uint8_t)1 : (switchTempVar_0 == Code.DeclareWord) ? (std::uint8_t)2 : (switchTempVar_0 == Code.DeclareDword) ? (std::uint8_t)4 : (switchTempVar_0 == Code.DeclareQword) ? (std::uint8_t)8 : throw new InvalidOperationException();
 		elemLength = (switchTempVar_0 == Code::DeclareByte) ? static_cast<std::uint8_t>(1) : (switchTempVar_0 == Code::DeclareWord) ? static_cast<std::uint8_t>(2) : (switchTempVar_0 == Code::DeclareDword) ? static_cast<std::uint8_t>(4) : (switchTempVar_0 == Code::DeclareQword) ? static_cast<std::uint8_t>(8) : throw InvalidOperationException();
 		maxLength = 16 / elemLength;
 	}
@@ -141,7 +141,7 @@ namespace Iced::Intel::EncoderInternal
 
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte.None) ? (byte)0x0 : (switchTempVar_1 == MandatoryPrefixByte.P66) ? (byte)0x66 : (switchTempVar_1 == MandatoryPrefixByte.PF3) ? (byte)0xF3 : (switchTempVar_1 == MandatoryPrefixByte.PF2) ? (byte)0xF2 : throw new InvalidOperationException();
+		//ORIGINAL LINE: mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte.None) ? (std::uint8_t)0x0 : (switchTempVar_1 == MandatoryPrefixByte.P66) ? (std::uint8_t)0x66 : (switchTempVar_1 == MandatoryPrefixByte.PF3) ? (std::uint8_t)0xF3 : (switchTempVar_1 == MandatoryPrefixByte.PF2) ? (std::uint8_t)0xF2 : throw new InvalidOperationException();
 		mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte::None) ? static_cast<std::uint8_t>(0x0) : (switchTempVar_1 == MandatoryPrefixByte::P66) ? static_cast<std::uint8_t>(0x66) : (switchTempVar_1 == MandatoryPrefixByte::PF3) ? static_cast<std::uint8_t>(0xF3) : (switchTempVar_1 == MandatoryPrefixByte::PF2) ? static_cast<std::uint8_t>(0xF2) : throw InvalidOperationException();
 	}
 

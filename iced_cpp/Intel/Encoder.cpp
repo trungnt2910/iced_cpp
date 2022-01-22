@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -134,7 +134,7 @@ namespace Iced::Intel
 
 	std::uint32_t Encoder::Encode(const Instruction& instruction, std::uint64_t rip)
 	{
-		uint result;
+		std::uint32_t result;
 		std::string errorMessage;
 		if (!TryEncode(instruction, rip, result, errorMessage))
 		{
@@ -891,7 +891,7 @@ namespace Iced::Intel
 			}
 			if (displSize == 1)
 			{
-				sbyte compressedValue;
+				std::int8_t compressedValue;
 				if (TryConvertToDisp8N(instruction, static_cast<std::int16_t>(Displ), compressedValue))
 				{
 					Displ = static_cast<std::uint32_t>(compressedValue);
@@ -1077,7 +1077,7 @@ namespace Iced::Intel
 		}
 		if (displSize == 1)
 		{
-			sbyte compressedValue;
+			std::int8_t compressedValue;
 			if (TryConvertToDisp8N(instruction, static_cast<std::int32_t>(Displ), compressedValue))
 			{
 				Displ = static_cast<std::uint32_t>(compressedValue);

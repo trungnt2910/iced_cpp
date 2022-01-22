@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -193,7 +193,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			assert(encoder.GetBitness() == 64);
 			assert(longInstructionSize64 <= (std::uint32_t)std::numeric_limits<std::int8_t>::max());
 			instr.SetNearBranch64(IP + longInstructionSize64);
-			uint instrLen;
+			std::uint32_t instrLen;
 			if (!encoder.TryEncode(instr, IP, instrLen, errorMessage))
 			{
 				return CreateErrorMessage(errorMessage, instruction);

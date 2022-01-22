@@ -2,7 +2,7 @@
 
 #include <csharp/enum.h>
 #include <csharp/exceptionhelper.h>
-#include <csharp/primitives.h>
+
 
 #include <any>
 #include <cctype>
@@ -80,3 +80,5 @@ public:
 		return res;
 	}
 };
+
+#define nameof(x) #x

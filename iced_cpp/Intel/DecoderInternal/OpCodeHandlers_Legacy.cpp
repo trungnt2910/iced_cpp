@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -1007,7 +1007,7 @@ namespace Iced::Intel::DecoderInternal
 			instruction.SetCode(code32);
 		}
 		Static::Assert(static_cast<std::uint32_t>(StateFlags::Has66) != 4 ? 0 : -1);
-		if ((((flags & 4) | (uint)(state.flags & StateFlags::Has66)) & decoder->invalidCheckMask) == (4 | (uint)StateFlags::Has66))
+		if ((((flags & 4) | (std::uint32_t)(state.flags & StateFlags::Has66)) & decoder->invalidCheckMask) == (4 | (std::uint32_t)StateFlags::Has66))
 		{
 			decoder->SetInvalidInstruction();
 		}

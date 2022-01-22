@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -89,7 +89,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Register gpr;
 		TupleType tupleType;
-		if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 			tupleType = tupleTypeW1;
@@ -126,7 +126,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetOp2Kind(OpKind::Memory);
 			decoder->ReadOpMem(instruction, tupleType);
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -151,7 +151,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 			gpr = Register::RAX;
@@ -176,7 +176,7 @@ namespace Iced::Intel::DecoderInternal
 		else
 		{
 			instruction.SetOp2Kind(OpKind::Memory);
-			if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 			{
 				decoder->ReadOpMem(instruction, tupleTypeW1);
 			}
@@ -207,7 +207,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -226,7 +226,7 @@ namespace Iced::Intel::DecoderInternal
 		else
 		{
 			instruction.SetOp0Kind(OpKind::Memory);
-			if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 			{
 				decoder->ReadOpMem(instruction, tupleType64);
 			}
@@ -524,7 +524,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
 			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg2));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -592,7 +592,7 @@ namespace Iced::Intel::DecoderInternal
 		else
 		{
 			instruction.SetOp0Kind(OpKind::Memory);
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::z) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::z) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -601,7 +601,7 @@ namespace Iced::Intel::DecoderInternal
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
 		instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.reg + state.extraRegisterBase + state.extraRegisterBaseEVEX) + baseReg2));
-		if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::z) & disallowZeroingMasking & decoder->invalidCheckMask)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::z) & disallowZeroingMasking & decoder->invalidCheckMask)) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -663,7 +663,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
 			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg2));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -714,7 +714,7 @@ namespace Iced::Intel::DecoderInternal
 		else
 		{
 			instruction.SetOp0Kind(OpKind::Memory);
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::z) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::z) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -749,7 +749,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
 			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg2));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -799,7 +799,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
 			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg2));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -843,7 +843,7 @@ namespace Iced::Intel::DecoderInternal
 		else
 		{
 			instruction.SetOp0Kind(OpKind::Memory);
-			if ((static_cast<std::uint32_t>((uint)(state.flags & (StateFlags::b | StateFlags::z)) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & (StateFlags::b | StateFlags::z)) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -885,7 +885,7 @@ namespace Iced::Intel::DecoderInternal
 		else
 		{
 			instruction.SetOp1Kind(OpKind::Memory);
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -922,7 +922,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
 			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg2));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -956,7 +956,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op0Kind = OpKind.Register;
 			instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg2));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -1150,7 +1150,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
 			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg3));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -1199,7 +1199,7 @@ namespace Iced::Intel::DecoderInternal
 		else
 		{
 			instruction.SetOp2Kind(OpKind::Memory);
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -1243,7 +1243,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
 			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg3));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -1343,7 +1343,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
 			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -1393,7 +1393,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
 			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -1437,7 +1437,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op2Kind = OpKind.Register;
 			instruction.SetOp2Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -1481,7 +1481,7 @@ namespace Iced::Intel::DecoderInternal
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op0Kind = OpKind.Register;
 		instruction.SetOp0Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg));
-		if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 		{
 			decoder->SetInvalidInstruction();
 		}
@@ -1629,7 +1629,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			decoder->SetInvalidInstruction();
 		}
-		if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(codeW1);
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
@@ -1669,7 +1669,7 @@ namespace Iced::Intel::DecoderInternal
 		{
 			instruction.SetOp1Kind(OpKind::Memory);
 			decoder->ReadOpMem(instruction, tupleType);
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}
@@ -1694,7 +1694,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Register gpr;
 		TupleType tupleType;
-		if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			tupleType = tupleTypeW1;
@@ -1740,7 +1740,7 @@ namespace Iced::Intel::DecoderInternal
 		}
 		Register gpr;
 		TupleType tupleType;
-		if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			tupleType = tupleTypeW1;
@@ -1784,7 +1784,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -1858,7 +1858,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 		{
 			assert(code64 != Code::INVALID);
 			instruction.SetCode(code64);
@@ -1999,7 +1999,7 @@ namespace Iced::Intel::DecoderInternal
 			decoder->SetInvalidInstruction();
 		}
 		Register gpr;
-		if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+		if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 		{
 			instruction.SetCode(code64);
 			gpr = Register::RAX;
@@ -2018,7 +2018,7 @@ namespace Iced::Intel::DecoderInternal
 		else
 		{
 			instruction.SetOp0Kind(OpKind::Memory);
-			if ((static_cast<std::uint32_t>((uint)state.flags &decoder->is64bMode_and_W)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)state.flags &decoder->is64bMode_and_W)) != 0)
 			{
 				decoder->ReadOpMem(instruction, tupleType64);
 			}
@@ -2059,7 +2059,7 @@ namespace Iced::Intel::DecoderInternal
 			Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 			//instruction.Op1Kind = OpKind.Register;
 			instruction.SetOp1Register((Register)(static_cast<std::int32_t>(state.rm + state.extraBaseRegisterBaseEVEX) + baseReg));
-			if ((static_cast<std::uint32_t>((uint)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
+			if ((static_cast<std::uint32_t>((std::uint32_t)(state.flags & StateFlags::b) & decoder->invalidCheckMask)) != 0)
 			{
 				decoder->SetInvalidInstruction();
 			}

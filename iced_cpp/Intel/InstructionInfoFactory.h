@@ -1,8 +1,8 @@
 // C# helper headers
 #include <csharp/classes.h>
 #include <csharp/enum.h>
-#include <csharp/interfaces.h>
-#include <csharp/primitives.h>
+
+
 
 // Commonly used headers
 #include <cstdint>
@@ -37,7 +37,7 @@ namespace Iced::Intel
 	/// <summary>
 	/// Instruction info options used by <see cref="InstructionInfoFactory"/>
 	/// </summary>
-	enum class InstructionInfoOptions : uint
+	enum class InstructionInfoOptions : std::uint32_t
 	{
 		/// <summary>
 		/// No option is enabled
