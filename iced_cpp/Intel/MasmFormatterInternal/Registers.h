@@ -29,7 +29,12 @@ namespace Iced::Intel::MasmFormatterInternal
 	class Registers final
 	{
 	public:
+#if defined(_MSC_VER)
+#pragma warning (push)
+#pragma warning (disable: 4996)
 		static constexpr Register Register_ST = Register::DontUse0;
+#pragma warning (pop)
+#endif
 		static std::vector<FormatterString> AllRegisters;
 	};
 }
