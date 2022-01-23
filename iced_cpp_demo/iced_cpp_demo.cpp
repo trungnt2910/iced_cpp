@@ -6,7 +6,13 @@
 #include <iomanip>
 #include <sstream>
 
-#define INSTR_INFO
+#define INSTR_INFO INSTR_INFO
+#define OPCODE_INFO OPCODE_INFO
+#define DECODER DECODER
+#define ENCODER ENCODER
+#define MVEX MVEX
+#define NASM NASM
+#define GAS GAS
 #include "../iced_cpp/Intel/Assembler/Iced.Intel.Assembler.h"
 #include "../iced_cpp/Intel/Assembler/Iced.Intel.AssemblerRegisters.cpp"
 #include "../iced_cpp/Intel/Decoder.h"

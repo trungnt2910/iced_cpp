@@ -98,7 +98,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ENCODER;BLOCK_ENCODER;CODE_ASSEMBLER;INSTR_INFO;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER=DECODER;ENCODER=ENCODER;BLOCK_ENCODER=BLOCK_ENCODER;CODE_ASSEMBLER=CODE_ASSEMBLER;OPCODE_INFO=OPCODE_INFO;INSTR_INFO=INSTR_INFO;GAS=GAS;INTEL=INTEL;MASM=MASM;NASM=NASM;FAST_FMT=FAST_FMT;MVEX=MVEX;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -120,7 +120,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ENCODER;BLOCK_ENCODER;CODE_ASSEMBLER;INSTR_INFO;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER=DECODER;ENCODER=ENCODER;BLOCK_ENCODER=BLOCK_ENCODER;CODE_ASSEMBLER=CODE_ASSEMBLER;OPCODE_INFO=OPCODE_INFO;INSTR_INFO=INSTR_INFO;GAS=GAS;INTEL=INTEL;MASM=MASM;NASM=NASM;FAST_FMT=FAST_FMT;MVEX=MVEX;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -142,7 +142,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ENCODER;BLOCK_ENCODER;CODE_ASSEMBLER;INSTR_INFO;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER=DECODER;ENCODER=ENCODER;BLOCK_ENCODER=BLOCK_ENCODER;CODE_ASSEMBLER=CODE_ASSEMBLER;OPCODE_INFO=OPCODE_INFO;INSTR_INFO=INSTR_INFO;GAS=GAS;INTEL=INTEL;MASM=MASM;NASM=NASM;FAST_FMT=FAST_FMT;MVEX=MVEX;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -164,7 +164,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>ENCODER;BLOCK_ENCODER;CODE_ASSEMBLER;INSTR_INFO;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DECODER=DECODER;ENCODER=ENCODER;BLOCK_ENCODER=BLOCK_ENCODER;CODE_ASSEMBLER=CODE_ASSEMBLER;OPCODE_INFO=OPCODE_INFO;INSTR_INFO=INSTR_INFO;GAS=GAS;INTEL=INTEL;MASM=MASM;NASM=NASM;FAST_FMT=FAST_FMT;MVEX=MVEX;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -478,7 +478,6 @@
     <ClCompile Include="Intel\EncoderInternal\OpCodeOperandKinds.g.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpHandlers.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpTables.g.cpp" />
-    <ClCompile Include="Intel\EncodingKind.g.cpp" />
     <ClCompile Include="Intel\FastFormatter.cpp" />
     <ClCompile Include="Intel\FastFormatterInternal\FastFmtFlags.g.cpp" />
     <ClCompile Include="Intel\FastFormatterInternal\Iced.Intel.FastFormatterInternal.FmtData.cpp" />

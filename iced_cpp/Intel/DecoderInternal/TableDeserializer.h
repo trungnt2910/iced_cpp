@@ -1,18 +1,3 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-
-
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
 #pragma once
 
 #include "OpCodeHandlers.h"
@@ -27,10 +12,9 @@
 #include "HandlerFlags.g.h"
 #include "LegacyHandlerFlags.g.h"
 #include "../TupleType.g.h"
-#include <vector>
-#include <csharp/exceptionhelper.h>
-
+#include <optional>
 #include <string_view>
+#include <vector>
 
 //C# TO C++ CONVERTER NOTE: Forward class declarations:
 namespace Iced::Intel::DecoderInternal { class TableDeserializer; }

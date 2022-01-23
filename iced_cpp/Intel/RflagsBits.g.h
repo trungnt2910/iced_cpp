@@ -52,6 +52,7 @@ namespace Iced::Intel {
 	constexpr RflagsBits operator|(const RflagsBits& a, const RflagsBits& b) { return (RflagsBits)((int)a | (int)b); }
 	constexpr RflagsBits& operator&=(RflagsBits& a, const RflagsBits& b) { return a = (RflagsBits)((int)a & (int)b); }
 	constexpr RflagsBits operator&(const RflagsBits& a, const RflagsBits& b) { return (RflagsBits)((int)a & (int)b); }
+	constexpr RflagsBits operator~(const RflagsBits& a) { return (RflagsBits)(~((int)a)); }
 	constexpr int operator+(const RflagsBits& a, const RflagsBits& b) { return ((int)a + (int)b); }
 	constexpr int operator+(const RflagsBits& a, const int& b) { return ((int)a + b); }
 	constexpr int operator+(const int& a, const RflagsBits& b) { return (a + (int)b); }
@@ -74,71 +75,71 @@ namespace Iced::Intel {
 	constexpr bool operator<(const int& a, const RflagsBits& b) { return (a < (int)b); }
 	constexpr bool operator!=(const RflagsBits& a, const int& b) { return ((int)a != b); }
 	constexpr bool operator!=(const int& a, const RflagsBits& b) { return (a != (int)b); }
-	template <>
-	constexpr std::string ToString(const RflagsBits& e) {
-		std::string result;
-		auto temp = e;
-		if (temp == RflagsBits::None) {
-			return "None";
-		}
-		if ((temp & RflagsBits::OF) == RflagsBits::OF) {
-			temp ^= RflagsBits::OF;
-			result += "OF, ";
-		}
-		if ((temp & RflagsBits::SF) == RflagsBits::SF) {
-			temp ^= RflagsBits::SF;
-			result += "SF, ";
-		}
-		if ((temp & RflagsBits::ZF) == RflagsBits::ZF) {
-			temp ^= RflagsBits::ZF;
-			result += "ZF, ";
-		}
-		if ((temp & RflagsBits::AF) == RflagsBits::AF) {
-			temp ^= RflagsBits::AF;
-			result += "AF, ";
-		}
-		if ((temp & RflagsBits::CF) == RflagsBits::CF) {
-			temp ^= RflagsBits::CF;
-			result += "CF, ";
-		}
-		if ((temp & RflagsBits::PF) == RflagsBits::PF) {
-			temp ^= RflagsBits::PF;
-			result += "PF, ";
-		}
-		if ((temp & RflagsBits::DF) == RflagsBits::DF) {
-			temp ^= RflagsBits::DF;
-			result += "DF, ";
-		}
-		if ((temp & RflagsBits::IF) == RflagsBits::IF) {
-			temp ^= RflagsBits::IF;
-			result += "IF, ";
-		}
-		if ((temp & RflagsBits::AC) == RflagsBits::AC) {
-			temp ^= RflagsBits::AC;
-			result += "AC, ";
-		}
-		if ((temp & RflagsBits::UIF) == RflagsBits::UIF) {
-			temp ^= RflagsBits::UIF;
-			result += "UIF, ";
-		}
-		if ((temp & RflagsBits::C0) == RflagsBits::C0) {
-			temp ^= RflagsBits::C0;
-			result += "C0, ";
-		}
-		if ((temp & RflagsBits::C1) == RflagsBits::C1) {
-			temp ^= RflagsBits::C1;
-			result += "C1, ";
-		}
-		if ((temp & RflagsBits::C2) == RflagsBits::C2) {
-			temp ^= RflagsBits::C2;
-			result += "C2, ";
-		}
-		if ((temp & RflagsBits::C3) == RflagsBits::C3) {
-			temp ^= RflagsBits::C3;
-			result += "C3, ";
-		}
-		if (temp != 0 || result.empty()) return Internal::StringHelpers::ToDec((int)e);
-		return result.substr(0, result.size() - 2);
-		}
+}
+template <>
+constexpr std::string Iced::Intel::ToString(const Iced::Intel::RflagsBits& e) {
+	std::string result;
+	auto temp = e;
+	if (temp == Iced::Intel::RflagsBits::None) {
+		return "None";
+	}
+	if ((temp & Iced::Intel::RflagsBits::OF) == Iced::Intel::RflagsBits::OF) {
+		temp ^= Iced::Intel::RflagsBits::OF;
+		result += "OF, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::SF) == Iced::Intel::RflagsBits::SF) {
+		temp ^= Iced::Intel::RflagsBits::SF;
+		result += "SF, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::ZF) == Iced::Intel::RflagsBits::ZF) {
+		temp ^= Iced::Intel::RflagsBits::ZF;
+		result += "ZF, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::AF) == Iced::Intel::RflagsBits::AF) {
+		temp ^= Iced::Intel::RflagsBits::AF;
+		result += "AF, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::CF) == Iced::Intel::RflagsBits::CF) {
+		temp ^= Iced::Intel::RflagsBits::CF;
+		result += "CF, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::PF) == Iced::Intel::RflagsBits::PF) {
+		temp ^= Iced::Intel::RflagsBits::PF;
+		result += "PF, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::DF) == Iced::Intel::RflagsBits::DF) {
+		temp ^= Iced::Intel::RflagsBits::DF;
+		result += "DF, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::IF) == Iced::Intel::RflagsBits::IF) {
+		temp ^= Iced::Intel::RflagsBits::IF;
+		result += "IF, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::AC) == Iced::Intel::RflagsBits::AC) {
+		temp ^= Iced::Intel::RflagsBits::AC;
+		result += "AC, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::UIF) == Iced::Intel::RflagsBits::UIF) {
+		temp ^= Iced::Intel::RflagsBits::UIF;
+		result += "UIF, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::C0) == Iced::Intel::RflagsBits::C0) {
+		temp ^= Iced::Intel::RflagsBits::C0;
+		result += "C0, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::C1) == Iced::Intel::RflagsBits::C1) {
+		temp ^= Iced::Intel::RflagsBits::C1;
+		result += "C1, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::C2) == Iced::Intel::RflagsBits::C2) {
+		temp ^= Iced::Intel::RflagsBits::C2;
+		result += "C2, ";
+	}
+	if ((temp & Iced::Intel::RflagsBits::C3) == Iced::Intel::RflagsBits::C3) {
+		temp ^= Iced::Intel::RflagsBits::C3;
+		result += "C3, ";
+	}
+	if (temp != 0 || result.empty()) return Internal::StringHelpers::ToDec((int)e);
+	return result.substr(0, result.size() - 2);
 }
 #endif
