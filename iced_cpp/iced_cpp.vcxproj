@@ -224,7 +224,6 @@
     <ClInclude Include="Intel\BlockEncoderInternal\TargetInstr.h" />
     <ClInclude Include="Intel\BlockEncoderInternal\XbeginInstr.h" />
     <ClInclude Include="Intel\ByteArrayCodeReader.h" />
-    <ClInclude Include="Intel\EncoderInternal\OpCodeInfoStrings.h" />
     <ClInclude Include="Intel\Internal\StringHelpers.h" />
     <ClInclude Include="Intel\Code.g.h" />
     <ClInclude Include="Intel\CodeExtensions.h" />
@@ -474,7 +473,6 @@
     <ClCompile Include="Intel\EncoderInternal\Enums.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeHandlers.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfosEnums.cpp" />
-    <ClCompile Include="Intel\EncoderInternal\OpCodeInfoStrings.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeOperandKinds.g.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpHandlers.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpTables.g.cpp" />

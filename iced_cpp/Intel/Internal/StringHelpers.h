@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <concepts>
+#include <string>
 #include <type_traits>
 
 namespace Iced::Intel::Internal
@@ -65,6 +66,26 @@ namespace Iced::Intel::Internal
 		{
 			return (i < 0) ? "-" + ToDec((std::make_unsigned_t<I>)-i) : ToDec((std::make_unsigned_t<I>)i);
 		}
-
+		/// <summary>
+		/// constexpr version of strlen
+		/// </summary>
+		/// <param name="i">pointer to c-style string</param>
+		/// <returns></returns>
+		static constexpr std::size_t Length(const char* ch)
+		{
+			return std::char_traits<char>::length(ch);
+		}
+		/// <summary>
+		/// constexpr version of strcpy
+		/// </summary>
+		/// <param name="src">Source</param>
+		/// <param name="dst">Destination</param>
+		/// <returns>Number of chars copied, excluding the null terminator.</returns>
+		static constexpr std::size_t Copy(const char* src, char* dst)
+		{
+			std::size_t len = Length(src);
+			std::char_traits<char>::copy(dst, src, len);
+			return len;
+		}
 	};
 }

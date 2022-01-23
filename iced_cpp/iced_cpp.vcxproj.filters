@@ -654,9 +654,6 @@
     <ClInclude Include="Intel\Internal\StringHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\EncoderInternal\OpCodeInfoStrings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Intel\ToString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1173,9 +1170,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\VectorLength.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\EncoderInternal\OpCodeInfoStrings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

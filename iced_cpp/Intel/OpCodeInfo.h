@@ -65,17 +65,17 @@ namespace Iced::Intel
 		DEFINE_ARITH_FRIEND(Flags)
 		/* readonly */
 	private:
-		mutable bool isConstexprConstructed = false;
 		union
 		{
-			mutable std::string toOpCodeStringValue;
-			int toOpCodeStringIndex;
+			const char* toOpCodeCharPtr;
+			std::string toOpCodeString = "";
 		};
 		union
 		{
-			mutable std::string toInstructionStringValue;
-			int toInstructionStringIndex;
+			const char* toInstructionCharPtr;
+			std::string toInstructionString = "";
 		};
+		bool useCharPtr = false;
 		/* readonly */
 		EncoderInternal::EncFlags2 encFlags2 = static_cast<EncoderInternal::EncFlags2>(0);
 		/* readonly */
@@ -124,9 +124,14 @@ namespace Iced::Intel
 
 		constexpr OpCodeInfo(const OpCodeInfo& op);
 
+		constexpr OpCodeInfo(OpCodeInfo&& op) noexcept;
+
 		constexpr OpCodeInfo();
 
 		constexpr ~OpCodeInfo();
+
+	private:
+		constexpr OpCodeInfo(::Iced::Intel::Code code, EncoderInternal::EncFlags1 encFlags1, EncoderInternal::EncFlags2 encFlags2, EncoderInternal::EncFlags3 encFlags3, EncoderInternal::OpCodeInfoFlags1 opcFlags1, EncoderInternal::OpCodeInfoFlags2 opcFlags2, bool constructStrings);
 	public:
 		/// <summary>
 		/// Gets the code
@@ -622,36 +627,25 @@ namespace Iced::Intel
 		/// Gets the opcode string, eg. <c>VEX.128.66.0F38.W0 78 /r</c>, see also <see cref="ToInstructionString()"/>
 		/// </summary>
 		/// <returns></returns>
-		const char* ToOpCodeString() const;
+		constexpr const char* ToOpCodeString() const;
 		/// <summary>
 		/// Gets the instruction string, eg. <c>VPBROADCASTB xmm1, xmm2/m8</c>, see also <see cref="ToOpCodeString()"/>
 		/// </summary>
 		/// <returns></returns>
-		const char* ToInstructionString() const;
+		constexpr const char* ToInstructionString() const;
 		/// <summary>
 		/// Gets the instruction string, eg. <c>VPBROADCASTB xmm1, xmm2/m8</c>, see also <see cref="ToOpCodeString()"/>
 		/// </summary>
 		/// <returns></returns>
-		const char* ToString() const;
+		constexpr const char* ToString() const;
 	};
 
-	constexpr OpCodeInfo::OpCodeInfo()
-	{
-		if (std::is_constant_evaluated())
-		{
-			isConstexprConstructed = true;
-			toOpCodeStringIndex = toInstructionStringIndex = -1;
-		}
-		else
-		{
-			isConstexprConstructed = false;
-			toOpCodeStringValue = toInstructionStringValue = "";
-		}
-	}
-
-	constexpr OpCodeInfo::OpCodeInfo(::Iced::Intel::Code code, EncoderInternal::EncFlags1 encFlags1, EncoderInternal::EncFlags2 encFlags2, EncoderInternal::EncFlags3 encFlags3, EncoderInternal::OpCodeInfoFlags1 opcFlags1, EncoderInternal::OpCodeInfoFlags2 opcFlags2)
+	constexpr OpCodeInfo::OpCodeInfo(::Iced::Intel::Code code, EncoderInternal::EncFlags1 encFlags1, EncoderInternal::EncFlags2 encFlags2, EncoderInternal::EncFlags3 encFlags3, EncoderInternal::OpCodeInfoFlags1 opcFlags1, EncoderInternal::OpCodeInfoFlags2 opcFlags2, bool constructStrings)
 		: OpCodeInfo()
 	{
+		assert(static_cast<std::uint32_t>(code) < static_cast<std::uint32_t>(IcedConstants::CodeEnumCount));
+		assert(static_cast<std::uint32_t>(code) <= std::numeric_limits<std::uint16_t>::max());
+
 		this->code = static_cast<std::uint16_t>(code);
 		this->encFlags2 = encFlags2;
 		this->encFlags3 = encFlags3;
@@ -822,21 +816,49 @@ namespace Iced::Intel
 		default:
 			throw InvalidOperationException();
 		}
+
+		if (constructStrings)
+		{
+			using namespace EncoderInternal;
+
+			useCharPtr = false;
+			toOpCodeString = (OpCodeFormatter(*this, lkind, (opcFlags1 & OpCodeInfoFlags1::ModRegRmString) != 0)).Format();
+			auto fmtOption = static_cast<InstrStrFmtOption>((static_cast<std::uint32_t>(opcFlags2) >> static_cast<std::int32_t>(OpCodeInfoFlags2::InstrStrFmtOptionShift)) & static_cast<std::uint32_t>(OpCodeInfoFlags2::InstrStrFmtOptionMask));
+			toInstructionString = (InstructionFormatter(*this, fmtOption)).Format();
+		}
+	}
+
+	constexpr OpCodeInfo::OpCodeInfo(::Iced::Intel::Code code, EncoderInternal::EncFlags1 encFlags1, EncoderInternal::EncFlags2 encFlags2, EncoderInternal::EncFlags3 encFlags3, EncoderInternal::OpCodeInfoFlags1 opcFlags1, EncoderInternal::OpCodeInfoFlags2 opcFlags2)
+		: OpCodeInfo(code, encFlags1, encFlags2, encFlags3, opcFlags1, opcFlags2, true)
+	{
 	}
 
 	constexpr OpCodeInfo::OpCodeInfo(const OpCodeInfo& other)
 	{
-		if (std::is_constant_evaluated())
+		useCharPtr = other.useCharPtr;
+
+		if (useCharPtr)
 		{
-			isConstexprConstructed = true;
-			toOpCodeStringIndex = other.toOpCodeStringIndex;
-			toInstructionStringIndex = other.toInstructionStringIndex;
+			// These strings are initialized by default.
+			// Destroy them.
+			toOpCodeString.~basic_string();
+			toInstructionString.~basic_string();
+
+			auto toOpCodeLength = Internal::StringHelpers::Length(other.toOpCodeCharPtr);
+			auto toInstructionLength = Internal::StringHelpers::Length(other.toInstructionCharPtr);
+
+			auto toOpCodeTemp = new char[toOpCodeLength + 1];
+			std::copy(other.toOpCodeCharPtr, other.toOpCodeCharPtr + toOpCodeLength + 1, toOpCodeTemp);
+			toOpCodeCharPtr = toOpCodeTemp;
+
+			auto toInstructionTemp = new char[toInstructionLength + 1];
+			std::copy(other.toInstructionCharPtr, other.toInstructionCharPtr + toInstructionLength + 1, toInstructionTemp);
+			toInstructionCharPtr = toInstructionTemp;
 		}
 		else
 		{
-			isConstexprConstructed = false;
-			toOpCodeStringValue = other.toOpCodeStringValue;
-			toInstructionStringValue = other.toInstructionStringValue;
+			toOpCodeString = other.toOpCodeString;
+			toInstructionString = other.toInstructionString;
 		}
 
 		encFlags2 = other.encFlags2;
@@ -862,12 +884,57 @@ namespace Iced::Intel
 		lkind = other.lkind;
 	}
 
+	constexpr OpCodeInfo::OpCodeInfo(OpCodeInfo&& other) noexcept
+	{
+		useCharPtr = other.useCharPtr;
+
+		if (useCharPtr)
+		{
+			toOpCodeString.~basic_string();
+			toInstructionString.~basic_string();
+
+			toOpCodeCharPtr = other.toOpCodeCharPtr;
+			toInstructionCharPtr = other.toInstructionCharPtr;
+		}
+		else
+		{
+			toOpCodeString = std::move(other.toOpCodeString);
+			toInstructionString = std::move(other.toInstructionString);
+		}
+
+		encFlags2 = other.encFlags2;
+		encFlags3 = other.encFlags3;
+		opcFlags1 = other.opcFlags1;
+		opcFlags2 = other.opcFlags2;
+		code = other.code;
+		encoding = other.encoding;
+		operandSize = other.operandSize;
+		addressSize = other.addressSize;
+		l = other.l;
+		tupleType = other.tupleType;
+		table = other.table;
+		mandatoryPrefix = other.mandatoryPrefix;
+		groupIndex = other.groupIndex;
+		rmGroupIndex = other.rmGroupIndex;
+		op0Kind = other.op0Kind;
+		op1Kind = other.op1Kind;
+		op2Kind = other.op2Kind;
+		op3Kind = other.op3Kind;
+		op4Kind = other.op4Kind;
+		flags = other.flags;
+		lkind = other.lkind;
+	}
+
+	constexpr OpCodeInfo::OpCodeInfo()
+	{
+	}
+
 	constexpr OpCodeInfo::~OpCodeInfo()
 	{
-		if (!isConstexprConstructed)
+		if (!useCharPtr)
 		{
-			toOpCodeStringValue.~basic_string();
-			toInstructionStringValue.~basic_string();
+			toOpCodeString.~basic_string();
+			toInstructionString.~basic_string();
 		}
 	}
 }
@@ -1475,6 +1542,21 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return (switchTempVar_10 == 16) ? Mode16 : (switchTempVar_10 == 32) ? Mode32 : (switchTempVar_10 == 64) ? Mode64 : throw new ArgumentOutOfRangeException(nameof(bitness));
 		return (switchTempVar_10 == 16) ? GetMode16() : (switchTempVar_10 == 32) ? GetMode32() : (switchTempVar_10 == 64) ? GetMode64() : throw std::invalid_argument("invalid bitness");
+	}
+
+	constexpr const char* OpCodeInfo::ToOpCodeString() const
+	{
+		return (useCharPtr) ? toOpCodeCharPtr : toOpCodeString.c_str();
+	}
+
+	constexpr const char* OpCodeInfo::ToInstructionString() const
+	{
+		return (useCharPtr) ? toInstructionCharPtr : toInstructionString.c_str();
+	}
+
+	constexpr const char* OpCodeInfo::ToString() const
+	{
+		return ToInstructionString();
 	}
 }
 
