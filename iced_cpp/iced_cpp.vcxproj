@@ -186,6 +186,7 @@
     <ClInclude Include="csharp\classes.h" />
     <ClInclude Include="csharp\enum.h" />
     <ClInclude Include="csharp\exceptionhelper.h" />
+    <ClInclude Include="Intel\GetHashCode.h" />
     <ClInclude Include="Intel\Assembler\AssemblerMemoryOperand.h" />
     <ClInclude Include="Intel\Assembler\AssemblerOperandFlags.h" />
     <ClInclude Include="Intel\Assembler\AssemblerResult.h" />
@@ -311,6 +312,7 @@
     <ClInclude Include="Intel\Iced.Intel.Instruction.h" />
     <ClInclude Include="Intel\Iced.Intel.InstructionInfoExtensions.h" />
     <ClInclude Include="Intel\Iced.Intel.MemorySizeExtensions.h" />
+    <ClInclude Include="Intel\Internal\TypeHelpers.h" />
     <ClInclude Include="Intel\RegisterExtensions.defs.h" />
     <ClInclude Include="Intel\IcedFeatures.h" />
     <ClInclude Include="Intel\IFormatterOptionsProvider.h" />
@@ -417,7 +419,6 @@
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterST.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTMM.cpp" />
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTR.cpp" />
-    <ClCompile Include="Intel\Assembler\Label.cpp" />
     <ClCompile Include="Intel\Assembler\MemoryOperandSize.g.cpp" />
     <ClCompile Include="Intel\BlockEncoder.cpp" />
     <ClCompile Include="Intel\BlockEncoderInternal\Block.cpp" />
@@ -572,7 +573,6 @@
     <ClCompile Include="Intel\TupleTypeTable.cpp" />
     <ClCompile Include="Intel\UsedMemory.cpp" />
     <ClCompile Include="Intel\VectorLength.g.cpp" />
-    <ClCompile Include="NRT_Helpers.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

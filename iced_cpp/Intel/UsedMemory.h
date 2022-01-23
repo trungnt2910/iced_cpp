@@ -293,13 +293,13 @@ namespace Iced::Intel
 		std::string sb;
 		sb.push_back('[');
 		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-		sb.append(to_string(GetSegment()));
+		sb.append(Iced::Intel::ToString(GetSegment()));
 		sb.push_back(':');
 		bool needPlus = false;
 		if (GetBase() != Register::None)
 		{
 			//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-			sb.append(to_string(GetBase()));
+			sb.append(Iced::Intel::ToString(GetBase()));
 			needPlus = true;
 		}
 		if (GetIndex() != Register::None)
@@ -310,7 +310,7 @@ namespace Iced::Intel
 			}
 			needPlus = true;
 			//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
-			sb.append(to_string(GetIndex()));
+			sb.append(Iced::Intel::ToString(GetIndex()));
 			if (GetScale() != 1)
 			{
 				sb.push_back('*');
@@ -325,7 +325,7 @@ namespace Iced::Intel
 			}
 			if (GetDisplacement() <= 9)
 			{
-				sb.append(std::to_string(GetDisplacement()));
+				sb.append(Iced::Intel::ToString(GetDisplacement()));
 			}
 			else
 			{
@@ -334,9 +334,9 @@ namespace Iced::Intel
 			}
 		}
 		sb.push_back(';');
-		sb.append(to_string(GetMemorySize()));
+		sb.append(Iced::Intel::ToString(GetMemorySize()));
 		sb.push_back(';');
-		sb.append(to_string(GetAccess()));
+		sb.append(Iced::Intel::ToString(GetAccess()));
 		sb.push_back(']');
 		return sb;
 	}

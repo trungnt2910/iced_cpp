@@ -1,28 +1,14 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-
-
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
 
 #pragma once
 
+#include <cstdint>
 #include <string>
-#include <any>
-#include <format>
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
+#include "../GetHashCode.h"
+#include "../ToString.h"
+
 namespace Iced::Intel
 {
 	/// <summary>
@@ -31,54 +17,114 @@ namespace Iced::Intel
 	class Label
 	{
 	private:
+		friend class Assembler;
 		std::int32_t InstructionIndex = 0;
-
-	public:
-		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-		//ORIGINAL LINE: internal Label(string? name, ulong id)
-		Label(const std::string& name, std::uint64_t id);
-		/// <summary>
-		/// Name of this label.
-		/// </summary>
-		std::string Name;
+		constexpr Label(const std::string& name, std::uint64_t id);
 		/// <summary>
 		/// Id of this label.
 		/// </summary>
 		std::uint64_t Id = 0;
 		/// <summary>
+		/// Name of this label.
+		/// </summary>
+		std::string Name;
+	public:
+		/// <summary>
+		/// Gets the Label's Id
+		/// </summary>
+		/// <returns></returns>
+		constexpr std::uint64_t GetId() const;
+		/// <summary>
+		/// Gets the Label's Name
+		/// </summary>
+		/// <returns></returns>
+		constexpr const std::string& GetName() const;
+		/// <summary>
 		/// Gets the instruction index associated with this label. This is setup after calling <see cref="Assembler.Label"/>.
 		/// </summary>
-		std::int32_t GetInstructionIndex() const;
-		void SetInstructionIndex(std::int32_t value);
+		constexpr std::int32_t GetInstructionIndex() const;
+		constexpr void SetInstructionIndex(std::int32_t value);
 		/// <summary>
 		/// <c>true</c> if this label is empty and was not created by <see cref="Assembler.CreateLabel"/>.
 		/// </summary>
-		bool IsEmpty() const;
+		constexpr bool IsEmpty() const;
 		/// <inheritdoc />
-		std::string ToString() const;
+		constexpr std::string ToString() const;
 		/// <inheritdoc />
-		bool Equals(const Label& other);
+		constexpr bool Equals(const Label& other) const;
 		/// <inheritdoc />
-	  //C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-	  //ORIGINAL LINE: public override bool Equals(Object? obj)
-		bool Equals(std::any obj);
-		/// <inheritdoc />
-		std::int32_t GetHashCode();
+		constexpr std::int32_t GetHashCode() const;
 		/// <summary>
 		/// Equality operator for <see cref="Label"/>
 		/// </summary>
 		/// <param name="left">Label</param>
 		/// <param name="right">Label</param>
 		/// <returns></returns>
-		bool operator == (const Label& right);
+		constexpr bool operator == (const Label& right) const;
 		/// <summary>
 		/// Inequality operator for <see cref="Label"/>
 		/// </summary>
 		/// <param name="left">Label</param>
 		/// <param name="right">Label</param>
 		/// <returns></returns>
-		bool operator != (const Label& right);
-
-		Label() = default;
+		constexpr bool operator != (const Label& right) const;
+		constexpr Label() = default;
 	};
+
+	constexpr Label::Label(const std::string& name, std::uint64_t id)
+	{
+		Name = (name != "") ? name : "___label";
+		Id = id;
+		SetInstructionIndex(-1);
+	}
+
+	constexpr std::uint64_t Label::GetId() const
+	{
+		return Id;
+	}
+
+	constexpr const std::string& Label::GetName() const
+	{
+		return Name;
+	}
+
+	constexpr std::int32_t Label::GetInstructionIndex() const
+	{
+		return InstructionIndex;
+	}
+
+	constexpr void Label::SetInstructionIndex(std::int32_t value)
+	{
+		InstructionIndex = value;
+	}
+
+	constexpr bool Label::IsEmpty() const
+	{
+		return Id == 0;
+	}
+
+	constexpr std::string Label::ToString() const
+	{
+		return Iced::Intel::ToString(Name) + "@" + Iced::Intel::ToString(Id);
+	}
+
+	constexpr bool Label::Equals(const Label& other) const
+	{
+		return Name == other.Name && Id == other.Id;
+	}
+
+	constexpr std::int32_t Label::GetHashCode() const
+	{
+		return (Iced::Intel::GetHashCode(Name) * 397) ^ Iced::Intel::GetHashCode(Id);
+	}
+
+	constexpr bool Label::operator == (const Label& right) const
+	{
+		return this->Equals(right);
+	}
+
+	constexpr bool Label::operator != (const Label& right) const
+	{
+		return !this->Equals(right);
+	}
 }

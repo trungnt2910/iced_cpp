@@ -660,6 +660,12 @@
     <ClInclude Include="Intel\ToString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Intel\GetHashCode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\Internal\TypeHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Intel\Assembler\AssemblerResult.cpp">
@@ -711,9 +717,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Assembler\Iced.Intel.AssemblerRegisterTR.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\Assembler\Label.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Assembler\MemoryOperandSize.g.cpp">
@@ -1173,9 +1176,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\VectorLength.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NRT_Helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfoStrings.cpp">

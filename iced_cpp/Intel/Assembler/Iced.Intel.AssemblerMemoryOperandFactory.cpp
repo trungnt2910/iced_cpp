@@ -79,7 +79,7 @@ namespace Iced::Intel
 
 	AssemblerMemoryOperand AssemblerMemoryOperandFactory::operator [](const Label& label)
 	{
-		return AssemblerMemoryOperand(Size, Segment, Register::RIP, Register::None, 1, static_cast<std::int64_t>(label.Id), Flags);
+		return AssemblerMemoryOperand(Size, Segment, Register::RIP, Register::None, 1, static_cast<std::int64_t>(label.GetId()), Flags);
 	}
 
 	AssemblerMemoryOperand AssemblerMemoryOperandFactory::operator [](AssemblerRegister16 register_)

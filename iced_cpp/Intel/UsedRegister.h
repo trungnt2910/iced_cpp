@@ -61,6 +61,6 @@ namespace Iced::Intel
 
 	constexpr std::string UsedRegister::ToString() const
 	{
-		return to_string(GetRegister()) + ":" + to_string(GetAccess());
+		return Iced::Intel::ToString(GetRegister()) + ":" + Iced::Intel::ToString(GetAccess());
 	}
 }

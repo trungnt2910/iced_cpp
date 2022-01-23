@@ -67,7 +67,7 @@ namespace Iced::Intel::NasmFormatterInternal
 
 	 //C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 	 //ORIGINAL LINE: var keyword = (switchTempVar_0 == 0x00) ? empty : (switchTempVar_0 == 0x01) ? @byte : (switchTempVar_0 == 0x02) ? dword : (switchTempVar_0 == 0x03) ? far : (switchTempVar_0 == 0x04) ? fpuenv14 : (switchTempVar_0 == 0x05) ? fpuenv28 : (switchTempVar_0 == 0x06) ? fpustate108 : (switchTempVar_0 == 0x07) ? fpustate94 : (switchTempVar_0 == 0x08) ? oword : (switchTempVar_0 == 0x09) ? qword : (switchTempVar_0 == 0x0A) ? tword : (switchTempVar_0 == 0x0B) ? word : (switchTempVar_0 == 0x0C) ? yword : (switchTempVar_0 == 0x0D) ? zword : (switchTempVar_0 == 0x0E) ? mem384 : throw new InvalidOperationException();
-			auto keyword = (switchTempVar_0 == 0x00) ? empty : (switchTempVar_0 == 0x01) ? byte : (switchTempVar_0 == 0x02) ? dword : (switchTempVar_0 == 0x03) ? far : (switchTempVar_0 == 0x04) ? fpuenv14 : (switchTempVar_0 == 0x05) ? fpuenv28 : (switchTempVar_0 == 0x06) ? fpustate108 : (switchTempVar_0 == 0x07) ? fpustate94 : (switchTempVar_0 == 0x08) ? oword : (switchTempVar_0 == 0x09) ? qword : (switchTempVar_0 == 0x0A) ? tword : (switchTempVar_0 == 0x0B) ? word : (switchTempVar_0 == 0x0C) ? yword : (switchTempVar_0 == 0x0D) ? zword : (switchTempVar_0 == 0x0E) ? mem384 : throw InvalidOperationException();
+			auto keyword = (switchTempVar_0 == 0x00) ? empty : (switchTempVar_0 == 0x01) ? byte : (switchTempVar_0 == 0x02) ? dword : (switchTempVar_0 == 0x03) ? far : (switchTempVar_0 == 0x04) ? fpuenv14 : (switchTempVar_0 == 0x05) ? fpuenv28 : (switchTempVar_0 == 0x06) ? fpustate108 : (switchTempVar_0 == 0x07) ? fpustate94 : (switchTempVar_0 == 0x08) ? oword : (switchTempVar_0 == 0x09) ? qword : (switchTempVar_0 == 0x0A) ? tword : (switchTempVar_0 == 0x0B) ? word : (switchTempVar_0 == 0x0C) ? yword : (switchTempVar_0 == 0x0D) ? zword : (switchTempVar_0 == 0x0E) ? mem384 : throw std::runtime_error("unexpected");
 			FormatterString bcstTo;
 			if (i < static_cast<std::int32_t>(IcedConstants::FirstBroadcastMemorySize))
 			{
@@ -82,7 +82,7 @@ namespace Iced::Intel::NasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: bcstTo = (switchTempVar_1 == 0x00) ? empty : (switchTempVar_1 == 0x01) ? b1to2 : (switchTempVar_1 == 0x02) ? b1to4 : (switchTempVar_1 == 0x03) ? b1to8 : (switchTempVar_1 == 0x04) ? b1to16 : (switchTempVar_1 == 0x05) ? b1to32 : throw new InvalidOperationException();
-				bcstTo = (switchTempVar_1 == 0x00) ? empty : (switchTempVar_1 == 0x01) ? b1to2 : (switchTempVar_1 == 0x02) ? b1to4 : (switchTempVar_1 == 0x03) ? b1to8 : (switchTempVar_1 == 0x04) ? b1to16 : (switchTempVar_1 == 0x05) ? b1to32 : throw InvalidOperationException();
+				bcstTo = (switchTempVar_1 == 0x00) ? empty : (switchTempVar_1 == 0x01) ? b1to2 : (switchTempVar_1 == 0x02) ? b1to4 : (switchTempVar_1 == 0x03) ? b1to8 : (switchTempVar_1 == 0x04) ? b1to16 : (switchTempVar_1 == 0x05) ? b1to32 : throw std::runtime_error("unexpected");
 			}
 			infos[i] = Info(keyword, bcstTo);
 		}

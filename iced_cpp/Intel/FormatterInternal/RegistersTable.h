@@ -30,7 +30,7 @@ namespace Iced::Intel::FormatterInternal
 			}
 			if (reader.GetCanRead())
 			{
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			return strings;
 		}

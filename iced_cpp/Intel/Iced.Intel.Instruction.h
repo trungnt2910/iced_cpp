@@ -1295,7 +1295,7 @@ namespace Iced::Intel
 		/// </summary>
 		/// <returns></returns>
 	public:
-		std::int32_t GetHashCode();
+		constexpr std::int32_t GetHashCode() const;
 		/// <summary>
 		/// Checks if this instance equals <paramref name="obj"/>
 		/// </summary>

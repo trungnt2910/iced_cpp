@@ -481,7 +481,7 @@ void HowTo_InstructionInfo()
         auto fpuInfo = instr.GetFpuStackIncrementInfo();
         std::cout << "    OpCode: " << opCode.ToOpCodeString() << std::endl;
         std::cout << "    Instruction: " << opCode.ToInstructionString() << std::endl;
-        std::cout << "    Encoding: " << to_string(instr.GetEncoding()) << std::endl;
+        std::cout << "    Encoding: " << Iced::Intel::ToString(instr.GetEncoding()) << std::endl;
         std::cout << "    Mnemonic: " << ToString(instr.GetMnemonic()) << std::endl;
         std::cout << "    Code: " << ToString(instr.GetCode()) << std::endl;
         std::cout << "    CpuidFeature: ";
@@ -490,14 +490,14 @@ void HowTo_InstructionInfo()
             std::cout << std::accumulate(
                 std::next(features.begin()),
                 features.end(),
-                to_string(features[0]),
+                Iced::Intel::ToString(features[0]),
                 [](const std::string& a, CpuidFeature b) {
-                    return a + " and " + to_string(b);
+                    return a + " and " + Iced::Intel::ToString(b);
                 }
             );
         }
         std::cout << std::endl;
-        std::cout << "    FlowControl: " << to_string(instr.GetFlowControl()) << std::endl;
+        std::cout << "    FlowControl: " << Iced::Intel::ToString(instr.GetFlowControl()) << std::endl;
 
         if (fpuInfo.WritesTop)
         {
@@ -516,7 +516,7 @@ void HowTo_InstructionInfo()
         if (instr.IsStackInstruction())
             std::cout << "    SP Increment: " << instr.GetStackPointerIncrement() << std::endl;
         if (instr.GetConditionCode() != ConditionCode::None)
-            std::cout << "    Condition code: " << to_string(instr.GetConditionCode()) << std::endl;
+            std::cout << "    Condition code: " << Iced::Intel::ToString(instr.GetConditionCode()) << std::endl;
         if (instr.GetRflagsRead() != RflagsBits::None)
             std::cout << "    RFLAGS Read: " << ToString(instr.GetRflagsRead()) << std::endl;
         if (instr.GetRflagsWritten() != RflagsBits::None)
@@ -541,9 +541,9 @@ void HowTo_InstructionInfo()
             }
         }
         for (int i = 0; i < instr.GetOpCount(); i++)
-            std::cout << "    Op" << i << "Access: " << to_string(info.GetOpAccess(i)) << std::endl;
+            std::cout << "    Op" << i << "Access: " << Iced::Intel::ToString(info.GetOpAccess(i)) << std::endl;
         for (int i = 0; i < opCode.GetOpCount(); i++)
-            std::cout << "    Op" << i << ": " << to_string(opCode.GetOpKind(i)) << std::endl;
+            std::cout << "    Op" << i << ": " << Iced::Intel::ToString(opCode.GetOpKind(i)) << std::endl;
         // The returned iterator is a struct, nothing is allocated unless you box it
         for (const auto& regInfo : info.GetUsedRegisters())
             std::cout << "    Used reg: " << regInfo.ToString() << std::endl;

@@ -136,7 +136,7 @@ namespace Iced::Intel
 		return AssemblerMemoryOperand(MemoryOperandSize::None, Register::None, Register::None, *this, scale, 0, AssemblerOperandFlags::None);
 	}
 
-	inline std::int32_t AssemblerRegister32::GetHashCode() const
+	constexpr std::int32_t AssemblerRegister32::GetHashCode() const
 	{
 		return (static_cast<std::int32_t>(Value) * 397) ^ static_cast<std::int32_t>(Flags);
 	}
@@ -158,7 +158,7 @@ namespace Iced::Intel
 
 	inline std::string AssemblerRegister32::ToString() const
 	{
-		return to_string(Value);
+		return Iced::Intel::ToString(Value);
 	}
 
 	constexpr AssemblerMemoryOperand operator + (AssemblerRegister32 left, AssemblerMemoryOperand right)

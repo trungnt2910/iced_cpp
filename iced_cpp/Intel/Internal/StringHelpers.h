@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <concepts>
 #include <type_traits>
 
 namespace Iced::Intel::Internal
@@ -47,7 +48,8 @@ namespace Iced::Intel::Internal
 
 			return result;
 		}
-		static constexpr std::string ToDec(std::uint32_t i)
+		template <std::unsigned_integral U>
+		static constexpr std::string ToDec(U i)
 		{
 			std::string result;
 			while (i)
@@ -58,9 +60,10 @@ namespace Iced::Intel::Internal
 			std::reverse(result.begin(), result.end());
 			return result;
 		}
-		static constexpr std::string ToDec(std::int32_t i)
+		template <std::signed_integral I>
+		static constexpr std::string ToDec(I i)
 		{
-			return (i < 0) ? "-" + ToDec((std::uint32_t)i) : ToDec((std::uint32_t)i);
+			return (i < 0) ? "-" + ToDec((std::make_unsigned_t<I>)-i) : ToDec((std::make_unsigned_t<I>)i);
 		}
 
 	};

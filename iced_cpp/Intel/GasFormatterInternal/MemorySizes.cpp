@@ -52,7 +52,7 @@ namespace Iced::Intel::GasFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: bcstTo = (switchTempVar_0 == 0x00) ? empty : (switchTempVar_0 == 0x01) ? b1to2 : (switchTempVar_0 == 0x02) ? b1to4 : (switchTempVar_0 == 0x03) ? b1to8 : (switchTempVar_0 == 0x04) ? b1to16 : (switchTempVar_0 == 0x05) ? b1to32 : throw new InvalidOperationException();
-				bcstTo = (switchTempVar_0 == 0x00) ? empty : (switchTempVar_0 == 0x01) ? b1to2 : (switchTempVar_0 == 0x02) ? b1to4 : (switchTempVar_0 == 0x03) ? b1to8 : (switchTempVar_0 == 0x04) ? b1to16 : (switchTempVar_0 == 0x05) ? b1to32 : throw InvalidOperationException();
+				bcstTo = (switchTempVar_0 == 0x00) ? empty : (switchTempVar_0 == 0x01) ? b1to2 : (switchTempVar_0 == 0x02) ? b1to4 : (switchTempVar_0 == 0x03) ? b1to8 : (switchTempVar_0 == 0x04) ? b1to16 : (switchTempVar_0 == 0x05) ? b1to32 : throw std::runtime_error("unexpected");
 			}
 			infos[i] = bcstTo;
 		}

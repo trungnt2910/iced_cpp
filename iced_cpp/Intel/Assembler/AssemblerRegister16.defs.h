@@ -65,7 +65,7 @@ namespace Iced::Intel
 		/// <returns></returns>
 		constexpr AssemblerMemoryOperand operator *(std::int32_t scale) const;
 		/// <inheritdoc />
-		std::int32_t GetHashCode() const;
+		constexpr std::int32_t GetHashCode() const;
 		/// <summary>
 		/// Equality operator for <see cref="AssemblerRegister16"/>
 		/// </summary>

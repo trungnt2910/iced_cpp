@@ -308,13 +308,13 @@ namespace Iced::Intel
 		template <typename T>
 		void NoOpCodeFoundForBuildInternal(std::string& builder, const T& arg)
 		{
-			builder.append(to_string(arg));
+			builder.append(Iced::Intel::ToString(arg));
 		}
 
 		template <typename T, typename... Args>
 		void NoOpCodeFoundForBuildInternal(std::string& builder, const T& arg, const Args&... argNames)
 		{
-			builder.append(to_string(arg));
+			builder.append(Iced::Intel::ToString(arg));
 			builder.append(", ");
 			NoOpCodeFoundForBuildInternal(builder, argNames...);
 		}
@@ -333,7 +333,7 @@ namespace Iced::Intel
 			//}
 			NoOpCodeFoundForBuildInternal(builder, argNames...);
 			builder.append(" ");
-			builder.append(std::format("`. Combination of arguments and/or current bitness {0:s} is not compatible with any existing OpCode encoding.", std::to_string(GetBitness())));
+			builder.append(std::format("`. Combination of arguments and/or current bitness {0:s} is not compatible with any existing OpCode encoding.", Iced::Intel::ToString(GetBitness())));
 			return std::invalid_argument(builder);
 		}
 

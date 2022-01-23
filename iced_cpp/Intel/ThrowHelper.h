@@ -118,7 +118,7 @@ namespace Iced::Intel
 	constexpr void ThrowHelper::ThrowInvalidOperationException(bool dummy)
 	{
 		if (!dummy)
-		throw InvalidOperationException();
+		throw std::runtime_error("invalid operation");
 	}
 
 	[[noreturn]]
@@ -195,90 +195,90 @@ namespace Iced::Intel
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_value(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("value");
+		throw std::out_of_range("value");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_index(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("index");
+		throw std::out_of_range("index");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_count(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("count");
+		throw std::out_of_range("count");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_length(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("length");
+		throw std::out_of_range("length");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_operand(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("operand");
+		throw std::out_of_range("operand");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_instructionOperand(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("instructionOperand");
+		throw std::out_of_range("instructionOperand");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_capacity(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("capacity");
+		throw std::out_of_range("capacity");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_memorySize(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("memorySize");
+		throw std::out_of_range("memorySize");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_size(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("size");
+		throw std::out_of_range("size");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_elementSize(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("elementSize");
+		throw std::out_of_range("elementSize");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_register(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("register");
+		throw std::out_of_range("register");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_code(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("code");
+		throw std::out_of_range("code");
 	}
 
 	[[noreturn]]
 	constexpr void ThrowHelper::ThrowArgumentOutOfRangeException_data(bool dummy)
 	{
 		if (!dummy)
-		throw ArgumentOutOfRangeException("data");
+		throw std::out_of_range("data");
 	}
 }

@@ -73,7 +73,7 @@ namespace Iced::Intel
 		bool operator != (AssemblerRegister8 right);
 
 		inline bool operator == (Register right) { return (Register)(*this) == right; }
-		inline std::string ToString() const { return to_string(Value); }
+		inline std::string ToString() const { return Iced::Intel::ToString(Value); }
 
 		AssemblerRegister8() = default;
 	};

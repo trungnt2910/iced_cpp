@@ -42,7 +42,7 @@ namespace Iced::Intel
 				}
 				if (i != data_size)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				return regInfos;
 				return std::array<RegisterInfo, IcedConstants::RegisterEnumCount>();

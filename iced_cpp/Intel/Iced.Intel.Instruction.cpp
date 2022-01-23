@@ -193,7 +193,7 @@ namespace Iced::Intel
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), to_string(operand + 1)));
+			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand + 1)));
 		}
 		auto opKind = operands[operand]->GetImmediateOpKind();
 		OpKind opKindPrev = operands[operand - 1]->GetImmediateOpKind();
@@ -203,7 +203,7 @@ namespace Iced::Intel
 		}
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't an immediate operand", ::Iced::Intel::ToString(code), to_string(operand)));
+			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't an immediate operand", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand)));
 		}
 		return opKind;
 	}
@@ -218,12 +218,12 @@ namespace Iced::Intel
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), to_string(operand + 1)));
+			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand + 1)));
 		}
 		auto opKind = operands[operand]->GetNearBranchOpKind();
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a near branch operand", ::Iced::Intel::ToString(code), to_string(operand)));
+			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a near branch operand", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand)));
 		}
 		return opKind;
 	}
@@ -238,12 +238,12 @@ namespace Iced::Intel
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), to_string(operand + 1)));
+			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand + 1)));
 		}
 		auto opKind = operands[operand]->GetFarBranchOpKind();
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a far branch operand", ::Iced::Intel::ToString(code), to_string(operand)));
+			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a far branch operand", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand)));
 		}
 		return opKind;
 	}
@@ -2223,7 +2223,7 @@ namespace Iced::Intel
 		return a.memDispl == b.memDispl && ((a.flags1 ^ b.flags1) & ~static_cast<std::uint32_t>(InstrFlags1::EqualsIgnoreMask)) == 0 && a.immediate == b.immediate && a.code == b.code && a.memBaseReg == b.memBaseReg && a.memIndexReg == b.memIndexReg && a.reg0 == b.reg0 && a.reg1 == b.reg1 && a.reg2 == b.reg2 && a.reg3 == b.reg3 && a.opKind0 == b.opKind0 && a.opKind1 == b.opKind1 && a.opKind2 == b.opKind2 && a.opKind3 == b.opKind3 && a.scale == b.scale && a.displSize == b.displSize && a.pad == b.pad;
 	}
 
-	std::int32_t Instruction::GetHashCode()
+	constexpr std::int32_t Instruction::GetHashCode() const
 	{
 		std::uint32_t c = static_cast<std::uint32_t>(memDispl);
 		c ^= static_cast<std::uint32_t>(memDispl >> 32);
@@ -2898,7 +2898,7 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return (switchTempVar_2 == OpKind.Immediate8) ? Immediate8 : (switchTempVar_2 == OpKind.Immediate8_2nd) ? Immediate8_2nd : (switchTempVar_2 == OpKind.Immediate16) ? Immediate16 : (switchTempVar_2 == OpKind.Immediate32) ? Immediate32 : (switchTempVar_2 == OpKind.Immediate64) ? Immediate64 : (switchTempVar_2 == OpKind.Immediate8to16) ? (ulong)Immediate8to16 : (switchTempVar_2 == OpKind.Immediate8to32) ? (ulong)Immediate8to32 : (switchTempVar_2 == OpKind.Immediate8to64) ? (ulong)Immediate8to64 : (switchTempVar_2 == OpKind.Immediate32to64) ? (ulong)Immediate32to64 : throw new ArgumentException(string.Format("Op{0} isn't an immediate operand", operand), nameof(operand));
 		//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires only one argument:
-		return (switchTempVar_2 == OpKind::Immediate8) ? GetImmediate8() : (switchTempVar_2 == OpKind::Immediate8_2nd) ? GetImmediate8_2nd() : (switchTempVar_2 == OpKind::Immediate16) ? GetImmediate16() : (switchTempVar_2 == OpKind::Immediate32) ? GetImmediate32() : (switchTempVar_2 == OpKind::Immediate64) ? GetImmediate64() : (switchTempVar_2 == OpKind::Immediate8to16) ? static_cast<std::uint64_t>(GetImmediate8to16()) : (switchTempVar_2 == OpKind::Immediate8to32) ? static_cast<std::uint64_t>(GetImmediate8to32()) : (switchTempVar_2 == OpKind::Immediate8to64) ? static_cast<std::uint64_t>(GetImmediate8to64()) : (switchTempVar_2 == OpKind::Immediate32to64) ? static_cast<std::uint64_t>(GetImmediate32to64()) : throw std::invalid_argument(std::format("Op{0:s} isn't an immediate operand", to_string(operand)));
+		return (switchTempVar_2 == OpKind::Immediate8) ? GetImmediate8() : (switchTempVar_2 == OpKind::Immediate8_2nd) ? GetImmediate8_2nd() : (switchTempVar_2 == OpKind::Immediate16) ? GetImmediate16() : (switchTempVar_2 == OpKind::Immediate32) ? GetImmediate32() : (switchTempVar_2 == OpKind::Immediate64) ? GetImmediate64() : (switchTempVar_2 == OpKind::Immediate8to16) ? static_cast<std::uint64_t>(GetImmediate8to16()) : (switchTempVar_2 == OpKind::Immediate8to32) ? static_cast<std::uint64_t>(GetImmediate8to32()) : (switchTempVar_2 == OpKind::Immediate8to64) ? static_cast<std::uint64_t>(GetImmediate8to64()) : (switchTempVar_2 == OpKind::Immediate32to64) ? static_cast<std::uint64_t>(GetImmediate32to64()) : throw std::invalid_argument(std::format("Op{0:s} isn't an immediate operand", Iced::Intel::ToString(operand)));
 	}
 
 	void Instruction::SetImmediate(std::int32_t operand, std::int32_t immediate)
@@ -2942,7 +2942,7 @@ namespace Iced::Intel
 		default:
 			//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires only one argument:
 			//ORIGINAL LINE: throw new ArgumentException(string.Format("Op{0} isn't an immediate operand", operand), nameof(operand));
-			throw std::invalid_argument(std::format("Op{0:s} isn't an immediate operand", to_string(operand)));
+			throw std::invalid_argument(std::format("Op{0:s} isn't an immediate operand", Iced::Intel::ToString(operand)));
 		}
 	}
 

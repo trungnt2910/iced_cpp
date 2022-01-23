@@ -130,7 +130,7 @@ namespace Iced::Intel
 		{
 			//C# TO C++ CONVERTER TODO TASK: This exception's constructor requires only one argument:
 			//ORIGINAL LINE: throw new ArgumentException(string.Format("Cannot reuse label. The specified label is already associated with an instruction at index {(std::uint8_t)0}.", label.InstructionIndex), nameof(label));
-			throw std::invalid_argument(std::format("Cannot reuse label. The specified label is already associated with an instruction at index {0:s}.", to_string(label.GetInstructionIndex())));
+			throw std::invalid_argument(std::format("Cannot reuse label. The specified label is already associated with an instruction at index {0:s}.", Iced::Intel::ToString(label.GetInstructionIndex())));
 		}
 		if (!currentLabel.IsEmpty())
 		{
@@ -469,13 +469,13 @@ namespace Iced::Intel
 		// Protect against using a prefix without actually using it
 		if (prefixFlags != PrefixFlags::None)
 		{
-			errorMessage = std::format("Unused prefixes {0:s}. You must emit an instruction after using an instruction prefix.", to_string(prefixFlags));
+			errorMessage = std::format("Unused prefixes {0:s}. You must emit an instruction after using an instruction prefix.", Iced::Intel::ToString(prefixFlags));
 			return false;
 		}
 		// Protect against a label emitted without being attached to an instruction
 		if (!currentLabel.IsEmpty())
 		{
-			errorMessage = std::format("Unused label {0:s}. You must emit an instruction after emitting a label.", to_string(currentLabel));
+			errorMessage = std::format("Unused label {0:s}. You must emit an instruction after emitting a label.", Iced::Intel::ToString(currentLabel));
 			return false;
 		}
 		if (definedAnonLabel)

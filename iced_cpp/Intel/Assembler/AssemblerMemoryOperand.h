@@ -1,36 +1,11 @@
 #pragma once
 
-#include <csharp/classes.h>
 #include <string>
 
-// These registers depend on each other, better forward declare them all.
-namespace Iced::Intel
-{
-	class AssemblerMemoryOperand;
-	class AssemblerRegister8;
-	class AssemblerRegister16;
-	class AssemblerRegister32;
-	class AssemblerRegister64;
-	class AssemblerRegisterBND;
-	class AssemblerRegisterCR;
-	class AssemblerRegisterDR;
-	class AssemblerRegisterK;
-	class AssemblerRegisterMM;
-	class AssemblerRegisterST;
-	class AssemblerRegisterTMM;
-	class AssemblerRegisterTR;
-	class AssemblerRegisterXMM;
-	class AssemblerRegisterYMM;
-	class AssemblerRegisterZMM;
-	class AssemblerRegisterSegment;
-}
-
+#include "../GetHashCode.h"
 #include "../Register.g.h"
 #include "AssemblerOperandFlags.h"
 #include "MemoryOperandSize.g.h"
-#include "AssemblerRegister16.defs.h"
-#include "AssemblerRegister32.defs.h"
-#include "AssemblerRegister64.defs.h"
 #include "../MemoryOperand.h"
 
 // Code generated from Iced. Do not edit.
@@ -123,27 +98,6 @@ namespace Iced::Intel
 		/// </summary>
 		constexpr AssemblerMemoryOperand k7() const;
 		/// <summary>
-		/// Adds a 16-bit memory operand with an new base or index.
-		/// </summary>
-		/// <param name="left">The base or index.</param>
-		/// <param name="right">The memory operand.</param>
-		/// <returns></returns>
-		constexpr friend   static AssemblerMemoryOperand operator + (AssemblerRegister16 left, AssemblerMemoryOperand right);
-		/// <summary>
-		/// Adds a 32-bit memory operand with an new base or index.
-		/// </summary>
-		/// <param name="left">The base or index.</param>
-		/// <param name="right">The memory operand.</param>
-		/// <returns></returns>
-		constexpr friend   static AssemblerMemoryOperand operator + (AssemblerRegister32 left, AssemblerMemoryOperand right);
-		/// <summary>
-		/// Adds a 64-bit memory operand with an new base or index.
-		/// </summary>
-		/// <param name="left">The base or index.</param>
-		/// <param name="right">The memory operand.</param>
-		/// <returns></returns>
-		constexpr friend   static AssemblerMemoryOperand operator + (AssemblerRegister64 left, AssemblerMemoryOperand right);
-		/// <summary>
 		/// Adds a displacement to a memory operand.
 		/// </summary>
 		/// <param name="left">The memory operand.</param>
@@ -163,7 +117,7 @@ namespace Iced::Intel
 		/// <param name="bitness">The bitness</param>
 		constexpr MemoryOperand ToMemoryOperand(std::int32_t bitness) const;
 		/// <inheritdoc />
-		inline std::int32_t GetHashCode() const;
+		constexpr std::int32_t GetHashCode() const;
 		/// <summary>
 		/// Equality operator for <see cref="AssemblerMemoryOperand"/>.
 		/// </summary>
@@ -264,7 +218,7 @@ namespace Iced::Intel
 		return MemoryOperand(Base, Index, Scale, Displacement, dispSize, (Flags & AssemblerOperandFlags::Broadcast) != 0, Segment);
 	}
 
-	inline std::int32_t AssemblerMemoryOperand::GetHashCode() const 
+	constexpr std::int32_t AssemblerMemoryOperand::GetHashCode() const 
 	{
 		//	 unchecked
 		auto hashCode = static_cast<std::int32_t>(Size);
@@ -272,7 +226,7 @@ namespace Iced::Intel
 		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Base);
 		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Index);
 		hashCode = (hashCode * 397) ^ Scale;
-		hashCode = (hashCode * 397) ^ ::GetHashCode(Displacement);
+		hashCode = (hashCode * 397) ^ Iced::Intel::GetHashCode(Displacement);
 		hashCode = (hashCode * 397) ^ static_cast<std::int32_t>(Flags);
 		return hashCode;
 		//C# TO C++ CONVERTER TODO TASK: End of the original C# 'unchecked' block.
