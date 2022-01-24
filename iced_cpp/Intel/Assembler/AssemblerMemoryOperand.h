@@ -1,4 +1,9 @@
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
+
 #pragma once
+
+#if defined(ENCODER) && defined(BLOCK_ENCODER) && defined(CODE_ASSEMBLER)
 
 #include <string>
 
@@ -8,18 +13,12 @@
 #include "MemoryOperandSize.g.h"
 #include "../MemoryOperand.h"
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel
 {
 	/// <summary>
 	/// Defines an assembly memory operand used with <see cref="Assembler"/>.
 	/// </summary>
-   //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
-   //ORIGINAL LINE: [DebuggerDisplay("{" + nameof(Base) + "} + {" + nameof(Index) + "} * {" + nameof(Scale) + "} + {" + nameof(Displacement) + "}")][EditorBrowsable(EditorBrowsableState.Never)] public struct AssemblerMemoryOperand : IEquatable<AssemblerMemoryOperand>
-	class AssemblerMemoryOperand
+	struct AssemblerMemoryOperand
 	{
 		/// <summary>
 		/// Creates a new instance.
@@ -256,3 +255,5 @@ namespace Iced::Intel
 #undef LIST_PARAM
 	}
 }
+
+#endif

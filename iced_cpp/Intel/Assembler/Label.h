@@ -3,6 +3,7 @@
 
 #pragma once
 
+#if defined(ENCODER) && defined(BLOCK_ENCODER) && defined(CODE_ASSEMBLER)
 #include <cstdint>
 #include <string>
 
@@ -128,3 +129,4 @@ namespace Iced::Intel
 		return !this->Equals(right);
 	}
 }
+#endif

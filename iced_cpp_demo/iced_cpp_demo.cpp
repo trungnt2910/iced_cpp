@@ -13,8 +13,11 @@
 #define MVEX MVEX
 #define NASM NASM
 #define GAS GAS
-#include "../iced_cpp/Intel/Assembler/Iced.Intel.Assembler.h"
-#include "../iced_cpp/Intel/Assembler/Iced.Intel.AssemblerRegisters.cpp"
+#define BLOCK_ENCODER BLOCK_ENCODER
+#define CODE_ASSEMBLER CODE_ASSEMBLER
+
+#include "../iced_cpp/Intel/Assembler/Assembler.h"
+#include "../iced_cpp/Intel/Assembler/AssemblerRegisters.h"
 #include "../iced_cpp/Intel/Decoder.h"
 #include "../iced_cpp/Intel/StreamCodeReader.h"
 #include "../iced_cpp/Intel/StreamCodeWriter.h"

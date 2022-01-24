@@ -1,31 +1,14 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-
-
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
 
 #pragma once
 
 #include "../BlockEncoder.h"
+#include "../ToString.h"
 #include "Label.h"
 #include <vector>
 #include <stdexcept>
-#include <format>
-#include <csharp/exceptionhelper.h>
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel
 {
 	/// <summary>
@@ -34,7 +17,7 @@ namespace Iced::Intel
 	class AssemblerResult
 	{
 	public:
-		AssemblerResult(const std::vector<BlockEncoderResult>& result);
+		constexpr AssemblerResult(const std::vector<BlockEncoderResult>& result);
 		/// <summary>
 		/// The associated block encoder result.
 		/// </summary>
@@ -45,8 +28,41 @@ namespace Iced::Intel
 		/// <param name="label">A label.</param>
 		/// <param name="index">Result index</param>
 		/// <returns>RIP of the label.</returns>
-		std::uint64_t GetLabelRIP(const Label& label, std::int32_t index = 0);
+		constexpr std::uint64_t GetLabelRIP(const Label& label, std::int32_t index = 0);
 
-		AssemblerResult() = default;
+		constexpr AssemblerResult() = default;
 	};
+
+	constexpr AssemblerResult::AssemblerResult(const std::vector<BlockEncoderResult>& result)
+	{
+		Result = result;
+	}
+
+	constexpr std::uint64_t AssemblerResult::GetLabelRIP(const Label& label, std::int32_t index)
+	{
+		if (label.IsEmpty())
+		{
+			throw std::invalid_argument("Invalid label. Must be created via Assembler::CreateLabel.");
+		}
+		if (label.GetInstructionIndex() < 0)
+		{
+			throw std::invalid_argument("The label is not associated with an instruction index. It must be emitted via Assembler::Label.");
+		}
+		if (Result.empty() || static_cast<std::uint32_t>(index) >= static_cast<std::uint32_t>(Result.size()))
+		{
+			throw std::out_of_range("index");
+		}
+		auto result = Result[index];
+		if (result.NewInstructionOffsets.empty() || label.GetInstructionIndex() >= result.NewInstructionOffsets.size())
+		{
+			throw std::out_of_range(
+				"The label instruction index " +
+				Iced::Intel::ToString(label.GetInstructionIndex()) +
+				" is out of range of the instruction offsets results" +
+				Iced::Intel::ToString(result.NewInstructionOffsets.size()) +
+				". Did you forget to pass BlockEncoderOptions::ReturnNewInstructionOffsets to Assembler::Assemble / TryAssemble ? ");
+		}
+		return result.RIP + result.NewInstructionOffsets[label.GetInstructionIndex()];
+	}
+
 }
