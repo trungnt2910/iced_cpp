@@ -1,78 +1,100 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-
-
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
 #include "IcedFeatures.h"
 #include "Decoder.h"
 
 namespace Iced::Intel
 {
-
-	bool IcedFeatures::GetHasGasFormatter()
+	bool IcedFeatures::HasGasFormatter()
 	{
+#if defined(GAS)
 		return true;
+#else
+		return false;
+#endif
 	}
 
-	bool IcedFeatures::GetHasIntelFormatter()
+	bool IcedFeatures::HasIntelFormatter()
 	{
+#if defined(INTEL)
 		return true;
+#else
+		return false;
+#endif
 	}
 
-	bool IcedFeatures::GetHasMasmFormatter()
+	bool IcedFeatures::HasMasmFormatter()
 	{
+#if defined(MASM)
 		return true;
+#else
+		return false;
+#endif
 	}
 
-	bool IcedFeatures::GetHasNasmFormatter()
+	bool IcedFeatures::HasNasmFormatter()
 	{
+#if defined(NASM)
 		return true;
+#else
+		return false;
+#endif
 	}
 
-	bool IcedFeatures::GetHasFastFormatter()
+	bool IcedFeatures::HasFastFormatter()
 	{
+#if defined(FAST_FMT)
 		return true;
+#else
+		return false;
+#endif
 	}
 
-	bool IcedFeatures::GetHasDecoder()
+	bool IcedFeatures::HasDecoder()
 	{
+#if defined(DECODER)
 		return true;
+#else
+		return false;
+#endif
 	}
 
-	bool IcedFeatures::GetHasEncoder()
+	bool IcedFeatures::HasEncoder()
 	{
+#if defined(ENCODER)
 		return true;
+#else
+		return false;
+#endif
 	}
 
-	bool IcedFeatures::GetHasBlockEncoder()
+	bool IcedFeatures::HasBlockEncoder()
 	{
+#if defined(ENCODER) && defined(BLOCK_ENCODER)
 		return true;
+#else
+		return false;
+#endif
 	}
 
-	bool IcedFeatures::GetHasOpCodeInfo()
+	bool IcedFeatures::HasOpCodeInfo()
 	{
+#if defined(ENCODER) && defined(OPCODE_INFO)
 		return true;
+#else
+		return false;
+#endif
 	}
 
-	bool IcedFeatures::GetHasInstructionInfo()
+	bool IcedFeatures::HasInstructionInfo()
 	{
+#if defined(INSTR_INFO)
 		return true;
+#else
+		return false;
+#endif
 	}
 
 	void IcedFeatures::Initialize()
 	{
-		// The decoder already initializes this stuff, but when it's called, it's a little bit too late.
-		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to the C# 'typeof' operator:
-		//RuntimeHelpers::RunClassConstructor(typeof(Decoder)->TypeHandle);
+
 	}
 }

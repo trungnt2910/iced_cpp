@@ -1,24 +1,8 @@
-// C# helper headers
-#include <csharp/classes.h>
-#include <csharp/enum.h>
-
-
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
 
 #pragma once
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel
 {
 	/// <summary>
@@ -26,47 +10,50 @@ namespace Iced::Intel
 	/// </summary>
 	class IcedFeatures final
 	{
+		// These functions cannot be made inline, they are designed
+		// to be runtime checks used by client code to get information 
+		// on how the original library was built.
+	public:
 		/// <summary>
 		/// <see langword="true"/> if the gas (AT&amp;T) formatter is available
 		/// </summary>
-	public:
-		static bool GetHasGasFormatter();
+		static bool HasGasFormatter();
 		/// <summary>
 		/// <see langword="true"/> if the Intel (xed) formatter is available
 		/// </summary>
-		static bool GetHasIntelFormatter();
+		static bool HasIntelFormatter();
 		/// <summary>
 		/// <see langword="true"/> if the masm formatter is available
 		/// </summary>
-		static bool GetHasMasmFormatter();
+		static bool HasMasmFormatter();
 		/// <summary>
 		/// <see langword="true"/> if the nasm formatter is available
 		/// </summary>
-		static bool GetHasNasmFormatter();
+		static bool HasNasmFormatter();
 		/// <summary>
 		/// <see langword="true"/> if the fast formatter is available
 		/// </summary>
-		static bool GetHasFastFormatter();
+		static bool HasFastFormatter();
 		/// <summary>
 		/// <see langword="true"/> if the decoder is available
 		/// </summary>
-		static bool GetHasDecoder();
+		static bool HasDecoder();
 		/// <summary>
 		/// <see langword="true"/> if the encoder is available
 		/// </summary>
-		static bool GetHasEncoder();
+		static bool HasEncoder();
 		/// <summary>
 		/// <see langword="true"/> if the block encoder is available
 		/// </summary>
-		static bool GetHasBlockEncoder();
+		static bool HasBlockEncoder();
 		/// <summary>
 		/// <see langword="true"/> if the opcode info is available
 		/// </summary>
-		static bool GetHasOpCodeInfo();
+		static bool HasOpCodeInfo();
 		/// <summary>
 		/// <see langword="true"/> if the instruction info code is available
 		/// </summary>
-		static bool GetHasInstructionInfo();
+		static bool HasInstructionInfo();
 		/// <summary>
 		/// Initializes some static constructors related to the decoder and instruction info. If those
 		/// static constructors are initialized, the jitter generates faster code since it doesn't have
