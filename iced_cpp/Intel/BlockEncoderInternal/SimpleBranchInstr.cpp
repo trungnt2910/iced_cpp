@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -55,7 +55,7 @@ namespace Iced::Intel::BlockEncoderInternal
 
 			//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 			//ORIGINAL LINE: nearInstructionSize = (switchTempVar_0 == 16) ? nativeInstructionSize + 2 + 3 : (switchTempVar_0 == 32 || switchTempVar_0 == 64) ? nativeInstructionSize + 2 + 5 : throw new InvalidOperationException();
-			nearInstructionSize = (switchTempVar_0 == 16) ? nativeInstructionSize + 2 + 3 : (switchTempVar_0 == 32 || switchTempVar_0 == 64) ? nativeInstructionSize + 2 + 5 : throw InvalidOperationException();
+			nearInstructionSize = (switchTempVar_0 == 16) ? nativeInstructionSize + 2 + 3 : (switchTempVar_0 == 32 || switchTempVar_0 == 64) ? nativeInstructionSize + 2 + 5 : throw std::runtime_error("invalid operation");
 			if (blockEncoder->GetBitness() == 64)
 			{
 				longInstructionSize = nativeInstructionSize + 2 + CallOrJmpPointerDataInstructionSize64;
@@ -150,14 +150,14 @@ namespace Iced::Intel::BlockEncoderInternal
 			c64 = Code::Jrcxz_rel8_64;
 			break;
 		default:
-			throw ArgumentOutOfRangeException("code");
+			throw std::out_of_range("code");
 		}
 		auto switchTempVar_1 = bitness;
 
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return (switchTempVar_1 == 16) ? c16 : (switchTempVar_1 == 32) ? c32 : (switchTempVar_1 == 64) ? c64 : throw new ArgumentOutOfRangeException(nameof(bitness));
-		return (switchTempVar_1 == 16) ? c16 : (switchTempVar_1 == 32) ? c32 : (switchTempVar_1 == 64) ? c64 : throw ArgumentOutOfRangeException("bitness");
+		return (switchTempVar_1 == 16) ? c16 : (switchTempVar_1 == 32) ? c32 : (switchTempVar_1 == 64) ? c64 : throw std::out_of_range("bitness");
 	}
 
 	void SimpleBranchInstr::Initialize(BlockEncoder* blockEncoder)
@@ -286,7 +286,7 @@ namespace Iced::Intel::BlockEncoderInternal
 				instr.SetOp0Kind(OpKind::NearBranch64);
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			if (!encoder.TryEncode(instr, IP + size, instrLen, errorMessage))
 			{
@@ -339,7 +339,7 @@ namespace Iced::Intel::BlockEncoderInternal
 				instr.SetOp0Kind(OpKind::NearBranch64);
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			if (!encoder.TryEncode(instr, IP + size, instrLen, errorMessage))
 			{
@@ -354,7 +354,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			return "";
 		case InstrKind::Uninitialized:
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 }

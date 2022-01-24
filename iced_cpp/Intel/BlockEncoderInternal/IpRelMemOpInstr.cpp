@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -131,7 +131,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			return "IP relative memory operand is too far away and isn't currently supported. " "Try to allocate memory close to the original instruction (+/-2GB).";
 		case InstrKind::Uninitialized:
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 }

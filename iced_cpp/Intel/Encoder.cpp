@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -192,7 +192,7 @@ namespace Iced::Intel
 			}
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		switch (handler->OpSize)
 		{
@@ -211,7 +211,7 @@ namespace Iced::Intel
 			}
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		switch (handler->AddrSize)
 		{
@@ -226,7 +226,7 @@ namespace Iced::Intel
 		case CodeSize::Code64:
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		if (!handler->IsDeclareData)
 		{
@@ -350,7 +350,7 @@ namespace Iced::Intel
 				ImmediateHi = static_cast<std::uint32_t>(target >> 32);
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			break;
 		case 2:
@@ -362,7 +362,7 @@ namespace Iced::Intel
 				Immediate = instruction.GetNearBranch16();
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			break;
 		case 4:
@@ -380,11 +380,11 @@ namespace Iced::Intel
 				ImmediateHi = static_cast<std::uint32_t>(target >> 32);
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -411,7 +411,7 @@ namespace Iced::Intel
 				ImmediateHi = static_cast<std::uint32_t>(target >> 32);
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 		}
 		else
@@ -437,7 +437,7 @@ namespace Iced::Intel
 				break;
 			case 8:
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 		}
 	}
@@ -459,7 +459,7 @@ namespace Iced::Intel
 			Immediate = instruction.GetNearBranch32();
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		if (!Verify(operand, opKind, instruction.GetOpKind(operand)))
 		{
@@ -1274,7 +1274,7 @@ namespace Iced::Intel
 			break;
 		}
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -1427,7 +1427,7 @@ namespace Iced::Intel
 			WriteByteInternal(value >> 24);
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -1468,7 +1468,7 @@ namespace Iced::Intel
 			constantOffsets.DisplacementOffset = static_cast<std::uint8_t>(displAddr - eip);
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		switch (ImmSize)
 		{
@@ -1525,7 +1525,7 @@ namespace Iced::Intel
 			constantOffsets.ImmediateOffset = static_cast<std::uint8_t>(immAddr - eip);
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		return constantOffsets;
 	}

@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -19,7 +19,6 @@
 #include <vector>
 #include <cctype>
 #include <stdexcept>
-#include <csharp/exceptionhelper.h>
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.

@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -24,7 +24,6 @@
 #include "MemorySize.g.h"
 #include <vector>
 #include <limits>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 
 // Code generated from Iced. Do not edit.

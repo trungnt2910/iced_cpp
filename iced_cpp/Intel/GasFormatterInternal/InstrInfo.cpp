@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -33,7 +33,7 @@ namespace Iced::Intel::GasFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return (switchTempVar_0 == 0) ? (Register)Op0Register : (switchTempVar_0 == 1) ? (Register)Op1Register : (switchTempVar_0 == 2) ? (Register)Op2Register : (switchTempVar_0 == 3) ? (Register)Op3Register : (switchTempVar_0 == 4) ? (Register)Op4Register : throw new ArgumentOutOfRangeException(nameof(operand));
-		return (switchTempVar_0 == 0) ? static_cast<Register>(Op0Register) : (switchTempVar_0 == 1) ? static_cast<Register>(Op1Register) : (switchTempVar_0 == 2) ? static_cast<Register>(Op2Register) : (switchTempVar_0 == 3) ? static_cast<Register>(Op3Register) : (switchTempVar_0 == 4) ? static_cast<Register>(Op4Register) : throw ArgumentOutOfRangeException("operand");
+		return (switchTempVar_0 == 0) ? static_cast<Register>(Op0Register) : (switchTempVar_0 == 1) ? static_cast<Register>(Op1Register) : (switchTempVar_0 == 2) ? static_cast<Register>(Op2Register) : (switchTempVar_0 == 3) ? static_cast<Register>(Op3Register) : (switchTempVar_0 == 4) ? static_cast<Register>(Op4Register) : throw std::out_of_range("operand");
 	}
 
 	InstrOpKind InstrOpInfo::GetOpKind(std::int32_t operand) const
@@ -245,7 +245,7 @@ namespace Iced::Intel::GasFormatterInternal
 				Op4Register = static_cast<std::uint8_t>(instruction.GetOp0Register());
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 		}
 		switch (OpCount)
@@ -293,7 +293,7 @@ namespace Iced::Intel::GasFormatterInternal
 			Op4Index = 0;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -417,7 +417,7 @@ namespace Iced::Intel::GasFormatterInternal
 			}
 			else
 			{
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			info.OpCount = 2;
 			Static::Assert(InstrOpKind::Register == (InstrOpKind)0 ? 0 : -1);
@@ -1092,7 +1092,7 @@ namespace Iced::Intel::GasFormatterInternal
 			info.OpCount++;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -1238,7 +1238,7 @@ namespace Iced::Intel::GasFormatterInternal
 			info.Op4Index = OpAccess_INVALID;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -1336,7 +1336,7 @@ namespace Iced::Intel::GasFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var opKind = (switchTempVar_3 == Code.DeclareByte) ? InstrOpKind.DeclareByte : (switchTempVar_3 == Code.DeclareWord) ? InstrOpKind.DeclareWord : (switchTempVar_3 == Code.DeclareDword) ? InstrOpKind.DeclareDword : (switchTempVar_3 == Code.DeclareQword) ? InstrOpKind.DeclareQword : throw new InvalidOperationException();
-		auto opKind = (switchTempVar_3 == Code::DeclareByte) ? InstrOpKind::DeclareByte : (switchTempVar_3 == Code::DeclareWord) ? InstrOpKind::DeclareWord : (switchTempVar_3 == Code::DeclareDword) ? InstrOpKind::DeclareDword : (switchTempVar_3 == Code::DeclareQword) ? InstrOpKind::DeclareQword : throw InvalidOperationException();
+		auto opKind = (switchTempVar_3 == Code::DeclareByte) ? InstrOpKind::DeclareByte : (switchTempVar_3 == Code::DeclareWord) ? InstrOpKind::DeclareWord : (switchTempVar_3 == Code::DeclareDword) ? InstrOpKind::DeclareDword : (switchTempVar_3 == Code::DeclareQword) ? InstrOpKind::DeclareQword : throw std::runtime_error("invalid operation");
 		this->opKind = opKind;
 	}
 

@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -23,7 +23,6 @@
 #include <string>
 #include <limits>
 #include <format>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 
 namespace Iced::Intel { class BlockEncoder;  }

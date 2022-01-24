@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -40,7 +40,6 @@
 #include <stdexcept>
 #include <any>
 #include <format>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 
 // Code generated from Iced. Do not edit.

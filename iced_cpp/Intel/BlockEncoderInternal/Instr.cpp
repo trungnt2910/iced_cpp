@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -235,7 +235,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		}
 		if (minSize > (std::uint32_t)std::numeric_limits<std::int32_t>::max())
 		{
-			throw ArgumentOutOfRangeException("minSize");
+			throw std::out_of_range("minSize");
 		}
 		auto instr = Instruction();
 		instr.SetOp0Kind(OpKind::Memory);
@@ -259,7 +259,7 @@ namespace Iced::Intel::BlockEncoderInternal
 			break;
 		}
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		std::string errorMessage;
 		if (!encoder.TryEncode(instr, ip, size, errorMessage))

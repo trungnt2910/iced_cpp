@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -24,7 +24,6 @@
 #include "Register.g.h"
 #include <string>
 #include <vector>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 #include "FastFormatterInternal/MemorySizes.h"
 

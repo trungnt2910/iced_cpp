@@ -10,7 +10,6 @@
 #include "FormatterOptions.h"
 #include <string>
 #include <limits>
-#include <csharp/exceptionhelper.h>
 
 namespace Iced::Intel { class FormatterOperandOptions; }
 namespace Iced::Intel { class NumberFormattingOptions; }
@@ -270,7 +269,7 @@ namespace Iced::Intel
 			digitGroupSize = options.GetBinaryDigitGroupSize();
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		if (digitGroupSize < 0)
 		{

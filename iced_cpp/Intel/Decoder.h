@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -30,7 +30,6 @@
 #include <limits>
 #include <stdexcept>
 #include <any>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 
 namespace Iced::Intel::DecoderInternal { class OpCodeHandler; }

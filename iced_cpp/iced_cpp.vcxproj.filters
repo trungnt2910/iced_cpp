@@ -582,16 +582,10 @@
     <ClInclude Include="Intel\VectorLength.g.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="csharp\exceptionhelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NRT_Helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="csharp\enum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="csharp\classes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\EncoderInternal\InstructionFormatter.h">
@@ -631,6 +625,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\Assembler\Assembler.Functions.g.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\Internal\Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

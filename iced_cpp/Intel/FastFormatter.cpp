@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -483,7 +483,7 @@ namespace Iced::Intel
 					break;
 				}
 				default:
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				if (operand == 0 && instruction.GetHasOpMaskOrZeroingMasking())
 				{
@@ -578,7 +578,7 @@ namespace Iced::Intel
 			case OpKind::Memory:
 				return false;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 		}
 		return ShowUselessPrefixes;

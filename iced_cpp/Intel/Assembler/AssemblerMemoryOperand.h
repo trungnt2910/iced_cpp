@@ -243,8 +243,8 @@ namespace Iced::Intel
 
 	inline std::string AssemblerMemoryOperand::ToString() const
 	{
-		return nameof(AssemblerMemoryOperand)"(" +
-#define LIST_PARAM(s) std::string(nameof((s))"=" + ::Iced::Intel::ToString((s))) 
+		return "Iced::Intel::AssemblerMemoryOperand(" +
+#define LIST_PARAM(s) (std::string((#s)) + "=" + ::Iced::Intel::ToString((s))) 
 			LIST_PARAM(Size) + "," +
 			LIST_PARAM(Segment) + "," +
 			LIST_PARAM(Base) + "," +

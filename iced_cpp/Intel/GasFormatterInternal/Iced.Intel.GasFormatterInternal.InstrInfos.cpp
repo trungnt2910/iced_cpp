@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -177,7 +177,7 @@ namespace Iced::Intel::GasFormatterInternal
 				v2 = reader.ReadByte();
 				if (v2 > 1)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				v3 = reader.ReadCompressedUInt32();
 				instrInfo = new SimpleInstrInfo_os(static_cast<std::int32_t>(v), s, v2 != 0, static_cast<InstrOpInfoFlags>(v3));
@@ -265,7 +265,7 @@ namespace Iced::Intel::GasFormatterInternal
 				v2 = reader.ReadByte();
 				if (v2 > 1)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				instrInfo = new SimpleInstrInfo_os2(static_cast<std::int32_t>(v), s, s2, v2 != 0, InstrOpInfoFlags::None);
 				break;
@@ -276,7 +276,7 @@ namespace Iced::Intel::GasFormatterInternal
 				v2 = reader.ReadByte();
 				if (v2 > 1)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				v3 = reader.ReadCompressedUInt32();
 				instrInfo = new SimpleInstrInfo_os2(static_cast<std::int32_t>(v), s, s2, v2 != 0, static_cast<InstrOpInfoFlags>(v3));
@@ -293,7 +293,7 @@ namespace Iced::Intel::GasFormatterInternal
 				v2 = reader.ReadByte();
 				if (v2 > 1)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				instrInfo = new SimpleInstrInfo_pops(s, FormatterConstants::GetPseudoOps(static_cast<PseudoOpsKind>(v)), v2 != 0);
 				break;
@@ -318,7 +318,7 @@ namespace Iced::Intel::GasFormatterInternal
 				v = reader.ReadByte();
 				if (v > 1)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				instrInfo = new SimpleInstrInfo_STi_ST(s, v != 0);
 				break;
@@ -326,12 +326,12 @@ namespace Iced::Intel::GasFormatterInternal
 				v = reader.ReadByte();
 				if (v > 1)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				instrInfo = new SimpleInstrInfo_STIG1(s, v != 0);
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			infos[i] = instrInfo;
 			if (currentIndex >= 0)
@@ -341,7 +341,7 @@ namespace Iced::Intel::GasFormatterInternal
 		}
 		if (reader.GetCanRead())
 		{
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		return infos;
 	}

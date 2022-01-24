@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -207,7 +207,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		}
 		case InstrKind::Uninitialized:
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -334,15 +334,15 @@ namespace Iced::Intel::BlockEncoderInternal
 			{
 				return code;
 			}
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		default:
-			throw ArgumentOutOfRangeException("code");
+			throw std::out_of_range("code");
 		}
 		auto switchTempVar_0 = bitness;
 
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return (switchTempVar_0 == 16) ? c16 : (switchTempVar_0 == 32) ? c32 : (switchTempVar_0 == 64) ? c64 : throw new ArgumentOutOfRangeException(nameof(bitness));
-		return (switchTempVar_0 == 16) ? c16 : (switchTempVar_0 == 32) ? c32 : (switchTempVar_0 == 64) ? c64 : throw ArgumentOutOfRangeException("bitness");
+		return (switchTempVar_0 == 16) ? c16 : (switchTempVar_0 == 32) ? c32 : (switchTempVar_0 == 64) ? c64 : throw std::out_of_range("bitness");
 	}
 }

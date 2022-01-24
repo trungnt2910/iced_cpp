@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -20,7 +20,6 @@
 #include "../Static.h"
 #include "../DecoderOptions.g.h"
 #include "../CodeSize.g.h"
-#include <csharp/exceptionhelper.h>
 
 namespace Iced::Intel::DecoderInternal
 {
@@ -28,7 +27,7 @@ namespace Iced::Intel::DecoderInternal
 	OpCodeHandler_VEX2::OpCodeHandler_VEX2(std::shared_ptr<OpCodeHandler> handlerMem)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.handlerMem = handlerMem ?? throw new ArgumentNullException(nameof(handlerMem));
+		//ORIGINAL LINE: this.handlerMem = handlerMem ?? throw std::invalid_argument("handlerMem is null");
 		this->handlerMem = (handlerMem != nullptr) ? handlerMem : throw std::invalid_argument("handlerMem");
 	}
 
@@ -51,7 +50,7 @@ namespace Iced::Intel::DecoderInternal
 	OpCodeHandler_VEX3::OpCodeHandler_VEX3(std::shared_ptr<OpCodeHandler> handlerMem)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.handlerMem = handlerMem ?? throw new ArgumentNullException(nameof(handlerMem));
+		//ORIGINAL LINE: this.handlerMem = handlerMem ?? throw std::invalid_argument("handlerMem is null");
 		this->handlerMem = (handlerMem != nullptr) ? handlerMem : throw std::invalid_argument("handlerMem");
 	}
 
@@ -74,7 +73,7 @@ namespace Iced::Intel::DecoderInternal
 	OpCodeHandler_XOP::OpCodeHandler_XOP(std::shared_ptr<OpCodeHandler> handler_reg0)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.handler_reg0 = handler_reg0 ?? throw new ArgumentNullException(nameof(handler_reg0));
+		//ORIGINAL LINE: this.handler_reg0 = handler_reg0 ?? throw std::invalid_argument("handler_reg0 is null");
 		this->handler_reg0 = (handler_reg0 != nullptr) ? handler_reg0 : throw std::invalid_argument("handler_reg0");
 	}
 
@@ -93,7 +92,7 @@ namespace Iced::Intel::DecoderInternal
 	OpCodeHandler_EVEX::OpCodeHandler_EVEX(std::shared_ptr<OpCodeHandler> handlerMem)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.handlerMem = handlerMem ?? throw new ArgumentNullException(nameof(handlerMem));
+		//ORIGINAL LINE: this.handlerMem = handlerMem ?? throw std::invalid_argument("handlerMem is null");
 		this->handlerMem = (handlerMem != nullptr) ? handlerMem : throw std::invalid_argument("handlerMem");
 	}
 
@@ -218,7 +217,7 @@ namespace Iced::Intel::DecoderInternal
 		assert(rex <= 0x0F);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: this.handler = handler ?? throw new InvalidOperationException();
-		this->handler = (handler != nullptr) ? handler : throw InvalidOperationException();
+		this->handler = (handler != nullptr) ? handler : throw std::runtime_error("invalid operation");
 		this->rex = rex;
 	}
 
@@ -372,7 +371,7 @@ namespace Iced::Intel::DecoderInternal
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF2) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
+		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler ?? throw std::invalid_argument("handler is null"), handler66 ?? throw std::invalid_argument("handler66 is null"), handlerF3 ?? throw std::invalid_argument("handlerF3 is null"), handlerF2 ?? throw std::invalid_argument("handlerF2 is null")};
 		handlers = { (handler != nullptr) ? handler : throw std::invalid_argument("handler"), (handler66 != nullptr) ? handler66 : throw std::invalid_argument("handler66"), (handlerF3 != nullptr) ? handlerF3 : throw std::invalid_argument("handlerF3"), (handlerF2 != nullptr) ? handlerF2 : throw std::invalid_argument("handlerF2") };
 		assert(handler->HasModRM == HasModRM);
 		assert(handler66->HasModRM == HasModRM);
@@ -400,22 +399,22 @@ namespace Iced::Intel::DecoderInternal
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF2) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers_reg = new Info[4] { new Info(handler_reg ?? throw new ArgumentNullException(nameof(handler_reg)), (flags & LegacyHandlerFlags.HandlerReg) == 0), new Info(handler66_reg ?? throw new ArgumentNullException(nameof(handler66_reg)), (flags & LegacyHandlerFlags.Handler66Reg) == 0), new Info(handlerF3_reg ?? throw new ArgumentNullException(nameof(handlerF3_reg)), (flags & LegacyHandlerFlags.HandlerF3Reg) == 0), new Info(handlerF2_reg ?? throw new ArgumentNullException(nameof(handlerF2_reg)), (flags & LegacyHandlerFlags.HandlerF2Reg) == 0)};
+		//ORIGINAL LINE: handlers_reg = new Info[4] { new Info(handler_reg ?? throw std::invalid_argument("handler_reg is null"), (flags & LegacyHandlerFlags.HandlerReg) == 0), new Info(handler66_reg ?? throw std::invalid_argument("handler66_reg is null"), (flags & LegacyHandlerFlags.Handler66Reg) == 0), new Info(handlerF3_reg ?? throw std::invalid_argument("handlerF3_reg is null"), (flags & LegacyHandlerFlags.HandlerF3Reg) == 0), new Info(handlerF2_reg ?? throw std::invalid_argument("handlerF2_reg is null"), (flags & LegacyHandlerFlags.HandlerF2Reg) == 0)};
 		handlers_reg =
 		{
-			Info((handler_reg == nullptr) ? throw ArgumentNullException(nameof(handler_reg)) : handler_reg, (flags & LegacyHandlerFlags::HandlerReg) == 0),
-			Info((handler66_reg == nullptr) ? throw ArgumentNullException(nameof(handler66_reg)) : handler66_reg, (flags & LegacyHandlerFlags::Handler66Reg) == 0),
-			Info((handlerF3_reg == nullptr) ? throw new ArgumentNullException(nameof(handlerF3_reg)) : handlerF3_reg, (flags & LegacyHandlerFlags::HandlerF3Reg) == 0),
-			Info((handlerF2_reg == nullptr) ? throw new ArgumentNullException(nameof(handlerF2_reg)) : handlerF2_reg, (flags & LegacyHandlerFlags::HandlerF2Reg) == 0),
+			Info((handler_reg == nullptr) ? throw std::invalid_argument("handler_reg is null") : handler_reg, (flags & LegacyHandlerFlags::HandlerReg) == 0),
+			Info((handler66_reg == nullptr) ? throw std::invalid_argument("handler66_reg is null") : handler66_reg, (flags & LegacyHandlerFlags::Handler66Reg) == 0),
+			Info((handlerF3_reg == nullptr) ? throw std::invalid_argument("handlerF3_reg is null") : handlerF3_reg, (flags & LegacyHandlerFlags::HandlerF3Reg) == 0),
+			Info((handlerF2_reg == nullptr) ? throw std::invalid_argument("handlerF2_reg is null") : handlerF2_reg, (flags & LegacyHandlerFlags::HandlerF2Reg) == 0),
 		};
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers_mem = new Info[4] { new Info(handler_mem ?? throw new ArgumentNullException(nameof(handler_mem)), (flags & LegacyHandlerFlags.HandlerMem) == 0), new Info(handler66_mem ?? throw new ArgumentNullException(nameof(handler66_mem)), (flags & LegacyHandlerFlags.Handler66Mem) == 0), new Info(handlerF3_mem ?? throw new ArgumentNullException(nameof(handlerF3_mem)), (flags & LegacyHandlerFlags.HandlerF3Mem) == 0), new Info(handlerF2_mem ?? throw new ArgumentNullException(nameof(handlerF2_mem)), (flags & LegacyHandlerFlags.HandlerF2Mem) == 0)};
+		//ORIGINAL LINE: handlers_mem = new Info[4] { new Info(handler_mem ?? throw std::invalid_argument("handler_mem is null"), (flags & LegacyHandlerFlags.HandlerMem) == 0), new Info(handler66_mem ?? throw std::invalid_argument("handler66_mem is null"), (flags & LegacyHandlerFlags.Handler66Mem) == 0), new Info(handlerF3_mem ?? throw std::invalid_argument("handlerF3_mem is null"), (flags & LegacyHandlerFlags.HandlerF3Mem) == 0), new Info(handlerF2_mem ?? throw std::invalid_argument("handlerF2_mem is null"), (flags & LegacyHandlerFlags.HandlerF2Mem) == 0)};
 		handlers_mem =
 		{
-			Info((handler_mem == nullptr) ? throw ArgumentNullException(nameof(handler_mem)) : handler_mem, (flags & LegacyHandlerFlags::HandlerMem) == 0),
-			Info((handler66_mem == nullptr) ? throw ArgumentNullException(nameof(handler66_mem)) : handler66_mem, (flags & LegacyHandlerFlags::Handler66Mem) == 0),
-			Info((handlerF3_mem == nullptr) ? throw ArgumentNullException(nameof(handlerF3_mem)) : handlerF3_mem, (flags & LegacyHandlerFlags::HandlerF3Mem) == 0),
-			Info((handlerF2_mem == nullptr) ? throw ArgumentNullException(nameof(handlerF2_mem)) : handlerF2_mem, (flags & LegacyHandlerFlags::HandlerF2Mem) == 0),
+			Info((handler_mem == nullptr) ? throw std::invalid_argument("handler_mem is null") : handler_mem, (flags & LegacyHandlerFlags::HandlerMem) == 0),
+			Info((handler66_mem == nullptr) ? throw std::invalid_argument("handler66_mem is null") : handler66_mem, (flags & LegacyHandlerFlags::Handler66Mem) == 0),
+			Info((handlerF3_mem == nullptr) ? throw std::invalid_argument("handlerF3_mem is null") : handlerF3_mem, (flags & LegacyHandlerFlags::HandlerF3Mem) == 0),
+			Info((handlerF2_mem == nullptr) ? throw std::invalid_argument("handlerF2_mem is null") : handlerF2_mem, (flags & LegacyHandlerFlags::HandlerF2Mem) == 0),
 		};
 		assert(handler_reg->HasModRM == HasModRM);
 		assert(handler_mem->HasModRM == HasModRM);
@@ -442,16 +441,16 @@ namespace Iced::Intel::DecoderInternal
 	OpCodeHandler_MandatoryPrefix4::OpCodeHandler_MandatoryPrefix4(std::shared_ptr<OpCodeHandler> handlerNP, std::shared_ptr<OpCodeHandler> handler66, std::shared_ptr<OpCodeHandler> handlerF3, std::shared_ptr<OpCodeHandler> handlerF2, std::uint32_t flags)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.handlerNP = handlerNP ?? throw new ArgumentNullException(nameof(handlerNP));
+		//ORIGINAL LINE: this.handlerNP = handlerNP ?? throw std::invalid_argument("handlerNP is null");
 		this->handlerNP = (handlerNP != nullptr) ? handlerNP : throw std::invalid_argument("handlerNP");
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.handler66 = handler66 ?? throw new ArgumentNullException(nameof(handler66));
+		//ORIGINAL LINE: this.handler66 = handler66 ?? throw std::invalid_argument("handler66 is null");
 		this->handler66 = (handler66 != nullptr) ? handler66 : throw std::invalid_argument("handler66");
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.handlerF3 = handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3));
+		//ORIGINAL LINE: this.handlerF3 = handlerF3 ?? throw std::invalid_argument("handlerF3 is null");
 		this->handlerF3 = (handlerF3 != nullptr) ? handlerF3 : throw std::invalid_argument("handlerF3");
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.handlerF2 = handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2));
+		//ORIGINAL LINE: this.handlerF2 = handlerF2 ?? throw std::invalid_argument("handlerF2 is null");
 		this->handlerF2 = (handlerF2 != nullptr) ? handlerF2 : throw std::invalid_argument("handlerF2");
 		this->flags = flags;
 	}
@@ -484,7 +483,7 @@ namespace Iced::Intel::DecoderInternal
 			handler = handlerF2;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		if (handler->HasModRM && (flags & 0x10) != 0)
 		{
@@ -500,7 +499,7 @@ namespace Iced::Intel::DecoderInternal
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF3) == 2 ? 0 : -1);
 		Static::Assert(static_cast<std::int32_t>(MandatoryPrefixByte::PF2) == 3 ? 0 : -1);
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler ?? throw new ArgumentNullException(nameof(handler)), handler66 ?? throw new ArgumentNullException(nameof(handler66)), handlerF3 ?? throw new ArgumentNullException(nameof(handlerF3)), handlerF2 ?? throw new ArgumentNullException(nameof(handlerF2))};
+		//ORIGINAL LINE: handlers = std::make_shared<OpCodeHandler>[4] { handler ?? throw std::invalid_argument("handler is null"), handler66 ?? throw std::invalid_argument("handler66 is null"), handlerF3 ?? throw std::invalid_argument("handlerF3 is null"), handlerF2 ?? throw std::invalid_argument("handlerF2 is null")};
 		handlers = { (handler != nullptr) ? handler : throw std::invalid_argument("handler"), (handler66 != nullptr) ? handler66 : throw std::invalid_argument("handler66"), (handlerF3 != nullptr) ? handlerF3 : throw std::invalid_argument("handlerF3"), (handlerF2 != nullptr) ? handlerF2 : throw std::invalid_argument("handlerF2") };
 		assert(handler->HasModRM == HasModRM);
 		assert(handler66->HasModRM == HasModRM);
@@ -542,10 +541,10 @@ namespace Iced::Intel::DecoderInternal
 	OpCodeHandler_Reservednop::OpCodeHandler_Reservednop(std::shared_ptr<OpCodeHandler> reservedNopHandler, std::shared_ptr<OpCodeHandler> otherHandler)
 	{
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.reservedNopHandler = reservedNopHandler ?? throw new ArgumentNullException(nameof(reservedNopHandler));
+		//ORIGINAL LINE: this.reservedNopHandler = reservedNopHandler ?? throw std::invalid_argument("reservedNopHandler is null");
 		this->reservedNopHandler = (reservedNopHandler != nullptr) ? reservedNopHandler : throw std::invalid_argument("reservedNopHandler");
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: this.otherHandler = otherHandler ?? throw new ArgumentNullException(nameof(otherHandler));
+		//ORIGINAL LINE: this.otherHandler = otherHandler ?? throw std::invalid_argument("otherHandler is null");
 		this->otherHandler = (otherHandler != nullptr) ? otherHandler : throw std::invalid_argument("otherHandler");
 	}
 

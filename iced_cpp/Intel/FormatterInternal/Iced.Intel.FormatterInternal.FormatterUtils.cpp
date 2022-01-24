@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -430,7 +430,7 @@ namespace Iced::Intel::FormatterInternal
 			return FormatterFlowControl::Xbegin;
 			// GENERATOR-END: FormatterFlowControlSwitch
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 

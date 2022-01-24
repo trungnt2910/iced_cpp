@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -17,7 +17,6 @@
 
 #include "../OpCodeOperandKind.g.h"
 #include <string>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 
 // Code generated from Iced. Do not edit.

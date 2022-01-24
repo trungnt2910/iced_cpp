@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -42,7 +42,7 @@ namespace Iced::Intel::InstructionInfoInternal
 		}
 		if (reader.GetCanRead())
 		{
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		return cpuidFeatures;
 	}

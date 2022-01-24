@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -67,7 +67,7 @@ namespace Iced::Intel::EncoderInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: elemLength = (switchTempVar_0 == Code.DeclareByte) ? (std::uint8_t)1 : (switchTempVar_0 == Code.DeclareWord) ? (std::uint8_t)2 : (switchTempVar_0 == Code.DeclareDword) ? (std::uint8_t)4 : (switchTempVar_0 == Code.DeclareQword) ? (std::uint8_t)8 : throw new InvalidOperationException();
-		elemLength = (switchTempVar_0 == Code::DeclareByte) ? static_cast<std::uint8_t>(1) : (switchTempVar_0 == Code::DeclareWord) ? static_cast<std::uint8_t>(2) : (switchTempVar_0 == Code::DeclareDword) ? static_cast<std::uint8_t>(4) : (switchTempVar_0 == Code::DeclareQword) ? static_cast<std::uint8_t>(8) : throw InvalidOperationException();
+		elemLength = (switchTempVar_0 == Code::DeclareByte) ? static_cast<std::uint8_t>(1) : (switchTempVar_0 == Code::DeclareWord) ? static_cast<std::uint8_t>(2) : (switchTempVar_0 == Code::DeclareDword) ? static_cast<std::uint8_t>(4) : (switchTempVar_0 == Code::DeclareQword) ? static_cast<std::uint8_t>(8) : throw std::runtime_error("invalid operation");
 		maxLength = 16 / elemLength;
 	}
 
@@ -135,14 +135,14 @@ namespace Iced::Intel::EncoderInternal
 			tableByte2 = 0x3A;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		auto switchTempVar_1 = static_cast<MandatoryPrefixByte>((static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncFlags2::MandatoryPrefixShift)) & static_cast<std::uint32_t>(EncFlags2::MandatoryPrefixMask));
 
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte.None) ? (std::uint8_t)0x0 : (switchTempVar_1 == MandatoryPrefixByte.P66) ? (std::uint8_t)0x66 : (switchTempVar_1 == MandatoryPrefixByte.PF3) ? (std::uint8_t)0xF3 : (switchTempVar_1 == MandatoryPrefixByte.PF2) ? (std::uint8_t)0xF2 : throw new InvalidOperationException();
-		mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte::None) ? static_cast<std::uint8_t>(0x0) : (switchTempVar_1 == MandatoryPrefixByte::P66) ? static_cast<std::uint8_t>(0x66) : (switchTempVar_1 == MandatoryPrefixByte::PF3) ? static_cast<std::uint8_t>(0xF3) : (switchTempVar_1 == MandatoryPrefixByte::PF2) ? static_cast<std::uint8_t>(0xF2) : throw InvalidOperationException();
+		mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte::None) ? static_cast<std::uint8_t>(0x0) : (switchTempVar_1 == MandatoryPrefixByte::P66) ? static_cast<std::uint8_t>(0x66) : (switchTempVar_1 == MandatoryPrefixByte::PF3) ? static_cast<std::uint8_t>(0xF3) : (switchTempVar_1 == MandatoryPrefixByte::PF2) ? static_cast<std::uint8_t>(0xF2) : throw std::runtime_error("invalid operation");
 	}
 
 	void LegacyHandler::Encode(Encoder& encoder, const Instruction& instruction)
@@ -410,7 +410,7 @@ namespace Iced::Intel::EncoderInternal
 			llBits = 2 << 5;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		if (wbit == WBit::WIG)
 		{

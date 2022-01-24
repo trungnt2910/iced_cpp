@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -21,7 +21,6 @@
 #include "../DecoderOptions.g.h"
 #include <vector>
 #include <stdexcept>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 
 namespace Iced::Intel { class Decoder; }

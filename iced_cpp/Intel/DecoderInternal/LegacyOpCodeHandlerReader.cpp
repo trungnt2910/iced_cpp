@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -72,7 +72,7 @@ namespace Iced::Intel::DecoderInternal
             elem = deserializer.ReadHandlerReference();
             return 1;
         case LegacyOpCodeHandlerKind::ArrayReference:
-            throw InvalidOperationException();
+            throw std::runtime_error("invalid operation");
         case LegacyOpCodeHandlerKind::RM:
         {
             auto tempVar0 = deserializer.ReadHandler();
@@ -1665,7 +1665,7 @@ namespace Iced::Intel::DecoderInternal
         }
         return 1;
         default:
-            throw InvalidOperationException();
+            throw std::runtime_error("invalid operation");
         }
     }
 }

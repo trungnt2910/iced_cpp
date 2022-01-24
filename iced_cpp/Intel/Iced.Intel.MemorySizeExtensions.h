@@ -1,5 +1,5 @@
 ﻿// C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 

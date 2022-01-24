@@ -667,15 +667,15 @@ namespace Iced::Intel
 		auto switchTempVar_1 = static_cast<MandatoryPrefixByte>((static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncoderInternal::EncFlags2::MandatoryPrefixShift)) & static_cast<std::uint32_t>(EncoderInternal::EncFlags2::MandatoryPrefixMask));
 
 
-		mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte::None) ? static_cast<std::uint8_t>((encFlags2 & EncoderInternal::EncFlags2::HasMandatoryPrefix) != 0 ? MandatoryPrefix::PNP : MandatoryPrefix::None) : (switchTempVar_1 == MandatoryPrefixByte::P66) ? static_cast<std::uint8_t>(MandatoryPrefix::P66) : (switchTempVar_1 == MandatoryPrefixByte::PF3) ? static_cast<std::uint8_t>(MandatoryPrefix::PF3) : (switchTempVar_1 == MandatoryPrefixByte::PF2) ? static_cast<std::uint8_t>(MandatoryPrefix::PF2) : throw InvalidOperationException();
+		mandatoryPrefix = (switchTempVar_1 == MandatoryPrefixByte::None) ? static_cast<std::uint8_t>((encFlags2 & EncoderInternal::EncFlags2::HasMandatoryPrefix) != 0 ? MandatoryPrefix::PNP : MandatoryPrefix::None) : (switchTempVar_1 == MandatoryPrefixByte::P66) ? static_cast<std::uint8_t>(MandatoryPrefix::P66) : (switchTempVar_1 == MandatoryPrefixByte::PF3) ? static_cast<std::uint8_t>(MandatoryPrefix::PF3) : (switchTempVar_1 == MandatoryPrefixByte::PF2) ? static_cast<std::uint8_t>(MandatoryPrefix::PF2) : throw std::runtime_error("invalid operation");
 		auto switchTempVar_2 = static_cast<CodeSize>((static_cast<std::uint32_t>(encFlags3) >> static_cast<std::int32_t>(EncoderInternal::EncFlags3::OperandSizeShift)) & static_cast<std::uint32_t>(EncoderInternal::EncFlags3::OperandSizeMask));
 
 
-		operandSize = (switchTempVar_2 == CodeSize::Unknown) ? static_cast<std::uint8_t>(0) : (switchTempVar_2 == CodeSize::Code16) ? static_cast<std::uint8_t>(16) : (switchTempVar_2 == CodeSize::Code32) ? static_cast<std::uint8_t>(32) : (switchTempVar_2 == CodeSize::Code64) ? static_cast<std::uint8_t>(64) : throw InvalidOperationException();
+		operandSize = (switchTempVar_2 == CodeSize::Unknown) ? static_cast<std::uint8_t>(0) : (switchTempVar_2 == CodeSize::Code16) ? static_cast<std::uint8_t>(16) : (switchTempVar_2 == CodeSize::Code32) ? static_cast<std::uint8_t>(32) : (switchTempVar_2 == CodeSize::Code64) ? static_cast<std::uint8_t>(64) : throw std::runtime_error("invalid operation");
 		auto switchTempVar_3 = static_cast<CodeSize>((static_cast<std::uint32_t>(encFlags3) >> static_cast<std::int32_t>(EncoderInternal::EncFlags3::AddressSizeShift)) & static_cast<std::uint32_t>(EncoderInternal::EncFlags3::AddressSizeMask));
 
 
-		addressSize = (switchTempVar_3 == CodeSize::Unknown) ? static_cast<std::uint8_t>(0) : (switchTempVar_3 == CodeSize::Code16) ? static_cast<std::uint8_t>(16) : (switchTempVar_3 == CodeSize::Code32) ? static_cast<std::uint8_t>(32) : (switchTempVar_3 == CodeSize::Code64) ? static_cast<std::uint8_t>(64) : throw InvalidOperationException();
+		addressSize = (switchTempVar_3 == CodeSize::Unknown) ? static_cast<std::uint8_t>(0) : (switchTempVar_3 == CodeSize::Code16) ? static_cast<std::uint8_t>(16) : (switchTempVar_3 == CodeSize::Code32) ? static_cast<std::uint8_t>(32) : (switchTempVar_3 == CodeSize::Code64) ? static_cast<std::uint8_t>(64) : throw std::runtime_error("invalid operation");
 		groupIndex = static_cast<std::int8_t>((encFlags2 & EncoderInternal::EncFlags2::HasGroupIndex) == 0 ? -1 : static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncoderInternal::EncFlags2::GroupIndexShift)) & 7));
 		rmGroupIndex = static_cast<std::int8_t>((encFlags3 & EncoderInternal::EncFlags3::HasRmGroupIndex) == 0 ? -1 : static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncoderInternal::EncFlags2::GroupIndexShift)) & 7));
 		tupleType = static_cast<std::uint8_t>((static_cast<std::uint32_t>(encFlags3) >> static_cast<std::int32_t>(EncoderInternal::EncFlags3::TupleTypeShift)) & static_cast<std::uint32_t>(EncoderInternal::EncFlags3::TupleTypeMask));
@@ -712,7 +712,7 @@ namespace Iced::Intel
 			flags |= Flags::LIG;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		switch (static_cast<EncoderInternal::WBit>((static_cast<std::uint32_t>(encFlags2) >> static_cast<std::int32_t>(EncoderInternal::EncFlags2::WBitShift)) & static_cast<std::uint32_t>(EncoderInternal::EncFlags2::WBitMask)))
 		{
@@ -728,7 +728,7 @@ namespace Iced::Intel
 			flags |= Flags::WIG32;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		switch (static_cast<EncodingKind>(encoding))
 		{
@@ -744,7 +744,7 @@ namespace Iced::Intel
 
 			//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 			//ORIGINAL LINE: table = (switchTempVar_4 == LegacyOpCodeTable.MAP0) ? (std::uint8_t)OpCodeTableKind.Normal : (switchTempVar_4 == LegacyOpCodeTable.MAP0F) ? (std::uint8_t)OpCodeTableKind.T0F : (switchTempVar_4 == LegacyOpCodeTable.MAP0F38) ? (std::uint8_t)OpCodeTableKind.T0F38 : (switchTempVar_4 == LegacyOpCodeTable.MAP0F3A) ? (std::uint8_t)OpCodeTableKind.T0F3A : throw new InvalidOperationException();
-			table = (switchTempVar_4 == EncoderInternal::LegacyOpCodeTable::MAP0) ? static_cast<std::uint8_t>(OpCodeTableKind::Normal) : (switchTempVar_4 == EncoderInternal::LegacyOpCodeTable::MAP0F) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F) : (switchTempVar_4 == EncoderInternal::LegacyOpCodeTable::MAP0F38) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F38) : (switchTempVar_4 == EncoderInternal::LegacyOpCodeTable::MAP0F3A) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F3A) : throw InvalidOperationException();
+			table = (switchTempVar_4 == EncoderInternal::LegacyOpCodeTable::MAP0) ? static_cast<std::uint8_t>(OpCodeTableKind::Normal) : (switchTempVar_4 == EncoderInternal::LegacyOpCodeTable::MAP0F) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F) : (switchTempVar_4 == EncoderInternal::LegacyOpCodeTable::MAP0F38) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F38) : (switchTempVar_4 == EncoderInternal::LegacyOpCodeTable::MAP0F3A) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F3A) : throw std::runtime_error("invalid operation");
 			break;
 		}
 		case EncodingKind::VEX:
@@ -760,7 +760,7 @@ namespace Iced::Intel
 
 			//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 			//ORIGINAL LINE: table = (switchTempVar_5 == VexOpCodeTable.MAP0) ? (std::uint8_t)OpCodeTableKind.Normal : (switchTempVar_5 == VexOpCodeTable.MAP0F) ? (std::uint8_t)OpCodeTableKind.T0F : (switchTempVar_5 == VexOpCodeTable.MAP0F38) ? (std::uint8_t)OpCodeTableKind.T0F38 : (switchTempVar_5 == VexOpCodeTable.MAP0F3A) ? (std::uint8_t)OpCodeTableKind.T0F3A : throw new InvalidOperationException();
-			table = (switchTempVar_5 == EncoderInternal::VexOpCodeTable::MAP0) ? static_cast<std::uint8_t>(OpCodeTableKind::Normal) : (switchTempVar_5 == EncoderInternal::VexOpCodeTable::MAP0F) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F) : (switchTempVar_5 == EncoderInternal::VexOpCodeTable::MAP0F38) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F38) : (switchTempVar_5 == EncoderInternal::VexOpCodeTable::MAP0F3A) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F3A) : throw InvalidOperationException();
+			table = (switchTempVar_5 == EncoderInternal::VexOpCodeTable::MAP0) ? static_cast<std::uint8_t>(OpCodeTableKind::Normal) : (switchTempVar_5 == EncoderInternal::VexOpCodeTable::MAP0F) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F) : (switchTempVar_5 == EncoderInternal::VexOpCodeTable::MAP0F38) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F38) : (switchTempVar_5 == EncoderInternal::VexOpCodeTable::MAP0F3A) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F3A) : throw std::runtime_error("invalid operation");
 			break;
 		}
 		case EncodingKind::EVEX:
@@ -775,7 +775,7 @@ namespace Iced::Intel
 
 			//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 			//ORIGINAL LINE: table = (switchTempVar_6 == EvexOpCodeTable.MAP0F) ? (std::uint8_t)OpCodeTableKind.T0F : (switchTempVar_6 == EvexOpCodeTable.MAP0F38) ? (std::uint8_t)OpCodeTableKind.T0F38 : (switchTempVar_6 == EvexOpCodeTable.MAP0F3A) ? (std::uint8_t)OpCodeTableKind.T0F3A : (switchTempVar_6 == EvexOpCodeTable.MAP5) ? (std::uint8_t)OpCodeTableKind.MAP5 : (switchTempVar_6 == EvexOpCodeTable.MAP6) ? (std::uint8_t)OpCodeTableKind.MAP6 : throw new InvalidOperationException();
-			table = (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP0F) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F) : (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP0F38) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F38) : (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP0F3A) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F3A) : (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP5) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP5) : (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP6) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP6) : throw InvalidOperationException();
+			table = (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP0F) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F) : (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP0F38) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F38) : (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP0F3A) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F3A) : (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP5) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP5) : (switchTempVar_6 == EncoderInternal::EvexOpCodeTable::MAP6) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP6) : throw std::runtime_error("invalid operation");
 			break;
 		}
 		case EncodingKind::XOP:
@@ -790,7 +790,7 @@ namespace Iced::Intel
 
 			//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 			//ORIGINAL LINE: table = (switchTempVar_7 == XopOpCodeTable.MAP8) ? (std::uint8_t)OpCodeTableKind.MAP8 : (switchTempVar_7 == XopOpCodeTable.MAP9) ? (std::uint8_t)OpCodeTableKind.MAP9 : (switchTempVar_7 == XopOpCodeTable.MAP10) ? (std::uint8_t)OpCodeTableKind.MAP10 : throw new InvalidOperationException();
-			table = (switchTempVar_7 == EncoderInternal::XopOpCodeTable::MAP8) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP8) : (switchTempVar_7 == EncoderInternal::XopOpCodeTable::MAP9) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP9) : (switchTempVar_7 == EncoderInternal::XopOpCodeTable::MAP10) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP10) : throw InvalidOperationException();
+			table = (switchTempVar_7 == EncoderInternal::XopOpCodeTable::MAP8) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP8) : (switchTempVar_7 == EncoderInternal::XopOpCodeTable::MAP9) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP9) : (switchTempVar_7 == EncoderInternal::XopOpCodeTable::MAP10) ? static_cast<std::uint8_t>(OpCodeTableKind::MAP10) : throw std::runtime_error("invalid operation");
 			break;
 		}
 		case EncodingKind::D3NOW:
@@ -810,11 +810,11 @@ namespace Iced::Intel
 
 			//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 			//ORIGINAL LINE: table = (switchTempVar_8 == EncoderInternal::MvexOpCodeTable.MAP0F) ? (std::uint8_t)OpCodeTableKind.T0F : (switchTempVar_8 == EncoderInternal::MvexOpCodeTable.MAP0F38) ? (std::uint8_t)OpCodeTableKind.T0F38 : (switchTempVar_8 == EncoderInternal::MvexOpCodeTable.MAP0F3A) ? (std::uint8_t)OpCodeTableKind.T0F3A : throw new InvalidOperationException();
-			table = (switchTempVar_8 == EncoderInternal::MvexOpCodeTable::MAP0F) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F) : (switchTempVar_8 == EncoderInternal::MvexOpCodeTable::MAP0F38) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F38) : (switchTempVar_8 == EncoderInternal::MvexOpCodeTable::MAP0F3A) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F3A) : throw InvalidOperationException();
+			table = (switchTempVar_8 == EncoderInternal::MvexOpCodeTable::MAP0F) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F) : (switchTempVar_8 == EncoderInternal::MvexOpCodeTable::MAP0F38) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F38) : (switchTempVar_8 == EncoderInternal::MvexOpCodeTable::MAP0F3A) ? static_cast<std::uint8_t>(OpCodeTableKind::T0F3A) : throw std::runtime_error("invalid operation");
 			break;
 		}
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 
 		if (constructStrings)
@@ -1532,7 +1532,7 @@ namespace Iced::Intel
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return (switchTempVar_9 == 0) ? Op0Kind : (switchTempVar_9 == 1) ? Op1Kind : (switchTempVar_9 == 2) ? Op2Kind : (switchTempVar_9 == 3) ? Op3Kind : (switchTempVar_9 == 4) ? Op4Kind : throw new ArgumentOutOfRangeException(nameof(operand));
-		return (switchTempVar_9 == 0) ? GetOp0Kind() : (switchTempVar_9 == 1) ? GetOp1Kind() : (switchTempVar_9 == 2) ? GetOp2Kind() : (switchTempVar_9 == 3) ? GetOp3Kind() : (switchTempVar_9 == 4) ? GetOp4Kind() : throw ArgumentOutOfRangeException("operand");
+		return (switchTempVar_9 == 0) ? GetOp0Kind() : (switchTempVar_9 == 1) ? GetOp1Kind() : (switchTempVar_9 == 2) ? GetOp2Kind() : (switchTempVar_9 == 3) ? GetOp3Kind() : (switchTempVar_9 == 4) ? GetOp4Kind() : throw std::out_of_range("operand");
 	}
 
 	constexpr bool OpCodeInfo::IsAvailableInMode(std::int32_t bitness) const

@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -119,7 +119,7 @@ namespace Iced::Intel::BlockEncoderInternal
 		}
 		case InstrKind::Uninitialized:
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 }

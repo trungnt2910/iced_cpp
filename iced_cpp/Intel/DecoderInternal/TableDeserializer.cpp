@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -56,12 +56,12 @@ namespace Iced::Intel::DecoderInternal
 				idToHandler.push_back(HandlerInfo(ReadHandlers(static_cast<std::int32_t>(reader.ReadCompressedUInt32()))));
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 		}
 		if (reader.GetCanRead())
 		{
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -130,7 +130,7 @@ namespace Iced::Intel::DecoderInternal
 		std::shared_ptr<OpCodeHandler> tempVar = ReadHandlerOrNull();
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return ReadHandlerOrNull() ?? throw new InvalidOperationException();
-		return (tempVar != nullptr) ? tempVar : throw InvalidOperationException();
+		return (tempVar != nullptr) ? tempVar : throw std::runtime_error("invalid operation");
 	}
 
 	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
@@ -140,7 +140,7 @@ namespace Iced::Intel::DecoderInternal
 		std::int32_t count = handlerReader->ReadHandlers(*this, handlerArray, 0);
 		if (count != 1)
 		{
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		return handlerArray[0];
 	}
@@ -157,7 +157,7 @@ namespace Iced::Intel::DecoderInternal
 			std::int32_t num = handlerReader->ReadHandlers(*this, handlers, i);
 			if (num <= 0 || static_cast<std::uint32_t>(i) + static_cast<std::uint32_t>(num) > static_cast<std::uint32_t>(handlers.size()))
 			{
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			i += num;
 		}
@@ -169,14 +169,14 @@ namespace Iced::Intel::DecoderInternal
 		std::uint32_t index = reader.ReadByte();
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return idToHandler[(int)index].handler ?? throw new InvalidOperationException();
-		return ((idToHandler[static_cast<std::int32_t>(index)].handler) != nullptr) ? idToHandler[static_cast<std::int32_t>(index)].handler : throw InvalidOperationException();
+		return ((idToHandler[static_cast<std::int32_t>(index)].handler) != nullptr) ? idToHandler[static_cast<std::int32_t>(index)].handler : throw std::runtime_error("invalid operation");
 	}
 
 	std::vector<std::shared_ptr<OpCodeHandler>> TableDeserializer::ReadArrayReference(std::uint32_t kind)
 	{
 		if (reader.ReadByte() != kind)
 		{
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		return GetTable(reader.ReadByte());
 	}
@@ -187,6 +187,6 @@ namespace Iced::Intel::DecoderInternal
 		//ORIGINAL LINE: return (idToHandler[(int)index].handlers ?? throw new InvalidOperationException())!;
 	//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 	//ORIGINAL LINE: return (idToHandler[(int)index].handlers ?? throw new InvalidOperationException());
-		return ((idToHandler[static_cast<std::int32_t>(index)].handlers) != std::nullopt) ? idToHandler[static_cast<std::int32_t>(index)].handlers.value() : throw InvalidOperationException();
+		return ((idToHandler[static_cast<std::int32_t>(index)].handlers) != std::nullopt) ? idToHandler[static_cast<std::int32_t>(index)].handlers.value() : throw std::runtime_error("invalid operation");
 	}
 }

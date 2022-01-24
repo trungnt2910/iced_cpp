@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -20,7 +20,6 @@
 #include "../BlockEncoder.h"
 #include "Instr.h"
 #include <vector>
-#include <csharp/exceptionhelper.h>
 
 //C# TO C++ CONVERTER NOTE: Forward class declarations:
 namespace Iced::Intel::BlockEncoderInternal { class BlockData; class Instr; }

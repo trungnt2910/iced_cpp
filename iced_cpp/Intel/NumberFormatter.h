@@ -10,7 +10,6 @@
 #include <string>
 #include <string_view>
 #include <vector>
-#include <csharp/exceptionhelper.h>
 
 #include <csharp/enum.h>
 

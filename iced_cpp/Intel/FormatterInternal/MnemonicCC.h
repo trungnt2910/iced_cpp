@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -18,7 +18,6 @@
 #include "../FormatterOptions.h"
 #include "FormatterString.h"
 #include <vector>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 
 // Code generated from Iced. Do not edit.

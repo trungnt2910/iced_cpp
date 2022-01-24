@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -88,7 +88,7 @@ namespace Iced::Intel::FormatterInternal
 			index = static_cast<std::int32_t>(options.GetCCG());
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		assert(static_cast<std::uint32_t>(index) < static_cast<std::uint32_t>(mnemonics.size()));
 		return mnemonics[index];

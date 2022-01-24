@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -103,7 +103,7 @@ namespace Iced::Intel::IntelFormatterInternal
 				v = reader.ReadByte();
 				if (v > 1)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				instrInfo = new SimpleInstrInfo_ST_STi(s, v != 0);
 				break;
@@ -111,7 +111,7 @@ namespace Iced::Intel::IntelFormatterInternal
 				v = reader.ReadByte();
 				if (v > 1)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				instrInfo = new SimpleInstrInfo_STi_ST(s, v != 0);
 				break;
@@ -242,7 +242,7 @@ namespace Iced::Intel::IntelFormatterInternal
 				v2 = reader.ReadByte();
 				if (v2 > 1)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				instrInfo = new SimpleInstrInfo_ST1(s, static_cast<InstrOpInfoFlags>(v), v2 != 0);
 				break;
@@ -255,7 +255,7 @@ namespace Iced::Intel::IntelFormatterInternal
 				instrInfo = new SimpleInstrInfo_invlpga(static_cast<std::int32_t>(v), s);
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			infos[i] = instrInfo;
 			if (currentIndex >= 0)
@@ -265,7 +265,7 @@ namespace Iced::Intel::IntelFormatterInternal
 		}
 		if (reader.GetCanRead())
 		{
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		return infos;
 	}

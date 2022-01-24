@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -26,7 +26,6 @@
 #include <vector>
 #include <limits>
 #include <stdexcept>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 
 //C# TO C++ CONVERTER NOTE: Forward class declarations:

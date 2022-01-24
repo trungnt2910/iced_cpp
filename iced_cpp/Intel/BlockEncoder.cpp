@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -76,7 +76,7 @@ namespace Iced::Intel
 	{
 		if (bitness != 16 && bitness != 32 && bitness != 64)
 		{
-			throw ArgumentOutOfRangeException("bitness");
+			throw std::out_of_range("bitness");
 		}
 		this->bitness = bitness;
 		this->options = options;
@@ -146,7 +146,7 @@ namespace Iced::Intel
 				instr->Initialize(this);
 				if (instr->Size > oldSize)
 				{
-					throw InvalidOperationException();
+					throw std::runtime_error("invalid operation");
 				}
 				ip += instr->Size;
 			}

@@ -15,6 +15,7 @@
 #include "AssemblerRegister.g.h"
 #include "AssemblerMemoryOperand.h"
 #include "../Code.g.h"
+#include "../Internal/Math.h"
 #include <bit>
 #include <string>
 #include <vector>
@@ -282,7 +283,7 @@ namespace Iced::Intel
 		case 64:
 			break;
 		default:
-			throw ArgumentOutOfRangeException("bitness");
+			throw std::out_of_range("bitness");
 		}
 		Bitness = bitness;
 		instructions = InstructionList();
@@ -403,7 +404,7 @@ namespace Iced::Intel
 	{
 		if (currentAnonLabel.IsEmpty())
 		{
-			throw InvalidOperationException("No anonymous label has been created yet");
+			throw std::runtime_error("No anonymous label has been created yet");
 		}
 		return currentAnonLabel;
 	}
@@ -421,7 +422,7 @@ namespace Iced::Intel
 	{
 		if (!currentLabel.IsEmpty() && definedAnonLabel)
 		{
-			throw InvalidOperationException("You can't create both an anonymous label and a normal label");
+			throw std::runtime_error("You can't create both an anonymous label and a normal label");
 		}
 		if (!currentLabel.IsEmpty())
 		{
@@ -581,7 +582,7 @@ namespace Iced::Intel
 		}
 		constexpr std::int32_t maxLength = (std::uint8_t)16;
 		std::int32_t rest;
-		std::int32_t cycles = Math::DivRem(length, maxLength, rest);
+		std::int32_t cycles = Internal::Math::DivRem(length, maxLength, rest);
 		std::int32_t currentPosition = index;
 		for (std::int32_t i = (std::uint8_t)0; i < cycles; i++)
 		{
@@ -666,11 +667,11 @@ namespace Iced::Intel
 
 		if (sizeInBytes < (std::uint8_t)0)
 		{
-			throw ArgumentOutOfRangeException("sizeInBytes");
+			throw std::out_of_range("sizeInBytes");
 		}
 		if (this->prefixFlags != PrefixFlags::None)
 		{
-			throw InvalidOperationException("No prefixes are allowed");
+			throw std::runtime_error("No prefixes are allowed");
 		}
 		if (sizeInBytes == (std::uint8_t)0)
 		{
@@ -678,7 +679,7 @@ namespace Iced::Intel
 		}
 		constexpr std::int32_t maxMultibyteNopInstructionLength = (std::uint8_t)9;
 		std::int32_t rest;
-		std::int32_t cycles = Math::DivRem(sizeInBytes, maxMultibyteNopInstructionLength, rest);
+		std::int32_t cycles = Internal::Math::DivRem(sizeInBytes, maxMultibyteNopInstructionLength, rest);
 		for (std::int32_t i = (std::uint8_t)0; i < cycles; i++)
 		{
 			AppendNop(maxMultibyteNopInstructionLength);
@@ -695,7 +696,7 @@ namespace Iced::Intel
 		Iced::Intel::AssemblerResult assemblerResult;
 		if (!TryAssemble(writer, rip, errorMessage, assemblerResult, options))
 		{
-			throw InvalidOperationException(errorMessage);
+			throw std::runtime_error(errorMessage);
 		}
 		return assemblerResult;
 	}

@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -92,11 +92,11 @@ namespace Iced::Intel::DecoderInternal
 	{
 		if (tableLow.size() != 8)
 		{
-			throw ArgumentOutOfRangeException("tableLow");
+			throw std::out_of_range("tableLow");
 		}
 		if (tableHigh.size() != 8)
 		{
-			throw ArgumentOutOfRangeException("tableHigh");
+			throw std::out_of_range("tableHigh");
 		}
 		this->tableLow = tableLow;
 		this->tableHigh = tableHigh;
@@ -123,11 +123,11 @@ namespace Iced::Intel::DecoderInternal
 	{
 		if (tableLow.size() != 8)
 		{
-			throw ArgumentOutOfRangeException("tableLow");
+			throw std::out_of_range("tableLow");
 		}
 		if (tableHigh.size() != 64)
 		{
-			throw ArgumentOutOfRangeException("tableHigh");
+			throw std::out_of_range("tableHigh");
 		}
 		this->tableLow = tableLow;
 		this->tableHigh = tableHigh;

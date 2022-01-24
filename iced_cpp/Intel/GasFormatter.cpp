@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -249,7 +249,7 @@ namespace Iced::Intel
 						FormatPrefix(output, instruction, column, str_rex_w, PrefixKind::OperandSize, needSpace);
 						break;
 					default:
-						throw InvalidOperationException();
+						throw std::runtime_error("invalid operation");
 					}
 				}
 				else
@@ -418,7 +418,7 @@ namespace Iced::Intel
 			case InstrOpKind::Memory:
 				return false;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 		}
 		return options.GetShowUselessPrefixes();
@@ -888,7 +888,7 @@ namespace Iced::Intel
 			FormatDecorator(output, instruction, operand, instructionOperand, str_rz, DecoratorKind::RoundingControl);
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		if (operand + 1 == opInfo.OpCount && instruction.GetHasOpMaskOrZeroingMasking())
 		{
@@ -1092,7 +1092,7 @@ namespace Iced::Intel
 			}
 			else
 			{
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			output.WriteNumber(instruction, operand, instructionOperand, s, origDispl, displKind, FormatterTextKind::Number);
 		}

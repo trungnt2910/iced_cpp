@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -47,7 +47,7 @@ namespace Iced::Intel
 			// All sbyte and all byte values can be used
 			if (!(std::numeric_limits<std::int8_t>::min() <= immediate && immediate <= std::numeric_limits<std::uint8_t>::max()))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8(static_cast<std::uint8_t>(immediate));
 			break;
@@ -55,28 +55,28 @@ namespace Iced::Intel
 			// All sbyte and all byte values can be used
 			if (!(std::numeric_limits<std::int8_t>::min() <= immediate && immediate <= std::numeric_limits<std::uint8_t>::max()))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8_2nd(static_cast<std::uint8_t>(immediate));
 			break;
 		case OpKind::Immediate8to16:
 			if (!(std::numeric_limits<std::int8_t>::min() <= immediate && immediate <= std::numeric_limits<std::int8_t>::max()))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8(static_cast<std::uint8_t>(immediate));
 			break;
 		case OpKind::Immediate8to32:
 			if (!(std::numeric_limits<std::int8_t>::min() <= immediate && immediate <= std::numeric_limits<std::int8_t>::max()))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8(static_cast<std::uint8_t>(immediate));
 			break;
 		case OpKind::Immediate8to64:
 			if (!(std::numeric_limits<std::int8_t>::min() <= immediate && immediate <= std::numeric_limits<std::int8_t>::max()))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8(static_cast<std::uint8_t>(immediate));
 			break;
@@ -84,7 +84,7 @@ namespace Iced::Intel
 			// All short and all ushort values can be used
 			if (!(std::numeric_limits<std::int16_t>::min() <= immediate && immediate <= std::numeric_limits<std::uint16_t>::max()))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate16(static_cast<std::uint16_t>(immediate));
 			break;
@@ -92,14 +92,14 @@ namespace Iced::Intel
 			// All int and all uint values can be used
 			if (!(std::numeric_limits<std::int32_t>::min() <= immediate && immediate <= std::numeric_limits<std::uint32_t>::max()))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetImmediate32(static_cast<std::uint32_t>(immediate));
 			break;
 		case OpKind::Immediate32to64:
 			if (!(std::numeric_limits<std::int32_t>::min() <= immediate && immediate <= std::numeric_limits<std::int32_t>::max()))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetImmediate32(static_cast<std::uint32_t>(immediate));
 			break;
@@ -107,7 +107,7 @@ namespace Iced::Intel
 			instruction.SetImmediate64(static_cast<std::uint64_t>(immediate));
 			break;
 		default:
-			throw ArgumentOutOfRangeException("instruction");
+			throw std::out_of_range("instruction");
 		}
 	}
 
@@ -120,28 +120,28 @@ namespace Iced::Intel
 		case OpKind::Immediate8:
 			if (immediate > std::numeric_limits<std::uint8_t>::max())
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8(static_cast<std::uint8_t>(immediate));
 			break;
 		case OpKind::Immediate8_2nd:
 			if (immediate > std::numeric_limits<std::uint8_t>::max())
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8_2nd(static_cast<std::uint8_t>(immediate));
 			break;
 		case OpKind::Immediate8to16:
 			if (!(immediate <= static_cast<std::uint64_t>(std::numeric_limits<std::int8_t>::max()) || (0xFF80 <= immediate && immediate <= 0xFFFF)))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8(static_cast<std::uint8_t>(immediate));
 			break;
 		case OpKind::Immediate8to32:
 			if (!(immediate <= static_cast<std::uint64_t>(std::numeric_limits<std::int8_t>::max()) || (0xFFFF'FF80 <= immediate && immediate <= 0xFFFF'FFFF)))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8(static_cast<std::uint8_t>(immediate));
 			break;
@@ -149,21 +149,21 @@ namespace Iced::Intel
 			// Allow 00..7F and FFFF_FFFF_FFFF_FF80..FFFF_FFFF_FFFF_FFFF
 			if ((immediate + 0x80) > std::numeric_limits<std::uint8_t>::max())
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate8(static_cast<std::uint8_t>(immediate));
 			break;
 		case OpKind::Immediate16:
 			if (immediate > std::numeric_limits<std::uint16_t>::max())
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetInternalImmediate16(static_cast<std::uint16_t>(immediate));
 			break;
 		case OpKind::Immediate32:
 			if (immediate > std::numeric_limits<std::uint32_t>::max())
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetImmediate32(static_cast<std::uint32_t>(immediate));
 			break;
@@ -171,7 +171,7 @@ namespace Iced::Intel
 			// Allow 0..7FFF_FFFF and FFFF_FFFF_8000_0000..FFFF_FFFF_FFFF_FFFF
 			if ((immediate + 0x8000'0000) > static_cast<std::uint64_t>(std::numeric_limits<std::uint32_t>::max()))
 			{
-				throw ArgumentOutOfRangeException("immediate");
+				throw std::out_of_range("immediate");
 			}
 			instruction.SetImmediate32(static_cast<std::uint32_t>(immediate));
 			break;
@@ -179,7 +179,7 @@ namespace Iced::Intel
 			instruction.SetImmediate64(immediate);
 			break;
 		default:
-			throw ArgumentOutOfRangeException("instruction");
+			throw std::out_of_range("instruction");
 		}
 	}
 
@@ -188,12 +188,12 @@ namespace Iced::Intel
 		auto handlers = EncoderInternal::OpCodeHandlers::Handlers;
 		if (static_cast<std::uint32_t>(code) >= static_cast<std::uint32_t>(handlers.size()))
 		{
-			throw ArgumentOutOfRangeException("code");
+			throw std::out_of_range("code");
 		}
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand + 1)));
+			throw std::out_of_range(::Iced::Intel::ToString(code) + " doesn't have at least " + Iced::Intel::ToString(operand + 1) + " operands");
 		}
 		auto opKind = operands[operand]->GetImmediateOpKind();
 		OpKind opKindPrev = operands[operand - 1]->GetImmediateOpKind();
@@ -203,7 +203,7 @@ namespace Iced::Intel
 		}
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't an immediate operand", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand)));
+			throw std::invalid_argument(::Iced::Intel::ToString(code) + "'s op" + Iced::Intel::ToString(operand) + " isn't an immediate operand");
 		}
 		return opKind;
 	}
@@ -213,17 +213,17 @@ namespace Iced::Intel
 		auto handlers = EncoderInternal::OpCodeHandlers::Handlers;
 		if (static_cast<std::uint32_t>(code) >= static_cast<std::uint32_t>(handlers.size()))
 		{
-			throw ArgumentOutOfRangeException("code");
+			throw std::out_of_range("code");
 		}
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand + 1)));
+			throw std::out_of_range(::Iced::Intel::ToString(code) + " doesn't have at least " + Iced::Intel::ToString(operand + 1) + " operands");
 		}
 		auto opKind = operands[operand]->GetNearBranchOpKind();
 		if (opKind == static_cast<OpKind>(-1))
 		{
-			throw std::invalid_argument(std::format("{0:s}'s op{1:s} isn't a near branch operand", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand)));
+			throw std::invalid_argument(::Iced::Intel::ToString(code) + "'s op" + Iced::Intel::ToString(operand) + " isn't a near branch operand");
 		}
 		return opKind;
 	}
@@ -233,12 +233,12 @@ namespace Iced::Intel
 		auto handlers = EncoderInternal::OpCodeHandlers::Handlers;
 		if (static_cast<std::uint32_t>(code) >= static_cast<std::uint32_t>(handlers.size()))
 		{
-			throw ArgumentOutOfRangeException("code");
+			throw std::out_of_range("code");
 		}
 		auto operands = handlers[static_cast<std::int32_t>(code)]->Operands;
 		if (static_cast<std::uint32_t>(operand) >= static_cast<std::uint32_t>(operands.size()))
 		{
-			throw ArgumentOutOfRangeException("operand", std::format("{0:s} doesn't have at least {1:s} operands", ::Iced::Intel::ToString(code), Iced::Intel::ToString(operand + 1)));
+			throw std::out_of_range(::Iced::Intel::ToString(code) + " doesn't have at least " + Iced::Intel::ToString(operand + 1) + " operands");
 		}
 		auto opKind = operands[operand]->GetFarBranchOpKind();
 		if (opKind == static_cast<OpKind>(-1))
@@ -281,7 +281,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw ArgumentOutOfRangeException("addressSize");
+			throw std::out_of_range("addressSize");
 		}
 		instruction.SetSegmentPrefix(segmentPrefix);
 		assert(instruction.GetOpCount() == 2);
@@ -321,7 +321,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw ArgumentOutOfRangeException("addressSize");
+			throw std::out_of_range("addressSize");
 		}
 		assert(instruction.GetOpCount() == 2);
 		return instruction;
@@ -357,7 +357,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw ArgumentOutOfRangeException("addressSize");
+			throw std::out_of_range("addressSize");
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
@@ -399,7 +399,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw ArgumentOutOfRangeException("addressSize");
+			throw std::out_of_range("addressSize");
 		}
 		instruction.SetSegmentPrefix(segmentPrefix);
 		assert(instruction.GetOpCount() == 2);
@@ -439,7 +439,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw ArgumentOutOfRangeException("addressSize");
+			throw std::out_of_range("addressSize");
 		}
 		instruction.SetSegmentPrefix(segmentPrefix);
 		assert(instruction.GetOpCount() == 2);
@@ -464,7 +464,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			throw ArgumentOutOfRangeException("addressSize");
+			throw std::out_of_range("addressSize");
 		}
 		Static::Assert(OpKind::Register == (Iced::Intel::OpKind)0 ? 0 : -1);
 		//instruction.Op1Kind = OpKind.Register;
@@ -1190,7 +1190,7 @@ namespace Iced::Intel
 			instruction.SetNearBranch64(target);
 			break;
 		default:
-			throw ArgumentOutOfRangeException("bitness");
+			throw std::out_of_range("bitness");
 		}
 		assert(instruction.GetOpCount() == 1);
 		return instruction;
@@ -4541,7 +4541,7 @@ namespace Iced::Intel
 			return true;
 		}
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		result = 0;
 		return false;

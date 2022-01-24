@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -72,13 +72,13 @@ namespace Iced::Intel::EncoderInternal
 				handler = std::make_shared<MvexHandler>(static_cast<EncFlags1>(encFlags1[i]), static_cast<EncFlags2>(encFlags2[i]), encFlags3);
 				break;
 			default:
-				throw InvalidOperationException();
+				throw std::runtime_error("invalid operation");
 			}
 			handlers[i] = handler;
 		}
 		if (i != handlers.size())
 		{
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		Handlers = handlers;
 	}

@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -31,7 +31,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: return (switchTempVar_0 == 0) ? (Register)Op0Register : (switchTempVar_0 == 1) ? (Register)Op1Register : (switchTempVar_0 == 2) ? (Register)Op2Register : (switchTempVar_0 == 3) ? (Register)Op3Register : (switchTempVar_0 == 4) ? (Register)Op4Register : throw new ArgumentOutOfRangeException(nameof(operand));
-		return (switchTempVar_0 == 0) ? static_cast<Register>(Op0Register) : (switchTempVar_0 == 1) ? static_cast<Register>(Op1Register) : (switchTempVar_0 == 2) ? static_cast<Register>(Op2Register) : (switchTempVar_0 == 3) ? static_cast<Register>(Op3Register) : (switchTempVar_0 == 4) ? static_cast<Register>(Op4Register) : throw ArgumentOutOfRangeException("operand");
+		return (switchTempVar_0 == 0) ? static_cast<Register>(Op0Register) : (switchTempVar_0 == 1) ? static_cast<Register>(Op1Register) : (switchTempVar_0 == 2) ? static_cast<Register>(Op2Register) : (switchTempVar_0 == 3) ? static_cast<Register>(Op3Register) : (switchTempVar_0 == 4) ? static_cast<Register>(Op4Register) : throw std::out_of_range("operand");
 	}
 
 	InstrOpKind InstrOpInfo::GetOpKind(std::int32_t operand) const
@@ -213,7 +213,7 @@ namespace Iced::Intel::MasmFormatterInternal
 			Op4Index = 4;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -314,7 +314,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var shortFormOpKind = (switchTempVar_2 == CodeSize.Unknown) ? instruction.Op0Kind : (switchTempVar_2 == CodeSize.Code16) ? OpKind.MemoryESDI : (switchTempVar_2 == CodeSize.Code32) ? OpKind.MemoryESEDI : (switchTempVar_2 == CodeSize.Code64) ? OpKind.MemoryESRDI : throw new InvalidOperationException();
-		auto shortFormOpKind = (switchTempVar_2 == CodeSize::Unknown) ? instruction.GetOp0Kind() : (switchTempVar_2 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_2 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_2 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw InvalidOperationException();
+		auto shortFormOpKind = (switchTempVar_2 == CodeSize::Unknown) ? instruction.GetOp0Kind() : (switchTempVar_2 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_2 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_2 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw std::runtime_error("invalid operation");
 		bool shortForm = instruction.GetOp0Kind() == shortFormOpKind;
 		if (!shortForm)
 		{
@@ -341,7 +341,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var shortFormOpKind = (switchTempVar_3 == CodeSize.Unknown) ? instruction.Op1Kind : (switchTempVar_3 == CodeSize.Code16) ? OpKind.MemorySegSI : (switchTempVar_3 == CodeSize.Code32) ? OpKind.MemorySegESI : (switchTempVar_3 == CodeSize.Code64) ? OpKind.MemorySegRSI : throw new InvalidOperationException();
-		auto shortFormOpKind = (switchTempVar_3 == CodeSize::Unknown) ? instruction.GetOp1Kind() : (switchTempVar_3 == CodeSize::Code16) ? OpKind::MemorySegSI : (switchTempVar_3 == CodeSize::Code32) ? OpKind::MemorySegESI : (switchTempVar_3 == CodeSize::Code64) ? OpKind::MemorySegRSI : throw InvalidOperationException();
+		auto shortFormOpKind = (switchTempVar_3 == CodeSize::Unknown) ? instruction.GetOp1Kind() : (switchTempVar_3 == CodeSize::Code16) ? OpKind::MemorySegSI : (switchTempVar_3 == CodeSize::Code32) ? OpKind::MemorySegESI : (switchTempVar_3 == CodeSize::Code64) ? OpKind::MemorySegRSI : throw std::runtime_error("invalid operation");
 		bool shortForm = instruction.GetOp1Kind() == shortFormOpKind && (instruction.GetSegmentPrefix() == Register::None || !FormatterUtils::ShowSegmentPrefix(Register::DS, instruction, options));
 		if (!shortForm)
 		{
@@ -368,7 +368,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var shortFormOpKind = (switchTempVar_4 == CodeSize.Unknown) ? instruction.Op0Kind : (switchTempVar_4 == CodeSize.Code16) ? OpKind.MemoryESDI : (switchTempVar_4 == CodeSize.Code32) ? OpKind.MemoryESEDI : (switchTempVar_4 == CodeSize.Code64) ? OpKind.MemoryESRDI : throw new InvalidOperationException();
-		auto shortFormOpKind = (switchTempVar_4 == CodeSize::Unknown) ? instruction.GetOp0Kind() : (switchTempVar_4 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_4 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_4 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw InvalidOperationException();
+		auto shortFormOpKind = (switchTempVar_4 == CodeSize::Unknown) ? instruction.GetOp0Kind() : (switchTempVar_4 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_4 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_4 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw std::runtime_error("invalid operation");
 		bool shortForm = instruction.GetOp0Kind() == shortFormOpKind && (instruction.GetSegmentPrefix() == Register::None || !FormatterUtils::ShowSegmentPrefix(Register::DS, instruction, options));
 		if (!shortForm)
 		{
@@ -395,7 +395,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var shortFormOpKind = (switchTempVar_5 == CodeSize.Unknown) ? instruction.Op1Kind : (switchTempVar_5 == CodeSize.Code16) ? OpKind.MemoryESDI : (switchTempVar_5 == CodeSize.Code32) ? OpKind.MemoryESEDI : (switchTempVar_5 == CodeSize.Code64) ? OpKind.MemoryESRDI : throw new InvalidOperationException();
-		auto shortFormOpKind = (switchTempVar_5 == CodeSize::Unknown) ? instruction.GetOp1Kind() : (switchTempVar_5 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_5 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_5 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw InvalidOperationException();
+		auto shortFormOpKind = (switchTempVar_5 == CodeSize::Unknown) ? instruction.GetOp1Kind() : (switchTempVar_5 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_5 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_5 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw std::runtime_error("invalid operation");
 		bool shortForm = instruction.GetOp1Kind() == shortFormOpKind && (instruction.GetSegmentPrefix() == Register::None || !FormatterUtils::ShowSegmentPrefix(Register::DS, instruction, options));
 		if (!shortForm)
 		{
@@ -422,7 +422,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var shortFormOpKind = (switchTempVar_6 == CodeSize.Unknown) ? instruction.Op0Kind : (switchTempVar_6 == CodeSize.Code16) ? OpKind.MemoryESDI : (switchTempVar_6 == CodeSize.Code32) ? OpKind.MemoryESEDI : (switchTempVar_6 == CodeSize.Code64) ? OpKind.MemoryESRDI : throw new InvalidOperationException();
-		auto shortFormOpKind = (switchTempVar_6 == CodeSize::Unknown) ? instruction.GetOp0Kind() : (switchTempVar_6 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_6 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_6 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw InvalidOperationException();
+		auto shortFormOpKind = (switchTempVar_6 == CodeSize::Unknown) ? instruction.GetOp0Kind() : (switchTempVar_6 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_6 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_6 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw std::runtime_error("invalid operation");
 		bool shortForm = instruction.GetOp0Kind() == shortFormOpKind;
 		if (!shortForm)
 		{
@@ -453,7 +453,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var shortFormOpKind = (switchTempVar_7 == CodeSize.Unknown) ? instruction.Op1Kind : (switchTempVar_7 == CodeSize.Code16) ? OpKind.MemorySegSI : (switchTempVar_7 == CodeSize.Code32) ? OpKind.MemorySegESI : (switchTempVar_7 == CodeSize.Code64) ? OpKind.MemorySegRSI : throw new InvalidOperationException();
-		auto shortFormOpKind = (switchTempVar_7 == CodeSize::Unknown) ? instruction.GetOp1Kind() : (switchTempVar_7 == CodeSize::Code16) ? OpKind::MemorySegSI : (switchTempVar_7 == CodeSize::Code32) ? OpKind::MemorySegESI : (switchTempVar_7 == CodeSize::Code64) ? OpKind::MemorySegRSI : throw InvalidOperationException();
+		auto shortFormOpKind = (switchTempVar_7 == CodeSize::Unknown) ? instruction.GetOp1Kind() : (switchTempVar_7 == CodeSize::Code16) ? OpKind::MemorySegSI : (switchTempVar_7 == CodeSize::Code32) ? OpKind::MemorySegESI : (switchTempVar_7 == CodeSize::Code64) ? OpKind::MemorySegRSI : throw std::runtime_error("invalid operation");
 		bool shortForm = instruction.GetOp1Kind() == shortFormOpKind && (instruction.GetSegmentPrefix() == Register::None || !FormatterUtils::ShowSegmentPrefix(Register::DS, instruction, options));
 		if (!shortForm)
 		{
@@ -485,7 +485,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var shortFormOpKind = (switchTempVar_8 == CodeSize.Unknown) ? instruction.Op1Kind : (switchTempVar_8 == CodeSize.Code16) ? OpKind.MemoryESDI : (switchTempVar_8 == CodeSize.Code32) ? OpKind.MemoryESEDI : (switchTempVar_8 == CodeSize.Code64) ? OpKind.MemoryESRDI : throw new InvalidOperationException();
-		auto shortFormOpKind = (switchTempVar_8 == CodeSize::Unknown) ? instruction.GetOp1Kind() : (switchTempVar_8 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_8 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_8 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw InvalidOperationException();
+		auto shortFormOpKind = (switchTempVar_8 == CodeSize::Unknown) ? instruction.GetOp1Kind() : (switchTempVar_8 == CodeSize::Code16) ? OpKind::MemoryESDI : (switchTempVar_8 == CodeSize::Code32) ? OpKind::MemoryESEDI : (switchTempVar_8 == CodeSize::Code64) ? OpKind::MemoryESRDI : throw std::runtime_error("invalid operation");
 		bool shortForm = instruction.GetOp1Kind() == shortFormOpKind && (instruction.GetSegmentPrefix() == Register::None || !FormatterUtils::ShowSegmentPrefix(Register::DS, instruction, options));
 		if (!shortForm)
 		{
@@ -517,7 +517,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var baseReg = (switchTempVar_9 == CodeSize.Unknown) ? instruction.MemoryBase : (switchTempVar_9 == CodeSize.Code16) ? Register.BX : (switchTempVar_9 == CodeSize.Code32) ? Register.EBX : (switchTempVar_9 == CodeSize.Code64) ? Register.RBX : throw new InvalidOperationException();
-		auto baseReg = (switchTempVar_9 == CodeSize::Unknown) ? instruction.GetMemoryBase() : (switchTempVar_9 == CodeSize::Code16) ? Register::BX : (switchTempVar_9 == CodeSize::Code32) ? Register::EBX : (switchTempVar_9 == CodeSize::Code64) ? Register::RBX : throw InvalidOperationException();
+		auto baseReg = (switchTempVar_9 == CodeSize::Unknown) ? instruction.GetMemoryBase() : (switchTempVar_9 == CodeSize::Code16) ? Register::BX : (switchTempVar_9 == CodeSize::Code32) ? Register::EBX : (switchTempVar_9 == CodeSize::Code64) ? Register::RBX : throw std::runtime_error("invalid operation");
 		bool shortForm = instruction.GetMemoryBase() == baseReg && (instruction.GetSegmentPrefix() == Register::None || !FormatterUtils::ShowSegmentPrefix(Register::DS, instruction, options));
 		if (!shortForm)
 		{
@@ -751,7 +751,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: var shortFormOpKind = (switchTempVar_10 == CodeSize.Unknown) ? instruction.Op0Kind : (switchTempVar_10 == CodeSize.Code16) ? OpKind.MemorySegDI : (switchTempVar_10 == CodeSize.Code32) ? OpKind.MemorySegEDI : (switchTempVar_10 == CodeSize.Code64) ? OpKind.MemorySegRDI : throw new InvalidOperationException();
-		auto shortFormOpKind = (switchTempVar_10 == CodeSize::Unknown) ? instruction.GetOp0Kind() : (switchTempVar_10 == CodeSize::Code16) ? OpKind::MemorySegDI : (switchTempVar_10 == CodeSize::Code32) ? OpKind::MemorySegEDI : (switchTempVar_10 == CodeSize::Code64) ? OpKind::MemorySegRDI : throw InvalidOperationException();
+		auto shortFormOpKind = (switchTempVar_10 == CodeSize::Unknown) ? instruction.GetOp0Kind() : (switchTempVar_10 == CodeSize::Code16) ? OpKind::MemorySegDI : (switchTempVar_10 == CodeSize::Code32) ? OpKind::MemorySegEDI : (switchTempVar_10 == CodeSize::Code64) ? OpKind::MemorySegRDI : throw std::runtime_error("invalid operation");
 		bool shortForm = instruction.GetOp0Kind() == shortFormOpKind && (instruction.GetSegmentPrefix() == Register::None || !FormatterUtils::ShowSegmentPrefix(Register::DS, instruction, options));
 		if (!shortForm)
 		{
@@ -983,7 +983,7 @@ namespace Iced::Intel::MasmFormatterInternal
 			info.Op2Index = OpAccess_INVALID;
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 		info.OpCount--;
 	}
@@ -1149,7 +1149,7 @@ namespace Iced::Intel::MasmFormatterInternal
 			info.Op0Register = static_cast<std::uint8_t>(Register::RAX);
 			break;
 		default:
-			throw InvalidOperationException();
+			throw std::runtime_error("invalid operation");
 		}
 	}
 
@@ -1161,7 +1161,7 @@ namespace Iced::Intel::MasmFormatterInternal
 
 		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
 		//ORIGINAL LINE: opKind = (switchTempVar_11 == Code.DeclareByte) ? InstrOpKind.DeclareByte : (switchTempVar_11 == Code.DeclareWord) ? InstrOpKind.DeclareWord : (switchTempVar_11 == Code.DeclareDword) ? InstrOpKind.DeclareDword : (switchTempVar_11 == Code.DeclareQword) ? InstrOpKind.DeclareQword : throw new InvalidOperationException();
-		opKind = (switchTempVar_11 == Code::DeclareByte) ? InstrOpKind::DeclareByte : (switchTempVar_11 == Code::DeclareWord) ? InstrOpKind::DeclareWord : (switchTempVar_11 == Code::DeclareDword) ? InstrOpKind::DeclareDword : (switchTempVar_11 == Code::DeclareQword) ? InstrOpKind::DeclareQword : throw InvalidOperationException();
+		opKind = (switchTempVar_11 == Code::DeclareByte) ? InstrOpKind::DeclareByte : (switchTempVar_11 == Code::DeclareWord) ? InstrOpKind::DeclareWord : (switchTempVar_11 == Code::DeclareDword) ? InstrOpKind::DeclareDword : (switchTempVar_11 == Code::DeclareQword) ? InstrOpKind::DeclareQword : throw std::runtime_error("invalid operation");
 	}
 
 	void SimpleInstrInfo_DeclareData::GetOpInfo(const FormatterOptions& options, const Instruction& instruction, InstrOpInfo& info)

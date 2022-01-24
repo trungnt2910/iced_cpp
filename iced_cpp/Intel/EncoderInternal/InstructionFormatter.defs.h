@@ -1,5 +1,5 @@
 // C# helper headers
-#include <csharp/classes.h>
+
 #include <csharp/enum.h>
 
 
@@ -21,7 +21,6 @@
 #include "../Code.g.h"
 #include <string>
 #include <vector>
-#include <csharp/exceptionhelper.h>
 #include <cassert>
 
 namespace Iced::Intel
