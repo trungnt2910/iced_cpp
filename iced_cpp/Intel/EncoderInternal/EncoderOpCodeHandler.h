@@ -18,15 +18,17 @@
 #include "../Iced.Intel.Instruction.h"
 #include "Enums.h"
 #include "../CodeSize.g.h"
-#include "OpHandlers.h"
+#include "OpHandlers.defs.h"
 #include "../Code.g.h"
 #include "../TupleType.g.h"
+#include <array>
 #include <string>
 #include <vector>
 #include <limits>
 #include <optional>
 #include <format>
 #include <cassert>
+#include <tuple>
 
 //C# TO C++ CONVERTER NOTE: Forward class declarations:
 namespace Iced::Intel::EncoderInternal { class OpCodeHandler; class Op; }
@@ -54,9 +56,9 @@ namespace Iced::Intel::EncoderInternal
 		CodeSize OpSize = static_cast<CodeSize>(0);
 		CodeSize AddrSize = static_cast<CodeSize>(0);
 		std::optional<TryConvertToDisp8N_> TryConvertToDisp8N;
-		std::vector<std::shared_ptr<Op>> Operands;
+		std::vector<const Op*> Operands;
 	protected:
-		OpCodeHandler(EncFlags2 encFlags2, enum EncFlags3 encFlags3, bool isDeclareData, const std::optional<TryConvertToDisp8N_>& tryConvertToDisp8N, const std::vector<std::shared_ptr<Op>>& operands);
+		OpCodeHandler(EncFlags2 encFlags2, enum EncFlags3 encFlags3, bool isDeclareData, const std::optional<TryConvertToDisp8N_>& tryConvertToDisp8N, std::vector<const Op*>&& operands);
 		static std::uint32_t GetOpCode(EncFlags2 encFlags2);
 	public:
 		virtual void Encode(Encoder& encoder, const Instruction& instruction) = 0;
@@ -86,7 +88,7 @@ namespace Iced::Intel::EncoderInternal
 		std::uint32_t tableByte1 = 0, tableByte2 = 0;
 		/* readonly */
 		std::uint32_t mandatoryPrefix = 0;
-		static std::vector<std::shared_ptr<Op>> CreateOps(EncFlags1 encFlags1);
+		static std::vector<const Op*> CreateOps(EncFlags1 encFlags1);
 	public:
 		LegacyHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3);
 		void Encode(Encoder& encoder, const Instruction& instruction) override;
@@ -104,7 +106,7 @@ namespace Iced::Intel::EncoderInternal
 		std::uint32_t mask_L = 0;
 		/* readonly */
 		std::uint32_t W1 = 0;
-		static std::vector<std::shared_ptr<Op>> CreateOps(EncFlags1 encFlags1);
+		static std::vector<const Op*> CreateOps(EncFlags1 encFlags1);
 	public:
 		VexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3);
 		void Encode(Encoder& encoder, const Instruction& instruction) override;
@@ -117,7 +119,7 @@ namespace Iced::Intel::EncoderInternal
 		std::uint32_t table = 0;
 		/* readonly */
 		std::uint32_t lastByte = 0;
-		static std::vector<std::shared_ptr<Op>> CreateOps(EncFlags1 encFlags1);
+		static std::vector<const Op*> CreateOps(EncFlags1 encFlags1);
 	public:
 		XopHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3);
 		void Encode(Encoder& encoder, const Instruction& instruction) override;
@@ -141,7 +143,7 @@ namespace Iced::Intel::EncoderInternal
 		std::uint32_t mask_W = 0;
 		/* readonly */
 		std::uint32_t mask_LL = 0;
-		static std::vector<std::shared_ptr<Op>> CreateOps(EncFlags1 encFlags1);
+		static std::vector<const Op*> CreateOps(EncFlags1 encFlags1);
 		static TryConvertToDisp8N_ tryConvertToDisp8N;
 	public:
 		EvexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3);
@@ -167,7 +169,7 @@ namespace Iced::Intel::EncoderInternal
 		std::uint32_t p1Bits = 0;
 		/* readonly */
 		std::uint32_t mask_W = 0;
-		static std::vector<std::shared_ptr<Op>> CreateOps(EncFlags1 encFlags1);
+		static std::vector<const Op*> CreateOps(EncFlags1 encFlags1);
 		static TryConvertToDisp8N tryConvertToDisp8N;
 	public:
 		MvexHandler(EncFlags1 encFlags1, EncFlags2 encFlags2, enum EncFlags3 encFlags3);
@@ -186,7 +188,15 @@ namespace Iced::Intel::EncoderInternal
 		using EncFlags3 = ::Iced::Intel::EncoderInternal::EncFlags3;
 		using TryConvertToDisp8N = ::Iced::Intel::EncoderInternal::TryConvertToDisp8N;
 	private:
-		static std::vector<std::shared_ptr<Op>> operands;
+		inline static constexpr std::tuple operandsData = std::make_tuple(
+			OpModRM_reg(Register::MM0, Register::MM7),
+			OpModRM_rm(Register::MM0, Register::MM7)
+		);
+		inline static constexpr std::array operands = std::to_array<const Op*>(
+		{
+			(const Op*)&std::get<0>(operandsData),
+			(const Op*)&std::get<1>(operandsData)
+		});
 		/* readonly */
 		std::uint32_t immediate = 0;
 	public:

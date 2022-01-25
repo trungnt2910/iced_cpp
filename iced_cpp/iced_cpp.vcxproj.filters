@@ -171,7 +171,7 @@
     <ClInclude Include="Intel\EncoderInternal\OpCodeOperandKinds.g.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\EncoderInternal\OpHandlers.h">
+    <ClInclude Include="Intel\EncoderInternal\OpHandlers.defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\EncoderInternal\OpTables.g.h">
@@ -630,6 +630,9 @@
     <ClInclude Include="Intel\Internal\Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Intel\EncoderInternal\OpHandlers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Intel\BlockEncoderInternal\Block.cpp">
@@ -753,12 +756,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\EncoderInternal\OpCodeOperandKinds.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\EncoderInternal\OpHandlers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\EncoderInternal\OpTables.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\FastFormatterInternal\FastFmtFlags.g.cpp">

@@ -268,6 +268,7 @@
     <ClInclude Include="Intel\EncoderInternal\OpCodeInfos.h" />
     <ClInclude Include="Intel\EncoderInternal\OpCodeInfosEnums.h" />
     <ClInclude Include="Intel\EncoderInternal\OpCodeOperandKinds.g.h" />
+    <ClInclude Include="Intel\EncoderInternal\OpHandlers.defs.h" />
     <ClInclude Include="Intel\EncoderInternal\OpHandlers.h" />
     <ClInclude Include="Intel\EncoderInternal\OpTables.g.h" />
     <ClInclude Include="Intel\EncodingKind.g.h" />
@@ -449,8 +450,6 @@
     <ClCompile Include="Intel\EncoderInternal\OpCodeHandlers.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfosEnums.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeOperandKinds.g.cpp" />
-    <ClCompile Include="Intel\EncoderInternal\OpHandlers.cpp" />
-    <ClCompile Include="Intel\EncoderInternal\OpTables.g.cpp" />
     <ClCompile Include="Intel\FastFormatter.cpp" />
     <ClCompile Include="Intel\FastFormatterInternal\FastFmtFlags.g.cpp" />
     <ClCompile Include="Intel\FastFormatterInternal\Iced.Intel.FastFormatterInternal.FmtData.cpp" />
