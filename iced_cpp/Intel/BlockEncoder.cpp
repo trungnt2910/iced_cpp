@@ -18,6 +18,8 @@
 
 #include "Iced.Intel.Instruction.h"
 
+#include "EncoderInternal/EncoderOpCodeHandler.h"
+
 #include <algorithm>
 
 using namespace Iced::Intel::BlockEncoderInternal;

@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "EncoderInternal/EncoderOpCodeHandler.h"
+#include "EncoderInternal/EncoderOpCodeHandler.defs.h"
 #include "CodeWriter.h"
 #include "EncoderInternal/Enums.h"
 #include "Iced.Intel.Instruction.h"
@@ -94,14 +94,12 @@ namespace Iced::Intel
 		/* readonly */
 		std::int32_t bitness = 0;
 		/* readonly */
-		std::vector<std::shared_ptr<::Iced::Intel::EncoderInternal::OpCodeHandler>> handlers;
-		/* readonly */
 		std::vector<std::uint32_t> immSizes;
 		std::uint64_t currentRip = 0;
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: string? errorMessage;
 		std::string errorMessage;
-		std::shared_ptr<::Iced::Intel::EncoderInternal::OpCodeHandler> handler;
+		const ::Iced::Intel::EncoderInternal::OpCodeHandler* handler;
 		std::uint32_t eip = 0;
 		std::uint32_t displAddr = 0;
 		std::uint32_t immAddr = 0;
@@ -225,3 +223,6 @@ namespace Iced::Intel
 		ConstantOffsets GetConstantOffsets();
 	};
 }
+
+// Avoid undefined functions.
+#include "EncoderInternal/EncoderOpCodeHandler.h"

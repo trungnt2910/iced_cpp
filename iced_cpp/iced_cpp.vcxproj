@@ -257,6 +257,7 @@
     <ClInclude Include="Intel\EncoderCodeExtensions.h" />
     <ClInclude Include="Intel\EncoderException.h" />
     <ClInclude Include="Intel\EncoderInternal\EncoderData.g.h" />
+    <ClInclude Include="Intel\EncoderInternal\EncoderOpCodeHandler.defs.h" />
     <ClInclude Include="Intel\EncoderInternal\EncoderOpCodeHandler.h" />
     <ClInclude Include="Intel\EncoderInternal\Enums.h" />
     <ClInclude Include="Intel\EncoderInternal\InstructionFormatter.defs.h" />
@@ -445,9 +446,7 @@
     <ClCompile Include="Intel\DecoderOptions.g.cpp" />
     <ClCompile Include="Intel\Encoder.cpp" />
     <ClCompile Include="Intel\EncoderInternal\EncoderData.g.cpp" />
-    <ClCompile Include="Intel\EncoderInternal\EncoderOpCodeHandler.cpp" />
     <ClCompile Include="Intel\EncoderInternal\Enums.cpp" />
-    <ClCompile Include="Intel\EncoderInternal\OpCodeHandlers.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfosEnums.cpp" />
     <ClCompile Include="Intel\EncoderInternal\OpCodeOperandKinds.g.cpp" />
     <ClCompile Include="Intel\FastFormatter.cpp" />

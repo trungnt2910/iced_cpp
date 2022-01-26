@@ -144,7 +144,7 @@
     <ClInclude Include="Intel\EncoderInternal\EncoderData.g.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\EncoderInternal\EncoderOpCodeHandler.h">
+    <ClInclude Include="Intel\EncoderInternal\EncoderOpCodeHandler.defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\EncoderInternal\Enums.h">
@@ -633,6 +633,9 @@
     <ClInclude Include="Intel\EncoderInternal\OpHandlers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Intel\EncoderInternal\EncoderOpCodeHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Intel\BlockEncoderInternal\Block.cpp">
@@ -743,13 +746,7 @@
     <ClCompile Include="Intel\EncoderInternal\EncoderData.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\EncoderInternal\EncoderOpCodeHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\EncoderInternal\Enums.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\EncoderInternal\OpCodeHandlers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\EncoderInternal\OpCodeInfosEnums.cpp">

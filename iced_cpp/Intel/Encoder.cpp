@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "Encoder.h"
+#include "EncoderInternal/EncoderOpCodeHandler.h"
 #include "ThrowHelper.h"
 #include "EncoderInternal/OpCodeHandlers.h"
 #include "EncoderException.h"
@@ -112,9 +113,6 @@ namespace Iced::Intel
 		immSizes = s_immSizes;
 		this->writer = writer;
 		this->bitness = bitness;
-		handlers = OpCodeHandlers::Handlers;
-		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to the C# 'null-forgiving operator':
-		//ORIGINAL LINE: handler = null!;
 		handler = nullptr; // It's initialized by TryEncode
 		opSize16Flags = bitness != 16 ? EncoderFlags::P66 : EncoderFlags::None;
 		opSize32Flags = bitness == 16 ? EncoderFlags::P66 : EncoderFlags::None;
@@ -160,7 +158,7 @@ namespace Iced::Intel
 		DisplSize = DisplSize::None;
 		ImmSize = ImmSize::None;
 		ModRM = 0;
-		auto handler = handlers[static_cast<std::int32_t>(instruction.GetCode())];
+		auto handler = OpCodeHandlers::Handlers[static_cast<std::int32_t>(instruction.GetCode())];
 		this->handler = handler;
 		OpCode = handler->OpCode;
 		if (handler->GroupIndex >= 0)
@@ -261,7 +259,7 @@ namespace Iced::Intel
 		}
 		else
 		{
-			assert(std::dynamic_pointer_cast<DeclareDataHandler>(handler) != nullptr);
+			assert(dynamic_cast<const DeclareDataHandler*>(handler) != nullptr);
 			handler->Encode(*this, instruction);
 		}
 		std::uint32_t instrLen = static_cast<std::uint32_t>(currentRip) - static_cast<std::uint32_t>(rip);
@@ -800,9 +798,9 @@ namespace Iced::Intel
 	bool Encoder::TryConvertToDisp8N(const Instruction& instruction, std::int32_t displ, std::int8_t& compressedValue)
 	{
 		auto tryConvertToDisp8N = handler->TryConvertToDisp8N;
-		if (tryConvertToDisp8N != std::nullopt)
+		if (tryConvertToDisp8N != nullptr)
 		{
-			return tryConvertToDisp8N.value()(*this, handler, instruction, displ, compressedValue);
+			return tryConvertToDisp8N(*this, handler, instruction, displ, compressedValue);
 		}
 		if (std::numeric_limits<std::int8_t>::min() <= displ && displ <= std::numeric_limits<std::int8_t>::max())
 		{
