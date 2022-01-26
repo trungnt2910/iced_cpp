@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <bit>
 #include <concepts>
 #include <string>
 #include <type_traits>
@@ -46,6 +47,27 @@ namespace Iced::Intel::Internal
 			result.resize(2);
 			result[0] = i >> 8u;
 			result[1] = i & 0xFF;
+
+			return result;
+		}
+		// ToDo: Optimize.
+		template <std::unsigned_integral U>
+		static constexpr std::string ToHex(U i)
+		{
+			constexpr std::size_t bits = sizeof(U) * CHAR_BIT;
+
+			std::size_t lzero = (std::size_t)std::countl_zero(i);
+			std::size_t length = (bits - lzero + 3) >> 2;
+			std::string result(length, '\0');
+
+			// Underflows when zero, evaluates to false.
+			while (length--)
+			{
+				auto& ch = result[length];
+				ch = (i & 0xFu);
+				ch += (ch > 9) ? ('A' - 10) : '0';
+				i >>= 4;
+			}
 
 			return result;
 		}

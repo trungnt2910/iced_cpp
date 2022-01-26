@@ -8,6 +8,7 @@
 #include "OpAccess.g.h"
 #include "CodeSize.g.h"
 #include "Instruction.VA.h"
+#include "Internal/StringHelpers.h"
 #include <string>
 #include <limits>
 #include <stdexcept>
@@ -20,24 +21,15 @@ namespace Iced::Intel
 	/// </summary>
 	class UsedMemory
 	{
-		/* readonly */
 	private:
 		std::uint64_t displ = 0;
-		/* readonly */
 		std::uint8_t segReg = 0;
-		/* readonly */
 		std::uint8_t baseReg = 0;
-		/* readonly */
 		std::uint8_t indexReg = 0;
-		/* readonly */
 		std::uint8_t memorySize = 0;
-		/* readonly */
 		std::uint8_t scale = 0;
-		/* readonly */
 		std::uint8_t access = 0;
-		/* readonly */
 		std::uint8_t addressSize = 0;
-		/* readonly */
 		std::uint8_t vsibSize = 0;
 		/// <summary>
 		/// Effective segment register or <see cref="Register.None"/> if the segment register is ignored
@@ -292,13 +284,11 @@ namespace Iced::Intel
 	{
 		std::string sb;
 		sb.push_back('[');
-		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
 		sb.append(Iced::Intel::ToString(GetSegment()));
 		sb.push_back(':');
 		bool needPlus = false;
 		if (GetBase() != Register::None)
 		{
-			//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
 			sb.append(Iced::Intel::ToString(GetBase()));
 			needPlus = true;
 		}
@@ -309,7 +299,6 @@ namespace Iced::Intel
 				sb.push_back('+');
 			}
 			needPlus = true;
-			//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
 			sb.append(Iced::Intel::ToString(GetIndex()));
 			if (GetScale() != 1)
 			{
@@ -330,7 +319,7 @@ namespace Iced::Intel
 			else
 			{
 				sb.append("0x");
-				sb.append(std::format("{:X}", GetDisplacement()));
+				sb.append(Internal::StringHelpers::ToHex(GetDisplacement()));
 			}
 		}
 		sb.push_back(';');
