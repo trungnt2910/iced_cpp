@@ -26,54 +26,6 @@ using namespace Iced::Intel::BlockEncoderInternal;
 
 namespace Iced::Intel
 {
-
-	RelocInfo::RelocInfo(RelocKind kind, std::uint64_t address)
-	{
-		Kind = kind;
-		Address = address;
-	}
-
-	InstructionBlock::InstructionBlock(Iced::Intel::CodeWriter* codeWriter, const std::vector<Instruction>& instructions, std::uint64_t rip)
-	{
-		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: CodeWriter = codeWriter ?? throw new ArgumentNullException(nameof(codeWriter));
-		CodeWriter = (codeWriter != nullptr) ? codeWriter : throw std::invalid_argument("codeWriter");
-		//C# TO C++ CONVERTER TODO TASK: Throw expressions are not converted by C# to C++ Converter:
-		//ORIGINAL LINE: Instructions = instructions ?? throw new ArgumentNullException(nameof(instructions));
-		Instructions = instructions;
-		RIP = rip;
-	}
-
-	//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
-	//ORIGINAL LINE: internal BlockEncoderResult(ulong rip, List<RelocInfo>? relocInfos, uint[]? newInstructionOffsets, ConstantOffsets[]? constantOffsets)
-	BlockEncoderResult::BlockEncoderResult(std::uint64_t rip, const std::vector<RelocInfo>& relocInfos, const std::vector<std::uint32_t>& newInstructionOffsets, const std::vector<class ConstantOffsets>& constantOffsets)
-	{
-		RIP = rip;
-		RelocInfos = relocInfos;
-		NewInstructionOffsets = newInstructionOffsets;
-		ConstantOffsets = constantOffsets;
-	}
-
-	std::int32_t BlockEncoder::GetBitness() const
-	{
-		return bitness;
-	}
-
-	bool BlockEncoder::GetFixBranches() const
-	{
-		return (options & BlockEncoderOptions::DontFixBranches) == 0;
-	}
-
-	BlockEncoder::NullCodeWriter* BlockEncoder::NullCodeWriter::Instance = new NullCodeWriter();
-
-	BlockEncoder::NullCodeWriter::NullCodeWriter()
-	{
-	}
-
-	void BlockEncoder::NullCodeWriter::WriteByte(std::uint8_t value)
-	{
-	}
-
 	BlockEncoder::BlockEncoder(std::int32_t bitness, const std::vector<InstructionBlock>& instrBlocks, BlockEncoderOptions options) : nullEncoder(Encoder::Create(bitness, NullCodeWriter::Instance))
 	{
 		if (bitness != 16 && bitness != 32 && bitness != 64)

@@ -983,9 +983,6 @@
     <ClCompile Include="Intel\IntelFormatter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\ISymbolResolver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\MandatoryPrefix.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

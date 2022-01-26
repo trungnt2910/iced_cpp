@@ -496,7 +496,6 @@
     <ClCompile Include="Intel\IntelFormatterInternal\Registers.cpp" />
     <ClCompile Include="Intel\IntelFormatterInternal\SizeOverride.g.cpp" />
     <ClCompile Include="Intel\Internal\DataReader.cpp" />
-    <ClCompile Include="Intel\ISymbolResolver.cpp" />
     <ClCompile Include="Intel\MandatoryPrefix.g.cpp" />
     <ClCompile Include="Intel\MandatoryPrefixByte.g.cpp" />
     <ClCompile Include="Intel\MasmFormatter.cpp" />
