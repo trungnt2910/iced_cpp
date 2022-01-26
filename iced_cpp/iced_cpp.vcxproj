@@ -456,7 +456,6 @@
     <ClCompile Include="Intel\FastFormatterOptions.cpp" />
     <ClCompile Include="Intel\FastStringOutput.cpp" />
     <ClCompile Include="Intel\FlowControl.g.cpp" />
-    <ClCompile Include="Intel\Formatter.cpp" />
     <ClCompile Include="Intel\FormatterConstants.cpp" />
     <ClCompile Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.cpp" />
     <ClCompile Include="Intel\FormatterInternal\MnemonicCC.cpp" />
@@ -483,7 +482,6 @@
     <ClCompile Include="Intel\InstructionInfoFactory.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\CpuidFeatureInternal.g.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\Iced.Intel.InstructionInfoInternal.CpuidFeatureInternalData.cpp" />
-    <ClCompile Include="Intel\InstructionInfoInternal\InfoHandlerFlags.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\RflagsInfoConstants.g.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\SimpleList.cpp" />
     <ClCompile Include="Intel\IntelFormatter.cpp" />

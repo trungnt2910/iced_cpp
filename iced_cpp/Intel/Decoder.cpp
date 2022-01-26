@@ -43,17 +43,6 @@ using namespace Iced::Intel::DecoderInternal;
 
 namespace Iced::Intel
 {
-
-	EncodingKind Decoder::State::GetEncoding() const
-	{
-		return static_cast<EncodingKind>((static_cast<std::uint32_t>(flags) >> static_cast<std::int32_t>(StateFlags::EncodingShift)) & static_cast<std::uint32_t>(StateFlags::EncodingMask));
-	}
-
-	std::int32_t Decoder::State::GetSss() const
-	{
-		return (static_cast<std::int32_t>(flags) >> static_cast<std::int32_t>(StateFlags::MvexSssShift)) & static_cast<std::int32_t>(StateFlags::MvexSssMask);
-	}
-
 	std::uint64_t Decoder::GetIP() const
 	{
 		return instructionPointer;
@@ -99,7 +88,6 @@ namespace Iced::Intel
 		instructionPointer = ip;
 		this->options = options;
 		invalidCheckMask = (options & DecoderOptions::NoInvalidCheck) == 0 ? std::numeric_limits<std::uint32_t>::max() : 0;
-		memRegs16 = s_memRegs16;
 		Bitness = bitness;
 		if (bitness == 64)
 		{
@@ -820,26 +808,12 @@ namespace Iced::Intel
 		}
 	}
 
-	Decoder::RegInfo2::RegInfo2(Register baseReg, Register indexReg)
-	{
-		this->baseReg = baseReg;
-		this->indexReg = indexReg;
-	}
-
-	void Decoder::RegInfo2::Deconstruct(Register& baseReg, Register& indexReg)
-	{
-		baseReg = this->baseReg;
-		indexReg = this->indexReg;
-	}
-
-	std::vector<Decoder::RegInfo2> Decoder::s_memRegs16 = { RegInfo2(Register::BX, Register::SI), RegInfo2(Register::BX, Register::DI), RegInfo2(Register::BP, Register::SI), RegInfo2(Register::BP, Register::DI), RegInfo2(Register::SI, Register::None), RegInfo2(Register::DI, Register::None), RegInfo2(Register::BP, Register::None), RegInfo2(Register::BX, Register::None) };
-
 	void Decoder::ReadOpMem16(Instruction& instruction, TupleType tupleType)
 	{
 		assert(state.addressSize == OpSize::Size16);
 		//C# TO C++ CONVERTER NOTE: The following 'decomposition declaration' requires C++17:
 		//ORIGINAL LINE: var(baseReg, indexReg) = memRegs16[(int)state.rm];
-		auto [baseReg, indexReg] = memRegs16[static_cast<std::int32_t>(state.rm)];
+		auto [baseReg, indexReg] = s_memRegs16[static_cast<std::int32_t>(state.rm)];
 		switch (static_cast<std::int32_t>(state.mod))
 		{
 		case 0:

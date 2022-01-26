@@ -800,9 +800,6 @@
     <ClCompile Include="Intel\InstructionInfoInternal\Iced.Intel.InstructionInfoInternal.CpuidFeatureInternalData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\InstructionInfoInternal\InfoHandlerFlags.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\InstructionInfoInternal\RflagsInfoConstants.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -933,9 +930,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\FlowControl.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\Formatter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\FormatterConstants.cpp">
