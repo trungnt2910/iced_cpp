@@ -1,6 +1,5 @@
 // C# helper headers
 
-#include <csharp/enum.h>
 
 
 
@@ -25,6 +24,7 @@
 #include "../FormatterOptions.h"
 #include "../CodeSize.g.h"
 #include "../Code.g.h"
+#include "../Internal/Enum.h"
 #include <string>
 #include <vector>
 #include <cassert>
@@ -72,11 +72,11 @@ namespace Iced::Intel::MasmFormatterInternal
 		DeclareQword
 	};
 
-	DEFINE_COMP(InstrOpKind)
-		DEFINE_ARITH(InstrOpKind)
+	ICED_DEFINE_COMP(InstrOpKind)
+	ICED_DEFINE_ARITH(InstrOpKind)
 
-		// GENERATOR-END: InstrOpKind
-		class InstrOpInfo
+	// GENERATOR-END: InstrOpKind
+	class InstrOpInfo
 	{
 	public:
 		static constexpr std::int32_t TEST_RegisterBits = IcedConstants::RegisterBits;

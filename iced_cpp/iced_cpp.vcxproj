@@ -187,7 +187,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="csharp\enum.h" />
+    <ClInclude Include="Intel\FormatterInternal\FormatterUtils.All.h" />
+    <ClInclude Include="Intel\Internal\Enum.h" />
     <ClInclude Include="Intel\Assembler\Assembler.Functions.g.h" />
     <ClInclude Include="Intel\Assembler\AssemblerMemoryOperandFactory.RegisterFunctions.g.h" />
     <ClInclude Include="Intel\Assembler\AssemblerRegister.defs.g.h" />
@@ -284,9 +285,8 @@
     <ClInclude Include="Intel\Formatter.h" />
     <ClInclude Include="Intel\FormatterConstants.h" />
     <ClInclude Include="Intel\FormatterInternal\FormatterString.h" />
-    <ClInclude Include="Intel\FormatterInternal\FormatterUtils.h" />
     <ClInclude Include="Intel\FormatterInternal\FormatterStringsTable.h" />
-    <ClInclude Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.h" />
+    <ClInclude Include="Intel\FormatterInternal\FormatterUtils.h" />
     <ClInclude Include="Intel\FormatterInternal\MnemonicCC.h" />
     <ClInclude Include="Intel\FormatterInternal\PseudoOpsKind.g.h" />
     <ClInclude Include="Intel\FormatterInternal\RegistersTable.h" />
@@ -410,7 +410,6 @@
     <ClCompile Include="Intel\BlockEncoderInternal\XbeginInstr.cpp" />
     <ClCompile Include="Intel\ByteArrayCodeReader.cpp" />
     <ClCompile Include="Intel\Code.g.cpp" />
-    <ClCompile Include="Intel\CodeExtensions.cpp" />
     <ClCompile Include="Intel\CodeReader.cpp" />
     <ClCompile Include="Intel\CodeSize.g.cpp" />
     <ClCompile Include="Intel\CodeWriter.cpp" />
@@ -457,7 +456,6 @@
     <ClCompile Include="Intel\FastStringOutput.cpp" />
     <ClCompile Include="Intel\FlowControl.g.cpp" />
     <ClCompile Include="Intel\FormatterConstants.cpp" />
-    <ClCompile Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.cpp" />
     <ClCompile Include="Intel\FormatterInternal\MnemonicCC.cpp" />
     <ClCompile Include="Intel\FormatterInternal\PseudoOpsKind.g.cpp" />
     <ClCompile Include="Intel\FormatterTextKind.g.cpp" />
@@ -480,7 +478,6 @@
     <ClCompile Include="Intel\Instruction.Info.cpp" />
     <ClCompile Include="Intel\Instruction.VA.cpp" />
     <ClCompile Include="Intel\InstructionInfoFactory.cpp" />
-    <ClCompile Include="Intel\InstructionInfoInternal\CpuidFeatureInternal.g.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\Iced.Intel.InstructionInfoInternal.CpuidFeatureInternalData.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\RflagsInfoConstants.g.cpp" />
     <ClCompile Include="Intel\InstructionInfoInternal\SimpleList.cpp" />

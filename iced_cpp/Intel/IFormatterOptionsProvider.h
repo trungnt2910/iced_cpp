@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
 
-#include <csharp/enum.h>
 
 #pragma once
 
 #include "Iced.Intel.Instruction.h"
 #include "MemorySizeOptions.g.h"
 #include "FormatterOptions.h"
+#include "Internal/Enum.h"
 #include <string>
 #include <limits>
 
@@ -48,9 +48,9 @@ namespace Iced::Intel
 			MemorySizeShift = 30,
 			MemorySizeMask = 3U << static_cast<std::int32_t>(MemorySizeShift)
 		};
-		DEFINE_FLAGS_FRIEND(Flags)
-		DEFINE_COMP_FRIEND(Flags)
-		DEFINE_ARITH_FRIEND(Flags)
+		ICED_DEFINE_FLAGS_FRIEND(Flags)
+		ICED_DEFINE_COMP_FRIEND(Flags)
+		ICED_DEFINE_ARITH_FRIEND(Flags)
 
 		/// <summary>
 		/// Show branch size (eg. <c>SHORT</c>, <c>NEAR PTR</c>)

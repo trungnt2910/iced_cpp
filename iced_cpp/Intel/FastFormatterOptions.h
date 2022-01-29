@@ -1,24 +1,10 @@
-// C# helper headers
-
-#include <csharp/enum.h>
-
-
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
 
 #pragma once
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
+#include "Internal/Enum.h"
+
 namespace Iced::Intel
 {
 	/// <summary>
@@ -40,9 +26,9 @@ namespace Iced::Intel
 			UseHexPrefix = 0x00000080
 		};
 
-		DEFINE_FLAGS_FRIEND(Flags1)
-		DEFINE_COMP_FRIEND(Flags1)
-			DEFINE_ARITH_FRIEND(Flags1)
+		ICED_DEFINE_FLAGS_FRIEND(Flags1)
+		ICED_DEFINE_COMP_FRIEND(Flags1)
+		ICED_DEFINE_ARITH_FRIEND(Flags1)
 	private:
 		Flags1 flags1 = static_cast<Flags1>(0);
 	public:

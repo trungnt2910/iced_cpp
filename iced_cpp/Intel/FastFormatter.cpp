@@ -1,6 +1,5 @@
 // C# helper headers
 
-#include <csharp/enum.h>
 
 
 
@@ -24,7 +23,7 @@
 #include "FormatterConstants.h"
 #include "CodeSize.g.h"
 #include "Static.h"
-#include "FormatterInternal/Iced.Intel.FormatterInternal.FormatterUtils.h"
+#include "FormatterInternal/FormatterUtils.h"
 #include "Iced.Intel.InstructionInfoExtensions.h"
 #include "Iced.Intel.IcedConstants.h"
 #include "InstructionUtils.h"

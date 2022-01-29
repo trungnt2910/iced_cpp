@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 
-#include <csharp/enum.h>
 
 #include "EncoderInternal/Enums.h"
 #include "EncoderInternal/OpCodeOperandKinds.g.h"
@@ -29,6 +28,7 @@
 #include "InstructionMemorySizes.g.h"
 #include "MandatoryPrefixByte.g.h"
 #include "CodeSize.g.h"
+#include "Internal/Enum.h"
 
 namespace Iced::Intel::EncoderInternal
 {
@@ -60,9 +60,9 @@ namespace Iced::Intel
 			CPL2 = 0x00000100,
 			CPL3 = 0x00000200
 		};
-		DEFINE_FLAGS_FRIEND(Flags)
-		DEFINE_COMP_FRIEND(Flags)
-		DEFINE_ARITH_FRIEND(Flags)
+		ICED_DEFINE_FLAGS_FRIEND(Flags)
+		ICED_DEFINE_COMP_FRIEND(Flags)
+		ICED_DEFINE_ARITH_FRIEND(Flags)
 		/* readonly */
 	private:
 		union
@@ -130,6 +130,9 @@ namespace Iced::Intel
 
 		constexpr ~OpCodeInfo();
 
+		constexpr OpCodeInfo& operator=(const OpCodeInfo& other);
+
+		constexpr OpCodeInfo& operator=(OpCodeInfo&& other) noexcept;
 	private:
 		constexpr OpCodeInfo(::Iced::Intel::Code code, EncoderInternal::EncFlags1 encFlags1, EncoderInternal::EncFlags2 encFlags2, EncoderInternal::EncFlags3 encFlags3, EncoderInternal::OpCodeInfoFlags1 opcFlags1, EncoderInternal::OpCodeInfoFlags2 opcFlags2, bool constructStrings);
 	public:
@@ -844,16 +847,8 @@ namespace Iced::Intel
 			toOpCodeString.~basic_string();
 			toInstructionString.~basic_string();
 
-			auto toOpCodeLength = Internal::StringHelpers::Length(other.toOpCodeCharPtr);
-			auto toInstructionLength = Internal::StringHelpers::Length(other.toInstructionCharPtr);
-
-			auto toOpCodeTemp = new char[toOpCodeLength + 1];
-			std::copy(other.toOpCodeCharPtr, other.toOpCodeCharPtr + toOpCodeLength + 1, toOpCodeTemp);
-			toOpCodeCharPtr = toOpCodeTemp;
-
-			auto toInstructionTemp = new char[toInstructionLength + 1];
-			std::copy(other.toInstructionCharPtr, other.toInstructionCharPtr + toInstructionLength + 1, toInstructionTemp);
-			toInstructionCharPtr = toInstructionTemp;
+			toOpCodeCharPtr = other.toOpCodeCharPtr;
+			toInstructionCharPtr = other.toInstructionCharPtr;
 		}
 		else
 		{
@@ -936,6 +931,108 @@ namespace Iced::Intel
 			toOpCodeString.~basic_string();
 			toInstructionString.~basic_string();
 		}
+	}
+
+	constexpr OpCodeInfo& OpCodeInfo::operator=(const OpCodeInfo& other)
+	{
+		if (this == &other)
+		{
+			return *this;
+		}
+
+		if (useCharPtr)
+		{
+			toOpCodeString.~basic_string();
+			toInstructionString.~basic_string();
+		}
+
+		useCharPtr = other.useCharPtr;
+
+		if (useCharPtr)
+		{
+			toOpCodeCharPtr = other.toOpCodeCharPtr;
+			toInstructionCharPtr = other.toInstructionCharPtr;
+		}
+		else
+		{
+			toOpCodeString = other.toOpCodeString;
+			toInstructionString = other.toInstructionString;
+		}
+
+		encFlags2 = other.encFlags2;
+		encFlags3 = other.encFlags3;
+		opcFlags1 = other.opcFlags1;
+		opcFlags2 = other.opcFlags2;
+		code = other.code;
+		encoding = other.encoding;
+		operandSize = other.operandSize;
+		addressSize = other.addressSize;
+		l = other.l;
+		tupleType = other.tupleType;
+		table = other.table;
+		mandatoryPrefix = other.mandatoryPrefix;
+		groupIndex = other.groupIndex;
+		rmGroupIndex = other.rmGroupIndex;
+		op0Kind = other.op0Kind;
+		op1Kind = other.op1Kind;
+		op2Kind = other.op2Kind;
+		op3Kind = other.op3Kind;
+		op4Kind = other.op4Kind;
+		flags = other.flags;
+		lkind = other.lkind;
+	
+		return *this;
+	}
+
+	constexpr OpCodeInfo& OpCodeInfo::operator=(OpCodeInfo&& other) noexcept
+	{
+		if (this == &other)
+		{
+			return *this;
+		}
+
+		if (useCharPtr)
+		{
+			toOpCodeString.~basic_string();
+			toInstructionString.~basic_string();
+		}
+
+		useCharPtr = other.useCharPtr;
+
+		if (useCharPtr)
+		{
+			toOpCodeCharPtr = other.toOpCodeCharPtr;
+			toInstructionCharPtr = other.toInstructionCharPtr;
+		}
+		else
+		{
+			toOpCodeString = std::move(other.toOpCodeString);
+			toInstructionString = std::move(other.toInstructionString);
+		}
+
+		encFlags2 = other.encFlags2;
+		encFlags3 = other.encFlags3;
+		opcFlags1 = other.opcFlags1;
+		opcFlags2 = other.opcFlags2;
+		code = other.code;
+		encoding = other.encoding;
+		operandSize = other.operandSize;
+		addressSize = other.addressSize;
+		l = other.l;
+		tupleType = other.tupleType;
+		table = other.table;
+		mandatoryPrefix = other.mandatoryPrefix;
+		groupIndex = other.groupIndex;
+		rmGroupIndex = other.rmGroupIndex;
+		op0Kind = other.op0Kind;
+		op1Kind = other.op1Kind;
+		op2Kind = other.op2Kind;
+		op3Kind = other.op3Kind;
+		op4Kind = other.op4Kind;
+		flags = other.flags;
+		lkind = other.lkind;
+
+		return *this;
 	}
 }
 

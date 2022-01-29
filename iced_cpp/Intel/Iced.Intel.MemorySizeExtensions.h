@@ -1,6 +1,5 @@
 ﻿// C# helper headers
 
-#include <csharp/enum.h>
 
 
 

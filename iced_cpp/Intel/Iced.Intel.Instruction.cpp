@@ -1,6 +1,5 @@
 // C# helper headers
 
-#include <csharp/enum.h>
 
 
 
@@ -2339,25 +2338,6 @@ namespace Iced::Intel
 		return code == static_cast<std::uint16_t>(Code::INVALID);
 	}
 
-	Iced::Intel::Code Instruction::GetCode() const
-	{
-		return static_cast<Iced::Intel::Code>(code);
-	}
-
-	void Instruction::SetCode(Iced::Intel::Code value)
-	{
-		if (static_cast<std::uint32_t>(value) >= static_cast<std::uint32_t>(IcedConstants::CodeEnumCount))
-		{
-			ThrowHelper::ThrowArgumentOutOfRangeException_value();
-		}
-		code = static_cast<std::uint16_t>(value);
-	}
-
-	void Instruction::InternalSetCodeNoCheck(Iced::Intel::Code code)
-	{
-		this->code = static_cast<std::uint16_t>(code);
-	}
-
 	Iced::Intel::Mnemonic Instruction::GetMnemonic() const
 	{
 		return Iced::Intel::MnemonicUtils::Mnemonic(GetCode());
@@ -3149,21 +3129,6 @@ namespace Iced::Intel
 	void Instruction::SetInternalFarBranchSelector(std::uint32_t value)
 	{
 		memDispl = value;
-	}
-
-	Register Instruction::GetMemoryBase() const
-	{
-		return static_cast<Register>(memBaseReg);
-	}
-
-	void Instruction::SetMemoryBase(Register value)
-	{
-		memBaseReg = static_cast<std::uint8_t>(value);
-	}
-
-	void Instruction::SetInternalMemoryBase(Register value)
-	{
-		memBaseReg = static_cast<std::uint8_t>(value);
 	}
 
 	Register Instruction::GetMemoryIndex() const

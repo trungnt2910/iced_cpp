@@ -5,13 +5,13 @@
 
 #include "FormatterOptions.h"
 #include "IFormatterOptionsProvider.h"
+#include "Internal/Enum.h"
 #include <array>
 #include <cstdint>
 #include <string>
 #include <string_view>
 #include <vector>
 
-#include <csharp/enum.h>
 
 namespace Iced::Intel
 {
@@ -22,9 +22,9 @@ namespace Iced::Intel
 		LeadingZeros = 0x00000002,
 		SmallHexNumbersInDecimal = 0x00000004
 	};
-	DEFINE_FLAGS(NumberFormatterFlags)
-	DEFINE_COMP(NumberFormatterFlags)
-	DEFINE_ARITH(NumberFormatterFlags)
+	ICED_DEFINE_FLAGS(NumberFormatterFlags)
+	ICED_DEFINE_COMP(NumberFormatterFlags)
+	ICED_DEFINE_ARITH(NumberFormatterFlags)
 
 	class NumberFormatter
 	{

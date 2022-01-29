@@ -1,6 +1,5 @@
 // C# helper headers
 
-#include <csharp/enum.h>
 
 
 
@@ -22,6 +21,7 @@
 #include "../BlockEncoder.h"
 #include "../ConstantOffsets.h"
 #include "../Encoder.h"
+#include "../Internal/Enum.h"
 #include <string>
 #include <limits>
 #include <cassert>
@@ -47,8 +47,8 @@ namespace Iced::Intel::BlockEncoderInternal
 			Uninitialized
 		};
 
-		DEFINE_COMP_FRIEND(InstrKind)
-			DEFINE_ARITH_FRIEND(InstrKind)
+		ICED_DEFINE_COMP_FRIEND(InstrKind)
+		ICED_DEFINE_ARITH_FRIEND(InstrKind)
 		/* readonly */
 	private:
 		std::int32_t bitness = 0;

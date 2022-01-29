@@ -1,17 +1,5 @@
-// C# helper headers
-
-#include <csharp/enum.h>
-
-
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
 
 #pragma once
 
@@ -22,14 +10,11 @@
 #include "Iced.Intel.Instruction.h"
 #include "OpAccess.g.h"
 #include "MemorySize.g.h"
+#include "Internal/Enum.h"
 #include <vector>
 #include <limits>
 #include <cassert>
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
 using namespace Iced::Intel::InstructionInfoInternal;
 namespace Iced::Intel
 {
@@ -54,9 +39,9 @@ namespace Iced::Intel
 		/// </summary>
 		NoRegisterUsage = 0x00000002
 	};
-	DEFINE_FLAGS(InstructionInfoOptions)
-		DEFINE_COMP(InstructionInfoOptions)
-		DEFINE_ARITH(InstructionInfoOptions)
+	ICED_DEFINE_FLAGS(InstructionInfoOptions)
+	ICED_DEFINE_COMP(InstructionInfoOptions)
+	ICED_DEFINE_ARITH(InstructionInfoOptions)
 
 	/// <summary>
 	/// Creates <see cref="InstructionInfo"/>s.
@@ -79,14 +64,14 @@ namespace Iced::Intel
 			Is64Bit = 0x00000004,
 			ZeroExtVecRegs = 0x00000008
 		};
-		DEFINE_FLAGS_FRIEND(Flags)
-			DEFINE_COMP_FRIEND(Flags)
-			DEFINE_ARITH_FRIEND(Flags)
+		ICED_DEFINE_FLAGS_FRIEND(Flags)
+		ICED_DEFINE_COMP_FRIEND(Flags)
+		ICED_DEFINE_ARITH_FRIEND(Flags)
 
-			/// <summary>
-			/// Constructor
-			/// </summary>
 	public:
+		/// <summary>
+		/// Constructor
+		/// </summary>
 		InstructionInfoFactory();
 		/// <summary>
 		/// Creates an <see cref="InstructionInfo"/>. The return value is only valid until this instance creates a new <see cref="InstructionInfo"/> value.

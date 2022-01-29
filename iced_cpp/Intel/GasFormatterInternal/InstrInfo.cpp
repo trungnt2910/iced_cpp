@@ -1,6 +1,5 @@
 // C# helper headers
 
-#include <csharp/enum.h>
 
 
 
@@ -20,7 +19,7 @@
 #include "../FormatterInternal/MnemonicCC.h"
 #include "Registers.h"
 #include "../RoundingControl.g.h"
-#include "../FormatterInternal/Iced.Intel.FormatterInternal.FormatterUtils.h"
+#include "../FormatterInternal/FormatterUtils.h"
 
 using namespace Iced::Intel::FormatterInternal;
 

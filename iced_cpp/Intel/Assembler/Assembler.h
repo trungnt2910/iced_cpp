@@ -16,13 +16,13 @@
 #include "AssemblerMemoryOperand.h"
 #include "../Code.g.h"
 #include "../Internal/Math.h"
+#include "../Internal/Enum.h"
 #include <bit>
 #include <string>
 #include <vector>
 #include <cmath>
 #include <limits>
 #include <stdexcept>
-#include <csharp/enum.h>
 
 namespace Iced::Intel
 {
@@ -42,9 +42,9 @@ namespace Iced::Intel
 			PreferVex = 0x10,
 			PreferEvex = 0x20
 		};
-		DEFINE_FLAGS_FRIEND(PrefixFlags)
-			DEFINE_COMP_FRIEND(PrefixFlags)
-			DEFINE_ARITH_FRIEND(PrefixFlags)
+		ICED_DEFINE_FLAGS_FRIEND(PrefixFlags)
+		ICED_DEFINE_COMP_FRIEND(PrefixFlags)
+		ICED_DEFINE_ARITH_FRIEND(PrefixFlags)
 	private:
 		std::int32_t Bitness = 0;
 		bool PreferVex = false;

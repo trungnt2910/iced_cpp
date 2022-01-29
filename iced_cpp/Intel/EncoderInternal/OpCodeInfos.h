@@ -29,7 +29,7 @@ namespace Iced::Intel::EncoderInternal
 
 			for (std::int32_t i = 0; i < infos.size(); i++)
 			{
-				std::construct_at<OpCodeInfo>(&infos[i], static_cast<Code>(i), static_cast<EncFlags1>(encFlags1[i]), static_cast<EncFlags2>(encFlags2[i]), static_cast<EncFlags3>(encFlags3[i]), static_cast<OpCodeInfoFlags1>(opcFlags1[i]), static_cast<OpCodeInfoFlags2>(opcFlags2[i]));
+				infos[i] = OpCodeInfo((Code)i, (EncFlags1)encFlags1[i], (EncFlags2)encFlags2[i], (EncFlags3)encFlags3[i], (OpCodeInfoFlags1)opcFlags1[i], (OpCodeInfoFlags2)opcFlags2[i]);
 				if (pos != nullptr)
 				{
 					std::size_t tempLength = infos[i].toOpCodeString.length();

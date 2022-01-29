@@ -5,10 +5,10 @@
 #pragma once
 
 // C# helper headers
-#include <csharp/enum.h>
 
 #include "../ToString.h"
 #include "../RoundingControl.g.h"
+#include "../Internal/Enum.h"
 
 namespace Iced::Intel
 {
@@ -86,8 +86,8 @@ namespace Iced::Intel
 		/// </summary>
 		RegisterMask = 0x7 << 6
 	};
-	DEFINE_FLAGS(AssemblerOperandFlags)
-	DEFINE_COMP(AssemblerOperandFlags)
-	DEFINE_ARITH(AssemblerOperandFlags)
+	ICED_DEFINE_FLAGS(AssemblerOperandFlags)
+	ICED_DEFINE_COMP(AssemblerOperandFlags)
+	ICED_DEFINE_ARITH(AssemblerOperandFlags)
 }
 #endif

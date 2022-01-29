@@ -1,6 +1,5 @@
 // C# helper headers
 
-#include <csharp/enum.h>
 
 
 
@@ -79,9 +78,6 @@ namespace Iced::Intel::GasFormatterInternal
 		DeclareDword,
 		DeclareQword
 	};
-
-	DEFINE_COMP(InstrOpKind)
-		DEFINE_ARITH(InstrOpKind)
 
 		// GENERATOR-END: InstrOpKind
 		class InstrOpInfo

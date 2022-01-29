@@ -1,6 +1,5 @@
 // C# helper headers
 
-#include <csharp/enum.h>
 
 
 
@@ -19,7 +18,7 @@
 #include "GasFormatterInternal/MemorySizes.h"
 #include "ThrowHelper.h"
 #include "FormatterTextKind.g.h"
-#include "FormatterInternal/Iced.Intel.FormatterInternal.FormatterUtils.h"
+#include "FormatterInternal/FormatterUtils.h"
 #include "GasFormatterInternal/InstrOpInfoFlags.g.h"
 #include "GasFormatterInternal/SizeOverride.g.h"
 #include "CodeSize.g.h"

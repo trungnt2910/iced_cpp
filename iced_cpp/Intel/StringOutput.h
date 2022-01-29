@@ -27,7 +27,7 @@ namespace Iced::Intel
 		/// <param name="text">Text, can be an empty string</param>
 		/// <param name="kind">Text kind. This value can be identical to the previous value passed to this method. It's
 		/// the responsibility of the implementer to merge any such strings if needed.</param>
-		constexpr void Write(const std::string& text, FormatterTextKind kind) override
+		constexpr void Write(const char* text, FormatterTextKind kind) override
 		{
 			sb.append(text);
 		}

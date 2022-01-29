@@ -192,13 +192,10 @@
     <ClInclude Include="Intel\FormatterInternal\FormatterString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\FormatterInternal\FormatterUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Intel\FormatterInternal\FormatterStringsTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.h">
+    <ClInclude Include="Intel\FormatterInternal\FormatterUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\FormatterInternal\MnemonicCC.h">
@@ -585,7 +582,7 @@
     <ClInclude Include="NRT_Helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="csharp\enum.h">
+    <ClInclude Include="Intel\Internal\Enum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\EncoderInternal\InstructionFormatter.h">
@@ -634,6 +631,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\EncoderInternal\EncoderOpCodeHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\FormatterInternal\FormatterUtils.All.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -764,9 +764,6 @@
     <ClCompile Include="Intel\FastFormatterInternal\Registers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\FormatterInternal\Iced.Intel.FormatterInternal.FormatterUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\FormatterInternal\MnemonicCC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -792,9 +789,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\GasFormatterInternal\SizeOverride.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\InstructionInfoInternal\CpuidFeatureInternal.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\InstructionInfoInternal\Iced.Intel.InstructionInfoInternal.CpuidFeatureInternalData.cpp">
@@ -885,9 +879,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\Code.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\CodeExtensions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\CodeReader.cpp">

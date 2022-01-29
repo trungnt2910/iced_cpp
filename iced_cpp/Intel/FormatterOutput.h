@@ -143,13 +143,31 @@ namespace Iced::Intel
 	/// </summary>
 	class FormatterOutput
 	{
+	public:
 		/// <summary>
 		/// Writes text and text kind
 		/// </summary>
 		/// <param name="text">Text</param>
 		/// <param name="kind">Text kind</param>
-	public:
-		constexpr virtual void Write(const std::string& text, FormatterTextKind kind) = 0;
+		constexpr virtual void Write(const char* text, FormatterTextKind kind) = 0;
+		/// <summary>
+		/// Writes text and text kind
+		/// </summary>
+		/// <param name="text">Text</param>
+		/// <param name="kind">Text kind</param>
+		constexpr virtual void Write(const std::string_view& text, FormatterTextKind kind)
+		{
+			return Write(text.data(), kind);
+		}
+		/// <summary>
+		/// Writes text and text kind
+		/// </summary>
+		/// <param name="text">Text</param>
+		/// <param name="kind">Text kind</param>
+		constexpr virtual void Write(const std::string& text, FormatterTextKind kind)
+		{
+			return Write(text.data(), kind);
+		}
 		/// <summary>
 		/// Writes a prefix
 		/// </summary>
