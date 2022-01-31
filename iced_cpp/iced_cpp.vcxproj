@@ -188,6 +188,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Intel\FormatterInternal\FormatterUtils.All.h" />
+    <ClInclude Include="Intel\IcedConstants.g.h" />
     <ClInclude Include="Intel\Internal\Enum.h" />
     <ClInclude Include="Intel\Assembler\Assembler.Functions.g.h" />
     <ClInclude Include="Intel\Assembler\AssemblerMemoryOperandFactory.RegisterFunctions.g.h" />
@@ -302,10 +303,10 @@
     <ClInclude Include="Intel\GasFormatterInternal\Registers.h" />
     <ClInclude Include="Intel\GasFormatterInternal\SizeOverride.g.h" />
     <ClInclude Include="Intel\HexUtils.h" />
-    <ClInclude Include="Intel\Iced.Intel.IcedConstants.h" />
+    <ClInclude Include="Intel\IcedConstants.h" />
     <ClInclude Include="Intel\Iced.Intel.Instruction.h" />
-    <ClInclude Include="Intel\Iced.Intel.InstructionInfoExtensions.h" />
-    <ClInclude Include="Intel\Iced.Intel.MemorySizeExtensions.h" />
+    <ClInclude Include="Intel\InstructionInfoExtensions.h" />
+    <ClInclude Include="Intel\MemorySizeExtensions.h" />
     <ClInclude Include="Intel\Internal\TypeHelpers.h" />
     <ClInclude Include="Intel\RegisterExtensions.defs.h" />
     <ClInclude Include="Intel\IcedFeatures.h" />
@@ -347,7 +348,7 @@
     <ClInclude Include="Intel\MasmFormatterInternal\Registers.h" />
     <ClInclude Include="Intel\MemoryOperand.h" />
     <ClInclude Include="Intel\MemorySize.g.h" />
-    <ClInclude Include="Intel\MemorySizeExtensions.h" />
+    <ClInclude Include="Intel\MemorySizeInfo.h" />
     <ClInclude Include="Intel\MemorySizeOptions.g.h" />
     <ClInclude Include="Intel\Mnemonic.g.h" />
     <ClInclude Include="Intel\MnemonicUtils.h" />
@@ -467,10 +468,8 @@
     <ClCompile Include="Intel\GasFormatterInternal\MemorySizes.cpp" />
     <ClCompile Include="Intel\GasFormatterInternal\Registers.cpp" />
     <ClCompile Include="Intel\GasFormatterInternal\SizeOverride.g.cpp" />
-    <ClCompile Include="Intel\Iced.Intel.IcedConstants.cpp" />
     <ClCompile Include="Intel\Iced.Intel.Instruction.cpp" />
-    <ClCompile Include="Intel\Iced.Intel.InstructionInfoExtensions.cpp" />
-    <ClCompile Include="Intel\Iced.Intel.MemorySizeExtensions.cpp" />
+    <ClCompile Include="Intel\InstructionInfoExtensions.cpp" />
     <ClCompile Include="Intel\RegisterExtensions.h" />
     <ClCompile Include="Intel\IcedFeatures.cpp" />
     <ClCompile Include="Intel\IFormatterOptionsProvider.cpp" />
@@ -501,7 +500,6 @@
     <ClCompile Include="Intel\MasmFormatterInternal\MemorySizes.cpp" />
     <ClCompile Include="Intel\MasmFormatterInternal\Registers.cpp" />
     <ClCompile Include="Intel\MemorySize.g.cpp" />
-    <ClCompile Include="Intel\MemorySizeExtensions.cpp" />
     <ClCompile Include="Intel\MemorySizeOptions.g.cpp" />
     <ClCompile Include="Intel\Mnemonic.g.cpp" />
     <ClCompile Include="Intel\MnemonicUtilsData.g.cpp" />

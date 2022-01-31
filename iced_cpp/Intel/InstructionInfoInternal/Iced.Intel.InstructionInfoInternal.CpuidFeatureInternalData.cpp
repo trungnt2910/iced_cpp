@@ -14,7 +14,7 @@
 
 #include "Iced.Intel.InstructionInfoInternal.CpuidFeatureInternalData.h"
 #include "../Internal/DataReader.h"
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 
 using namespace Iced::Intel::Internal;
 

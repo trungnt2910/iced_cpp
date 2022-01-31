@@ -6,7 +6,7 @@
 #include "../InstructionMemorySizes.g.h"
 #include "../MvexInfo.h"
 #include "../MvexConvFn.g.h"
-#include "../Iced.Intel.MemorySizeExtensions.h"
+#include "../MemorySizeExtensions.h"
 #include "../MvexEHBit.g.h"
 #include "../OpCodeInfo.h"
 #include "../Internal/StringHelpers.h"

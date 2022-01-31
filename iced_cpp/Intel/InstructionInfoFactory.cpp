@@ -19,7 +19,7 @@
 #include "UsedMemory.h"
 #include "UsedRegister.h"
 #include "MvexRegMemConv.g.h"
-#include "Iced.Intel.IcedConstants.h"
+#include "IcedConstants.h"
 #include "InstructionInfoInternal/InstrInfoTable.g.h"
 #include "InstructionUtils.h"
 

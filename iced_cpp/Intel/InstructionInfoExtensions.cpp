@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-#include "Iced.Intel.InstructionInfoExtensions.h"
+#include "InstructionInfoExtensions.h"
 #include "InstructionInfoInternal/InstrInfoTable.g.h"
 #include "ThrowHelper.h"
 #include "InstructionInfoInternal/InfoHandlerFlags.h"

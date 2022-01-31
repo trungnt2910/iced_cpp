@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 
 // Code generated from Iced. Do not edit.
 // Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.

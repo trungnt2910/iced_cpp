@@ -15,7 +15,7 @@
 #include "Iced.Intel.FastFormatterInternal.FmtData.h"
 #include "../Internal/DataReader.h"
 #include "../FormatterInternal/FormatterStringsTable.h"
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 
 using namespace Iced::Intel::Internal;
 using namespace Iced::Intel::FormatterInternal;

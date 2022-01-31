@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "JccInstr.h"
-#include "../Iced.Intel.InstructionInfoExtensions.h"
+#include "../InstructionInfoExtensions.h"
 #include "../../NRT_Helpers.h"
 #include "../OpKind.g.h"
 

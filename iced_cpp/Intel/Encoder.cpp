@@ -18,9 +18,9 @@
 #include "EncoderInternal/OpCodeHandlers.h"
 #include "EncoderException.h"
 #include "CodeSize.g.h"
-#include "Iced.Intel.IcedConstants.h"
+#include "IcedConstants.h"
 #include "Static.h"
-#include "Iced.Intel.MemorySizeExtensions.h"
+#include "MemorySizeExtensions.h"
 #include "InstructionUtils.h"
 #include "RegisterExtensions.h"
 

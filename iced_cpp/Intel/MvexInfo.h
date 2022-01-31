@@ -9,7 +9,7 @@
 #include "MvexInfoFlags1.g.h"
 #include "MvexInfoFlags2.g.h"
 #include "MvexTupleTypeLut.g.h"
-#include "Iced.Intel.IcedConstants.h"
+#include "IcedConstants.h"
 #include <cassert>
 
 // Code generated from Iced. Do not edit.

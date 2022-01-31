@@ -27,7 +27,7 @@
 #include "../iced_cpp/Intel/ISymbolResolver.h"
 #include "../iced_cpp/Intel/GasFormatter.h"
 #include "../iced_cpp/Intel/InstructionInfoFactory.h"
-#include "../iced_cpp/Intel/Iced.Intel.MemorySizeExtensions.h"
+#include "../iced_cpp/Intel/MemorySizeExtensions.h"
 
 using namespace Iced::Intel::AssemblerRegisters;
 using namespace Iced::Intel;

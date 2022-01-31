@@ -11,7 +11,7 @@
 #include "Encoder.h"
 #include "BlockEncoderInternal/Instr.h"
 #include "BlockEncoderInternal/TargetInstr.h"
-#include "Iced.Intel.IcedConstants.h"
+#include "IcedConstants.h"
 #include <string>
 #include <unordered_map>
 #include <vector>

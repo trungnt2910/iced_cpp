@@ -8,7 +8,7 @@
 #include "OpAccess.g.h"
 #include <vector>
 
-#include "Iced.Intel.IcedConstants.h"
+#include "IcedConstants.h"
 #include "InstructionInfoInternal/InfoHandlerFlags.h"
 
 namespace Iced::Intel

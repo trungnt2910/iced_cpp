@@ -18,7 +18,7 @@
 #include "../EncodingKind.g.h"
 #include "../OpKind.g.h"
 #include "../TupleType.g.h"
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 
 namespace Iced::Intel::DecoderInternal
 {

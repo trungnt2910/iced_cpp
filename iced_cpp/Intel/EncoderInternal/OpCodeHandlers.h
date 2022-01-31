@@ -5,7 +5,7 @@
 
 #include "EncoderOpCodeHandler.h"
 #include "EncoderData.g.h"
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 #include "Enums.h"
 #include "../EncodingKind.g.h"
 #include "../Code.g.h"

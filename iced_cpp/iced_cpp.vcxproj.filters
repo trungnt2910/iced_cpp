@@ -402,16 +402,13 @@
     <ClInclude Include="Intel\HexUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Iced.Intel.IcedConstants.h">
+    <ClInclude Include="Intel\IcedConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\Iced.Intel.Instruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Iced.Intel.InstructionInfoExtensions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Intel\Iced.Intel.MemorySizeExtensions.h">
+    <ClInclude Include="Intel\MemorySizeExtensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\RegisterExtensions.defs.h">
@@ -471,7 +468,7 @@
     <ClInclude Include="Intel\MemorySize.g.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\MemorySizeExtensions.h">
+    <ClInclude Include="Intel\MemorySizeInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\MemorySizeOptions.g.h">
@@ -634,6 +631,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\FormatterInternal\FormatterUtils.All.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\IcedConstants.g.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\InstructionInfoExtensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -932,16 +935,10 @@
     <ClCompile Include="Intel\GasFormatter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\Iced.Intel.IcedConstants.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\Iced.Intel.Instruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\Iced.Intel.InstructionInfoExtensions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\Iced.Intel.MemorySizeExtensions.cpp">
+    <ClCompile Include="Intel\InstructionInfoExtensions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\RegisterExtensions.h">
@@ -978,9 +975,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\MemorySize.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\MemorySizeExtensions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\MemorySizeOptions.g.cpp">

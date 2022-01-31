@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "MemorySizes.h"
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 
 using namespace Iced::Intel::FormatterInternal;
 

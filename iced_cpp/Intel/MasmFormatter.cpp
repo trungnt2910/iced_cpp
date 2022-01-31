@@ -22,7 +22,7 @@
 #include "MemorySizeOptions.g.h"
 #include "FormatterInternal/MnemonicCC.h"
 #include "Code.g.h"
-#include "Iced.Intel.IcedConstants.h"
+#include "IcedConstants.h"
 #include "OpKind.g.h"
 #include "InstructionUtils.h"
 #include "RoundingControl.g.h"

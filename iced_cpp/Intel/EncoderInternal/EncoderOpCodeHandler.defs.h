@@ -9,7 +9,7 @@
 #include "OpHandlers.defs.h"
 #include "../Code.g.h"
 #include "../TupleType.g.h"
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 #include <array>
 #include <string>
 #include <vector>

@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "OpCodeInfo.h"
-#include "Iced.Intel.IcedConstants.h"
+#include "IcedConstants.h"
 #include "MandatoryPrefixByte.g.h"
 #include "InstructionOpCounts.g.h"
 #include "CodeSize.g.h"

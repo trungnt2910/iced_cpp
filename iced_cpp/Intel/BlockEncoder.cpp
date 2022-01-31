@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "BlockEncoder.h"
-#include "Iced.Intel.IcedConstants.h"
+#include "IcedConstants.h"
 
 #include "Iced.Intel.Instruction.h"
 

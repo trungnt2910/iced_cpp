@@ -7,7 +7,7 @@
 #include <array>
 
 #include "../Internal/DataReader.h"
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 
 namespace Iced::Intel::FormatterInternal
 {

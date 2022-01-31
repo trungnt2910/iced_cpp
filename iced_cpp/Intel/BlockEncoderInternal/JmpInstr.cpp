@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "JmpInstr.h"
-#include "../Iced.Intel.InstructionInfoExtensions.h"
+#include "../InstructionInfoExtensions.h"
 #include "../../NRT_Helpers.h"
 
 namespace Iced::Intel::BlockEncoderInternal

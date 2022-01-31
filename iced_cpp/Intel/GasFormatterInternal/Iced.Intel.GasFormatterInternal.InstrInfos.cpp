@@ -14,7 +14,7 @@
 
 #include "Iced.Intel.GasFormatterInternal.InstrInfos.h"
 #include "../Internal/DataReader.h"
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 #include "../FormatterInternal/FormatterStringsTable.h"
 #include "CtorKind.g.h"
 #include "InstrOpInfoFlags.g.h"

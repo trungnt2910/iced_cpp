@@ -2,7 +2,7 @@
 
 #include "RegisterExtensions.defs.h"
 #include "RegisterInfo.h"
-#include "Iced.Intel.IcedConstants.h"
+#include "IcedConstants.h"
 #include "ThrowHelper.h"
 
 #include <array>

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../Iced.Intel.IcedConstants.h"
+#include "../IcedConstants.h"
 #include "../Mnemonic.g.h"
 #include "../FormatterInternal/FormatterString.h"
 #include "InstrOpInfoFlags.g.h"
