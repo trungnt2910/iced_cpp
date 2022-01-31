@@ -109,7 +109,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <AdditionalOptions>/constexpr:steps100000000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/constexpr:steps1000000000 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
@@ -131,7 +131,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <AdditionalOptions>/constexpr:steps100000000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/constexpr:steps1000000000 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
@@ -153,7 +153,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <AdditionalOptions>/constexpr:steps100000000 /w34996 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/constexpr:steps1000000000 /w34996 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
@@ -175,7 +175,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
-      <AdditionalOptions>/constexpr:steps100000000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/constexpr:steps1000000000 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
@@ -187,6 +187,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_EVEX.g.h" />
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_Legacy.g.h" />
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_MVEX.g.h" />
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_VEX.g.h" />
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_XOP.g.h" />
     <ClInclude Include="Intel\FormatterInternal\FormatterUtils.All.h" />
     <ClInclude Include="Intel\Internal\Enum.h" />
     <ClInclude Include="Intel\Assembler\Assembler.Functions.g.h" />
@@ -218,6 +223,7 @@
     <ClInclude Include="Intel\BlockEncoderInternal\XbeginInstr.h" />
     <ClInclude Include="Intel\ByteArrayCodeReader.h" />
     <ClInclude Include="Intel\Internal\Math.h" />
+    <ClInclude Include="Intel\Internal\MemoryPool.h" />
     <ClInclude Include="Intel\Internal\StringHelpers.h" />
     <ClInclude Include="Intel\Code.g.h" />
     <ClInclude Include="Intel\CodeExtensions.h" />
@@ -232,7 +238,7 @@
     <ClInclude Include="Intel\DecoderInternal\EvexOpCodeHandlerKind.g.h" />
     <ClInclude Include="Intel\DecoderInternal\EvexOpCodeHandlerReader.h" />
     <ClInclude Include="Intel\DecoderInternal\HandlerFlags.g.h" />
-    <ClInclude Include="Intel\DecoderInternal\Iced.Intel.DecoderInternal.OpCodeHandlersTables_EVEX.h" />
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_EVEX.h" />
     <ClInclude Include="Intel\DecoderInternal\Iced.Intel.DecoderInternal.OpCodeHandlersTables_Legacy.h" />
     <ClInclude Include="Intel\DecoderInternal\Iced.Intel.DecoderInternal.OpCodeHandlersTables_MVEX.h" />
     <ClInclude Include="Intel\DecoderInternal\Iced.Intel.DecoderInternal.OpCodeHandlersTables_VEX.h" />
@@ -242,6 +248,7 @@
     <ClInclude Include="Intel\DecoderInternal\LegacyOpCodeHandlerReader.h" />
     <ClInclude Include="Intel\DecoderInternal\MvexOpCodeHandlerKind.g.h" />
     <ClInclude Include="Intel\DecoderInternal\MvexOpCodeHandlerReader.h" />
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlers.defs.h" />
     <ClInclude Include="Intel\DecoderInternal\OpCodeHandlers.h" />
     <ClInclude Include="Intel\DecoderInternal\OpCodeHandlers_D3NOW.h" />
     <ClInclude Include="Intel\DecoderInternal\OpCodeHandlers_EVEX.h" />
@@ -431,7 +438,6 @@
     <ClCompile Include="Intel\DecoderInternal\LegacyOpCodeHandlerReader.cpp" />
     <ClCompile Include="Intel\DecoderInternal\MvexOpCodeHandlerKind.g.cpp" />
     <ClCompile Include="Intel\DecoderInternal\MvexOpCodeHandlerReader.cpp" />
-    <ClCompile Include="Intel\DecoderInternal\OpCodeHandlers.cpp" />
     <ClCompile Include="Intel\DecoderInternal\OpCodeHandlers_D3NOW.cpp" />
     <ClCompile Include="Intel\DecoderInternal\OpCodeHandlers_EVEX.cpp" />
     <ClCompile Include="Intel\DecoderInternal\OpCodeHandlers_Fpu.cpp" />
@@ -490,7 +496,6 @@
     <ClCompile Include="Intel\IntelFormatterInternal\MemorySizes.cpp" />
     <ClCompile Include="Intel\IntelFormatterInternal\Registers.cpp" />
     <ClCompile Include="Intel\IntelFormatterInternal\SizeOverride.g.cpp" />
-    <ClCompile Include="Intel\Internal\DataReader.cpp" />
     <ClCompile Include="Intel\MandatoryPrefix.g.cpp" />
     <ClCompile Include="Intel\MandatoryPrefixByte.g.cpp" />
     <ClCompile Include="Intel\MasmFormatter.cpp" />

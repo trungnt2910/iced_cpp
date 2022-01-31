@@ -27,9 +27,9 @@ namespace Iced::Intel::DecoderInternal
 	class OpCodeHandlersTables_MVEX final
 	{
 	public:
-		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_0F;
-		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_0F38;
-		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_0F3A;
+		static std::vector<const OpCodeHandler*> Handlers_0F;
+		static std::vector<const OpCodeHandler*> Handlers_0F38;
+		static std::vector<const OpCodeHandler*> Handlers_0F3A;
 	private:
 		class StaticConstructor
 		{

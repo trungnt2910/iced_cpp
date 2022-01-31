@@ -27,7 +27,7 @@ namespace Iced::Intel::DecoderInternal
 	class OpCodeHandlersTables_Legacy final
 	{
 	public:
-		static std::vector<std::shared_ptr<OpCodeHandler>> Handlers_MAP0;
+		static std::vector<const OpCodeHandler*> Handlers_MAP0;
 	private:
 		class StaticConstructor
 		{

@@ -19,9 +19,9 @@
 namespace Iced::Intel::DecoderInternal
 {
 
-	std::vector<std::shared_ptr<OpCodeHandler>> OpCodeHandlersTables_XOP::Handlers_MAP8;
-	std::vector<std::shared_ptr<OpCodeHandler>> OpCodeHandlersTables_XOP::Handlers_MAP9;
-	std::vector<std::shared_ptr<OpCodeHandler>> OpCodeHandlersTables_XOP::Handlers_MAP10;
+	std::vector<const OpCodeHandler*> OpCodeHandlersTables_XOP::Handlers_MAP8;
+	std::vector<const OpCodeHandler*> OpCodeHandlersTables_XOP::Handlers_MAP9;
+	std::vector<const OpCodeHandler*> OpCodeHandlersTables_XOP::Handlers_MAP10;
 
 	OpCodeHandlersTables_XOP::StaticConstructor::StaticConstructor()
 	{

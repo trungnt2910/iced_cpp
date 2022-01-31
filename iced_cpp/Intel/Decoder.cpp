@@ -28,7 +28,7 @@
 #include "UsedMemory.h"
 #include "DecoderInternal/Iced.Intel.DecoderInternal.OpCodeHandlersTables_Legacy.h"
 #include "DecoderInternal/Iced.Intel.DecoderInternal.OpCodeHandlersTables_VEX.h"
-#include "DecoderInternal/Iced.Intel.DecoderInternal.OpCodeHandlersTables_EVEX.h"
+#include "DecoderInternal/OpCodeHandlersTables_EVEX.h"
 #include "DecoderInternal/Iced.Intel.DecoderInternal.OpCodeHandlersTables_XOP.h"
 #include "DecoderInternal/Iced.Intel.DecoderInternal.OpCodeHandlersTables_MVEX.h"
 #include "ByteArrayCodeReader.h"
@@ -126,11 +126,6 @@ namespace Iced::Intel
 		handlers_VEX_0F = OpCodeHandlersTables_VEX::Handlers_0F;
 		handlers_VEX_0F38 = OpCodeHandlersTables_VEX::Handlers_0F38;
 		handlers_VEX_0F3A = OpCodeHandlersTables_VEX::Handlers_0F3A;
-		handlers_EVEX_0F = OpCodeHandlersTables_EVEX::Handlers_0F;
-		handlers_EVEX_0F38 = OpCodeHandlersTables_EVEX::Handlers_0F38;
-		handlers_EVEX_0F3A = OpCodeHandlersTables_EVEX::Handlers_0F3A;
-		handlers_EVEX_MAP5 = OpCodeHandlersTables_EVEX::Handlers_MAP5;
-		handlers_EVEX_MAP6 = OpCodeHandlersTables_EVEX::Handlers_MAP6;
 		handlers_XOP_MAP8 = OpCodeHandlersTables_XOP::Handlers_MAP8;
 		handlers_XOP_MAP9 = OpCodeHandlersTables_XOP::Handlers_MAP9;
 		handlers_XOP_MAP10 = OpCodeHandlersTables_XOP::Handlers_MAP10;
@@ -354,12 +349,12 @@ namespace Iced::Intel
 		state.flags |= StateFlags::IsInvalid;
 	}
 
-	void Decoder::DecodeTable(std::vector<std::shared_ptr<OpCodeHandler>>& table, Instruction& instruction)
+	void Decoder::DecodeTable(const std::span<const OpCodeHandler* const>& table, Instruction& instruction)
 	{
 		DecodeTable(table[static_cast<std::int32_t>(ReadByte())], instruction);
 	}
 
-	void Decoder::DecodeTable(std::shared_ptr<OpCodeHandler> handler, Instruction& instruction)
+	void Decoder::DecodeTable(const OpCodeHandler* handler, Instruction& instruction)
 	{
 		if (handler->HasModRM)
 		{
@@ -369,7 +364,7 @@ namespace Iced::Intel
 			state.reg = (m >> 3) & 7;
 			state.rm = m & 7;
 		}
-		handler->Decode(this, instruction);
+		handler->Decode(*this, instruction);
 	}
 
 	void Decoder::ReadModRM()
@@ -589,24 +584,26 @@ namespace Iced::Intel
 					Static::Assert(static_cast<std::int32_t>(StateFlags::IsInvalid) == 0x40 ? 0 : -1);
 					state.flags |= static_cast<StateFlags>((~p2 & 8) << 3);
 				}
-				std::vector<std::shared_ptr<OpCodeHandler>> handlers;
+				std::span<const OpCodeHandler* const> handlers;
 				switch (static_cast<std::int32_t>(p0 & 7))
 				{
+#define MAKE_SPAN(x) (std::span((x).begin(), (x).size()))
 				case 1:
-					handlers = handlers_EVEX_0F;
+					handlers = MAKE_SPAN(OpCodeHandlersTables_EVEX::Handlers_0F);
 					break;
 				case 2:
-					handlers = handlers_EVEX_0F38;
+					handlers = MAKE_SPAN(OpCodeHandlersTables_EVEX::Handlers_0F38);
 					break;
 				case 3:
-					handlers = handlers_EVEX_0F3A;
+					handlers = MAKE_SPAN(OpCodeHandlersTables_EVEX::Handlers_0F3A);
 					break;
 				case 5:
-					handlers = handlers_EVEX_MAP5;
+					handlers = MAKE_SPAN(OpCodeHandlersTables_EVEX::Handlers_MAP5);
 					break;
 				case 6:
-					handlers = handlers_EVEX_MAP6;
+					handlers = MAKE_SPAN(OpCodeHandlersTables_EVEX::Handlers_MAP6);
 					break;
+#undef MAKE_SPAN
 				default:
 					SetInvalidInstruction();
 					return;
@@ -624,7 +621,7 @@ namespace Iced::Intel
 				{
 					SetInvalidInstruction();
 				}
-				handler->Decode(this, instruction);
+				handler->Decode(*this, instruction);
 			}
 			else
 			{
@@ -666,7 +663,7 @@ namespace Iced::Intel
 				p0x >>= 2;
 				state.extraBaseRegisterBaseEVEX = p0x & 0x18;
 				state.extraBaseRegisterBase = p0x & 8;
-				std::vector<std::shared_ptr<OpCodeHandler>> handlers;
+				std::vector<const OpCodeHandler*> handlers;
 				switch (static_cast<std::int32_t>(p0 & 0xF))
 				{
 				case 1:
@@ -689,7 +686,7 @@ namespace Iced::Intel
 				state.mod = m >> 6;
 				state.reg = (m >> 3) & 7;
 				state.rm = m & 7;
-				handler->Decode(this, instruction);
+				handler->Decode(*this, instruction);
 			}
 		}
 	}

@@ -6,7 +6,7 @@
 
 #include "Iced.Intel.Instruction.h"
 #include "CodeReader.h"
-#include "DecoderInternal/OpCodeHandlers.h"
+#include "DecoderInternal/OpCodeHandlers.defs.h"
 #include "DecoderOptions.g.h"
 #include "CodeSize.g.h"
 #include "MandatoryPrefixByte.g.h"
@@ -17,9 +17,8 @@
 #include "ConstantOffsets.h"
 #include <vector>
 #include <limits>
+#include <span>
 #include <stdexcept>
-
-namespace Iced::Intel::DecoderInternal { class OpCodeHandler; }
 
 namespace Iced::Intel
 {
@@ -136,31 +135,24 @@ namespace Iced::Intel
 		std::int32_t Bitness = 0;
 		std::uint64_t instructionPointer = 0;
 		CodeReader * reader;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_MAP0;
+		std::vector<const OpCodeHandler*> handlers_MAP0;
 #if !defined(NO_VEX) && defined(MVEX)
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_VEX_MAP0;
+		std::vector<const OpCodeHandler*> handlers_VEX_MAP0;
 #endif
 #if !defined(NO_VEX)
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_VEX_0F;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_VEX_0F38;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_VEX_0F3A;
-#endif
-#if !defined(NO_EVEX)
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_0F;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_0F38;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_0F3A;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_MAP5;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_EVEX_MAP6;
+		std::vector<const OpCodeHandler*> handlers_VEX_0F;
+		std::vector<const OpCodeHandler*> handlers_VEX_0F38;
+		std::vector<const OpCodeHandler*> handlers_VEX_0F3A;
 #endif
 #if !defined(NO_XOP)
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_XOP_MAP8;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_XOP_MAP9;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_XOP_MAP10;
+		std::vector<const OpCodeHandler*> handlers_XOP_MAP8;
+		std::vector<const OpCodeHandler*> handlers_XOP_MAP9;
+		std::vector<const OpCodeHandler*> handlers_XOP_MAP10;
 #endif
 #if defined(MVEX)
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_MVEX_0F;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_MVEX_0F38;
-		std::vector<std::shared_ptr<OpCodeHandler>> handlers_MVEX_0F3A;
+		std::vector<const OpCodeHandler*> handlers_MVEX_0F;
+		std::vector<const OpCodeHandler*> handlers_MVEX_0F38;
+		std::vector<const OpCodeHandler*> handlers_MVEX_0F3A;
 #endif
 	public:
 		class State
@@ -304,9 +296,9 @@ namespace Iced::Intel
 		void ClearMandatoryPrefixF3(Instruction& instruction);
 		void ClearMandatoryPrefixF2(Instruction& instruction);
 		void SetInvalidInstruction();
-		void DecodeTable(std::vector<std::shared_ptr<OpCodeHandler>>& table, Instruction& instruction);
+		void DecodeTable(const std::span<const OpCodeHandler* const>& table, Instruction& instruction);
 	private:
-		void DecodeTable(std::shared_ptr<OpCodeHandler> handler, Instruction& instruction);
+		void DecodeTable(const OpCodeHandler* handler, Instruction& instruction);
 	public:
 		void ReadModRM();
 		void VEX2(Instruction& instruction);
@@ -338,4 +330,6 @@ namespace Iced::Intel
 		ConstantOffsets GetConstantOffsets(const Instruction& instruction);
 	};
 }
+
+#include "DecoderInternal/OpCodeHandlers.h"
 #endif

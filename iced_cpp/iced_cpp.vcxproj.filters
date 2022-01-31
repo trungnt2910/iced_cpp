@@ -78,7 +78,7 @@
     <ClInclude Include="Intel\DecoderInternal\HandlerFlags.g.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\DecoderInternal\Iced.Intel.DecoderInternal.OpCodeHandlersTables_EVEX.h">
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_EVEX.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\DecoderInternal\Iced.Intel.DecoderInternal.OpCodeHandlersTables_Legacy.h">
@@ -108,7 +108,7 @@
     <ClInclude Include="Intel\DecoderInternal\MvexOpCodeHandlerReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlers.h">
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlers.defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\DecoderInternal\OpCodeHandlers_D3NOW.h">
@@ -636,6 +636,27 @@
     <ClInclude Include="Intel\FormatterInternal\FormatterUtils.All.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Intel\Internal\MemoryPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_EVEX.g.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_Legacy.g.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_MVEX.g.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_VEX.g.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\DecoderInternal\OpCodeHandlersTables_XOP.g.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Intel\BlockEncoderInternal\Block.cpp">
@@ -680,9 +701,6 @@
     <ClCompile Include="Intel\DecoderInternal\HandlerFlags.g.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Intel\DecoderInternal\Iced.Intel.DecoderInternal.OpCodeHandlersTables_EVEX.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Intel\DecoderInternal\Iced.Intel.DecoderInternal.OpCodeHandlersTables_Legacy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -708,9 +726,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\DecoderInternal\MvexOpCodeHandlerReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\DecoderInternal\OpCodeHandlers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\DecoderInternal\OpCodeHandlers_D3NOW.cpp">
@@ -822,9 +837,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\IntelFormatterInternal\SizeOverride.g.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Intel\Internal\DataReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\MasmFormatterInternal\CtorKind.g.cpp">
@@ -1059,6 +1071,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Intel\VectorLength.g.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intel\DecoderInternal\Iced.Intel.DecoderInternal.OpCodeHandlersTables_EVEX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
