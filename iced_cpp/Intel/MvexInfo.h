@@ -1,4 +1,8 @@
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
+
 #pragma once
+#if (defined(DECODER) || defined(ENCODER) || (defined(ENCODER) && defined(OPCODE_INFO))) && defined(MVEX)
 
 #include "MvexTupleTypeLutKind.g.h"
 #include "MvexEHBit.g.h"
@@ -12,16 +16,10 @@
 #include "IcedConstants.h"
 #include <cassert>
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel
 {
-	/* readonly */
 	class MvexInfo
 	{
-		/* readonly */
 	private:
 		std::int32_t index = 0;
 	public:
@@ -149,3 +147,4 @@ namespace Iced::Intel
 	}
 
 }
+#endif

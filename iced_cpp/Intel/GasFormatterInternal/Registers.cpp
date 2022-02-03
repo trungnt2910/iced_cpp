@@ -30,7 +30,7 @@ namespace Iced::Intel::GasFormatterInternal
 		auto registers = AllRegistersNaked;
 		System::Diagnostics::Debug2::Assert(!registers.empty());
 		auto result = std::vector<FormatterString>(registers.size());
-		for (std::int32_t i = 0; i < registers.size(); i++)
+		for (std::size_t i = 0; i < registers.size(); i++)
 		{
 			result[i] = FormatterString("%" + registers[i].Get(false));
 		}

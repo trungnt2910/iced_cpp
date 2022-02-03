@@ -27,7 +27,7 @@ namespace Iced::Intel::FormatterInternal
 		{
 			auto reader = Iced::Intel::Internal::DataReader(SerializedStrings, MaxStringLength);
 			auto strings = std::vector<std::string>(StringsCount);
-			for (std::int32_t i = 0; i < strings.size(); i++)
+			for (std::size_t i = 0; i < strings.size(); i++)
 			{
 				strings[i] = reader.ReadAsciiString();
 			}

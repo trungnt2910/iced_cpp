@@ -25,7 +25,7 @@ namespace Iced::Intel
 			constexpr std::array sizes = std::to_array<std::uint16_t>({ 0, 1, 2, 4, 6, 8, 10, 14, 16, 28, 32, 48, 64, 94, 108, 512 });
 			// GENERATOR-END: ConstData
 			std::array<MemorySizeInfo, IcedConstants::MemorySizeEnumCount> infos;
-			for (std::int32_t i = 0, j = 0; i < infos.size(); i++, j += 3)
+			for (std::size_t i = 0, j = 0; i < infos.size(); i++, j += 3)
 			{
 				auto elementType = static_cast<MemorySize>(data[j]);
 				std::uint32_t value = static_cast<std::uint32_t>(data[j + 2] << 8) | data[j + 1];

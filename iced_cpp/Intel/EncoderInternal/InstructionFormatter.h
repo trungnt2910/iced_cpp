@@ -853,7 +853,7 @@ namespace Iced::Intel::EncoderInternal
 
 	constexpr void InstructionFormatter::Write(const std::string& s, bool upper)
 	{
-		for (std::int32_t i = 0; i < s.length(); i++)
+		for (std::size_t i = 0; i < s.length(); i++)
 		{
 			auto c = s[i];
 			c = upper ? Internal::StringHelpers::ToUpper(c) : Internal::StringHelpers::ToLower(c);

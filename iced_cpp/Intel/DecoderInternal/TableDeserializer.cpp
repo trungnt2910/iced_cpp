@@ -151,7 +151,7 @@ namespace Iced::Intel::DecoderInternal
 		//C# TO C++ CONVERTER WARNING: Nullable reference types have no equivalent in C++:
 		//ORIGINAL LINE: var handlers = std::make_shared<OpCodeHandler>?[count];
 		auto handlers = std::vector<std::shared_ptr<OpCodeHandler>>(count);
-		for (std::int32_t i = 0; i < handlers.size();)
+		for (std::size_t i = 0; i < handlers.size();)
 		{
 			std::int32_t num = handlerReader->ReadHandlers(*this, handlers, i);
 			if (num <= 0 || static_cast<std::uint32_t>(i) + static_cast<std::uint32_t>(num) > static_cast<std::uint32_t>(handlers.size()))

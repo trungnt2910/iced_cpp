@@ -25,7 +25,7 @@
 #include "MemorySize.g.h"
 #include "RoundingControl.g.h"
 #include "OpCodeInfo.h"
-#include "Instruction.Info.h"
+#include "FpuStackIncrementInfo.h"
 #include "EncodingKind.g.h"
 #include "CpuidFeature.g.h"
 #include "FlowControl.g.h"
@@ -35,6 +35,7 @@
 #include "Instruction.VA.h"
 #include "Internal/Enum.h"
 #include "ThrowHelper.h"
+#include "IcedConstants.h"
 #include <string>
 #include <vector>
 #include <limits>
@@ -1614,6 +1615,7 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal void InternalSetIsBroadcast()
 		void InternalSetIsBroadcast();
+#if defined(MVEX)
 		/// <summary>
 		/// <see langword="true"/> if the data is broadcast (EVEX instructions only)
 		/// </summary>
@@ -1625,6 +1627,8 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal void InternalSetIsMvexEvictionHint()
 		void InternalSetIsMvexEvictionHint();
+#endif
+#if defined(MVEX)
 		/// <summary>
 		/// (MVEX) Register/memory operand conversion function
 		/// </summary>
@@ -1636,6 +1640,7 @@ namespace Iced::Intel
 		//C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 		//ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] internal void InternalSetMvexRegMemConv(MvexRegMemConv newValue)
 		void InternalSetMvexRegMemConv(Iced::Intel::MvexRegMemConv newValue);
+#endif
 		/// <summary>
 		/// Gets the size of the memory location that is referenced by the operand. See also <see cref="IsBroadcast"/>.
 		/// Use this property if the operand has kind <see cref="OpKind.Memory"/>,
@@ -2084,6 +2089,7 @@ namespace Iced::Intel
 		/// This property is only valid if there's a memory operand with <c>RIP</c>/<c>EIP</c> relative addressing, see <see cref="IsIPRelativeMemoryOperand"/>
 		/// </summary>
 		std::uint64_t GetIPRelativeMemoryAddress() const;
+#if defined(ENCODER) && defined(OPCODE_INFO)
 		/// <summary>
 		/// Gets the <see cref="OpCodeInfo"/>
 		/// </summary>
@@ -2091,13 +2097,14 @@ namespace Iced::Intel
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] get
 		const OpCodeInfo& GetOpCode() const;
+#endif
 		/// <summary>
 		/// Formats the instruction using the default formatter with default formatter options
 		/// </summary>
 		/// <returns></returns>
 		std::string ToString() const;
 
-
+#if defined(INSTR_INFO)
 		/// <summary>
 		/// Gets the number of bytes added to <c>SP</c>/<c>ESP</c>/<c>RSP</c> or 0 if it's not an instruction that pushes or pops data. This method assumes
 		/// the instruction doesn't change the privilege level (eg. <c>IRET/D/Q</c>). If it's the <c>LEAVE</c> instruction, this method returns 0.
@@ -2350,7 +2357,7 @@ namespace Iced::Intel
 	  //C# TO C++ CONVERTER NOTE: The following .NET attribute has no direct equivalent in C++:
 	  //ORIGINAL LINE: [MethodImpl(MethodImplOptions.AggressiveInlining)] get
 		bool IsStringInstruction() const;
-
+#endif
 
 		/// <summary>
 		/// Gets the virtual address of a memory operand

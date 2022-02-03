@@ -1,19 +1,8 @@
-// C# helper headers
-
-
-
-
-// Commonly used headers
-#include <cstdint>
-#include <format>
-#include <functional>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <string_view>
-#include <vector>
+// SPDX-License-Identifier: MIT
+// Copyright (C) 2018-present iced project and contributors
 
 #pragma once
+#if defined(ENCODER) && defined(OPCODE_INFO)
 
 #include "OpCodeInfosEnums.h"
 #include "../MemorySize.g.h"
@@ -27,45 +16,29 @@ namespace Iced::Intel
 	class OpCodeInfo;
 }
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
-// SPDX-License-Identifier: MIT
-// Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel::EncoderInternal
 {
 	class InstructionFormatter
 	{
-		/* readonly */
 	private:
 		const bool isConstexprEval = false;
 		bool ownsSb = false;
 		const OpCodeInfo* opCode = nullptr;
-		/* readonly */
 		std::string* sb = nullptr;
-		/* readonly */
 		std::int32_t r32_count = 0;
-		/* readonly */
 		std::int32_t r64_count = 0;
-		/* readonly */
 		std::int32_t bnd_count = 0;
-		/* readonly */
 		std::int32_t startOpIndex = 0;
 		std::int32_t r32_index = 0, r64_index = 0, bnd_index = 0;
 		std::int32_t k_index = 0;
 		std::int32_t vec_index = 0;
 		std::int32_t tmm_index = 0;
-		/* readonly */
 		std::int32_t opCount = 0;
 		// true: k2 {k1}, false: k1 {k2}
-		/* readonly */
 		bool opMaskIsK1 = false;
-		/* readonly */
 		bool noVecIndex = false;
-		/* readonly */
 		bool swapVecIndex12 = false;
-		/* readonly */
 		bool noGprSuffix = false;
-		/* readonly */
 		bool vecIndexSameAsOpIndex = false;
 		static constexpr std::array ConvFnNames = std::to_array<std::string_view> ({ "Sf32", "Sf64", "Si32", "Si64", "Uf32", "Uf64", "Ui32", "Ui64", "Df32", "Df64", "Di32", "Di64" });
 		constexpr std::int32_t GetKIndex();
@@ -101,3 +74,4 @@ namespace Iced::Intel::EncoderInternal
 		constexpr InstructionFormatter() = default;
 	};
 }
+#endif

@@ -1,4 +1,5 @@
 #pragma once
+#if defined(INSTR_INFO)
 
 #include "Register.g.h"
 #include "RegisterExtensions.defs.h"
@@ -8,8 +9,6 @@
 #include <climits>
 #include <limits>
 
-// Code generated from Iced. Do not edit.
-// Commit tag: badb6147c0994a4954fa27645aba2b02c2bb9502.
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2018-present iced project and contributors
 namespace Iced::Intel
@@ -19,16 +18,11 @@ namespace Iced::Intel
 	/// </summary>
 	class RegisterInfo
 	{
-		/* readonly */
 	private:
 		std::uint8_t register_ = 0;
-		/* readonly */
 		std::uint8_t baseRegister = 0;
-		/* readonly */
 		std::uint8_t fullRegister = 0;
-		/* readonly */
 		std::uint16_t size = 0;
-		/* readonly */
 		std::uint8_t pad1 = 0, pad2 = 0, pad3 = 0;
 		/// <summary>
 		/// Gets the register
@@ -120,3 +114,5 @@ namespace Iced::Intel
 		pad3 = 0;
 	}
 }
+#include "RegisterExtensions.h"
+#endif

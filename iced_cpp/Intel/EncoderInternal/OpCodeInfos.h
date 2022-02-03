@@ -27,7 +27,7 @@ namespace Iced::Intel::EncoderInternal
 			const auto& opcFlags1 = OpCodeInfoData::OpcFlags1;
 			const auto& opcFlags2 = OpCodeInfoData::OpcFlags2;
 
-			for (std::int32_t i = 0; i < infos.size(); i++)
+			for (std::size_t i = 0; i < infos.size(); i++)
 			{
 				infos[i] = OpCodeInfo((Code)i, (EncFlags1)encFlags1[i], (EncFlags2)encFlags2[i], (EncFlags3)encFlags3[i], (OpCodeInfoFlags1)opcFlags1[i], (OpCodeInfoFlags2)opcFlags2[i]);
 				if (pos != nullptr)

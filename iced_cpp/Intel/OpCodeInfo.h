@@ -2,6 +2,7 @@
 // Copyright (C) 2018-present iced project and contributors
 
 #pragma once
+#if defined(ENCODER) && defined(OPCODE_INFO)
 
 #include <array>
 #include <string>
@@ -63,7 +64,6 @@ namespace Iced::Intel
 		ICED_DEFINE_FLAGS_FRIEND(Flags)
 		ICED_DEFINE_COMP_FRIEND(Flags)
 		ICED_DEFINE_ARITH_FRIEND(Flags)
-		/* readonly */
 	private:
 		union
 		{
@@ -76,45 +76,25 @@ namespace Iced::Intel
 			std::string toInstructionString = "";
 		};
 		bool useCharPtr = false;
-		/* readonly */
 		EncoderInternal::EncFlags2 encFlags2 = static_cast<EncoderInternal::EncFlags2>(0);
-		/* readonly */
 		EncoderInternal::EncFlags3 encFlags3 = static_cast<EncoderInternal::EncFlags3>(0);
-		/* readonly */
 		EncoderInternal::OpCodeInfoFlags1 opcFlags1 = static_cast<EncoderInternal::OpCodeInfoFlags1>(0);
-		/* readonly */
 		EncoderInternal::OpCodeInfoFlags2 opcFlags2 = static_cast<EncoderInternal::OpCodeInfoFlags2>(0);
-		/* readonly */
 		std::uint16_t code = 0;
-		/* readonly */
 		std::uint8_t encoding = 0;
-		/* readonly */
 		std::uint8_t operandSize = 0;
-		/* readonly */
 		std::uint8_t addressSize = 0;
-		/* readonly */
 		std::uint8_t l = 0;
-		/* readonly */
 		std::uint8_t tupleType = 0;
-		/* readonly */
 		std::uint8_t table = 0;
-		/* readonly */
 		std::uint8_t mandatoryPrefix = 0;
-		/* readonly */
 		std::int8_t groupIndex = 0;
-		/* readonly */
 		std::int8_t rmGroupIndex = 0;
-		/* readonly */
 		std::uint8_t op0Kind = 0;
-		/* readonly */
 		std::uint8_t op1Kind = 0;
-		/* readonly */
 		std::uint8_t op2Kind = 0;
-		/* readonly */
 		std::uint8_t op3Kind = 0;
-		/* readonly */
 		std::uint8_t op4Kind = 0;
-		/* readonly */
 		Flags flags = static_cast<Flags>(0);
 		EncoderInternal::LKind lkind = EncoderInternal::LKind::None;
 	public:
@@ -1659,3 +1639,4 @@ namespace Iced::Intel
 
 #include "EncoderInternal/InstructionFormatter.h"
 #include "EncoderInternal/OpCodeFormatter.h"
+#endif

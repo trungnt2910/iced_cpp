@@ -47,7 +47,7 @@ namespace Iced::Intel::FormatterInternal
 		static constexpr std::vector<FormatterString> Create(const std::vector<std::string>& strings)
 		{
 			auto res = std::vector<FormatterString>(strings.size());
-			for (std::int32_t i = 0; i < strings.size(); i++)
+			for (std::size_t i = 0; i < strings.size(); i++)
 			{
 				res[i] = FormatterString(strings[i]);
 			}

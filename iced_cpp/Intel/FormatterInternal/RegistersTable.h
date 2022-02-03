@@ -24,7 +24,7 @@ namespace Iced::Intel::FormatterInternal
 		{
 			auto reader = Iced::Intel::Internal::DataReader(RegistersData, MaxStringLength);
 			auto strings = std::vector<FormatterString>(IcedConstants::RegisterEnumCount);
-			for (std::int32_t i = 0; i < strings.size(); i++)
+			for (std::size_t i = 0; i < strings.size(); i++)
 			{
 				strings[i] = FormatterString(reader.ReadAsciiString());
 			}

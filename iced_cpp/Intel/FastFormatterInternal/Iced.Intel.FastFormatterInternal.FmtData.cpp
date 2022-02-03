@@ -36,7 +36,7 @@ namespace Iced::Intel::FastFormatterInternal
 		auto ca = std::vector<char>(1);
 		std::int32_t prevIndex = -1;
 		auto prevFlags = FastFmtFlags::None;
-		for (std::int32_t i = 0; i < mnemonics.size(); i++)
+		for (std::size_t i = 0; i < mnemonics.size(); i++)
 		{
 			auto f = static_cast<FastFmtFlags>(reader.ReadByte());
 			std::int32_t currentIndex;

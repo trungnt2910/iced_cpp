@@ -71,7 +71,7 @@ namespace Iced::Intel
 	std::vector<FormatterString> FormatterConstants::Create(const std::vector<std::string>& cc, std::int32_t size, const std::string& prefix, const std::string& suffix)
 	{
 		auto strings = std::vector<FormatterString>(size);
-		for (std::int32_t i = 0; i < strings.size(); i++)
+		for (std::size_t i = 0; i < strings.size(); i++)
 		{
 			strings[i] = FormatterString(prefix + cc[i] + suffix);
 		}

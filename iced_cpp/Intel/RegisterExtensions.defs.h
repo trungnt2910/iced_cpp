@@ -1,4 +1,5 @@
 #pragma once
+#if defined(INSTR_INFO)
 
 #include "Register.g.h"
 #include <vector>
@@ -170,3 +171,4 @@ namespace Iced::Intel
 		constexpr static bool IsVectorRegister(Register register_);
 	};
 }
+#endif

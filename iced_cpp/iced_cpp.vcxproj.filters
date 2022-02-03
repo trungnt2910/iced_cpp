@@ -423,7 +423,7 @@
     <ClInclude Include="Intel\Instruction.Create.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Intel\Instruction.Info.h">
+    <ClInclude Include="Intel\FpuStackIncrementInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\Instruction.VA.h">
@@ -637,6 +637,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Intel\InstructionInfoExtensions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\IcedFeatures\BlockEncoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\IcedFeatures\CodeAssembler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\IcedFeatures\Encoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Intel\IcedFeatures\Decoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

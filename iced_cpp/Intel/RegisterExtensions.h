@@ -1,4 +1,5 @@
 #pragma once
+#if defined(INSTR_INFO) || defined(ENCODER)
 
 #include "RegisterExtensions.defs.h"
 #include "RegisterInfo.h"
@@ -11,6 +12,7 @@ namespace Iced::Intel
 {
 	namespace RegisterExtensions
 	{
+#if defined(INSTR_INFO)
 		namespace Internal
 		{
 			constexpr std::array<RegisterInfo, IcedConstants::RegisterEnumCount> GetRegisterInfos()
@@ -90,6 +92,7 @@ namespace Iced::Intel
 		{
 			return GetInfo(register_).GetSize();
 		}
+#endif
 
 		constexpr bool IsSegmentRegister(Register register_)
 		{
@@ -188,3 +191,4 @@ namespace Iced::Intel
 
 	}
 }
+#endif

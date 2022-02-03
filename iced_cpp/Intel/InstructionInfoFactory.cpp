@@ -2732,7 +2732,7 @@ namespace Iced::Intel
 			assert(instruction.GetOp0Kind() == OpKind::Register);
 			auto reg = instruction.GetOp0Register();
 			// The memory operand's regs start at index 1
-			for (std::int32_t i = 1; i < info.usedRegisters.size(); i++)
+			for (std::size_t i = 1; i < info.usedRegisters.size(); i++)
 			{
 				auto regInfo = info.usedRegisters[i];
 				if (reg >= Register::EAX && reg <= Register::R15D)

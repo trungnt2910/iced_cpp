@@ -51,7 +51,7 @@ namespace Iced::Intel::GasFormatterInternal
 		std::string s, s2, s3, s4, s5, s6;
 		std::uint32_t v, v2, v3;
 		std::int32_t prevIndex = -1;
-		for (std::int32_t i = 0; i < infos.size(); i++)
+		for (std::size_t i = 0; i < infos.size(); i++)
 		{
 			std::uint8_t f = reader.ReadByte();
 			auto ctorKind = static_cast<CtorKind>(f & 0x7F);

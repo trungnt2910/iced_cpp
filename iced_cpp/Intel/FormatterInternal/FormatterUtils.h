@@ -96,10 +96,10 @@ namespace Iced::Intel::FormatterInternal
 		inline static constexpr std::array tabStrings = CreateStrings<6>(tabString);
 
 	public:
-		static constexpr void AddTabs(FormatterOutput& output, std::int32_t column, std::int32_t firstOperandCharIndex, std::int32_t tabSize);
+		static constexpr void AddTabs(FormatterOutput& output, std::int32_t column, std::int32_t firstOperandCharIndex, std::size_t tabSize);
 	private:
 		template <std::size_t N>
-		static constexpr void AddStrings(FormatterOutput& output, const std::array<std::string_view, N>& strings, std::int32_t count);
+		static constexpr void AddStrings(FormatterOutput& output, const std::array<std::string_view, N>& strings, std::size_t count);
 	public:
 		static constexpr bool IsCall(FormatterFlowControl kind);
 		static constexpr FormatterFlowControl GetFlowControl(const Instruction& instruction);
@@ -114,7 +114,7 @@ namespace Iced::Intel::FormatterInternal
 
 namespace Iced::Intel::FormatterInternal
 {
-	constexpr void FormatterUtils::AddTabs(FormatterOutput& output, std::int32_t column, std::int32_t firstOperandCharIndex, std::int32_t tabSize)
+	constexpr void FormatterUtils::AddTabs(FormatterOutput& output, std::int32_t column, std::int32_t firstOperandCharIndex, std::size_t tabSize)
 	{
 		constexpr std::int32_t max_firstOperandCharIndex = 256;
 		if (firstOperandCharIndex < 0)
@@ -162,14 +162,14 @@ namespace Iced::Intel::FormatterInternal
 	}
 
 	template <std::size_t N>
-	constexpr void FormatterUtils::AddStrings(FormatterOutput& output, const std::array<std::string_view, N>& strings, std::int32_t count)
+	constexpr void FormatterUtils::AddStrings(FormatterOutput& output, const std::array<std::string_view, N>& strings, std::size_t count)
 	{
 		while (count > 0)
 		{
-			std::int32_t n = count;
+			std::size_t n = count;
 			if (n >= strings.size())
 			{
-				n = (std::int32_t)strings.size();
+				n = strings.size();
 			}
 			output.Write(strings[n - 1], FormatterTextKind::Text);
 			count -= n;

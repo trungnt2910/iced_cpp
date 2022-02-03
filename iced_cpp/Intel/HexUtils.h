@@ -56,7 +56,7 @@ namespace Iced::Intel
 				return std::vector<std::uint8_t>();
 			}
 			std::int32_t len = 0;
-			for (std::int32_t i = 0; i < hexData.length(); i++)
+			for (std::size_t i = 0; i < hexData.length(); i++)
 			{
 				if (hexData[i] != ' ')
 				{
@@ -65,7 +65,7 @@ namespace Iced::Intel
 			}
 			auto data = std::vector<std::uint8_t>(len / 2);
 			std::int32_t w = 0;
-			for (std::int32_t i = 0; ;)
+			for (std::size_t i = 0; ;)
 			{
 				while (i < hexData.length() && std::isspace(hexData[i]))
 				{

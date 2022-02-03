@@ -1252,7 +1252,7 @@ namespace Iced::Intel
 		{
 			return false;
 		}
-		for (std::int32_t i = 0; i < a.size(); i++)
+		for (std::size_t i = 0; i < a.size(); i++)
 		{
 			if (a[i].Get(false) != b[i].Get(false))
 			{

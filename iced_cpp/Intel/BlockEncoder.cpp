@@ -37,14 +37,14 @@ namespace Iced::Intel
 		// around in `Instr`s.
 		blocks = std::vector<std::shared_ptr<Block>>(instrBlocks.size());
 		std::int32_t instrCount = 0;
-		for (std::int32_t i = 0; i < instrBlocks.size(); i++)
+		for (std::size_t i = 0; i < instrBlocks.size(); i++)
 		{
 			const auto& instructions = instrBlocks[i].Instructions;
 			auto block = std::make_shared<Block>(this, instrBlocks[i].CodeWriter, instrBlocks[i].RIP, GetReturnRelocInfos() ? std::vector<RelocInfo>() : std::vector<RelocInfo>());
 			blocks[i] = block;
 			auto instrs = std::vector<std::shared_ptr<Instr>>(instructions.size());
 			std::uint64_t ip = instrBlocks[i].RIP;
-			for (std::int32_t j = 0; j < instrs.size(); j++)
+			for (std::size_t j = 0; j < instrs.size(); j++)
 			{
 				const auto& instruction = instructions[j];
 				auto instr = Instr::Create(this, block, instruction);
@@ -182,7 +182,7 @@ namespace Iced::Intel
 			block->InitializeData();
 		}
 		auto resultArray = std::vector<BlockEncoderResult>(blocks.size());
-		for (std::int32_t i = 0; i < blocks.size(); i++)
+		for (std::size_t i = 0; i < blocks.size(); i++)
 		{
 			auto block = blocks[i];
 			auto encoder = Encoder::Create(bitness, &block->CodeWriter);
@@ -190,7 +190,7 @@ namespace Iced::Intel
 			auto newInstructionOffsets = GetReturnNewInstructionOffsets() ? std::vector<std::uint32_t>(block->GetInstructions().size()) : std::vector<std::uint32_t>();
 			auto constantOffsets = GetReturnConstantOffsets() ? std::vector<ConstantOffsets>(block->GetInstructions().size()) : std::vector<ConstantOffsets>();
 			auto instructions = block->GetInstructions();
-			for (std::int32_t j = 0; j < instructions.size(); j++)
+			for (std::size_t j = 0; j < instructions.size(); j++)
 			{
 				auto instr = instructions[j];
 				std::uint32_t bytesWritten = block->CodeWriter.BytesWritten;

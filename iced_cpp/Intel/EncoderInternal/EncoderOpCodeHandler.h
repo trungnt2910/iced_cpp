@@ -1,4 +1,5 @@
 #pragma once
+#if defined(ENCODER)
 
 // Commonly used headers
 #include <cstdint>
@@ -107,7 +108,7 @@ namespace Iced::Intel::EncoderInternal
 			}
 		}
 	}
-
+#if !defined(NO_VEX)
 	constexpr OpContainer VexHandler::CreateOps(EncFlags1 encFlags1)
 	{
 		auto op0 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::VEX_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::VEX_OpMask));
@@ -176,7 +177,8 @@ namespace Iced::Intel::EncoderInternal
 			encoder.WriteByteInternal(b);
 		}
 	}
-
+#endif
+#if !defined(NO_XOP)
 	constexpr OpContainer XopHandler::CreateOps(EncFlags1 encFlags1)
 	{
 		auto op0 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::XOP_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::XOP_OpMask));
@@ -224,7 +226,8 @@ namespace Iced::Intel::EncoderInternal
 		b |= (~encoderFlags >> (static_cast<std::int32_t>(EncoderFlags::VvvvvShift) - 3)) & 0x78;
 		encoder.WriteByteInternal(b);
 	}
-
+#endif
+#if !defined(NO_EVEX)
 	constexpr OpContainer EvexHandler::CreateOps(EncFlags1 encFlags1)
 	{
 		auto op0 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::EVEX_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::EVEX_OpMask));
@@ -352,7 +355,8 @@ namespace Iced::Intel::EncoderInternal
 		b |= mask_LL & encoder.Internal_EVEX_LIG;
 		encoder.WriteByteInternal(b);
 	}
-
+#endif
+#if defined(MVEX)
 	constexpr OpContainer MvexHandler::CreateOps(EncFlags1 encFlags1)
 	{
 		auto op0 = static_cast<std::int32_t>((static_cast<std::uint32_t>(encFlags1) >> static_cast<std::int32_t>(EncFlags1::MVEX_Op0Shift)) & static_cast<std::uint32_t>(EncFlags1::MVEX_OpMask));
@@ -525,7 +529,8 @@ namespace Iced::Intel::EncoderInternal
 		b ^= 8;
 		encoder.WriteByteInternal(b);
 	}
-
+#endif
+#if !defined(NO_D3NOW)
 	inline void D3nowHandler::Encode(Encoder& encoder, const Instruction& instruction) const
 	{
 		encoder.WritePrefixes(instruction);
@@ -534,3 +539,5 @@ namespace Iced::Intel::EncoderInternal
 		encoder.Immediate = immediate;
 	}
 }
+#endif
+#endif

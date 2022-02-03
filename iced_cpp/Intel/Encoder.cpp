@@ -228,7 +228,7 @@ namespace Iced::Intel
 		if (!handler->IsDeclareData)
 		{
 			auto ops = handler->Operands;
-			for (std::int32_t i = 0; i < ops.size(); i++)
+			for (std::size_t i = 0; i < ops.size(); i++)
 			{
 				ops[i]->Encode(*this, instruction, i);
 			}

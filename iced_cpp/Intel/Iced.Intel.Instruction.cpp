@@ -2754,7 +2754,7 @@ namespace Iced::Intel
 	{
 		flags1 |= static_cast<std::uint32_t>(InstrFlags1::Broadcast);
 	}
-
+#if defined(MVEX)
 	bool Instruction::IsMvexEvictionHint() const
 	{
 		return IcedConstants::IsMvex(GetCode()) && (immediate & static_cast<std::uint32_t>(MvexInstrFlags::EvictionHint)) != 0;
@@ -2776,7 +2776,8 @@ namespace Iced::Intel
 	{
 		immediate |= static_cast<std::uint32_t>(MvexInstrFlags::EvictionHint);
 	}
-
+#endif
+#if defined(MVEX)
 	Iced::Intel::MvexRegMemConv Instruction::GetMvexRegMemConv() const
 	{
 		if (!IcedConstants::IsMvex(GetCode()))
@@ -2795,16 +2796,18 @@ namespace Iced::Intel
 	{
 		immediate |= (static_cast<std::uint32_t>(newValue) << static_cast<std::int32_t>(MvexInstrFlags::MvexRegMemConvShift));
 	}
-
+#endif
 	Iced::Intel::MemorySize Instruction::GetMemorySize() const
 	{
 		std::int32_t index = static_cast<std::int32_t>(GetCode());
+#if defined(MVEX)
 		if (IcedConstants::IsMvex(static_cast<Iced::Intel::Code>(index)))
 		{
 			auto mvex = MvexInfo(static_cast<Iced::Intel::Code>(index));
 			std::int32_t sss = (static_cast<std::int32_t>(GetMvexRegMemConv()) - static_cast<std::int32_t>(MvexRegMemConv::MemConvNone)) & 7;
 			return static_cast<Iced::Intel::MemorySize>(MvexMemorySizeLut::Data[static_cast<std::int32_t>(mvex.GetTupleTypeLutKind()) * 8 + sss]);
 		}
+#endif
 		if (IsBroadcast())
 		{
 			return static_cast<Iced::Intel::MemorySize>(InstructionMemorySizes::SizesBcst[index]);
@@ -2933,7 +2936,11 @@ namespace Iced::Intel
 
 	void Instruction::SetImmediate8(std::uint8_t value)
 	{
+#if defined(MVEX)
 		immediate = (immediate & 0xFFFF'FF00) | static_cast<std::uint32_t>(value);
+#else
+		immediate = value;
+#endif
 	}
 
 	void Instruction::SetInternalImmediate8(std::uint32_t value)
@@ -3080,11 +3087,13 @@ namespace Iced::Intel
 	std::uint64_t Instruction::GetNearBranchTarget() const
 	{
 		auto opKind = GetOp0Kind();
+#if defined(MVEX)
 		// Check if JKZD/JKNZD
 		if (GetOpCount() == 2)
 		{
 			opKind = GetOp1Kind();
 		}
+#endif
 		auto switchTempVar_3 = opKind;
 
 
@@ -3807,19 +3816,39 @@ namespace Iced::Intel
 		return GetMemoryBase() == Register::EIP ? GetMemoryDisplacement32() : GetMemoryDisplacement64();
 	}
 
+#if defined(ENCODER) && defined(OPCODE_INFO)
 	const OpCodeInfo& Instruction::GetOpCode() const
 	{
 		return Iced::Intel::EncoderCodeExtensions::ToOpCode(GetCode());
 	}
+#endif
 
 	std::string Instruction::ToString() const
 	{
 		// If the order of #if/elif checks gets updated, also update the `Instruction_ToString()` test method
+#if defined(MASM)
 		StringOutput output;
-		MasmFormatter tempVar;
-		tempVar.Format(*this, output);
-		//C# TO C++ CONVERTER TODO TASK: There is no C++ equivalent to 'ToString':
+		MasmFormatter().Format(*this, output);
 		return output.ToString();
+#elif defined(NASM)
+		StringOutput output;
+		NasmFormatter().Format(*this, output);
+		return output.ToString();
+#elif defined(INTEL)
+		StringOutput output;
+		IntelFormatter().Format(*this, output);
+		return output.ToString();
+#elif defined(GAS)
+		StringOutput output;
+		GasFormatter().Format(*this, output);
+		return output.ToString();
+#elif defined(FAST_FMT)
+		StringOutput output;
+		FastFormatter().Format(*this, output);
+		return output.ToString();
+#else
+		return Internal::ToString(*this);
+#endif
 	}
 
 	std::int32_t Instruction::GetStackPointerIncrement() const

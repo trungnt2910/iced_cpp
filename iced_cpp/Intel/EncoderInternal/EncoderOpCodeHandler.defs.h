@@ -2,6 +2,7 @@
 // Copyright (C) 2018-present iced project and contributors
 
 #pragma once
+#if defined(ENCODER)
 
 #include "../Iced.Intel.Instruction.h"
 #include "Enums.h"
@@ -10,6 +11,9 @@
 #include "../Code.g.h"
 #include "../TupleType.g.h"
 #include "../IcedConstants.h"
+#include "../MandatoryPrefixByte.g.h"
+#include "../RegisterInfo.h"
+#include "../Static.h"
 #include <array>
 #include <string>
 #include <vector>
@@ -158,6 +162,7 @@ namespace Iced::Intel::EncoderInternal
 		}
 		inline void Encode(Encoder& encoder, const Instruction& instruction) const override;
 	};
+#if !defined(NO_VEX)
 	class VexHandler final : public OpCodeHandler
 	{
 	private:
@@ -199,6 +204,8 @@ namespace Iced::Intel::EncoderInternal
 		}
 		inline void Encode(Encoder& encoder, const Instruction& instruction) const override;
 	};
+#endif
+#if !defined(NO_XOP)
 	class XopHandler final : public OpCodeHandler
 	{
 	private:
@@ -230,6 +237,8 @@ namespace Iced::Intel::EncoderInternal
 		}
 		inline void Encode(Encoder& encoder, const Instruction& instruction) const override;
 	};
+#endif
+#if !defined(NO_EVEX)
 	class EvexHandler final : public OpCodeHandler
 	{
 	private:
@@ -293,6 +302,8 @@ namespace Iced::Intel::EncoderInternal
 	public:
 		inline void Encode(Encoder& encoder, const Instruction& instruction) const override;
 	};
+#endif
+#if defined(MVEX)
 	class MvexHandler final : public OpCodeHandler
 	{
 	private:
@@ -331,6 +342,8 @@ namespace Iced::Intel::EncoderInternal
 	public:
 		inline void Encode(Encoder& encoder, const Instruction& instruction) const override;
 	};
+#endif
+#if !defined(NO_D3NOW)
 	class D3nowHandler final : public OpCodeHandler
 	{
 	private:
@@ -358,3 +371,5 @@ namespace Iced::Intel::EncoderInternal
 		inline void Encode(Encoder& encoder, const Instruction& instruction) const override;
 	};
 }
+#endif
+#endif
